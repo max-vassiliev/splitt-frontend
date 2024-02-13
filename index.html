@@ -224,7 +224,10 @@
             <div class="add-expense__form_field">
               <label class="add-expense__form_label">Кто платил</label>
               <div class="form-input__container">
-                <button class="form-input__btn add-expense__btn-edit-payer">
+                <button
+                  class="form-input__btn add-expense__btn-edit-payer add-expense__btn-edit"
+                  data-form="payer"
+                >
                   вы
                 </button>
               </div>
@@ -232,7 +235,10 @@
             <div class="add-expense__form_field">
               <label class="add-expense__form_label">Поделить</label>
               <div class="form-input__container">
-                <button class="form-input__btn add-expense__btn-edit-splitt">
+                <button
+                  class="form-input__btn add-expense__btn-edit-splitt add-expense__btn-edit"
+                  data-form="splitt"
+                >
                   поровну
                 </button>
               </div>
@@ -241,14 +247,17 @@
             <div class="add-expense__form_field">
               <label class="add-expense__form_label">Комментарий</label>
               <div class="form-input__container">
-                <button class="form-input__btn add-expense__btn-note">
+                <button
+                  class="form-input__btn add-expense__btn-edit-note add-expense__btn-edit"
+                  data-form="note"
+                >
                   добавить
                 </button>
               </div>
             </div>
             <div class="add-expense__form_footer">
               <button
-                class="add-transaction__btn--close add-expense__btn--close"
+                class="add-transaction__btn--close add-expense__btn--close add-expense__form__btn--close"
                 type="button"
               >
                 отменить
@@ -268,8 +277,7 @@
           <form class="add-expense__form_body">
             <div class="add-expense__form_footer">
               <button
-                class="add-transaction__btn--close add-expense__form_payer__btn--close"
-                type="button"
+                class="add-transaction__btn--close add-expense__form__btn--close"
               >
                 отменить
               </button>
@@ -282,16 +290,13 @@
           </form>
         </div>
 
-        <!-- TODO1 test comment -->
-
         <!-- ADD EXPENSE: Splitt -->
         <div class="add-expense__form_splitt">
           <div class="add-expense__form_header">Поделить</div>
           <form class="add-expense__form_body">
             <div class="add-expense__form_footer">
               <button
-                class="add-transaction__btn--close add-expense__form_splitt__btn--close"
-                type="button"
+                class="add-transaction__btn--close add-expense__form__btn--close"
               >
                 отменить
               </button>
@@ -304,7 +309,24 @@
           </form>
         </div>
 
-        <!-- ADD EXPENSE: Comment -->
+        <!-- ADD EXPENSE: Note -->
+        <div class="add-expense__form_note">
+          <div class="add-expense__form_header">Комментарий</div>
+          <form class="add-expense__form_body">
+            <div class="add-expense__form_footer">
+              <button
+                class="add-transaction__btn--close add-expense__form__btn--close"
+              >
+                отменить
+              </button>
+              <button
+                class="add-transaction__btn--submit add-expense__form_note__btn--submit"
+              >
+                сохранить
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <!-- ADD REPAYMENT -->

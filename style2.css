@@ -509,7 +509,8 @@ header {
 
 .add-expense__form_main,
 .add-expense__form_payer,
-.add-expense__form_splitt {
+.add-expense__form_splitt,
+.add-expense__form_note {
   /* display: none; */
   position: absolute;
   align-items: center;
@@ -670,28 +671,33 @@ header {
 /*  ADD EXPENSE: Payer  */
 
 .add-expense__form_payer,
-.add-expense__form_splitt {
+.add-expense__form_splitt,
+.add-expense__form_note {
   left: calc(4rem + 450px + 4rem);
   z-index: 3;
 }
 
 .add-expense__form_payer .add-expense__form_header,
-.add-expense__form_splitt .add-expense__form_header {
+.add-expense__form_splitt .add-expense__form_header,
+.add-expense__form_note .add-expense__form_header {
   background-color: #ac6d54;
 }
 
 .add-expense__form_payer,
-.add-expense__form_splitt {
+.add-expense__form_splitt,
+.add-expense__form_note {
   display: none;
 }
 
 .add-expense__form_payer.active,
-.add-expense__form_splitt.active {
+.add-expense__form_splitt.active,
+.add-expense__form_note.active {
   display: block;
 }
 
 .add-expense__btn-edit-payer.active,
-.add-expense__btn-edit-splitt.active {
+.add-expense__btn-edit-splitt.active,
+.add-expense__btn-edit-note.active {
   border: 1px solid #ac6d54;
   background-color: rgba(172, 109, 84, 0.1);
 }

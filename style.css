@@ -501,10 +501,20 @@ header {
 
 .add-expense__form {
   display: none;
+}
+
+.add-expense__form.active {
+  display: block;
+}
+
+.add-expense__form_main,
+.add-expense__form_payer,
+.add-expense__form_splitt,
+.add-expense__form_note {
+  /* display: none; */
   position: absolute;
   align-items: center;
-  top: 5.5rem;
-  left: 4rem;
+  top: 5rem;
   min-width: 450px;
   background: #fff;
   z-index: 2;
@@ -513,9 +523,13 @@ header {
   box-shadow: 0 0px 1rem rgba(100, 100, 100, 0.3);
 }
 
-.add-expense__form.active {
-  display: block;
+.add-expense__form_main {
+  left: 4rem;
 }
+
+/* .add-expense__form.active {
+  display: block;
+} */
 
 .add-expense__form_header {
   background-color: #f97e4b;
@@ -525,7 +539,7 @@ header {
   font-weight: 700;
   text-align: center;
   color: #fff;
-  padding: 1.1rem 0;
+  padding: 2rem 0;
 }
 
 .add-expense__form_body {
@@ -551,22 +565,18 @@ header {
 }
 
 .form-input__container {
-  /* grid-column: 2; */
   position: relative;
-  /* display: inline-block; */
   display: inline-flex;
   align-items: center;
-  flex: 1;
 }
 
 .amount_input__comment {
-  margin: auto auto 0.3rem 13rem;
+  margin: 0.3rem auto 0.3rem 14.1rem;
   font-size: 1.3rem;
+  color: #666;
 }
 
 .text-input__user-input {
-  /* border: 1px solid #f3f3f3; */
-  width: 100%;
   border: none;
   font-family: inherit;
   color: #777;
@@ -591,39 +601,105 @@ header {
   width: 14rem;
 }
 
+.form-input__btn {
+  /*  */
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  margin-left: 0.9rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.8rem;
+  color: #666;
+  background-color: #f6f6f6;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.form-input__btn:hover {
+  background-color: #ebebeb;
+  color: #555;
+  box-shadow: 0 0px 1.2rem rgba(200, 200, 200, 0.3);
+}
+
+.form-input__btn:active {
+  background-color: #e3e3e3;
+  transform: translateY(3%);
+}
+
 .add-expense__form_footer {
   display: flex;
-  margin-top: 3.4rem;
+  margin-top: 4.2rem;
+  margin-bottom: 0.6rem;
   justify-content: center;
   align-items: center;
 }
 
-.add-expense__btn--close,
-.add-expense__btn--submit {
+.add-transaction__btn--close,
+.add-transaction__btn--submit {
   font-family: 'Raleway', Helvetica, Arial, sans-serif;
   border-radius: 1.3rem;
-  padding: 0.4rem 1.5rem;
+  padding: 0.6rem 1.5rem;
   margin: auto 1rem;
   background-color: #f3f3f3;
   transition: background-color 0.2s ease;
 }
 
-.add-expense__btn--close {
+.add-transaction__btn--close {
   cursor: pointer;
-  /* border: 1px solid #bbb; */
-  /* border: 1px solid #555; */
-  border: 1px solid #888;
+  border: 1px solid #777;
   color: #555;
-  font-weight: 600;
+  font-weight: 500;
+  transition: transform 0.3s ease-in, box-shadow 0.3s ease-in;
 }
 
-.add-expense__btn--close:hover {
-  background-color: #dadada;
+.add-transaction__btn--close:hover {
+  background-color: #eaeaea;
+  box-shadow: 0 0px 1.8rem rgba(200, 200, 200, 0.3);
 }
 
-.add-expense__btn--submit {
+.add-transaction__btn--close:active {
+  transform: translateY(0.2rem);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  background-color: #e3e3e3;
+}
+
+.add-transaction__btn--submit {
   color: #999;
   border: 1px solid #aaa;
+}
+
+/*  ADD EXPENSE: Payer  */
+
+.add-expense__form_payer,
+.add-expense__form_splitt,
+.add-expense__form_note {
+  left: calc(4rem + 450px + 4rem);
+  z-index: 3;
+}
+
+.add-expense__form_payer .add-expense__form_header,
+.add-expense__form_splitt .add-expense__form_header,
+.add-expense__form_note .add-expense__form_header {
+  background-color: #ac6d54;
+}
+
+.add-expense__form_payer,
+.add-expense__form_splitt,
+.add-expense__form_note {
+  display: none;
+}
+
+.add-expense__form_payer.active,
+.add-expense__form_splitt.active,
+.add-expense__form_note.active {
+  display: block;
+}
+
+.add-expense__btn-edit-payer.active,
+.add-expense__btn-edit-splitt.active,
+.add-expense__btn-edit-note.active {
+  border: 1px solid #ac6d54;
+  background-color: rgba(172, 109, 84, 0.1);
 }
 
 /*  ADD REPAYMENT  */

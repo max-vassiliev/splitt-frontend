@@ -3,6 +3,9 @@
 document.addEventListener('DOMContentLoaded', function () {
   let currentGroupId = 1;
   let activePopup = null;
+  let activeAddExpenseHiddenForm = null;
+
+  const ACTIVE_CLASS = 'active';
 
   // --------------
   // Elements (e:)
@@ -29,11 +32,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseBtn = document.querySelector('.add-expense__btn');
   const addExpenseForm = document.querySelector('.add-expense__form');
   const addExpenseFormMain = document.querySelector('.add-expense__form_main');
+  const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
+  const addExpenseHiddenFormBtnClose = document.querySelectorAll(
+    '.add-expense__form__btn--close'
+  );
   const addExpenseBtnEditPayer = document.querySelector(
     '.add-expense__btn-edit-payer'
   );
   const addExpenseBtnEditSplitt = document.querySelector(
     '.add-expense__btn-edit-splitt'
+  );
+  const addExpenseBtnEditNote = document.querySelector(
+    '.add-expense__btn-edit-note'
   );
   const addExpenseBtnClose = document.querySelector('.add-expense__btn--close');
   const addExpenseAmountInput = document.querySelector(
@@ -50,6 +60,10 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const addExpenseFormSplittBtnClose = document.querySelector(
     '.add-expense__form_splitt__btn--close'
+  );
+  const addExpenseFormNote = document.querySelector('.add-expense__form_note');
+  const addExpenseFormNoteBtnClose = document.querySelector(
+    '.add-expense__form_note__btn--close'
   );
 
   // e: Add Repayment
@@ -154,58 +168,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openAddExpense() {
     addOverlay();
-    addExpenseForm.classList.add('active');
+    addExpenseForm.classList.add(ACTIVE_CLASS);
     activePopup = addExpenseForm;
   }
 
   function closeAddExpense() {
-    addExpenseForm.classList.remove('active');
+    addExpenseForm.classList.remove(ACTIVE_CLASS);
     hideOverlay();
   }
 
-  function openAddExpensePayer() {
-    addExpenseFormPayer.classList.add('active');
-    addExpenseBtnEditPayer.classList.add('active');
+  // TODO1 new functions
+
+  function toggleAddExpenseHiddenForm(form, button) {
+    button.classList.contains(ACTIVE_CLASS)
+      ? closeAddExpenseHiddenForm()
+      : openAddExpenseHiddenForm(form, button);
   }
 
-  function closeAddExpensePayer() {
-    addExpenseFormPayer.classList.remove('active');
-    addExpenseBtnEditPayer.classList.remove('active');
-  }
-
-  function toggleAddExpenseFormPayerView() {
-    if (addExpenseBtnEditPayer.classList.contains('active')) {
-      closeAddExpensePayer();
-    } else {
-      openAddExpensePayer();
+  function openAddExpenseHiddenForm(form, button) {
+    if (activeAddExpenseHiddenForm) {
+      closeAddExpenseHiddenForm();
     }
+
+    form.classList.add(ACTIVE_CLASS);
+    button.classList.add(ACTIVE_CLASS);
+
+    activeAddExpenseHiddenForm = { form, button };
   }
 
-  function openAddExpenseSplitt() {
-    addExpenseFormSplitt.classList.add('active');
-    addExpenseBtnEditSplitt.classList.add('active');
+  // FIXME: delete if unused
+  function closeAddExpenseHiddenFormDELETE(form, button) {
+    form.classList.remove(ACTIVE_CLASS);
+    button.classList.remove(ACTIVE_CLASS);
+    activeAddExpenseHiddenForm = null;
   }
 
-  function closeAddExpenseSplitt() {
-    addExpenseFormSplitt.classList.remove('active');
-    addExpenseBtnEditSplitt.classList.remove('active');
-  }
-
-  function toggleAddExpenseFormSplittView() {
-    if (addExpenseBtnEditSplitt.classList.contains('active')) {
-      closeAddExpenseSplitt();
-    } else {
-      openAddExpenseSplitt();
-    }
-  }
-
-  function toggleAddExpenseAdditionalForms() {
-    if (addExpenseBtnEditPayer.classList.contains('active')) {
-      closeAddExpensePayer();
-    }
-    if (addExpenseBtnEditSplitt.classList.contains('active')) {
-      closeAddExpenseSplitt();
-    }
+  function closeAddExpenseHiddenForm() {
+    activeAddExpenseHiddenForm.form.classList.remove(ACTIVE_CLASS);
+    activeAddExpenseHiddenForm.button.classList.remove(ACTIVE_CLASS);
+    activeAddExpenseHiddenForm = null;
   }
 
   // f: Add Repayment
@@ -252,27 +253,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
   addExpenseAmountInput.addEventListener('input', handleAmountInput);
 
-  addExpenseBtnEditPayer.addEventListener('click', function (event) {
-    event.preventDefault();
-    toggleAddExpenseAdditionalForms();
-    toggleAddExpenseFormPayerView();
+  addExpenseBtnEdit.forEach(button => {
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      const hiddenFormName = this.dataset.form;
+      const hiddenForm = document.querySelector(
+        `.add-expense__form_${hiddenFormName}`
+      );
+      toggleAddExpenseHiddenForm(hiddenForm, this);
+    });
   });
 
-  addExpenseFormPayerBtnClose.addEventListener('click', function (event) {
-    event.preventDefault();
-    closeAddExpensePayer();
+  addExpenseHiddenFormBtnClose.forEach(button => {
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      closeAddExpenseHiddenForm();
+    });
   });
 
-  addExpenseBtnEditSplitt.addEventListener('click', function (event) {
-    event.preventDefault();
-    toggleAddExpenseAdditionalForms();
-    toggleAddExpenseFormSplittView();
-  });
+  // FIXME: delete if unused
 
-  addExpenseFormSplittBtnClose.addEventListener('click', function (event) {
-    event.preventDefault();
-    closeAddExpenseSplitt();
-  });
+  // addExpenseFormPayerBtnClose.addEventListener('click', function (event) {
+  //   event.preventDefault();
+  //   closeAddExpenseHiddenForm(addExpenseFormPayer, addExpenseBtnEditPayer);
+  // });
+
+  // addExpenseFormSplittBtnClose.addEventListener('click', function (event) {
+  //   event.preventDefault();
+  //   closeAddExpenseHiddenForm(addExpenseFormSplitt, addExpenseBtnEditSplitt);
+  // });
+
+  // addExpenseFormNoteBtnClose.addEventListener('click', function (event) {
+  //   event.preventDefault();
+  //   closeAddExpenseHiddenForm(addExpenseFormNote, addExpenseBtnEditNote);
+  // });
 
   // el: Add Repayment
 
