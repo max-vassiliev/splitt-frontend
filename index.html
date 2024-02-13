@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" type="image/png" href="/icon.png" />
+
+    <!-- TODO1: remove unused fonts -->
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Rubik:400,500,600,700,800,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Noto Sans:400,500,600,700,800,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito Sans:400,500,600,700,800,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- TODO1 Fonts END -->
+
+    <!-- TODO1: Remove unused icons -->
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+
+    <!-- TODO1: Icons END -->
+
+    <link rel="stylesheet" href="style2.css" />
+    <title>Splitt</title>
+  </head>
+  <body>
+    <div class="overlay hidden"></div>
+    <!-- TOP NAVIGATION -->
+    <header>
+      <div class="logo">
+        <img src="logo.png" alt="Logo" class="logo_img" />
+        <h1 class="logo_text">Splitt</h1>
+      </div>
+      <div class="menu">
+        <div class="menu__account">
+          <img
+            src="images/sanya-avatar-2.png"
+            alt="Avatar"
+            class="account__avatar"
+          />
+          <!-- <div class="account__username">Константин Константинопольский</div> -->
+          <div class="account__username">Арсений Тарковский</div>
+          <!-- <div class="account__username">Аркадий Райкин</div> -->
+          <!-- <div class="account__username">Максим Васильев</div> -->
+          <!-- <div class="account__username">Анна Воронова</div> -->
+          <!-- <div class="account__username">Катерина</div> -->
+          <!-- <div class="account__username">Саня</div> -->
+        </div>
+        <button class="menu__btn--open">&#x25BC;</button>
+        <div class="menu__popup">
+          <div class="menu__popup_top">
+            <div class="menu__popup_account">
+              <img
+                class="account__avatar"
+                src="images/sanya-avatar-2.png"
+                alt="Аватар"
+              />
+              <!-- <div class="account__username">Константин Константинопольский</div> -->
+              <div class="account__username">Арсений Тарковский</div>
+              <!-- <div class="account__username">Аркадий Райкин</div> -->
+              <!-- <div class="account__username">Максим Васильев</div> -->
+              <!-- <div class="account__username">Анна Воронова</div> -->
+              <!-- <div class="account__username">Катерина</div> -->
+              <!-- <div class="account__username">Саня</div> -->
+            </div>
+            <button class="menu__btn--close">&times;</button>
+          </div>
+          <div class="menu__popup_main">
+            <div class="menu__popup_item">
+              <a href="#">Личный&nbsp;кабинет</a>
+            </div>
+            <div class="menu__popup_item link__group--settings">
+              <a href="#">Настройки&nbsp;группы</a>
+            </div>
+            <div class="menu__popup_item"><a href="#">О&nbsp;сервисе</a></div>
+            <div class="menu__popup_item"><a href="#">Выйти</a></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app">
+      <!-- GROUP -->
+
+      <div class="group__header">
+        <div class="group__info">
+          <img
+            class="group__img"
+            src="images/sw-avatar-teal1-house-50px.png"
+            alt="Иконка группы"
+          />
+          <p class="group__title">Домофонд</p>
+        </div>
+      </div>
+      <div class="group__popup">
+        <div class="group__popup_top">
+          <div class="group__info">
+            <img
+              class="group__img"
+              src="images/sw-avatar-teal1-house-50px.png"
+              alt="Иконка группы"
+            />
+            <p class="group__title">Домофонд</p>
+          </div>
+          <button class="menu__btn--close group__btn--close">&times;</button>
+        </div>
+        <div class="group__popup_main">
+          <a class="group__popup_item link">
+            <span class="material-symbols-outlined group__popup_icon"
+              >edit</span
+            >
+            <p>Редактировать группу</p>
+          </a>
+          <a class="group__popup_item link">
+            <span class="material-symbols-outlined group__popup_icon"
+              >list_alt_add</span
+            >
+            <p>Создать группу</p>
+          </a>
+          <div class="group__popup_item">
+            <span class="material-symbols-outlined group__popup_icon"
+              >swap_horiz</span
+            >
+            <p>Перейти в другую группу:</p>
+            <div class="group__switch--container">
+              <select class="group__switch">
+                <option value="1">Домофонд</option>
+                <option value="2">В Царском Селе</option>
+                <option value="3">Бал у Голицыных</option>
+                <option value="4">Прием у французов</option>
+              </select>
+              <div class="custom-arrow"></div>
+              <button class="group__switch_btn">выбрать</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!---------------------->
+      <!-- ADD TRANSACTIONS -->
+      <!---------------------->
+
+      <div class="add-transactions">
+        <button class="add-expense__btn">добавить трату</button>
+        <button class="add-repayment__btn">вернуть долг</button>
+      </div>
+
+      <!-- ADD EXPENSE -->
+      <div class="add-expense__form">
+        <!-- ADD EXPENSE: Main -->
+        <div class="add-expense__form_main">
+          <div class="add-expense__form_header">Добавить трату</div>
+          <form class="add-expense__form_body">
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Название</label>
+              <div class="form-input__container">
+                <!-- <span class="text-input__sample-text">Введите название</span> -->
+                <input
+                  class="text-input__user-input"
+                  name="expense-title"
+                  type="text"
+                  placeholder="Введите название"
+                />
+              </div>
+            </div>
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Сумма</label>
+              <div class="form-input__container">
+                <input
+                  class="text-input__user-input input__expense-amount"
+                  type="text"
+                  value="0,00&nbsp;₽"
+                />
+              </div>
+            </div>
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Дата</label>
+              <div class="form-input__container">
+                <input
+                  class="text-input__user-input input__expense--date"
+                  type="date"
+                />
+              </div>
+            </div>
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Кто платил</label>
+              <div class="form-input__container">
+                <button class="form-input__btn add-expense__btn-edit-payer">
+                  вы
+                </button>
+              </div>
+            </div>
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Поделить</label>
+              <div class="form-input__container">
+                <button class="form-input__btn add-expense__btn-edit-splitt">
+                  поровну
+                </button>
+              </div>
+              <div class="amount_input__comment">(с каждого по 250&nbsp;₽)</div>
+            </div>
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Комментарий</label>
+              <div class="form-input__container">
+                <button class="form-input__btn add-expense__btn-note">
+                  добавить
+                </button>
+              </div>
+            </div>
+            <div class="add-expense__form_footer">
+              <button
+                class="add-transaction__btn--close add-expense__btn--close"
+                type="button"
+              >
+                отменить
+              </button>
+              <button
+                class="add-transaction__btn--submit add-expense__btn--submit"
+              >
+                сохранить
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ADD EXPENSE: Payer -->
+        <div class="add-expense__form_payer">
+          <div class="add-expense__form_header">Кто платил</div>
+          <form class="add-expense__form_body">
+            <div class="add-expense__form_footer">
+              <button
+                class="add-transaction__btn--close add-expense__form_payer__btn--close"
+                type="button"
+              >
+                отменить
+              </button>
+              <button
+                class="add-transaction__btn--submit add-expense__form_payer__btn--submit"
+              >
+                сохранить
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ADD EXPENSE: Splitt -->
+        <div class="add-expense__form_splitt">
+          <div class="add-expense__form_header">Поделить</div>
+          <form class="add-expense__form_body">
+            <div class="add-expense__form_footer">
+              <button
+                class="add-transaction__btn--close add-expense__form_splitt__btn--close"
+                type="button"
+              >
+                отменить
+              </button>
+              <button
+                class="add-transaction__btn--submit add-expense__form_splitt__btn--submit"
+              >
+                сохранить
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ADD EXPENSE: Comment -->
+      </div>
+
+      <!-- ADD REPAYMENT -->
+
+      <!------------------
+          TRANSACTIONS 
+        ------------------>
+
+      <!-- MOVEMENTS (annotations) -->
+      <div class="movements__annotations">
+        <div class="movements__annotations--total">
+          <p>общая сумма</p>
+        </div>
+        <div class="movements__annotations--share">
+          <p>ваш баланс</p>
+        </div>
+      </div>
+
+      <!-- MOVEMENTS -->
+      <div class="movements">
+        <div class="movements__frame">
+          <div class="movements__row movements--repayment">
+            <div class="repayment__marker"></div>
+            <div class="movements__date">26.09.2023</div>
+            <div class="movements__title">
+              ✅&nbsp;&nbsp;Возврат:
+              <span class="movements__repayment--destination">
+                Саня &rarr; Петя</span
+              >
+            </div>
+            <div class="movements__value">+&nbsp;4&nbsp;000,00&nbsp;₽</div>
+            <div
+              class="movements__value movements__share amount__color--positive"
+            >
+              +&nbsp;4&nbsp;000,00&nbsp;₽
+            </div>
+          </div>
+          <div class="movements__row">
+            <!-- <div class="movements__type movements__type--withdrawal">
+              1 withdrawal
+            </div> -->
+            <div class="movements__date">16.11.2023</div>
+            <div class="movements__title">🏠&nbsp;&nbsp;Арендь</div>
+            <div class="movements__value">-&nbsp;60&nbsp;000,00&nbsp;₽</div>
+            <div
+              class="movements__value movements__share amount__color--negative"
+            >
+              -&nbsp;15&nbsp;000,00&nbsp;₽
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIXME:: поменять названия классов с operation на summary -->
+      <!-- SUMMARY: STATUS -->
+      <div class="operation status">
+        <h2>Ваш долг</h2>
+        <p>
+          Чтобы восстановить баланс в группе, переведите деньги пользователям:
+        </p>
+        <div class="operation__table">
+          <div class="operation__table--row">
+            <div class="operation__table--avatar">🧑‍🎓</div>
+            <div class="operation__table--user">Катерина</div>
+            <div class="operation__table--amount amount__color--negative">
+              34&nbsp;056,83&nbsp;₽
+            </div>
+          </div>
+          <div class="operation__table--row">
+            <div class="operation__table--avatar">👨‍🦳</div>
+            <div class="operation__table--user">
+              Павлентий Петрович Павлентийпетровичевский
+            </div>
+            <div class="operation__table--amount amount__color--negative">
+              2&nbsp;011,00&nbsp;₽
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUMMARY: GROUP STATS -->
+      <div class="operation group-stats">
+        <h2>Статистика группы</h2>
+        <div class="operation__table">
+          <div class="operation__table--row">
+            <div class="operation__table--avatar">🧑‍🎓</div>
+            <div class="operation__table--user">Катерина</div>
+            <div class="operation__table--amount amount__color--positive">
+              +&nbsp;34&nbsp;056,83&nbsp;₽
+            </div>
+          </div>
+          <div class="operation__table--row">
+            <div class="operation__table--avatar">🤴</div>
+            <div class="operation__table--user">Пётр</div>
+            <div class="operation__table--amount amount__color--negative">
+              -&nbsp;6&nbsp;859,49&nbsp;₽
+            </div>
+          </div>
+          <div class="operation__table--row">
+            <div class="operation__table--avatar">👨‍🦳</div>
+            <div class="operation__table--user">
+              Павлентий Петрович Павлентийпетровичевский
+            </div>
+            <div class="operation__table--amount amount__color--positive">
+              +&nbsp;2&nbsp;011,00&nbsp;₽
+            </div>
+          </div>
+          <div class="operation__table--row">
+            <div class="operation__table--avatar">👨‍🎤</div>
+            <div class="operation__table--user">Саня</div>
+            <div class="operation__table--amount amount__color--negative">
+              -&nbsp;29&nbsp;208,00&nbsp;₽
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPERATION: TRANSFERS -->
+      <!-- <div class="operation operation--transfer">
+        <h2>Transfer money</h2>
+        <form class="form form--transfer">
+          <input type="text" class="form__input form__input--to" />
+          <input type="number" class="form__input form__input--amount" />
+          <button class="form__btn form__btn--transfer">&rarr;</button>
+          <label class="form__label">Transfer to</label>
+          <label class="form__label">Amount</label>
+          <p>some some some some some some some some some some </p>
+          <p>text text text text text text text text text text </p>
+          <p>dude dude dude dude dude dude dude dude dude dude </p>
+          <p>text text text text text text text text text text </p>
+          <p>some some some some some some some some some some </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+        </form>
+      </div> -->
+
+      <!-- FIXME: удалить, когда всё -->
+      <!-- OPERATION: LOAN -->
+      <!-- <div class="operation operation--loan">
+        <h2>Request loan</h2>
+        <form class="form form--loan">
+          <input type="number" class="form__input form__input--loan-amount" />
+          <button class="form__btn form__btn--loan">&rarr;</button>
+          <label class="form__label form__label--loan">Amount</label> -->
+      <!-- <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+          <p>text text text text text text text text text text </p>
+        </form>
+      </div> -->
+
+      <!-- OPERATION: CLOSE -->
+      <!-- <div class="operation operation--close">
+        <h2>Close account</h2>
+        <form class="form form--close">
+          <input type="text" class="form__input form__input--user" />
+          <input
+            type="password"
+            maxlength="6"
+            class="form__input form__input--pin"
+          />
+          <button class="form__btn form__btn--close">&rarr;</button>
+          <label class="form__label">Confirm user</label>
+          <label class="form__label">Confirm PIN</label>
+        </form>
+      </div> -->
+
+      <!-- MOVEMENTS: PAGES -->
+      <div class="movements__pages">
+        <div class="current__transactions">&uarr; Текущие транзакции</div>
+        <button class="btn__previous--page">&larr;</button>
+        <div class="transaction__history">история транзакций</div>
+        <button class="btn__next--page">&rarr;</button>
+      </div>
+
+      <!-- SUMMARY (Jonas) FIXME: -->
+      <!-- <div class="summary">
+        <p class="summary__label">In</p>
+        <p class="summary__value summary__value--in">0000€</p>
+        <p class="summary__label">Out</p>
+        <p class="summary__value summary__value--out">0000€</p>
+        <p class="summary__label">Inteeeerest</p>
+        <p class="summary__value summary__value--interest">0000€</p>
+        <button class="btn--sort">&downarrow; SORT</button>
+      </div> -->
+
+      <!-- LOGOUT TIMER -->
+      <!-- <p class="logout-timer">
+        You will be logged out in <span class="timer">05:00</span>
+      </p> -->
+    </main>
+
+    <!-- FIXME: убрать -->
+    <!-- <footer>
+      &copy; by Jonas Schmedtmann. Don't claim as your own :)
+    </footer> -->
+
+    <!-- <script src="script.js"></script> -->
+    <script src="script2.js"></script>
+  </body>
+</html>
