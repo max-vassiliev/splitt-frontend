@@ -19,61 +19,76 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // e: Utils
   const overlay = document.querySelector('.overlay');
+  const amountInput = document.querySelectorAll('.input-amount');
+  const btnClosePopup = document.querySelectorAll('.btn__close_popup');
 
   // e: Group
   const groupHeader = document.querySelector('.group__info');
   const groupSettingsLink = document.querySelector('.link__group--settings');
   const groupPopup = document.querySelector('.group__popup');
-  const groupPopupBtnClose = document.querySelector('.group__btn--close');
   const groupSwitch = document.querySelector('.group__switch');
   const groupSwitchBtn = document.querySelector('.group__switch_btn');
 
   // e: Add Expense
   const addExpenseBtn = document.querySelector('.add-expense__btn');
   const addExpenseForm = document.querySelector('.add-expense__form');
-  const addExpenseFormMain = document.querySelector('.add-expense__form_main');
   const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
     '.add-expense__form__btn--close'
   );
-  const addExpenseBtnEditPayer = document.querySelector(
-    '.add-expense__btn-edit-payer'
-  );
-  const addExpenseBtnEditSplitt = document.querySelector(
-    '.add-expense__btn-edit-splitt'
-  );
-  const addExpenseBtnEditNote = document.querySelector(
-    '.add-expense__btn-edit-note'
-  );
-  const addExpenseBtnClose = document.querySelector('.add-expense__btn--close');
-  const addExpenseAmountInput = document.querySelector(
-    '.input__expense-amount'
-  );
-  const addExpenseFormPayer = document.querySelector(
-    '.add-expense__form_payer'
-  );
-  const addExpenseFormPayerBtnClose = document.querySelector(
-    '.add-expense__form_payer__btn--close'
-  );
-  const addExpenseFormSplitt = document.querySelector(
-    '.add-expense__form_splitt'
-  );
-  const addExpenseFormSplittBtnClose = document.querySelector(
-    '.add-expense__form_splitt__btn--close'
-  );
-  const addExpenseFormNote = document.querySelector('.add-expense__form_note');
-  const addExpenseFormNoteBtnClose = document.querySelector(
-    '.add-expense__form_note__btn--close'
-  );
+  // const addExpenseBtnClose = document.querySelector('.add-expense__btn--close');
+
+  // const addExpenseFormMain = document.querySelector('.add-expense__form_main');
+  // const addExpenseBtnEditPayer = document.querySelector(
+  //   '.add-expense__btn-edit-payer'
+  // );
+  // const addExpenseBtnEditSplitt = document.querySelector(
+  //   '.add-expense__btn-edit-splitt'
+  // );
+  // const addExpenseBtnEditNote = document.querySelector(
+  //   '.add-expense__btn-edit-note'
+  // );
+  // const addExpenseFormPayer = document.querySelector(
+  //   '.add-expense__form_payer'
+  // );
+  // const addExpenseFormPayerBtnClose = document.querySelector(
+  //   '.add-expense__form_payer__btn--close'
+  // );
+  // const addExpenseFormSplitt = document.querySelector(
+  //   '.add-expense__form_splitt'
+  // );
+  // const addExpenseFormSplittBtnClose = document.querySelector(
+  //   '.add-expense__form_splitt__btn--close'
+  // );
+  // const addExpenseFormNote = document.querySelector('.add-expense__form_note');
+  // const addExpenseFormNoteBtnClose = document.querySelector(
+  //   '.add-expense__form_note__btn--close'
+  // );
 
   // e: Add Repayment
   const addRepaymentBtn = document.querySelector('.add-repayment__btn');
+  const addRepaymentForm = document.querySelector('.add-repayment__form');
 
   // ---------------
   // Functions (f:)
   // ---------------
 
   // f: Util
+
+  function addOverlay() {
+    overlay.classList.remove('hidden');
+  }
+
+  function hideOverlay() {
+    overlay.classList.add('hidden');
+  }
+
+  function closeActivePopup() {
+    if (!activePopup) return;
+    hideOverlay();
+    activePopup.classList.remove(ACTIVE_CLASS);
+    activePopup = null;
+  }
 
   function formatAmountString(value) {
     const cleanedValue = value.replace(/\D/g, '');
@@ -117,20 +132,6 @@ document.addEventListener('DOMContentLoaded', function () {
     menuPopup.classList.remove('active');
   }
 
-  // f: Overlay
-
-  function addOverlay() {
-    overlay.classList.remove('hidden');
-  }
-
-  function hideOverlay() {
-    overlay.classList.add('hidden');
-    if (activePopup) {
-      activePopup.classList.remove('active');
-      activePopup = null;
-    }
-  }
-
   // f: Group
 
   function openGroupPopup() {
@@ -140,8 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function closeGroupPopup() {
-    groupPopup.classList.remove('active');
-    hideOverlay();
+    closeActivePopup();
   }
 
   function handleGroupSwitchChange() {
@@ -173,8 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function closeAddExpense() {
-    addExpenseForm.classList.remove(ACTIVE_CLASS);
-    hideOverlay();
+    closeActivePopup();
   }
 
   // TODO1 new functions
@@ -213,10 +212,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openAddRepayment() {
     addOverlay();
+    addRepaymentForm.classList.add(ACTIVE_CLASS);
+    activePopup = addRepaymentForm;
   }
 
   function closeAddRepayment() {
-    hideOverlay();
+    closeActivePopup();
   }
 
   // ----------------------
@@ -235,8 +236,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   groupHeader.addEventListener('click', openGroupPopup);
 
-  groupPopupBtnClose.addEventListener('click', closeGroupPopup);
-
   groupSettingsLink.addEventListener('click', function (event) {
     event.preventDefault();
     closeMenuPopup();
@@ -248,10 +247,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // el: Add Expense
 
   addExpenseBtn.addEventListener('click', openAddExpense);
-
-  addExpenseBtnClose.addEventListener('click', closeAddExpense);
-
-  addExpenseAmountInput.addEventListener('input', handleAmountInput);
 
   addExpenseBtnEdit.forEach(button => {
     button.addEventListener('click', function (event) {
@@ -294,7 +289,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // el: Util
 
-  overlay.addEventListener('click', hideOverlay);
+  overlay.addEventListener('click', closeActivePopup);
+
+  amountInput.forEach(inputField => {
+    inputField.addEventListener('input', handleAmountInput);
+  });
+
+  btnClosePopup.forEach(button => {
+    button.addEventListener('click', closeActivePopup);
+  });
 
   document.addEventListener('click', function (event) {
     const isClickInsideMenuPopup = menuPopup.contains(event.target);

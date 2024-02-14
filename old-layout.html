@@ -141,7 +141,7 @@
             />
             <p class="group__title">Домофонд</p>
           </div>
-          <button class="menu__btn--close btn__close_popup">&times;</button>
+          <button class="menu__btn--close group__btn--close">&times;</button>
         </div>
         <div class="group__popup_main">
           <a class="group__popup_item link">
@@ -191,80 +191,90 @@
           <div class="add-transaction__form_header add-expense__form_header">
             Добавить трату
           </div>
-          <form class="add-transaction__form_body">
-            <div class="add-transaction__form_field">
-              <label class="add-transaction__form_label">Название</label>
-              <div class="add-transaction__form_input-container">
+          <form class="add-transaction__form_body add-expense__form_body">
+            <div class="add-transaction__form_field add-expense__form_field">
+              <label class="add-transaction__form_label add-expense__form_label"
+                >Название</label
+              >
+              <div
+                class="add-transaction__form_input-container form-input__container"
+              >
+                <!-- <span class="text-input__sample-text">Введите название</span> -->
                 <input
-                  class="add-transaction__form_input-text"
+                  class="add-transaction__form_input-text text-input__user-input"
                   name="expense-title"
                   type="text"
                   placeholder="Введите название"
                 />
               </div>
             </div>
-            <div class="add-transaction__form_field">
-              <label class="add-transaction__form_label">Сумма</label>
-              <div class="add-transaction__form_input-container">
+            <div class="add-transaction__form_field add-expense__form_field">
+              <label class="add-transaction__form_label add-expense__form_label"
+                >Сумма</label
+              >
+              <div
+                class="add-transaction__form_input-container form-input__container"
+              >
                 <input
-                  class="add-transaction__form_input-text input-amount"
+                  class="add-transaction__form_input-text text-input__user-input input__expense-amount"
                   type="text"
                   value="0,00&nbsp;₽"
                 />
               </div>
             </div>
-            <div class="add-transaction__form_field">
-              <label class="add-transaction__form_label">Дата</label>
-              <div class="add-transaction__form_input-container">
+            <!-- 
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Дата</label>
+              <div class="form-input__container">
                 <input
-                  class="add-transaction__form_input-text add-transaction__form_input-date input__expense--date"
+                  class="text-input__user-input input__expense--date"
                   type="date"
                 />
               </div>
             </div>
-            <div class="add-transaction__form_field">
-              <label class="add-transaction__form_label">Кто платил</label>
-              <div class="add-transaction__form_input-container">
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Кто платил</label>
+              <div class="form-input__container">
                 <button
-                  class="add-transaction__form_btn-edit add-expense__btn-edit"
+                  class="form-input__btn add-expense__btn-edit-payer add-expense__btn-edit"
                   data-form="payer"
                 >
                   вы
                 </button>
               </div>
             </div>
-
-            <div class="add-transaction__form_field">
-              <label class="add-transaction__form_label">Поделить</label>
-              <div class="add-transaction__form_input-container">
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Поделить</label>
+              <div class="form-input__container">
                 <button
-                  class="add-transaction__form_btn-edit add-expense__btn-edit"
+                  class="form-input__btn add-expense__btn-edit-splitt add-expense__btn-edit"
                   data-form="splitt"
                 >
                   поровну
                 </button>
               </div>
-              <div class="add-transaction__form_input-comment">
-                (с каждого по 250&nbsp;₽)
-              </div>
+              <div class="add-transaction__form_input-comment amount_input__comment">(с каждого по 250&nbsp;₽)</div>
             </div>
-            <div class="add-transaction__form_field">
-              <label class="add-transaction__form_label">Комментарий</label>
-              <div class="add-transaction__form_input-container">
+            <div class="add-expense__form_field">
+              <label class="add-expense__form_label">Комментарий</label>
+              <div class="form-input__container">
                 <button
-                  class="add-transaction__form_btn-edit add-expense__btn-edit"
+                  class="form-input__btn add-expense__btn-edit-note add-expense__btn-edit"
                   data-form="note"
                 >
                   добавить
                 </button>
               </div>
-            </div>
-            <div class="add-transaction__form_footer">
-              <button class="add-transaction__form_btn-close btn__close_popup">
+            </div> -->
+            <div class="add-transaction__form_footer add-expense__form_footer">
+              <button
+                class="add-transaction__btn--close add-expense__btn--close add-expense__form__btn--close"
+                type="button"
+              >
                 отменить
               </button>
               <button
-                class="add-transaction__form_btn-submit add-expense__btn--submit"
+                class="add-transaction__btn--submit add-expense__btn--submit"
               >
                 сохранить
               </button>
@@ -273,21 +283,19 @@
         </div>
 
         <!-- ADD EXPENSE: Payer -->
-        <div class="add-transaction__form_hidden add-expense__form_payer">
-          <div
-            class="add-transaction__form_header add-expense__form_hidden_header"
-          >
+        <div class="add-expense__form_payer">
+          <div class="add-transaction__form_header add-expense__form_header">
             Кто платил
           </div>
-          <form class="add-transaction__form_body">
-            <div class="add-transaction__form_footer">
+          <form class="add-expense__form_body">
+            <div class="add-expense__form_footer">
               <button
-                class="add-transaction__form_btn-close add-expense__form__btn--close"
+                class="add-transaction__btn--close add-expense__form__btn--close"
               >
                 отменить
               </button>
               <button
-                class="add-transaction__form_btn-submit add-expense__form_payer__btn--submit"
+                class="add-transaction__btn--submit add-expense__form_payer__btn--submit"
               >
                 сохранить
               </button>
@@ -296,21 +304,19 @@
         </div>
 
         <!-- ADD EXPENSE: Splitt -->
-        <div class="add-transaction__form_hidden add-expense__form_splitt">
-          <div
-            class="add-transaction__form_header add-expense__form_hidden_header"
-          >
+        <div class="add-expense__form_splitt">
+          <div class="add-transaction__form_header add-expense__form_header">
             Поделить
           </div>
-          <form class="add-transaction__form_body">
-            <div class="add-transaction__form_footer">
+          <form class="add-expense__form_body">
+            <div class="add-expense__form_footer">
               <button
-                class="add-transaction__form_btn-close add-expense__form__btn--close"
+                class="add-transaction__btn--close add-expense__form__btn--close"
               >
                 отменить
               </button>
               <button
-                class="add-transaction__form_btn-submit add-expense__form_splitt__btn--submit"
+                class="add-transaction__btn--submit add-expense__form_splitt__btn--submit"
               >
                 сохранить
               </button>
@@ -319,21 +325,19 @@
         </div>
 
         <!-- ADD EXPENSE: Note -->
-        <div class="add-transaction__form_hidden add-expense__form_note">
-          <div
-            class="add-transaction__form_header add-expense__form_hidden_header"
-          >
+        <div class="add-expense__form_note">
+          <div class="add-transaction__form_header add-expense__form_header">
             Комментарий
           </div>
-          <form class="add-transaction__form_body">
-            <div class="add-transaction__form_footer">
+          <form class="add-expense__form_body">
+            <div class="add-expense__form_footer">
               <button
-                class="add-transaction__form_btn-close add-expense__form__btn--close"
+                class="add-transaction__btn--close add-expense__form__btn--close"
               >
                 отменить
               </button>
               <button
-                class="add-transaction__form_btn-submit add-expense__form_note__btn--submit"
+                class="add-transaction__btn--submit add-expense__form_note__btn--submit"
               >
                 сохранить
               </button>
