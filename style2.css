@@ -572,8 +572,26 @@ header {
 }
 
 .add-transaction__form_input-date {
-  color: #777;
   width: 14rem;
+}
+
+.add-transaction__form_input-switch {
+  margin-left: 0.8rem;
+  padding: 0.5rem 0.8rem;
+  min-width: 18rem;
+  max-width: 22rem;
+  font-family: inherit;
+  font-size: 1.6rem;
+  color: #777;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid #aaa;
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+
+.add-transaction__form_input-switch:hover {
+  box-shadow: 0 0px 1rem rgba(120, 120, 120, 0.3);
 }
 
 .add-transaction__form_btn-edit {
@@ -799,16 +817,36 @@ header {
 
 /*  ADD REPAYMENT  */
 
-.add-repayment__form {
+.add-repayment__form,
+.add-repayment__form_note {
   display: none;
 }
 
-.add-repayment__form.active {
+.add-repayment__form.active,
+.add-repayment__form_note.active {
   display: block;
 }
 
 .add-repayment__form_header {
   background-color: #8cbf74;
+}
+
+.add-repayment__form_hidden_header {
+  background-color: #5c9144;
+}
+
+.add-repayment__btn-edit.active {
+  border: 1px solid rgb(92, 145, 68);
+  background-color: rgba(92, 145, 68, 0.1);
+}
+
+.add-repayment__form .add-transaction__form_input-text {
+  margin-left: 1.2rem;
+}
+
+.add-repayment__form button {
+  height: 3rem;
+  padding: 0 0.8rem;
 }
 
 /* ~ ~ ~ ~ */

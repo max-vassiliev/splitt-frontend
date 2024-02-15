@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentGroupId = 1;
   let activePopup = null;
   let activeAddExpenseHiddenForm = null;
+  let activeAddRepaymentHiddenForm = null;
 
   const ACTIVE_CLASS = 'active';
 
@@ -34,40 +35,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseForm = document.querySelector('.add-expense__form');
   const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
-    '.add-expense__form__btn--close'
+    '.add-expense__form_btn-close'
   );
-  // const addExpenseBtnClose = document.querySelector('.add-expense__btn--close');
-
-  // const addExpenseFormMain = document.querySelector('.add-expense__form_main');
-  // const addExpenseBtnEditPayer = document.querySelector(
-  //   '.add-expense__btn-edit-payer'
-  // );
-  // const addExpenseBtnEditSplitt = document.querySelector(
-  //   '.add-expense__btn-edit-splitt'
-  // );
-  // const addExpenseBtnEditNote = document.querySelector(
-  //   '.add-expense__btn-edit-note'
-  // );
-  // const addExpenseFormPayer = document.querySelector(
-  //   '.add-expense__form_payer'
-  // );
-  // const addExpenseFormPayerBtnClose = document.querySelector(
-  //   '.add-expense__form_payer__btn--close'
-  // );
-  // const addExpenseFormSplitt = document.querySelector(
-  //   '.add-expense__form_splitt'
-  // );
-  // const addExpenseFormSplittBtnClose = document.querySelector(
-  //   '.add-expense__form_splitt__btn--close'
-  // );
-  // const addExpenseFormNote = document.querySelector('.add-expense__form_note');
-  // const addExpenseFormNoteBtnClose = document.querySelector(
-  //   '.add-expense__form_note__btn--close'
-  // );
 
   // e: Add Repayment
   const addRepaymentBtn = document.querySelector('.add-repayment__btn');
   const addRepaymentForm = document.querySelector('.add-repayment__form');
+  const addRepaymentBtnEdit = document.querySelectorAll(
+    '.add-repayment__btn-edit'
+  );
+  const addRepaymentHiddenFormBtnClose = document.querySelectorAll(
+    '.add-repayment__form_btn-close'
+  );
 
   // ---------------
   // Functions (f:)
@@ -140,10 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
     activePopup = groupPopup;
   }
 
-  function closeGroupPopup() {
-    closeActivePopup();
-  }
-
   function handleGroupSwitchChange() {
     if (this.value === null || this.value === undefined) return;
 
@@ -172,12 +147,6 @@ document.addEventListener('DOMContentLoaded', function () {
     activePopup = addExpenseForm;
   }
 
-  function closeAddExpense() {
-    closeActivePopup();
-  }
-
-  // TODO1 new functions
-
   function toggleAddExpenseHiddenForm(form, button) {
     button.classList.contains(ACTIVE_CLASS)
       ? closeAddExpenseHiddenForm()
@@ -195,13 +164,6 @@ document.addEventListener('DOMContentLoaded', function () {
     activeAddExpenseHiddenForm = { form, button };
   }
 
-  // FIXME: delete if unused
-  function closeAddExpenseHiddenFormDELETE(form, button) {
-    form.classList.remove(ACTIVE_CLASS);
-    button.classList.remove(ACTIVE_CLASS);
-    activeAddExpenseHiddenForm = null;
-  }
-
   function closeAddExpenseHiddenForm() {
     activeAddExpenseHiddenForm.form.classList.remove(ACTIVE_CLASS);
     activeAddExpenseHiddenForm.button.classList.remove(ACTIVE_CLASS);
@@ -216,13 +178,47 @@ document.addEventListener('DOMContentLoaded', function () {
     activePopup = addRepaymentForm;
   }
 
-  function closeAddRepayment() {
-    closeActivePopup();
+  function toggleAddRepaymentHiddenForm(form, button) {
+    button.classList.contains(ACTIVE_CLASS)
+      ? closeAddRepaymentHiddenForm()
+      : openAddRepaymentHiddenForm(form, button);
+  }
+
+  function openAddRepaymentHiddenForm(form, button) {
+    if (activeAddRepaymentHiddenForm) {
+      closeAddRepaymentHiddenForm();
+    }
+
+    form.classList.add(ACTIVE_CLASS);
+    button.classList.add(ACTIVE_CLASS);
+
+    activeAddRepaymentHiddenForm = { form, button };
+  }
+
+  function closeAddRepaymentHiddenForm() {
+    activeAddRepaymentHiddenForm.form.classList.remove(ACTIVE_CLASS);
+    activeAddRepaymentHiddenForm.button.classList.remove(ACTIVE_CLASS);
+    activeAddRepaymentHiddenForm = null;
   }
 
   // ----------------------
   // Event Listeners (el:)
   // ----------------------
+
+  // f: Auxiliary
+
+  function toggleHiddenForm(button, transactionType) {
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      const hiddenFormName = this.dataset.form;
+      const hiddenForm = document.querySelector(
+        `.add-${transactionType}__form_${hiddenFormName}`
+      );
+      transactionType === 'expense'
+        ? toggleAddExpenseHiddenForm(hiddenForm, this)
+        : toggleAddRepaymentHiddenForm(hiddenForm, this);
+    });
+  }
 
   // el: Menu
 
@@ -248,16 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   addExpenseBtn.addEventListener('click', openAddExpense);
 
-  addExpenseBtnEdit.forEach(button => {
-    button.addEventListener('click', function (event) {
-      event.preventDefault();
-      const hiddenFormName = this.dataset.form;
-      const hiddenForm = document.querySelector(
-        `.add-expense__form_${hiddenFormName}`
-      );
-      toggleAddExpenseHiddenForm(hiddenForm, this);
-    });
-  });
+  addExpenseBtnEdit.forEach(button => toggleHiddenForm(button, 'expense'));
 
   addExpenseHiddenFormBtnClose.forEach(button => {
     button.addEventListener('click', function (event) {
@@ -266,26 +253,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // FIXME: delete if unused
-
-  // addExpenseFormPayerBtnClose.addEventListener('click', function (event) {
-  //   event.preventDefault();
-  //   closeAddExpenseHiddenForm(addExpenseFormPayer, addExpenseBtnEditPayer);
-  // });
-
-  // addExpenseFormSplittBtnClose.addEventListener('click', function (event) {
-  //   event.preventDefault();
-  //   closeAddExpenseHiddenForm(addExpenseFormSplitt, addExpenseBtnEditSplitt);
-  // });
-
-  // addExpenseFormNoteBtnClose.addEventListener('click', function (event) {
-  //   event.preventDefault();
-  //   closeAddExpenseHiddenForm(addExpenseFormNote, addExpenseBtnEditNote);
-  // });
-
   // el: Add Repayment
 
   addRepaymentBtn.addEventListener('click', openAddRepayment);
+
+  addRepaymentBtnEdit.forEach(button => toggleHiddenForm(button, 'repayment'));
+
+  addRepaymentHiddenFormBtnClose.forEach(button => {
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      closeAddRepaymentHiddenForm();
+    });
+  });
 
   // el: Util
 

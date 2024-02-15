@@ -187,7 +187,7 @@
       <!-- ADD EXPENSE -->
       <div class="add-expense__form">
         <!-- ADD EXPENSE: Main -->
-        <div class="add-transaction__form_main add-expense__form_main">
+        <div class="add-transaction__form_main">
           <div class="add-transaction__form_header add-expense__form_header">
             Добавить трату
           </div>
@@ -217,7 +217,7 @@
               <label class="add-transaction__form_label">Дата</label>
               <div class="add-transaction__form_input-container">
                 <input
-                  class="add-transaction__form_input-text add-transaction__form_input-date input__expense--date"
+                  class="add-transaction__form_input-text add-transaction__form_input-date"
                   type="date"
                 />
               </div>
@@ -233,7 +233,6 @@
                 </button>
               </div>
             </div>
-
             <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">Поделить</label>
               <div class="add-transaction__form_input-container">
@@ -260,7 +259,10 @@
               </div>
             </div>
             <div class="add-transaction__form_footer">
-              <button class="add-transaction__form_btn-close btn__close_popup">
+              <button
+                class="add-transaction__form_btn-close btn__close_popup"
+                type="button"
+              >
                 отменить
               </button>
               <button
@@ -282,7 +284,8 @@
           <form class="add-transaction__form_body">
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close add-expense__form__btn--close"
+                class="add-transaction__form_btn-close add-expense__form_btn-close"
+                type="button"
               >
                 отменить
               </button>
@@ -305,7 +308,8 @@
           <form class="add-transaction__form_body">
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close add-expense__form__btn--close"
+                class="add-transaction__form_btn-close add-expense__form_btn-close"
+                type="button"
               >
                 отменить
               </button>
@@ -328,7 +332,7 @@
           <form class="add-transaction__form_body">
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close add-expense__form__btn--close"
+                class="add-transaction__form_btn-close add-expense__form_btn-close"
               >
                 отменить
               </button>
@@ -343,11 +347,112 @@
       </div>
 
       <!-- ADD REPAYMENT -->
-      <div class="add-transaction__form add-repayment__form">
+      <div class="add-repayment__form">
+        <!-- ADD REPAYMENT: Main -->
         <div class="add-transaction__form_main add-repayment__form_main">
           <div class="add-transaction__form_header add-repayment__form_header">
-            Добавить трату
+            Вернуть долг
           </div>
+          <form class="add-transaction__form_body">
+            <div class="add-transaction__form_field">
+              <label class="add-transaction__form_label">Сумма</label>
+              <div class="add-transaction__form_input-container">
+                <input
+                  class="add-transaction__form_input-text input-amount"
+                  name="repayment-amount"
+                  type="text"
+                  value="0,00&nbsp;₽"
+                />
+              </div>
+            </div>
+            <div class="add-transaction__form_field">
+              <label class="add-transaction__form_label">Дата</label>
+              <div class="add-transaction__form_input-container">
+                <input
+                  class="add-transaction__form_input-text add-transaction__form_input-date"
+                  type="date"
+                />
+              </div>
+            </div>
+            <div class="add-transaction__form_field">
+              <label class="add-transaction__form_label">От кого</label>
+              <div class="add-transaction__form_input-container">
+                <select class="add-transaction__form_input-switch">
+                  <!-- <option value="4">от вас</option>
+                  <option value="1">Аркадий Райкин</option>
+                  <option value="2">Анна Воронова</option>
+                  <option value="3">Константин Константинопольский</option> -->
+                  <option value="4">от вас</option>
+                  <option value="1">Аркадий</option>
+                  <option value="2">Анна</option>
+                  <option value="3">Константин</option>
+                </select>
+              </div>
+            </div>
+            <div class="add-transaction__form_field">
+              <label class="add-transaction__form_label">Кому</label>
+              <div class="add-transaction__form_input-container">
+                <select class="add-transaction__form_input-switch">
+                  <!-- <option value="4">вам</option>
+                  <option value="1">Аркадий Райкин</option>
+                  <option value="2">Анна Воронова</option>
+                  <option value="3">Константин Константинопольский</option> -->
+                  <option value="4">вам</option>
+                  <option value="1">Аркадий</option>
+                  <option value="2">Анна</option>
+                  <option value="3">Константин</option>
+                </select>
+              </div>
+            </div>
+            <div class="add-transaction__form_field">
+              <label class="add-transaction__form_label">Комментарий</label>
+              <div class="add-transaction__form_input-container">
+                <button
+                  class="add-transaction__form_btn-edit add-repayment__btn-edit"
+                  data-form="note"
+                >
+                  добавить
+                </button>
+              </div>
+            </div>
+            <div class="add-transaction__form_footer">
+              <button
+                class="add-transaction__form_btn-close btn__close_popup"
+                type="button"
+              >
+                отменить
+              </button>
+              <button
+                class="add-transaction__form_btn-submit add-repayment__btn--submit"
+              >
+                сохранить
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ADD REPAYMENT: Note -->
+        <div class="add-transaction__form_hidden add-repayment__form_note">
+          <div
+            class="add-transaction__form_header add-repayment__form_hidden_header"
+          >
+            Комментарий
+          </div>
+          <form class="add-transaction__form_body">
+            <div class="add-transaction__form_footer">
+              <button
+                class="add-transaction__form_btn-close add-repayment__form_btn-close"
+                type="button"
+              >
+                отменить
+              </button>
+              <button
+                class="add-transaction__form_btn-submit add-repayment__form_note__btn--submit"
+              >
+                сохранить
+              </button>
+            </div>
+          </form>
         </div>
       </div>
 
