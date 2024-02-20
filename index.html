@@ -179,6 +179,10 @@
       <!-- ADD TRANSACTIONS -->
       <!---------------------->
 
+      <div class="emoji-picker-container">
+        <div id="emoji-picker"></div>
+      </div>
+
       <div class="add-transactions">
         <button class="add-expense__btn">добавить трату</button>
         <button class="add-repayment__btn">вернуть долг</button>
@@ -223,6 +227,32 @@
               </div>
             </div>
             <div class="add-transaction__form_field">
+              <label class="add-transaction__form_label">Значок</label>
+              <div class="add-transaction__form_input-container">
+                <input
+                  class="add-transaction__form_input-text"
+                  type="text"
+                  name="emoji-input"
+                  id="emoji-input"
+                  title="выбрать"
+                  readonly
+                />
+                <div
+                  class="material-symbols-outlined"
+                  id="btn__emoji-picker--switch"
+                >
+                  add_reaction
+                </div>
+                <div
+                  class="material-symbols-outlined"
+                  id="btn__emoji-remove"
+                  title="очистить"
+                >
+                  close_small
+                </div>
+              </div>
+            </div>
+            <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">Кто платил</label>
               <div class="add-transaction__form_input-container">
                 <button
@@ -233,7 +263,7 @@
                 </button>
               </div>
             </div>
-            <div class="add-transaction__form_field">
+            <div class="add-transaction__form_field field-splitt">
               <label class="add-transaction__form_label">Поделить</label>
               <div class="add-transaction__form_input-container">
                 <button
@@ -243,6 +273,8 @@
                   поровну
                 </button>
               </div>
+            </div>
+            <div class="add-transaction__form_field field-splitt-comment">
               <div class="add-transaction__form_input-comment">
                 (с каждого по 250&nbsp;₽)
               </div>
@@ -254,7 +286,7 @@
                   class="add-transaction__form_btn-edit add-expense__btn-edit"
                   data-form="note"
                 >
-                  добавить
+                  написать
                 </button>
               </div>
             </div>
@@ -346,6 +378,27 @@
         </div>
       </div>
 
+      <!-- ADD EXPENSE: Emoji -->
+      <!-- <div class="add-transaction__form_hidden add-expense__form_emoji">
+        <div
+          class="add-transaction__form_header add-expense__form_hidden_header"
+        >
+          Эмодзи
+        </div>
+        <form class="add-transaction__form_body">
+          <div class="emoji-picker-container">
+            <div id="emoji-picker"></div>
+          </div>
+          <div class="add-transaction__form_footer">
+            <button
+              class="add-transaction__form_btn-close add-expense__form_btn-close"
+            >
+              закрыть
+            </button>
+          </div>
+        </form>
+      </div> -->
+
       <!-- ADD REPAYMENT -->
       <div class="add-repayment__form">
         <!-- ADD REPAYMENT: Main -->
@@ -372,6 +425,32 @@
                   class="add-transaction__form_input-text add-transaction__form_input-date"
                   type="date"
                 />
+              </div>
+            </div>
+            <div class="add-transaction__form_field">
+              <label class="add-transaction__form_label">Эмодзи</label>
+              <div class="add-transaction__form_input-container">
+                <input
+                  class="add-transaction__form_input-text"
+                  type="text"
+                  name="emoji-input"
+                  id="emoji-input"
+                  title="выбрать"
+                  readonly
+                />
+                <div
+                  class="material-symbols-outlined"
+                  id="btn__emoji-picker--switch"
+                >
+                  add_reaction
+                </div>
+                <div
+                  class="material-symbols-outlined"
+                  id="btn__emoji-remove"
+                  title="очистить"
+                >
+                  close_small
+                </div>
               </div>
             </div>
             <div class="add-transaction__form_field">
@@ -665,5 +744,6 @@
 
     <!-- <script src="script.js"></script> -->
     <script src="script2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
   </body>
 </html>
