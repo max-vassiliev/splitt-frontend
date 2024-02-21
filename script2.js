@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
     'btn__emoji-picker--switch'
   );
   const emojiRemoveBtn = document.getElementById('btn__emoji-remove');
-  const emojiPickerContainer = document.querySelector(
-    '.emoji-picker-container'
+  const addExpenseEmojiPickerContainer = document.querySelector(
+    '.add-expense__emoji-picker-container'
   );
 
   function openEmojiInput() {
@@ -55,15 +55,15 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function openEmojiPicker() {
-    if (isActive(emojiPickerContainer)) return;
-    emojiPickerContainer.classList.add(ACTIVE_CLASS);
+    if (isActive(addExpenseEmojiPickerContainer)) return;
+    addExpenseEmojiPickerContainer.classList.add(ACTIVE_CLASS);
     console.log('openEmojiPicker');
     document.addEventListener('click', clickOutsideEmojiPicker);
   }
 
   function closeEmojiPicker() {
-    if (!isActive(emojiPickerContainer)) return;
-    emojiPickerContainer.classList.remove(ACTIVE_CLASS);
+    if (!isActive(addExpenseEmojiPickerContainer)) return;
+    addExpenseEmojiPickerContainer.classList.remove(ACTIVE_CLASS);
     console.log('closeEmojiPicker');
     document.removeEventListener('click', clickOutsideEmojiPicker);
   }
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function toggleEmojiPicker(event) {
     console.log('toggleEmojiPicker');
 
-    !emojiPickerContainer.classList.contains(ACTIVE_CLASS)
+    !addExpenseEmojiPickerContainer.classList.contains(ACTIVE_CLASS)
       ? openEmojiPicker()
       : closeEmojiPicker();
 
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function clickOutsideEmojiPicker(event) {
-    if (!emojiPickerContainer.contains(event.target)) {
+    if (!addExpenseEmojiPickerContainer.contains(event.target)) {
       console.log('clickOutsideEmojiPicker');
       closeEmojiPicker();
     }
@@ -91,15 +91,19 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(emoji);
   }
 
-  const pickerOptions = {
+  const addExpenseEmojiPickerOptions = {
     onEmojiSelect: handleEmojiSelect,
     searchPosition: 'static',
     previewPosition: 'top',
     locale: 'ru',
   };
 
-  const picker = new EmojiMart.Picker(pickerOptions);
-  document.getElementById('emoji-picker')?.appendChild(picker);
+  const addExpenseEmojiPicker = new EmojiMart.Picker(
+    addExpenseEmojiPickerOptions
+  );
+  document
+    .getElementById('add-expense__emoji-picker')
+    ?.appendChild(addExpenseEmojiPicker);
 
   emojiPickerSwitchBtn.addEventListener('click', toggleEmojiPicker);
   emojiInputField.addEventListener('click', toggleEmojiPicker);

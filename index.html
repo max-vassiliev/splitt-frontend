@@ -179,8 +179,12 @@
       <!-- ADD TRANSACTIONS -->
       <!---------------------->
 
-      <div class="emoji-picker-container">
-        <div id="emoji-picker"></div>
+      <div class="add-expense__emoji-picker-container">
+        <div id="add-expense__emoji-picker"></div>
+      </div>
+
+      <div class="add-repayment__emoji-picker-container">
+        <div id="add-repayment__emoji-picker"></div>
       </div>
 
       <div class="add-transactions">
@@ -233,19 +237,19 @@
                   class="add-transaction__form_input-text"
                   type="text"
                   name="emoji-input"
-                  id="emoji-input"
+                  id="add-expense__emoji-input"
                   title="выбрать"
                   readonly
                 />
                 <div
                   class="material-symbols-outlined"
-                  id="btn__emoji-picker--switch"
+                  id="add-expense__btn__emoji-picker--switch"
                 >
                   add_reaction
                 </div>
                 <div
                   class="material-symbols-outlined"
-                  id="btn__emoji-remove"
+                  id="add-expense__btn__emoji-remove"
                   title="очистить"
                 >
                   close_small
@@ -378,28 +382,10 @@
         </div>
       </div>
 
-      <!-- ADD EXPENSE: Emoji -->
-      <!-- <div class="add-transaction__form_hidden add-expense__form_emoji">
-        <div
-          class="add-transaction__form_header add-expense__form_hidden_header"
-        >
-          Эмодзи
-        </div>
-        <form class="add-transaction__form_body">
-          <div class="emoji-picker-container">
-            <div id="emoji-picker"></div>
-          </div>
-          <div class="add-transaction__form_footer">
-            <button
-              class="add-transaction__form_btn-close add-expense__form_btn-close"
-            >
-              закрыть
-            </button>
-          </div>
-        </form>
-      </div> -->
-
+      <!------------------->
       <!-- ADD REPAYMENT -->
+      <!------------------->
+
       <div class="add-repayment__form">
         <!-- ADD REPAYMENT: Main -->
         <div class="add-transaction__form_main add-repayment__form_main">

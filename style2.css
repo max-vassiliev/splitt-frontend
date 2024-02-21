@@ -612,33 +612,33 @@ header {
   background-color: coral;
 } */
 
-#emoji-input {
+#add-expense__emoji-input,
+#add-repayment__emoji-input {
   display: none;
   width: 3.9rem;
   font-size: 2.4rem;
   cursor: default;
   outline: none;
-  /* TODO1 проверить */
-  visibility: hidden;
 }
 
-#emoji-input.active {
+#add-expense__emoji-input.active,
+#add-repayment__emoji-input.active {
   display: inline-flex;
-  /* TODO1 проверить */
-  visibility: visible;
 }
 
-#btn__emoji-picker--switch,
-#btn__emoji-remove {
+#add-expense__btn__emoji-picker--switch,
+#add-expense__btn__emoji-remove,
+#add-repayment__btn__emoji-picker--switch,
+#add-repayment__btn__emoji-remove {
   min-width: 8rem;
-
   /* padding: 0.5rem 0.8rem; */
   font-size: 2.2rem;
   cursor: pointer;
   transition: transform 0.05s ease-in;
 }
 
-#btn__emoji-picker--switch {
+#add-expense__btn__emoji-picker--switch,
+#add-repayment__btn__emoji-picker--switch {
   /* display: inline-flex; */
   color: #777;
   font-size: 2.2rem;
@@ -646,39 +646,47 @@ header {
   margin-left: 0.9rem;
 }
 
-#btn__emoji-remove {
+#add-expense__btn__emoji-remove,
+#add-repayment__btn__emoji-remove {
   display: none;
   font-weight: 300;
   color: #bbb;
 }
 
-#btn__emoji-remove.active {
+#add-expense__btn__emoji-remove.active,
+#add-repayment__btn__emoji-remove.active {
   display: flex;
 }
 
-#btn__emoji-picker--switch.hidden {
+#add-expense__btn__emoji-picker--switch.hidden,
+#add-repayment__btn__emoji-picker--switch.hidden {
   display: none;
 }
 
-#btn__emoji-picker--switch:hover {
+#add-expense__btn__emoji-picker--switch:hover,
+#add-repayment__btn__emoji-picker--switch:hover {
   color: #5c9144;
   transform: translateY(-0.06rem);
 }
 
-#btn__emoji-picker--switch:active {
+#add-expense__btn__emoji-picker--switch:active,
+#add-repayment__btn__emoji-picker--switch:active {
   color: #497d31;
   transform: translateY(0rem);
 }
 
-#btn__emoji-remove:hover {
+#add-expense__btn__emoji-remove:hover,
+#add-repayment__btn__emoji-remove:hover {
   color: red;
 }
 
-#btn__emoji-remove:active {
+#add-expense__btn__emoji-remove:active,
+#add-repayment__btn__emoji-remove:active {
   color: rgb(193, 8, 8);
 }
 
-.emoji-picker-container {
+.add-expense__emoji-picker-container,
+.add-repayment__emoji-picker-container {
   display: none;
   position: absolute;
   position: absolute;
@@ -687,7 +695,8 @@ header {
   z-index: 3;
 }
 
-.emoji-picker-container.active {
+.add-expense__emoji-picker-container.active,
+.add-repayment__emoji-picker-container.active {
   display: block;
 }
 
@@ -739,9 +748,6 @@ header {
 }
 
 .add-transaction__form_input-comment {
-  /* display: block; */
-  /* margin: 0.3rem auto 0.3rem 14.1rem; */
-  /* margin: 0rem auto 0.3rem 2.1rem; */
   margin-left: 14.1rem;
   font-size: 1.3rem;
   color: #666;
