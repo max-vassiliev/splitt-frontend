@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let activePopup = null;
   let activeAddExpenseHiddenForm = null;
   let activeAddRepaymentHiddenForm = null;
+  let activeEmojiField = null;
 
   const ACTIVE_CLASS = 'active';
   const HIDDEN_CLASS = 'hidden';
@@ -29,85 +30,142 @@ document.addEventListener('DOMContentLoaded', function () {
   const btnClosePopup = document.querySelectorAll('.btn__close_popup');
 
   // e: Emoji Picker
-  const emojiInputField = document.getElementById('emoji-input');
-  const emojiPickerSwitchBtn = document.getElementById(
-    'btn__emoji-picker--switch'
+
+  const emojiField = {
+    constructor: function (
+      emojiInputField,
+      emojiPickerSwitchBtn,
+      emojiRemoveBtn
+    ) {
+      this.emojiInputField = emojiInputField;
+      this.emojiPickerSwitchBtn = emojiPickerSwitchBtn;
+      this.emojiRemoveBtn = emojiRemoveBtn;
+    },
+  };
+
+  const emojiPickerContainer = document.querySelector(
+    '.emoji-picker-container'
   );
-  const emojiRemoveBtn = document.getElementById('btn__emoji-remove');
-  const addExpenseEmojiPickerContainer = document.querySelector(
-    '.add-expense__emoji-picker-container'
+  const addExpenseEmojiInputField = document.querySelector(
+    '.emoji-input.add-expense'
+  );
+  const addExpenseEmojiPickerSwitchBtn = document.querySelector(
+    '.btn__emoji-picker--switch.add-expense'
+  );
+  const addExpenseEmojiRemoveBtn = document.querySelector(
+    '.btn__emoji-remove.add-expense'
+  );
+  const addRepaymentEmojiInputField = document.querySelector(
+    '.emoji-input.add-repayment'
+  );
+  const addRepaymentEmojiPickerSwitchBtn = document.querySelector(
+    '.btn__emoji-picker--switch.add-repayment'
+  );
+  const addRepaymentEmojiRemoveBtn = document.querySelector(
+    '.btn__emoji-remove.add-repayment'
+  );
+
+  const addExpenseEmojiField = Object.create(emojiField);
+  const addRepaymentEmojiField = Object.create(emojiField);
+
+  addExpenseEmojiField.constructor(
+    addExpenseEmojiInputField,
+    addExpenseEmojiPickerSwitchBtn,
+    addExpenseEmojiRemoveBtn
+  );
+
+  addRepaymentEmojiField.constructor(
+    addRepaymentEmojiInputField,
+    addRepaymentEmojiPickerSwitchBtn,
+    addRepaymentEmojiRemoveBtn
   );
 
   function openEmojiInput() {
-    if (isActive(emojiInputField)) {
+    if (isActive(activeEmojiField.emojiInputField)) {
       return;
     }
-    emojiPickerSwitchBtn.classList.add(HIDDEN_CLASS);
-    emojiInputField.classList.add(ACTIVE_CLASS);
-    emojiRemoveBtn.classList.add(ACTIVE_CLASS);
+    console.log('openEmojiInput');
+    activeEmojiField.emojiPickerSwitchBtn.classList.add(HIDDEN_CLASS);
+    activeEmojiField.emojiInputField.classList.add(ACTIVE_CLASS);
+    activeEmojiField.emojiRemoveBtn.classList.add(ACTIVE_CLASS);
   }
 
   function removeEmoji() {
-    emojiInputField.value = '';
-    emojiInputField.classList.remove(ACTIVE_CLASS);
-    emojiRemoveBtn.classList.remove(ACTIVE_CLASS);
-    emojiPickerSwitchBtn.classList.remove(HIDDEN_CLASS);
+    console.log('removeEmoji');
+    activeEmojiField.emojiInputField.value = '';
+    activeEmojiField.emojiInputField.classList.remove(ACTIVE_CLASS);
+    activeEmojiField.emojiRemoveBtn.classList.remove(ACTIVE_CLASS);
+    activeEmojiField.emojiPickerSwitchBtn.classList.remove(HIDDEN_CLASS);
+    activeEmojiField = null;
   }
 
   function openEmojiPicker() {
-    if (isActive(addExpenseEmojiPickerContainer)) return;
-    addExpenseEmojiPickerContainer.classList.add(ACTIVE_CLASS);
+    if (isActive(emojiPickerContainer)) return;
     console.log('openEmojiPicker');
+    emojiPickerContainer.classList.add(ACTIVE_CLASS);
     document.addEventListener('click', clickOutsideEmojiPicker);
   }
 
   function closeEmojiPicker() {
-    if (!isActive(addExpenseEmojiPickerContainer)) return;
-    addExpenseEmojiPickerContainer.classList.remove(ACTIVE_CLASS);
+    if (!isActive(emojiPickerContainer)) return;
     console.log('closeEmojiPicker');
+    emojiPickerContainer.classList.remove(ACTIVE_CLASS);
     document.removeEventListener('click', clickOutsideEmojiPicker);
   }
 
   function toggleEmojiPicker(event) {
     console.log('toggleEmojiPicker');
-
-    !addExpenseEmojiPickerContainer.classList.contains(ACTIVE_CLASS)
-      ? openEmojiPicker()
-      : closeEmojiPicker();
-
+    !isActive(emojiPickerContainer) ? openEmojiPicker() : closeEmojiPicker();
     event.stopPropagation();
   }
 
   function clickOutsideEmojiPicker(event) {
-    if (!addExpenseEmojiPickerContainer.contains(event.target)) {
-      console.log('clickOutsideEmojiPicker');
-      closeEmojiPicker();
-    }
+    if (emojiPickerContainer.contains(event.target)) return;
+    console.log('clickOutsideEmojiPicker');
+    closeEmojiPicker();
   }
 
   function handleEmojiSelect(emoji) {
     openEmojiInput();
-    emojiInputField.value = emoji.native;
+    activeEmojiField.emojiInputField.value = emoji.native;
     console.log(emoji);
   }
 
-  const addExpenseEmojiPickerOptions = {
+  const emojiPickerOptions = {
     onEmojiSelect: handleEmojiSelect,
     searchPosition: 'static',
-    previewPosition: 'top',
+    previewPosition: 'none',
     locale: 'ru',
   };
 
-  const addExpenseEmojiPicker = new EmojiMart.Picker(
-    addExpenseEmojiPickerOptions
-  );
-  document
-    .getElementById('add-expense__emoji-picker')
-    ?.appendChild(addExpenseEmojiPicker);
+  const emojiPicker = new EmojiMart.Picker(emojiPickerOptions);
+  document.getElementById('emoji-picker')?.appendChild(emojiPicker);
 
-  emojiPickerSwitchBtn.addEventListener('click', toggleEmojiPicker);
-  emojiInputField.addEventListener('click', toggleEmojiPicker);
-  emojiRemoveBtn.addEventListener('click', removeEmoji);
+  addExpenseEmojiPickerSwitchBtn.addEventListener('click', function (event) {
+    activeEmojiField = addExpenseEmojiField;
+    toggleEmojiPicker(event);
+  });
+  addExpenseEmojiInputField.addEventListener('click', function (event) {
+    activeEmojiField = addExpenseEmojiField;
+    toggleEmojiPicker(event);
+  });
+  addExpenseEmojiRemoveBtn.addEventListener('click', function () {
+    activeEmojiField = addExpenseEmojiField;
+    removeEmoji();
+  });
+
+  addRepaymentEmojiPickerSwitchBtn.addEventListener('click', function (event) {
+    activeEmojiField = addRepaymentEmojiField;
+    toggleEmojiPicker(event);
+  });
+  addRepaymentEmojiInputField.addEventListener('click', function (event) {
+    activeEmojiField = addRepaymentEmojiField;
+    toggleEmojiPicker(event);
+  });
+  addRepaymentEmojiRemoveBtn.addEventListener('click', function () {
+    activeEmojiField = addRepaymentEmojiField;
+    removeEmoji();
+  });
 
   // e: Group
   const groupHeader = document.querySelector('.group__info');
