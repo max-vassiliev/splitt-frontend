@@ -84,14 +84,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isActive(activeEmojiField.emojiInputField)) {
       return;
     }
-    console.log('openEmojiInput');
     activeEmojiField.emojiPickerSwitchBtn.classList.add(HIDDEN_CLASS);
     activeEmojiField.emojiInputField.classList.add(ACTIVE_CLASS);
     activeEmojiField.emojiRemoveBtn.classList.add(ACTIVE_CLASS);
   }
 
   function removeEmoji() {
-    console.log('removeEmoji');
     activeEmojiField.emojiInputField.value = '';
     activeEmojiField.emojiInputField.classList.remove(ACTIVE_CLASS);
     activeEmojiField.emojiRemoveBtn.classList.remove(ACTIVE_CLASS);
@@ -101,27 +99,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openEmojiPicker() {
     if (isActive(emojiPickerContainer)) return;
-    console.log('openEmojiPicker');
     emojiPickerContainer.classList.add(ACTIVE_CLASS);
     document.addEventListener('click', clickOutsideEmojiPicker);
   }
 
   function closeEmojiPicker() {
     if (!isActive(emojiPickerContainer)) return;
-    console.log('closeEmojiPicker');
     emojiPickerContainer.classList.remove(ACTIVE_CLASS);
     document.removeEventListener('click', clickOutsideEmojiPicker);
   }
 
   function toggleEmojiPicker(event) {
-    console.log('toggleEmojiPicker');
     !isActive(emojiPickerContainer) ? openEmojiPicker() : closeEmojiPicker();
     event.stopPropagation();
   }
 
   function clickOutsideEmojiPicker(event) {
     if (emojiPickerContainer.contains(event.target)) return;
-    console.log('clickOutsideEmojiPicker');
     closeEmojiPicker();
   }
 
@@ -248,11 +242,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // f: Menu
 
   function openMenuPopup() {
-    menuPopup.classList.add('active');
+    menuPopup.classList.add(ACTIVE_CLASS);
   }
 
   function closeMenuPopup() {
-    menuPopup.classList.remove('active');
+    menuPopup.classList.remove(ACTIVE_CLASS);
   }
 
   // f: Group
@@ -368,9 +362,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   openMenuPopupBtn.addEventListener('click', openMenuPopup);
 
-  closeMenuPopupBtn.addEventListener('click', closeMenuPopup);
-
   menuAccount.addEventListener('click', openMenuPopup);
+
+  closeMenuPopupBtn.addEventListener('click', closeMenuPopup);
 
   // el: Group
 
@@ -423,6 +417,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   document.addEventListener('click', function (event) {
+    console.log('Popup Menu Event Listener');
     const isClickInsideMenuPopup = menuPopup.contains(event.target);
     const isClickOnOpenButton = openMenuPopupBtn.contains(event.target);
     const isClickOnMenuAccount = menuAccount.contains(event.target);
@@ -435,6 +430,4 @@ document.addEventListener('DOMContentLoaded', function () {
       closeMenuPopup();
     }
   });
-
-  // el: Emoji
 });
