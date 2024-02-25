@@ -241,12 +241,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // f: Menu
 
+  function handleClickOutsideMenuPopup(event) {
+    const isClickInsideMenuPopup = menuPopup.contains(event.target);
+    const isClickOnOpenButton = openMenuPopupBtn.contains(event.target);
+    const isClickOnMenuAccount = menuAccount.contains(event.target);
+
+    if (
+      !isClickInsideMenuPopup &&
+      !isClickOnOpenButton &&
+      !isClickOnMenuAccount
+    ) {
+      closeMenuPopup();
+    }
+  }
+
   function openMenuPopup() {
     menuPopup.classList.add(ACTIVE_CLASS);
+    document.addEventListener('click', handleClickOutsideMenuPopup);
   }
 
   function closeMenuPopup() {
     menuPopup.classList.remove(ACTIVE_CLASS);
+    document.removeEventListener('click', handleClickOutsideMenuPopup);
   }
 
   // f: Group
@@ -414,20 +430,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
   btnClosePopup.forEach(button => {
     button.addEventListener('click', closeActivePopup);
-  });
-
-  document.addEventListener('click', function (event) {
-    console.log('Popup Menu Event Listener');
-    const isClickInsideMenuPopup = menuPopup.contains(event.target);
-    const isClickOnOpenButton = openMenuPopupBtn.contains(event.target);
-    const isClickOnMenuAccount = menuAccount.contains(event.target);
-
-    if (
-      !isClickInsideMenuPopup &&
-      !isClickOnOpenButton &&
-      !isClickOnMenuAccount
-    ) {
-      closeMenuPopup();
-    }
   });
 });
