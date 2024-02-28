@@ -9,9 +9,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const ACTIVE_CLASS = 'active';
   const HIDDEN_CLASS = 'hidden';
+  const DISABLED_ATTRIBUTE = 'disabled';
 
   function isActive(element) {
     return element.classList.contains(ACTIVE_CLASS);
+  }
+
+  function activate(element) {
+    element.classList.add(ACTIVE_CLASS);
+  }
+
+  function deactivate(element) {
+    element.classList.remove(ACTIVE_CLASS);
+  }
+
+  function isEmptyString(str) {
+    return str.trim() === '';
+  }
+
+  function clearText(textElement) {
+    textElement.value = '';
+  }
+
+  function removeWhiteSpace(textElement) {
+    if (!isEmptyString(textElement.value)) return;
+    clearText(textElement);
   }
 
   // --------------
@@ -175,6 +197,26 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
     '.add-expense__form_btn-close'
   );
+  const addExpenseNoteInput = document.querySelector(
+    '.add-transaction__form_input-note'
+  );
+  const addExpenseNoteCounter = document.querySelector(
+    '.character-count.expense-note'
+  );
+  const addExpenseNoteBtnCancel = document.querySelector(
+    '.add-expense__form_btn-cancel'
+  );
+  const addExpenseNoteBtnSave = document.querySelector(
+    '.add-expense__form_note__btn--save'
+  );
+
+  const addExpenseNoteForm = {
+    noteInput: addExpenseNoteInput,
+    counter: addExpenseNoteCounter,
+    saveButton: addExpenseNoteBtnSave,
+    cancelButton: addExpenseNoteBtnCancel,
+    isExpense: true,
+  };
 
   // e: Add Repayment
   const addRepaymentBtn = document.querySelector('.add-repayment__btn');
@@ -269,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openGroupPopup() {
     addOverlay();
-    groupPopup.classList.add('active');
+    groupPopup.classList.add(ACTIVE_CLASS);
     activePopup = groupPopup;
   }
 
@@ -284,13 +326,61 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function deactivateGroupSwitchBtn() {
-    if (groupSwitchBtn.classList.contains('active')) {
-      groupSwitchBtn.classList.remove('active');
+    if (groupSwitchBtn.classList.contains(ACTIVE_CLASS)) {
+      groupSwitchBtn.classList.remove(ACTIVE_CLASS);
     }
   }
 
   function activateGroupSwitchBtn() {
-    groupSwitchBtn.classList.add('active');
+    groupSwitchBtn.classList.add(ACTIVE_CLASS);
+  }
+
+  // f: Add Transaction
+
+  function countNoteLength(counter, inputText) {
+    counter.textContent = inputText.length;
+  }
+
+  function handleSaveNote(event, form) {
+    event.preventDefault();
+    closeHiddenForm(form.isExpense);
+  }
+
+  function changeMainFormButtonText(text, isExpense) {
+    isExpense
+      ? (activeAddExpenseHiddenForm.button.textContent = text)
+      : (activeAddRepaymentHiddenForm.button.textContent = text);
+  }
+
+  function toggleNoteSaveBtn(form) {
+    if (!isEmptyString(form.noteInput.value) && !isActive(form.saveButton)) {
+      activate(form.saveButton);
+      form.saveButton.removeAttribute(DISABLED_ATTRIBUTE);
+      changeMainFormButtonText('редактировать', form.isExpense);
+    }
+    if (isEmptyString(form.noteInput.value) && isActive(form.saveButton)) {
+      deactivate(form.saveButton);
+      form.saveButton.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
+      changeMainFormButtonText('написать', form.isExpense);
+    }
+  }
+
+  function closeHiddenForm(isExpense) {
+    isExpense ? closeAddExpenseHiddenForm() : closeAddRepaymentHiddenForm();
+  }
+
+  function handleTransactionNoteInput(noteForm) {
+    removeWhiteSpace(noteForm.noteInput);
+    countNoteLength(noteForm.counter, noteForm.noteInput.value);
+    toggleNoteSaveBtn(noteForm);
+  }
+
+  function handleTransactionNoteCancel(event, noteForm) {
+    event.preventDefault();
+    clearText(noteForm.noteInput);
+    countNoteLength(noteForm.counter, noteForm.noteInput.value);
+    toggleNoteSaveBtn(noteForm);
+    closeHiddenForm(noteForm.isExpense);
   }
 
   // f: Add Expense
@@ -407,6 +497,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  addExpenseNoteInput.addEventListener('input', () =>
+    handleTransactionNoteInput(addExpenseNoteForm)
+  );
+
+  addExpenseNoteBtnCancel.addEventListener('click', function (event) {
+    handleTransactionNoteCancel(event, addExpenseNoteForm);
+  });
+
+  addExpenseNoteBtnSave.addEventListener('click', event =>
+    handleSaveNote(event, addExpenseNoteForm)
+  );
+
   // el: Add Repayment
 
   addRepaymentBtn.addEventListener('click', openAddRepayment);
@@ -431,4 +533,12 @@ document.addEventListener('DOMContentLoaded', function () {
   btnClosePopup.forEach(button => {
     button.addEventListener('click', closeActivePopup);
   });
+
+  // TODO1: delete after add comment
+  // const addExpenseHiddenFormNote = document.querySelector(
+  //   '.add-transaction__form_hidden.add-expense__form_note'
+  // );
+  // openAddExpense();
+  // addExpenseHiddenFormNote.classList.add(ACTIVE_CLASS);
+  // activeAddExpenseHiddenForm = addExpenseHiddenFormNote;
 });

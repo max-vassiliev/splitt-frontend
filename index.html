@@ -276,7 +276,7 @@
               </div>
             </div>
             <div class="add-transaction__form_field field-splitt-comment">
-              <div class="add-transaction__form_input-comment">
+              <div class="add-transaction__form_input-splitt-comment">
                 (с каждого по 250&nbsp;₽)
               </div>
             </div>
@@ -363,14 +363,28 @@
             Комментарий
           </div>
           <form class="add-transaction__form_body">
+            <div class="add-transaction__form_note-container">
+              <textarea
+                class="add-transaction__form_input-note"
+                id="expense-note"
+                name="expense-note"
+                maxlength="250"
+                placeholder="Написать комментарий"
+              ></textarea>
+            </div>
+            <div class="add-transaction__form_input-note__counter expense-note">
+              <span class="character-count expense-note">0</span>
+              &nbsp;/&nbsp;250
+            </div>
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close add-expense__form_btn-close"
+                class="add-transaction__form_btn-close add-expense__form_btn-cancel"
               >
                 отменить
               </button>
               <button
-                class="add-transaction__form_btn-submit add-expense__form_note__btn--submit"
+                class="add-transaction__form_btn-submit add-expense__form_note__btn--save"
+                disabled
               >
                 сохранить
               </button>
