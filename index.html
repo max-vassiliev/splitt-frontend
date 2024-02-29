@@ -484,7 +484,7 @@
                   class="add-transaction__form_btn-edit add-repayment__btn-edit"
                   data-form="note"
                 >
-                  добавить
+                  написать
                 </button>
               </div>
             </div>
@@ -512,15 +512,32 @@
             Комментарий
           </div>
           <form class="add-transaction__form_body">
+            <div class="add-transaction__form_note-container">
+              <textarea
+                class="add-transaction__form_input-note"
+                id="repayment-note"
+                name="repayment-note"
+                maxlength="250"
+                placeholder="Написать комментарий"
+              ></textarea>
+            </div>
+            <div
+              class="add-transaction__form_input-note__counter repayment-note"
+            >
+              <span class="character-count repayment-note">0</span>
+              &nbsp;/&nbsp;250
+            </div>
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close add-repayment__form_btn-close"
+                class="add-transaction__form_btn-close add-repayment__form_btn-cancel"
                 type="button"
               >
                 отменить
               </button>
               <button
-                class="add-transaction__form_btn-submit add-repayment__form_note__btn--submit"
+                class="add-transaction__form_btn-submit add-repayment__form_note__btn--save"
+                type="button"
+                disabled
               >
                 сохранить
               </button>

@@ -55,24 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const emojiPickerContainer = document.querySelector(
     '.emoji-picker-container'
   );
-  const addExpenseEmojiInputField = document.querySelector(
-    '.emoji-input.add-expense'
-  );
-  const addExpenseEmojiPickerSwitchBtn = document.querySelector(
-    '.btn__emoji-picker--switch.add-expense'
-  );
-  const addExpenseEmojiRemoveBtn = document.querySelector(
-    '.btn__emoji-remove.add-expense'
-  );
-  const addRepaymentEmojiInputField = document.querySelector(
-    '.emoji-input.add-repayment'
-  );
-  const addRepaymentEmojiPickerSwitchBtn = document.querySelector(
-    '.btn__emoji-picker--switch.add-repayment'
-  );
-  const addRepaymentEmojiRemoveBtn = document.querySelector(
-    '.btn__emoji-remove.add-repayment'
-  );
   const emojiPickerOptions = {
     onEmojiSelect: handleEmojiSelect,
     searchPosition: 'static',
@@ -89,15 +71,26 @@ document.addEventListener('DOMContentLoaded', function () {
   const groupSwitch = document.querySelector('.group__switch');
   const groupSwitchBtn = document.querySelector('.group__switch_btn');
 
-  // e: Add Expense
+  // e: Add Expense: Main Form
   const addExpenseBtn = document.querySelector('.add-expense__btn');
   const addExpenseForm = document.querySelector('.add-expense__form');
   const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
+  const addExpenseEmojiInputField = document.querySelector(
+    '.emoji-input.add-expense'
+  );
+  const addExpenseEmojiPickerSwitchBtn = document.querySelector(
+    '.btn__emoji-picker--switch.add-expense'
+  );
+  const addExpenseEmojiRemoveBtn = document.querySelector(
+    '.btn__emoji-remove.add-expense'
+  );
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
     '.add-expense__form_btn-close'
   );
+
+  // e: Add Expense: Note Form
   const addExpenseNoteInput = document.querySelector(
-    '.add-transaction__form_input-note'
+    '.add-transaction__form_input-note#expense-note'
   );
   const addExpenseNoteCounter = document.querySelector(
     '.character-count.expense-note'
@@ -117,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
     isExpense: true,
   };
 
-  // e: Add Repayment
+  // e: Add Repayment: Main Form
   const addRepaymentBtn = document.querySelector('.add-repayment__btn');
   const addRepaymentForm = document.querySelector('.add-repayment__form');
   const addRepaymentBtnEdit = document.querySelectorAll(
@@ -126,6 +119,36 @@ document.addEventListener('DOMContentLoaded', function () {
   const addRepaymentHiddenFormBtnClose = document.querySelectorAll(
     '.add-repayment__form_btn-close'
   );
+  const addRepaymentEmojiInputField = document.querySelector(
+    '.emoji-input.add-repayment'
+  );
+  const addRepaymentEmojiPickerSwitchBtn = document.querySelector(
+    '.btn__emoji-picker--switch.add-repayment'
+  );
+  const addRepaymentEmojiRemoveBtn = document.querySelector(
+    '.btn__emoji-remove.add-repayment'
+  );
+
+  // e: Add Repayment: Note Form
+  const addRepaymentNoteInput = document.querySelector(
+    '.add-transaction__form_input-note#repayment-note'
+  );
+  const addRepaymentNoteCounter = document.querySelector(
+    '.character-count.repayment-note'
+  );
+  const addRepaymentNoteBtnCancel = document.querySelector(
+    '.add-repayment__form_btn-cancel'
+  );
+  const addRepaymentNoteBtnSave = document.querySelector(
+    '.add-repayment__form_note__btn--save'
+  );
+  const addRepaymentNoteForm = {
+    noteInput: addRepaymentNoteInput,
+    counter: addRepaymentNoteCounter,
+    saveButton: addRepaymentNoteBtnSave,
+    cancelButton: addRepaymentNoteBtnCancel,
+    isExpense: false,
+  };
 
   // ---------------
   // Functions (f:)
@@ -489,7 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
     removeEmoji();
   });
 
-  // el: Add Expense
+  // el: Add Expense: Main Form
 
   addExpenseBtn.addEventListener('click', openAddExpense);
 
@@ -501,6 +524,8 @@ document.addEventListener('DOMContentLoaded', function () {
       closeAddExpenseHiddenForm();
     });
   });
+
+  // el: Add Expense: Note Form
 
   addExpenseNoteInput.addEventListener('input', () =>
     handleTransactionNoteInput(addExpenseNoteForm)
@@ -514,7 +539,7 @@ document.addEventListener('DOMContentLoaded', function () {
     handleSaveNote(event, addExpenseNoteForm)
   );
 
-  // el: Add Repayment
+  // el: Add Repayment: Main Form
 
   addRepaymentBtn.addEventListener('click', openAddRepayment);
 
@@ -526,6 +551,20 @@ document.addEventListener('DOMContentLoaded', function () {
       closeAddRepaymentHiddenForm();
     });
   });
+
+  // el: Add Repayment: Note Form
+
+  addRepaymentNoteInput.addEventListener('input', () =>
+    handleTransactionNoteInput(addRepaymentNoteForm)
+  );
+
+  addRepaymentNoteBtnCancel.addEventListener('click', function (event) {
+    handleTransactionNoteCancel(event, addRepaymentNoteForm);
+  });
+
+  addRepaymentNoteBtnSave.addEventListener('click', event =>
+    handleSaveNote(event, addRepaymentNoteForm)
+  );
 
   // el: Util
 

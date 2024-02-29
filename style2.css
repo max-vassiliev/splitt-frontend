@@ -640,54 +640,6 @@ header {
   color: #666;
 }
 
-.add-transaction__form_note-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.add-transaction__form_input-note {
-  font-family: inherit;
-  color: #6b6b6b;
-  font-size: 1.8rem;
-  font-weight: 400;
-  padding: 2rem;
-  width: 100%;
-  height: 27rem;
-  border-radius: 1.2rem;
-  border: 1px solid #bbb;
-  resize: none;
-}
-
-.add-transaction__form_input-note::placeholder {
-  color: #aaa;
-  font-weight: 300;
-}
-
-.add-transaction__form_input-note:focus {
-  /* border-color: #ac6d54; */
-  border: 1.3px solid rgba(201, 101, 59, 0.5);
-  outline: none;
-}
-
-.add-transaction__form_input-note__counter {
-  display: flex;
-  justify-content: right;
-  margin-right: 1rem;
-  margin-top: 1rem;
-  font-size: 1.3rem;
-  color: #999;
-  font-weight: 500;
-}
-
-.add-transaction__form_footer {
-  display: flex;
-  margin-top: 4.2rem;
-  margin-bottom: 0.6rem;
-  justify-content: center;
-  align-items: center;
-}
-
 .add-transaction__form_btn-close,
 .add-transaction__form_btn-submit {
   font-family: 'Raleway', Helvetica, Arial, sans-serif;
@@ -721,6 +673,75 @@ header {
   color: #999;
   border: 1px solid #aaa;
 }
+
+.add-transaction__form_footer {
+  display: flex;
+  margin-top: 4.2rem;
+  margin-bottom: 0.6rem;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ADD TRANSACTION: Note Form */
+
+.add-transaction__form_note-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-transaction__form_input-note {
+  font-family: inherit;
+  color: #6b6b6b;
+  font-size: 1.8rem;
+  font-weight: 400;
+  padding: 2rem;
+  width: 100%;
+  height: 27rem;
+  border-radius: 1.2rem;
+  border: 1px solid #bbb;
+  resize: none;
+}
+
+.add-transaction__form_input-note::placeholder {
+  color: #aaa;
+  font-weight: 300;
+}
+
+.add-transaction__form_input-note:focus {
+  outline: none;
+}
+
+.add-expense__form_note__btn--save.active,
+.add-repayment__form_note__btn--save.active {
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.add-expense__form_note__btn--save.active:hover,
+.add-repayment__form_note__btn--save.active:hover {
+  transform: translateY(-0.06rem);
+}
+
+.add-expense__form_note__btn--save.active:active,
+.add-repayment__form_note__btn--save.active:active {
+  transform: translateY(0rem);
+}
+
+.add-transaction__form_input-note__counter {
+  display: flex;
+  justify-content: right;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  font-size: 1.3rem;
+  color: #999;
+  font-weight: 500;
+}
+
+/* Emoji Picker */
 
 .emoji-input {
   display: none;
@@ -817,7 +838,8 @@ header {
   background-color: #f97e4b;
 }
 
-.add-expense__form_hidden_header {
+.add-expense__form_hidden_header,
+.add-expense__form_note__btn--save.active {
   background-color: #c9653b;
 }
 
@@ -826,24 +848,17 @@ header {
   background-color: rgba(201, 101, 59, 0.1);
 }
 
-.add-expense__form_note__btn--save.active {
-  background-color: #c9653b;
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
+.add-transaction__form_input-note#expense-note:focus {
+  border: 1.3px solid rgba(201, 101, 59, 0.5);
 }
 
 .add-expense__form_note__btn--save.active:hover {
-  transform: translateY(-0.06rem);
   box-shadow: 0 0px 1.2rem rgba(201, 101, 59, 0.5);
 }
 
 .add-expense__form_note__btn--save.active:active {
   background-color: #af5933;
   box-shadow: 0 0px 1rem rgba(201, 101, 59, 0.2);
-  transform: translateY(0rem);
 }
 
 /*  ADD REPAYMENT  */
@@ -862,7 +877,8 @@ header {
   background-color: #8cbf74;
 }
 
-.add-repayment__form_hidden_header {
+.add-repayment__form_hidden_header,
+.add-repayment__form_note__btn--save.active {
   background-color: #5c9144;
 }
 
@@ -878,6 +894,19 @@ header {
 .add-repayment__form button {
   height: 3rem;
   padding: 0 0.8rem;
+}
+
+.add-transaction__form_input-note#repayment-note:focus {
+  border: 1.3px solid rgba(92, 145, 68, 0.9);
+}
+
+.add-repayment__form_note__btn--save.active:hover {
+  box-shadow: 0 0px 1.2rem rgba(92, 145, 68, 0.5);
+}
+
+.add-repayment__form_note__btn--save.active:active {
+  background-color: #719560;
+  box-shadow: 0 0px 1rem rgba(92, 145, 68, 0.2);
 }
 
 /* ~ ~ ~ ~ */
