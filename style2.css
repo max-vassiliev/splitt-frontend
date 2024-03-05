@@ -241,7 +241,8 @@ header {
   max-width: 110rem;
   margin: 7rem auto 4rem;
   display: grid;
-  grid-template-columns: 6fr 3fr;
+  /* grid-template-columns: 7fr 4fr; */
+  grid-template-columns: 2fr 1fr;
   /* grid-template-rows: auto repeat(3, 15rem) auto; */
   grid-template-rows: auto auto auto auto auto;
   gap: 2rem;
