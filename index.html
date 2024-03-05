@@ -73,7 +73,7 @@
       <div class="menu">
         <div class="menu__account">
           <img
-            src="images/sanya-avatar-2.png"
+            src="images/avatar-sanya.png"
             alt="Avatar"
             class="account__avatar"
           />
@@ -171,7 +171,7 @@
                 <option value="4">Прием у французов</option>
               </select>
               <div class="custom-arrow"></div>
-              <button class="group__switch_btn">выбрать</button>
+              <button class="group__switch_btn" disabled>выбрать</button>
             </div>
           </div>
         </div>
@@ -300,6 +300,8 @@
               </button>
               <button
                 class="add-transaction__form_btn-submit add-expense__btn--submit"
+                type="button"
+                disabled
               >
                 сохранить
               </button>
@@ -497,6 +499,8 @@
               </button>
               <button
                 class="add-transaction__form_btn-submit add-repayment__btn--submit"
+                type="button"
+                disabled
               >
                 сохранить
               </button>
@@ -604,14 +608,22 @@
         </p>
         <div class="operation__table">
           <div class="operation__table--row">
-            <div class="operation__table--avatar">🧑‍🎓</div>
+            <img
+              class="account__avatar"
+              src="images/avatar-kate.png"
+              alt="Катерина"
+            />
             <div class="operation__table--user">Катерина</div>
             <div class="operation__table--amount amount__color--negative">
               34&nbsp;056,83&nbsp;₽
             </div>
           </div>
           <div class="operation__table--row">
-            <div class="operation__table--avatar">👨‍🦳</div>
+            <img
+              class="account__avatar"
+              src="images/avatar-paul.png"
+              alt="Павлентий Петрович Павлентийпетровичевский"
+            />
             <div class="operation__table--user">
               Павлентий Петрович Павлентийпетровичевский
             </div>
@@ -627,21 +639,35 @@
         <h2>Статистика группы</h2>
         <div class="operation__table">
           <div class="operation__table--row">
-            <div class="operation__table--avatar">🧑‍🎓</div>
+            <img
+              class="account__avatar"
+              src="images/avatar-kate.png"
+              alt="Катерина"
+            />
             <div class="operation__table--user">Катерина</div>
             <div class="operation__table--amount amount__color--positive">
               +&nbsp;34&nbsp;056,83&nbsp;₽
             </div>
           </div>
           <div class="operation__table--row">
-            <div class="operation__table--avatar">🤴</div>
+            <!-- <div class="operation__table--avatar">🤴</div>
+             -->
+            <img
+              class="account__avatar"
+              src="images/avatar-peter.png"
+              alt="Пётр"
+            />
             <div class="operation__table--user">Пётр</div>
             <div class="operation__table--amount amount__color--negative">
               -&nbsp;6&nbsp;859,49&nbsp;₽
             </div>
           </div>
           <div class="operation__table--row">
-            <div class="operation__table--avatar">👨‍🦳</div>
+            <img
+              class="account__avatar"
+              src="images/avatar-paul.png"
+              alt="Павлентий Петрович Павлентийпетровичевский"
+            />
             <div class="operation__table--user">
               Павлентий Петрович Павлентийпетровичевский
             </div>
@@ -650,7 +676,11 @@
             </div>
           </div>
           <div class="operation__table--row">
-            <div class="operation__table--avatar">👨‍🎤</div>
+            <img
+              class="account__avatar"
+              src="images/avatar-sanya.png"
+              alt="Саня"
+            />
             <div class="operation__table--user">Саня</div>
             <div class="operation__table--amount amount__color--negative">
               -&nbsp;29&nbsp;208,00&nbsp;₽

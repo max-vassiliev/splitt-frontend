@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function activateGroupSwitchBtn() {
-    groupSwitchBtn.classList.add('active');
+    groupSwitchBtn.classList.add(ACTIVE_CLASS);
   }
 
   // f: Add Expense

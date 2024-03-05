@@ -887,9 +887,9 @@ header {
   background-color: rgba(92, 145, 68, 0.1);
 }
 
-.add-repayment__form .add-transaction__form_input-text {
+/* .add-repayment__form .add-transaction__form_input-text {
   margin-left: 1.2rem;
-}
+} */
 
 .add-repayment__form button {
   height: 3rem;
@@ -1056,6 +1056,10 @@ header {
   align-items: center;
   font-size: 1.6rem;
   margin: 0.6rem auto;
+}
+
+.operation__table--row .account__avatar {
+  margin-right: 0.8rem;
 }
 
 .operation__table--avatar {

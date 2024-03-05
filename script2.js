@@ -248,13 +248,14 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function deactivateGroupSwitchBtn() {
-    if (groupSwitchBtn.classList.contains(ACTIVE_CLASS)) {
-      groupSwitchBtn.classList.remove(ACTIVE_CLASS);
-    }
+    if (!groupSwitchBtn.classList.contains(ACTIVE_CLASS)) return;
+    groupSwitchBtn.classList.remove(ACTIVE_CLASS);
+    groupSwitchBtn.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
   }
 
   function activateGroupSwitchBtn() {
     groupSwitchBtn.classList.add(ACTIVE_CLASS);
+    groupSwitchBtn.removeAttribute(DISABLED_ATTRIBUTE);
   }
 
   // f: Emoji Picker
@@ -328,7 +329,9 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleEmojiSelect(emoji) {
     openEmojiInput();
     activeEmojiField.emojiInputField.value = emoji.native;
-    console.log(emoji);
+    // TODO1 удалить потом
+    // console.log(emoji);
+    closeEmojiPicker();
   }
 
   // f: Add Transaction
