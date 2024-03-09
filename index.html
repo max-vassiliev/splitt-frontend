@@ -341,6 +341,79 @@
             Поделить
           </div>
           <form class="add-transaction__form_body">
+            <div class="add-transaction__form_splitt-container">
+              <div class="splitt-from__toggle">
+                <input type="radio" id="equal" name="splitting" checked />
+                <label for="equal">поровну</label>
+                <input type="radio" id="parts" name="splitting" />
+                <label for="parts">частями (₽)</label>
+                <input type="radio" id="shares" name="splitting" />
+                <label for="shares">долями (%)</label>
+              </div>
+              <!-- ПОРОВНУ -->
+              <div class="splitt-form__table">
+                <div class="splitt-form__table--row">
+                  <input type="checkbox" checked />
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-peter.png"
+                    alt="Пётр"
+                  />
+                  <div class="splitt-form__table--user">Пётр</div>
+                  <div
+                    class="splitt-form__table--amount operation__table--amount"
+                  >
+                    <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
+                  </div>
+                </div>
+                <div class="splitt-form__table--row">
+                  <input type="checkbox" checked />
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-kate.png"
+                    alt="Катерина"
+                  />
+                  <div class="splitt-form__table--user">Катерина</div>
+                  <div
+                    class="splitt-form__table--amount operation__table--amount"
+                  >
+                    <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
+                  </div>
+                </div>
+                <div class="splitt-form__table--row">
+                  <input type="checkbox" checked />
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-paul.png"
+                    alt="Павлентий Петрович Павлентийпетровичевский"
+                  />
+                  <div class="splitt-form__table--user">Павлентий Петрович</div>
+                  <!-- <div class="splitt-form__table--user">
+                    Константин Константинопольский
+                  </div> -->
+                  <div
+                    class="splitt-form__table--amount operation__table--amount"
+                  >
+                    <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
+                  </div>
+                </div>
+                <div class="splitt-form__table--row">
+                  <input type="checkbox" checked />
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-sanya.png"
+                    alt="Арсений Тарковский"
+                  />
+                  <!-- <div class="splitt-form__table--user">Арсений Тарковский</div> -->
+                  <div class="splitt-form__table--user">Саня</div>
+                  <div
+                    class="splitt-form__table--amount operation__table--amount"
+                  >
+                    <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="add-transaction__form_footer">
               <button
                 class="add-transaction__form_btn-close add-expense__form_btn-close"

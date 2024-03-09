@@ -683,6 +683,77 @@ header {
   align-items: center;
 }
 
+/* ADD TRANSACTION: Splitt Form */
+
+.add-transaction__form_splitt-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.splitt-from__toggle {
+  display: flex;
+  background-color: #eee;
+  border-radius: 2rem;
+}
+
+.splitt-from__toggle input[type='radio'] {
+  display: none;
+}
+
+.splitt-from__toggle label {
+  padding: 0.3rem 2rem;
+  cursor: pointer;
+  border-radius: 2rem;
+  transition: background-color 0.3s ease;
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  font-size: 1.3rem;
+  color: #555;
+}
+
+.splitt-from__toggle input[type='radio']:checked + label {
+  background-color: #a6a6a6;
+  color: #fff;
+  font-weight: 700;
+}
+
+.splitt-form__table {
+  width: 93%;
+  margin-top: 3rem;
+  /* background-color: rgb(251, 247, 232); */
+}
+
+.splitt-form__table--row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.splitt-form__table--row img {
+  margin: 0 1rem;
+}
+
+.splitt-form__table--row input {
+  cursor: pointer;
+}
+
+.splitt-form__table--user {
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #666;
+  /* white-space: nowrap; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.splitt-form__table--amount {
+  margin-left: auto;
+  font-size: 1.5rem;
+  color: #777;
+}
+
 /* ADD TRANSACTION: Note Form */
 
 .add-transaction__form_note-container {
