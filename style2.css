@@ -574,6 +574,7 @@ header {
   box-sizing: border-box;
 }
 
+/* TODO1: delete if not used */
 .add-transaction__form_input-text::placeholder {
   color: #aaa;
 }
@@ -728,13 +729,14 @@ header {
   display: flex;
   align-items: center;
   margin-bottom: 0.3rem;
+  /* background-color: bisque; */
 }
 
 .splitt-form__table--row img {
   margin: 0 1rem;
 }
 
-.splitt-form__table--row input {
+.splitt-form__table--row input[type='checkbox'] {
   cursor: pointer;
 }
 
@@ -752,6 +754,62 @@ header {
   margin-left: auto;
   font-size: 1.5rem;
   color: #777;
+}
+
+.splitt-amount__input {
+  margin-left: auto;
+  border: none;
+  font-family: inherit;
+  color: #777;
+  font-size: 1.5rem;
+  text-align: right;
+  width: 11rem;
+}
+
+.splitt-share__input {
+  /* margin-left: auto; */
+  margin-left: 5rem;
+  border: none;
+  font-family: inherit;
+  color: #777;
+  font-size: 1.5rem;
+  text-align: right;
+  width: 7rem;
+  background-color: skyblue;
+}
+
+.splitt-share__amount {
+  color: #aaa;
+}
+
+.splitt-calculator {
+  /* margin-left: 1.1rem; */
+  /* margin-top: 2.5rem; */
+  margin: 3rem 0.2rem 0 0.2rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  /* background-color: cornsilk; */
+}
+
+.splitt-calculator__total,
+.splitt-calculator__remainder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.splitt-calculator__label {
+  /* margin-left: 1rem; */
+  margin-left: 1.1rem;
+}
+
+.splitt-calculator__total {
+  color: #555;
+}
+
+.splitt-calculator__remainder {
+  color: #aaa;
+  font-weight: 400;
 }
 
 /* ADD TRANSACTION: Note Form */

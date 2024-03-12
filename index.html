@@ -351,7 +351,7 @@
                 <label for="shares">долями (%)</label>
               </div>
               <!-- ПОРОВНУ -->
-              <div class="splitt-form__table">
+              <div class="splitt-form__table" id="splitt-equally-table">
                 <div class="splitt-form__table--row">
                   <input type="checkbox" checked />
                   <img
@@ -360,9 +360,7 @@
                     alt="Пётр"
                   />
                   <div class="splitt-form__table--user">Пётр</div>
-                  <div
-                    class="splitt-form__table--amount operation__table--amount"
-                  >
+                  <div class="splitt-form__table--amount">
                     <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
                   </div>
                 </div>
@@ -374,9 +372,7 @@
                     alt="Катерина"
                   />
                   <div class="splitt-form__table--user">Катерина</div>
-                  <div
-                    class="splitt-form__table--amount operation__table--amount"
-                  >
+                  <div class="splitt-form__table--amount">
                     <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
                   </div>
                 </div>
@@ -391,9 +387,7 @@
                   <!-- <div class="splitt-form__table--user">
                     Константин Константинопольский
                   </div> -->
-                  <div
-                    class="splitt-form__table--amount operation__table--amount"
-                  >
+                  <div class="splitt-form__table--amount">
                     <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
                   </div>
                 </div>
@@ -406,14 +400,174 @@
                   />
                   <!-- <div class="splitt-form__table--user">Арсений Тарковский</div> -->
                   <div class="splitt-form__table--user">Саня</div>
-                  <div
-                    class="splitt-form__table--amount operation__table--amount"
-                  >
+                  <div class="splitt-form__table--amount">
                     <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
                   </div>
                 </div>
               </div>
+              <!-- ЧАСТЯМИ (₽) -->
+              <div class="splitt-form__table" id="splitt-parts-table">
+                <div class="splitt-form__table--row">
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-peter.png"
+                    alt="Пётр"
+                  />
+                  <div class="splitt-form__table--user">Пётр</div>
+                  <input
+                    class="splitt-amount__input"
+                    name="splitt-amount-input"
+                    type="text"
+                    value="0,00&nbsp;₽"
+                  />
+                </div>
+                <div class="splitt-form__table--row">
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-kate.png"
+                    alt="Пётр"
+                  />
+                  <div class="splitt-form__table--user">Катерина</div>
+                  <input
+                    class="splitt-amount__input"
+                    name="splitt-amount-input"
+                    type="text"
+                    value="0,00&nbsp;₽"
+                  />
+                </div>
+                <div class="splitt-form__table--row">
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-paul.png"
+                    alt="Пётр"
+                  />
+                  <div class="splitt-form__table--user">Павлентий Петрович</div>
+                  <!-- <div class="splitt-form__table--user">
+                  Константин Константинопольский
+                </div> -->
+                  <input
+                    class="splitt-amount__input"
+                    name="splitt-amount-input"
+                    type="text"
+                    value="0,00&nbsp;₽"
+                  />
+                </div>
+                <div class="splitt-form__table--row">
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-sanya.png"
+                    alt="Пётр"
+                  />
+                  <!-- <div class="splitt-form__table--user">Саня</div> -->
+                  <div class="splitt-form__table--user">Арсений Тарковский</div>
+                  <input
+                    class="splitt-amount__input"
+                    name="splitt-amount-input"
+                    type="text"
+                    value="0,00&nbsp;₽"
+                  />
+                </div>
+                <div class="splitt-calculator splitt-parts-calculator">
+                  <div class="splitt-calculator__total">
+                    <div class="splitt-calculator__label">Всего</div>
+                    <div class="splitt-parts__total">10&nbsp;000,00&nbsp;₽</div>
+                  </div>
+                  <div class="splitt-calculator__remainder">
+                    <div class="splitt-calculator__label">Осталось</div>
+                    <div class="splitt-parts__remainder">
+                      1&nbsp;234,56&nbsp;₽
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- ДОЛЯМИ (%) -->
+              <div class="splitt-form__table" id="splitt-shares-table">
+                <div class="splitt-form__table--row">
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-peter.png"
+                    alt="Пётр"
+                  />
+                  <div class="splitt-form__table--user">Пётр</div>
+                  <input
+                    class="splitt-share__input"
+                    name="splitt-share"
+                    type="text"
+                    value="0&nbsp;%"
+                  />
+                  <div class="splitt-form__table--amount splitt-share__amount">
+                    <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
+                  </div>
+                </div>
+                <div class="splitt-form__table--row">
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-kate.png"
+                    alt="Пётр"
+                  />
+                  <div class="splitt-form__table--user">Катерина</div>
+                  <input
+                    class="splitt-share__input"
+                    name="splitt-share"
+                    type="text"
+                    value="75&nbsp;%"
+                  />
+                  <div class="splitt-form__table--amount splitt-share__amount">
+                    <span class="splitt-amount">12&nbsp;025,00</span>&nbsp;₽
+                  </div>
+                </div>
+                <div class="splitt-form__table--row">
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-paul.png"
+                    alt="Павлентий Петрович"
+                  />
+                  <div class="splitt-form__table--user">Павлентий Петрович</div>
+                  <input
+                    class="splitt-share__input"
+                    name="splitt-share"
+                    type="text"
+                    value="0&nbsp;%"
+                  />
+                  <div class="splitt-form__table--amount splitt-share__amount">
+                    <span class="splitt-amount">12&nbsp;025,00</span>&nbsp;₽
+                  </div>
+                </div>
+                <div class="splitt-form__table--row">
+                  <img
+                    class="account__avatar"
+                    src="images/avatar-sanya.png"
+                    alt="Пётр"
+                  />
+                  <!-- <div class="splitt-form__table--user">Саня</div> -->
+                  <div class="splitt-form__table--user">Арсений Тарковский</div>
+                  <input
+                    class="splitt-share__input"
+                    name="splitt-share"
+                    type="text"
+                    value="0&nbsp;%"
+                  />
+                  <div class="splitt-form__table--amount splitt-share__amount">
+                    <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽
+                  </div>
+                </div>
+                <div class="splitt-calculator splitt-shares-calculator">
+                  <div class="splitt-calculator__total">
+                    <div class="splitt-calculator__label">Всего</div>
+                    <div class="splitt-shares__total">
+                      10&nbsp;000,00&nbsp;₽
+                    </div>
+                  </div>
+                  <div class="splitt-calculator__remainder">
+                    <div class="splitt-calculator__label">Осталось</div>
+                    <div class="splitt-shares__remainder">
+                      1&nbsp;234,56&nbsp;₽
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+            <!-- Splitt Form: Footer -->
             <div class="add-transaction__form_footer">
               <button
                 class="add-transaction__form_btn-close add-expense__form_btn-close"
