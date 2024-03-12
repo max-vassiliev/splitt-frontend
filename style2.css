@@ -720,7 +720,7 @@ header {
 }
 
 .splitt-form__table {
-  width: 93%;
+  min-width: 93%;
   margin-top: 3rem;
   /* background-color: rgb(251, 247, 232); */
 }
@@ -729,7 +729,7 @@ header {
   display: flex;
   align-items: center;
   margin-bottom: 0.3rem;
-  /* background-color: bisque; */
+  background-color: bisque;
 }
 
 .splitt-form__table--row img {
@@ -745,6 +745,8 @@ header {
   font-size: 1.5rem;
   font-weight: 500;
   color: #666;
+  min-width: 15rem;
+  max-width: 30rem;
   /* white-space: nowrap; */
   overflow: hidden;
   text-overflow: ellipsis;
@@ -767,8 +769,12 @@ header {
 }
 
 .splitt-share__input {
-  /* margin-left: auto; */
-  margin-left: 5rem;
+  /* TODO1 testing */
+  /* position: absolute; */
+  right: 0;
+  margin-left: auto;
+  /* margin-left: 2rem; */
+  margin-right: 0.6rem;
   border: none;
   font-family: inherit;
   color: #777;
@@ -780,6 +786,9 @@ header {
 
 .splitt-share__amount {
   color: #aaa;
+  right: 0;
+  margin-left: 2rem;
+  background-color: gold;
 }
 
 .splitt-calculator {
