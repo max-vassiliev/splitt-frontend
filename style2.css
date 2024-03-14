@@ -722,7 +722,14 @@ header {
 .splitt-form__table {
   min-width: 93%;
   margin-top: 3rem;
+  display: none;
   /* background-color: rgb(251, 247, 232); */
+}
+
+.splitt-form__table #splitt-equally-table,
+.splitt-form__table #splitt-parts-table,
+.splitt-form__table #splitt-shares-table {
+  display: flex;
 }
 
 .splitt-form__table--row {
@@ -746,8 +753,8 @@ header {
   font-weight: 500;
   color: #666;
   min-width: 15rem;
-  max-width: 30rem;
-  /* white-space: nowrap; */
+  /* max-width: 30rem; */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -781,14 +788,18 @@ header {
   font-size: 1.5rem;
   text-align: right;
   width: 7rem;
-  background-color: skyblue;
+  background-color: lightskyblue;
 }
 
 .splitt-share__amount {
   color: #aaa;
   right: 0;
-  margin-left: 2rem;
-  background-color: gold;
+  margin-left: 1rem;
+  /* TODO1 тест */
+  width: 10rem;
+  display: flex;
+  justify-content: flex-end;
+  background-color: cornsilk;
 }
 
 .splitt-calculator {
@@ -819,6 +830,23 @@ header {
 .splitt-calculator__remainder {
   color: #aaa;
   font-weight: 400;
+}
+
+.splitt-shares-calculator .splitt-calculator__total,
+.splitt-shares-calculator .splitt-calculator__remainder {
+  justify-content: initial;
+}
+
+.splitt-shares__total-share,
+.splitt-shares__remainder-share {
+  margin-right: 0.6rem;
+  margin-left: auto;
+}
+
+.splitt-shares__total-amount,
+.splitt-shares__remainder-amount {
+  width: 11rem;
+  text-align: right;
 }
 
 /* ADD TRANSACTION: Note Form */
