@@ -343,12 +343,21 @@
           <form class="add-transaction__form_body">
             <div class="add-transaction__form_splitt-container">
               <div class="splitt-from__toggle">
-                <input type="radio" id="equal" name="splitting" checked />
-                <label for="equal">поровну</label>
-                <input type="radio" id="parts" name="splitting" />
-                <label for="parts">частями (₽)</label>
-                <input type="radio" id="shares" name="splitting" />
-                <label for="shares">долями (%)</label>
+                <input
+                  type="radio"
+                  id="splitt-equally-button"
+                  name="splitting"
+                  checked
+                />
+                <label for="splitt-equally-button">поровну</label>
+                <input type="radio" id="splitt-parts-button" name="splitting" />
+                <label for="splitt-parts-button">частями (₽)</label>
+                <input
+                  type="radio"
+                  id="splitt-shares-button"
+                  name="splitting"
+                />
+                <label for="splitt-shares-button">долями (%)</label>
               </div>
               <!-- ПОРОВНУ -->
               <div class="splitt-form__table" id="splitt-equally-table">

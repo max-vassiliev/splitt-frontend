@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let activeAddExpenseHiddenForm = null;
   let activeAddRepaymentHiddenForm = null;
   let activeEmojiField = null;
+  let activeSplittOptionsTable = null;
 
   const ACTIVE_CLASS = 'active';
   const HIDDEN_CLASS = 'hidden';
@@ -86,6 +87,11 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
     '.add-expense__form_btn-close'
+  );
+
+  // e: Add Expense: Splitt Form
+  const splittOptionButtons = document.querySelectorAll(
+    '.splitt-from__toggle input[type="radio"]'
   );
 
   // e: Add Expense: Note Form
@@ -526,6 +532,25 @@ document.addEventListener('DOMContentLoaded', function () {
       event.preventDefault();
       closeAddExpenseHiddenForm();
     });
+  });
+
+  // el: Add Expense: Splitt Form
+
+  function handleSplittOptionChange() {
+    if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
+
+    const selectedTableName = this.getAttribute('id').replace(
+      '-button',
+      '-table'
+    );
+
+    const selectedTable = document.getElementById(selectedTableName);
+    activate(selectedTable);
+    activeSplittOptionsTable = selectedTable;
+  }
+
+  splittOptionButtons.forEach(splittOptionButton => {
+    splittOptionButton.addEventListener('change', handleSplittOptionChange);
   });
 
   // el: Add Expense: Note Form

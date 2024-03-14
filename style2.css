@@ -726,10 +726,8 @@ header {
   /* background-color: rgb(251, 247, 232); */
 }
 
-.splitt-form__table #splitt-equally-table,
-.splitt-form__table #splitt-parts-table,
-.splitt-form__table #splitt-shares-table {
-  display: flex;
+.splitt-form__table.active {
+  display: block;
 }
 
 .splitt-form__table--row {
