@@ -714,8 +714,8 @@ header {
 }
 
 .splitt-from__toggle input[type='radio']:checked + label {
-  background-color: #a6a6a6;
-  color: #fff;
+  background-color: #9a9999;
+  color: #fafafa;
   font-weight: 700;
 }
 
@@ -793,10 +793,11 @@ header {
   color: #aaa;
   right: 0;
   margin-left: 1rem;
-  /* TODO1 тест */
-  width: 10rem;
   display: flex;
   justify-content: flex-end;
+  /* TODO1 тест */
+  /* width: 11rem; */
+  width: 8rem;
   background-color: cornsilk;
 }
 
@@ -843,7 +844,9 @@ header {
 
 .splitt-shares__total-amount,
 .splitt-shares__remainder-amount {
-  width: 11rem;
+  /* width: 11rem; */
+  width: 8rem;
+  margin-left: 1rem;
   text-align: right;
 }
 
@@ -974,7 +977,7 @@ header {
   position: absolute;
   margin-left: 30rem;
   margin-top: 23.8rem;
-  z-index: 3;
+  z-index: 4;
 }
 
 .emoji-picker-container.active {

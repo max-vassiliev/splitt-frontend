@@ -1,16 +1,16 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
+  const ACTIVE_CLASS = 'active';
+  const HIDDEN_CLASS = 'hidden';
+  const DISABLED_ATTRIBUTE = 'disabled';
+
   let currentGroupId = 1;
   let activePopup = null;
   let activeAddExpenseHiddenForm = null;
   let activeAddRepaymentHiddenForm = null;
-  let activeEmojiField = null;
   let activeSplittOptionsTable = null;
-
-  const ACTIVE_CLASS = 'active';
-  const HIDDEN_CLASS = 'hidden';
-  const DISABLED_ATTRIBUTE = 'disabled';
+  let activeEmojiField = null;
 
   function isActive(element) {
     return element.classList.contains(ACTIVE_CLASS);
@@ -49,8 +49,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // e: Utils
   const overlay = document.querySelector('.overlay');
-  const amountInput = document.querySelectorAll('.input-amount');
   const btnClosePopup = document.querySelectorAll('.btn__close_popup');
+  const amountInput = document.querySelectorAll('.input-amount');
+  const percentInput = document.querySelectorAll('.input-percent');
 
   // e: Emoji Picker
   const emojiPickerContainer = document.querySelector(
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const splittOptionButtons = document.querySelectorAll(
     '.splitt-from__toggle input[type="radio"]'
   );
+  const splittEquallyTable = document.getElementById('splitt-equally-table');
 
   // e: Add Expense: Note Form
   const addExpenseNoteInput = document.querySelector(
@@ -206,6 +208,43 @@ document.addEventListener('DOMContentLoaded', function () {
       Math.min(this.value.length, newCursorPosition)
     );
 
+    this.setSelectionRange(newCursorPosition, newCursorPosition);
+  }
+
+  function formatPercentString(value) {
+    let percent;
+    let cleanedValue = value.replace(/\D/g, '');
+
+    if (cleanedValue === '' || isNaN(cleanedValue)) {
+      percent = 0;
+    } else {
+      let finalPercent;
+      let cleanedValueParsed = parseInt(cleanedValue);
+      cleanedValueParsed > 100
+        ? (finalPercent = Math.floor(cleanedValueParsed / 10))
+        : (finalPercent = cleanedValueParsed);
+
+      percent = Math.max(finalPercent, 0);
+    }
+
+    let formattedPercent = percent + ' %';
+    return formattedPercent;
+  }
+
+  function handlePercentInput(event) {
+    const cursorPosition = this.selectionStart;
+    let currentValue = event.target.value;
+
+    const formattedPercent = formatPercentString(currentValue);
+    const lengthDifference = formattedPercent.length - currentValue.length;
+
+    this.value = formattedPercent;
+
+    let newCursorPosition = cursorPosition + lengthDifference;
+    newCursorPosition = Math.max(
+      0,
+      Math.min(this.value.length, newCursorPosition)
+    );
     this.setSelectionRange(newCursorPosition, newCursorPosition);
   }
 
@@ -413,6 +452,19 @@ document.addEventListener('DOMContentLoaded', function () {
     activeAddExpenseHiddenForm = { form, button };
   }
 
+  function handleSplittOptionChange() {
+    if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
+
+    const selectedTableName = this.getAttribute('id').replace(
+      '-button',
+      '-table'
+    );
+
+    const selectedTable = document.getElementById(selectedTableName);
+    activate(selectedTable);
+    activeSplittOptionsTable = selectedTable;
+  }
+
   function closeAddExpenseHiddenForm() {
     activeAddExpenseHiddenForm.form.classList.remove(ACTIVE_CLASS);
     activeAddExpenseHiddenForm.button.classList.remove(ACTIVE_CLASS);
@@ -536,22 +588,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // el: Add Expense: Splitt Form
 
-  function handleSplittOptionChange() {
-    if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
-
-    const selectedTableName = this.getAttribute('id').replace(
-      '-button',
-      '-table'
-    );
-
-    const selectedTable = document.getElementById(selectedTableName);
-    activate(selectedTable);
-    activeSplittOptionsTable = selectedTable;
-  }
-
   splittOptionButtons.forEach(splittOptionButton => {
     splittOptionButton.addEventListener('change', handleSplittOptionChange);
   });
+  activate(splittEquallyTable);
+  activeSplittOptionsTable = splittEquallyTable;
 
   // el: Add Expense: Note Form
 
@@ -600,6 +641,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   amountInput.forEach(inputField => {
     inputField.addEventListener('input', handleAmountInput);
+  });
+
+  percentInput.forEach(inputField => {
+    inputField.addEventListener('input', handlePercentInput);
   });
 
   btnClosePopup.forEach(button => {
