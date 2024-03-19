@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const ACTIVE_CLASS = 'active';
   const HIDDEN_CLASS = 'hidden';
   const DISABLED_ATTRIBUTE = 'disabled';
+  const MAX_AMOUNT = 10000000000;
 
   let currentGroupId = 1;
   let activePopup = null;
@@ -11,6 +12,14 @@ document.addEventListener('DOMContentLoaded', function () {
   let activeAddRepaymentHiddenForm = null;
   let activeSplittOptionsTable = null;
   let activeEmojiField = null;
+  // TODO1 проверить целесообразность
+  let currentAddExpenseForm = {
+    title: '',
+    amount: 0,
+    paidBy: {},
+    splitt: {},
+    comment: null,
+  };
 
   function isActive(element) {
     return element.classList.contains(ACTIVE_CLASS);
@@ -52,6 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const btnClosePopup = document.querySelectorAll('.btn__close_popup');
   const amountInput = document.querySelectorAll('.input-amount');
   const percentInput = document.querySelectorAll('.input-percent');
+  // TODO1 удалить
+  const testingExpenseAmountLog = document.querySelector(
+    '.testing-expense-amount-log'
+  );
 
   // e: Emoji Picker
   const emojiPickerContainer = document.querySelector(
@@ -77,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseBtn = document.querySelector('.add-expense__btn');
   const addExpenseForm = document.querySelector('.add-expense__form');
   const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
+  const addExpenseAmountInput = document.querySelector('.add-expense-amount');
   const addExpenseEmojiInputField = document.querySelector(
     '.emoji-input.add-expense'
   );
@@ -95,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-from__toggle input[type="radio"]'
   );
   const splittEquallyTable = document.getElementById('splitt-equally-table');
+  const splittAmountInputs = document.querySelectorAll('.splitt-amount__input');
 
   // e: Add Expense: Note Form
   const addExpenseNoteInput = document.querySelector(
@@ -126,6 +141,9 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const addRepaymentHiddenFormBtnClose = document.querySelectorAll(
     '.add-repayment__form_btn-close'
+  );
+  const addRepaymentAmountInput = document.querySelector(
+    '.add-repayment-amount'
   );
   const addRepaymentEmojiInputField = document.querySelector(
     '.emoji-input.add-repayment'
@@ -179,12 +197,22 @@ document.addEventListener('DOMContentLoaded', function () {
     activePopup = null;
   }
 
-  function formatAmountString(value) {
+  function parseInputAmount(value) {
     const cleanedValue = value.replace(/\D/g, '');
+    return cleanedValue ? parseInt(cleanedValue) : 0;
+  }
 
-    const amount = cleanedValue ? parseInt(cleanedValue) / 100 : 0;
+  function verifyInputAmount(amount) {
+    return amount > MAX_AMOUNT ? Math.floor(amount / 10) : amount;
+  }
 
-    let formattedAmount = amount.toLocaleString('ru-RU', {
+  function processInputAmount(value) {
+    const parsedAmount = parseInputAmount(value);
+    return verifyInputAmount(parsedAmount);
+  }
+
+  function formatAmountForOutput(amount) {
+    let formattedAmount = (amount / 100).toLocaleString('ru-RU', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
@@ -194,21 +222,19 @@ document.addEventListener('DOMContentLoaded', function () {
     return formattedAmount;
   }
 
-  function handleAmountInput(event) {
-    const cursorPosition = this.selectionStart;
-    const currentValue = event.target.value;
-    const formattedAmount = formatAmountString(currentValue);
-    const lengthDifference = formattedAmount.length - currentValue.length;
-
-    this.value = formattedAmount;
-
+  function setAmountCursorPosition(
+    amountIn,
+    amountOut,
+    cursorPosition,
+    context
+  ) {
+    const lengthDifference = amountOut.length - amountIn.length;
     let newCursorPosition = cursorPosition + lengthDifference;
     newCursorPosition = Math.max(
       0,
-      Math.min(this.value.length, newCursorPosition)
+      Math.min(context.value.length, newCursorPosition)
     );
-
-    this.setSelectionRange(newCursorPosition, newCursorPosition);
+    context.setSelectionRange(newCursorPosition, newCursorPosition);
   }
 
   function formatPercentString(value) {
@@ -374,8 +400,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleEmojiSelect(emoji) {
     openEmojiInput();
     activeEmojiField.emojiInputField.value = emoji.native;
-    // TODO1 удалить потом
-    // console.log(emoji);
     closeEmojiPicker();
   }
 
@@ -452,6 +476,11 @@ document.addEventListener('DOMContentLoaded', function () {
     activeAddExpenseHiddenForm = { form, button };
   }
 
+  function saveAddExpenseAmount(amount) {
+    currentAddExpenseForm.amount = amount;
+    testingExpenseAmountLog.textContent = currentAddExpenseForm.amount;
+  }
+
   function handleSplittOptionChange() {
     if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
 
@@ -463,6 +492,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedTable = document.getElementById(selectedTableName);
     activate(selectedTable);
     activeSplittOptionsTable = selectedTable;
+  }
+
+  function handleAddExpenseAmountInput(event) {
+    const cursorPosition = this.selectionStart;
+    const inputAmount = event.target.value;
+    const processedAmount = processInputAmount(inputAmount);
+    saveAddExpenseAmount(processedAmount);
+    const outputAmount = formatAmountForOutput(processedAmount);
+    this.value = outputAmount;
+    setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  }
+
+  function handleSplittAmountInput(event) {
+    const cursorPosition = this.selectionStart;
+    const inputAmount = event.target.value;
+    // TODO1 нужна верификация: лимит не больше текущей суммы траты
+    const processedAmount = processInputAmount(inputAmount);
+    const outputAmount = formatAmountForOutput(processedAmount);
+    this.value = outputAmount;
+    setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
   }
 
   function closeAddExpenseHiddenForm() {
@@ -500,6 +549,15 @@ document.addEventListener('DOMContentLoaded', function () {
     activeAddRepaymentHiddenForm.form.classList.remove(ACTIVE_CLASS);
     activeAddRepaymentHiddenForm.button.classList.remove(ACTIVE_CLASS);
     activeAddRepaymentHiddenForm = null;
+  }
+
+  function handleAddRepaymentAmountInput(event) {
+    const cursorPosition = this.selectionStart;
+    const inputAmount = event.target.value;
+    const processedAmount = processInputAmount(inputAmount);
+    const outputAmount = formatAmountForOutput(processedAmount);
+    this.value = outputAmount;
+    setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
   }
 
   // ----------------------
@@ -586,6 +644,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
+
   // el: Add Expense: Splitt Form
 
   splittOptionButtons.forEach(splittOptionButton => {
@@ -593,6 +653,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   activate(splittEquallyTable);
   activeSplittOptionsTable = splittEquallyTable;
+
+  splittAmountInputs.forEach(inputAmount =>
+    inputAmount.addEventListener('input', handleSplittAmountInput)
+  );
 
   // el: Add Expense: Note Form
 
@@ -621,6 +685,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  addRepaymentAmountInput.addEventListener(
+    'input',
+    handleAddRepaymentAmountInput
+  );
+
   // el: Add Repayment: Note Form
 
   addRepaymentNoteInput.addEventListener('input', () =>
@@ -638,10 +707,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // el: Util
 
   overlay.addEventListener('click', closeActivePopup);
-
-  amountInput.forEach(inputField => {
-    inputField.addEventListener('input', handleAmountInput);
-  });
 
   percentInput.forEach(inputField => {
     inputField.addEventListener('input', handlePercentInput);
