@@ -2,9 +2,11 @@
 
 document.addEventListener('DOMContentLoaded', function () {
   const ACTIVE_CLASS = 'active';
+  const INACTIVE_CLASS = 'inactive';
   const HIDDEN_CLASS = 'hidden';
   const DISABLED_ATTRIBUTE = 'disabled';
   const MAX_AMOUNT = 10000000000;
+  const DEFAULT_AMOUNT = '0,00 ₽';
 
   let currentGroupId = 1;
   let activePopup = null;
@@ -59,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // e: Utils
   const overlay = document.querySelector('.overlay');
   const btnClosePopup = document.querySelectorAll('.btn__close_popup');
-  const amountInput = document.querySelectorAll('.input-amount');
   const percentInput = document.querySelectorAll('.input-percent');
   // TODO1 удалить
   const testingExpenseAmountLog = document.querySelector(
@@ -109,6 +110,15 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-from__toggle input[type="radio"]'
   );
   const splittEquallyTable = document.getElementById('splitt-equally-table');
+  const splittEquallyTableRows = document.querySelectorAll(
+    '.splitt-equally-table-row'
+  );
+  const splittEquallyCheckboxes = document.querySelectorAll(
+    '.splitt-equally-checkbox'
+  );
+  const splittEquallyAmounts = document.querySelectorAll(
+    '.splitt-equally-amount'
+  );
   const splittAmountInputs = document.querySelectorAll('.splitt-amount__input');
 
   // e: Add Expense: Note Form
@@ -476,9 +486,50 @@ document.addEventListener('DOMContentLoaded', function () {
     activeAddExpenseHiddenForm = { form, button };
   }
 
+  function updateSplitts() {
+    // Step 1: Count the number of checked checkboxes
+    let checkedCount = 0;
+    splittEquallyCheckboxes.forEach((checkbox, index) => {
+      if (checkbox.checked) {
+        checkedCount++;
+      }
+    });
+
+    // Step 2: Divide the amount evenly
+    let baseAmount = 0;
+    let remainder = 0;
+    if (checkedCount > 0) {
+      baseAmount = Math.floor(currentAddExpenseForm.amount / checkedCount);
+      remainder = currentAddExpenseForm.amount % checkedCount;
+    }
+
+    // Step 3: Generate random indices for rows that will receive higher amount
+    let checkedIndices = new Set();
+    while (checkedIndices.size < remainder) {
+      const randomIndex = Math.floor(
+        Math.random() * splittEquallyTableRows.length
+      );
+      checkedIndices.add(randomIndex);
+    }
+
+    // Step 4: Update the amount for each row
+    splittEquallyTableRows.forEach((row, index) => {
+      if (!row.classList.contains('inactive')) {
+        let amountToAdd = baseAmount;
+        if (checkedIndices.has(index)) {
+          // Add higher amount to rows in the set
+          amountToAdd += 1;
+        }
+        splittEquallyAmounts[index].textContent =
+          formatAmountForOutput(amountToAdd);
+      }
+    });
+  }
+
   function saveAddExpenseAmount(amount) {
     currentAddExpenseForm.amount = amount;
     testingExpenseAmountLog.textContent = currentAddExpenseForm.amount;
+    updateSplitts();
   }
 
   function handleSplittOptionChange() {
@@ -502,6 +553,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputAmount = formatAmountForOutput(processedAmount);
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  }
+
+  function handleSplittEquallyCheckboxChange() {
+    const row = this.closest('.splitt-equally-table-row');
+    const amount = row.querySelector('.splitt-equally-amount');
+    if (!this.checked) {
+      row.classList.add(INACTIVE_CLASS);
+      amount.classList.add(INACTIVE_CLASS);
+      // updateSplitts();
+      amount.textContent = DEFAULT_AMOUNT;
+      updateSplitts();
+    } else {
+      row.classList.remove(INACTIVE_CLASS);
+      amount.classList.remove(INACTIVE_CLASS);
+      updateSplitts();
+    }
   }
 
   function handleSplittAmountInput(event) {
@@ -653,6 +720,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   activate(splittEquallyTable);
   activeSplittOptionsTable = splittEquallyTable;
+
+  splittEquallyCheckboxes.forEach(checkbox =>
+    checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
+  );
 
   splittAmountInputs.forEach(inputAmount =>
     inputAmount.addEventListener('input', handleSplittAmountInput)
