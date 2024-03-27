@@ -693,17 +693,17 @@ header {
   align-items: center;
 }
 
-.splitt-from__toggle {
+.splitt-form__toggle {
   display: flex;
   background-color: #eee;
   border-radius: 2rem;
 }
 
-.splitt-from__toggle input[type='radio'] {
+.splitt-form__toggle input[type='radio'] {
   display: none;
 }
 
-.splitt-from__toggle label {
+.splitt-form__toggle label {
   padding: 0.3rem 2rem;
   cursor: pointer;
   border-radius: 2rem;
@@ -713,7 +713,7 @@ header {
   color: #555;
 }
 
-.splitt-from__toggle input[type='radio']:checked + label {
+.splitt-form__toggle input[type='radio']:checked + label {
   background-color: #9a9999;
   color: #fafafa;
   font-weight: 700;

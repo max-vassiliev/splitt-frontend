@@ -342,7 +342,7 @@
           </div>
           <form class="add-transaction__form_body">
             <div class="add-transaction__form_splitt-container">
-              <div class="splitt-from__toggle">
+              <div class="splitt-form__toggle">
                 <input
                   type="radio"
                   id="splitt-equally-button"
@@ -361,7 +361,10 @@
               </div>
               <!-- ПОРОВНУ -->
               <div class="splitt-form__table" id="splitt-equally-table">
-                <div class="splitt-form__table--row splitt-equally-table-row">
+                <div
+                  class="splitt-form__table--row splitt-equally-table-row"
+                  data-user-id="1"
+                >
                   <input
                     type="checkbox"
                     class="splitt-equally-checkbox"
@@ -379,7 +382,10 @@
                     >
                   </div>
                 </div>
-                <div class="splitt-form__table--row splitt-equally-table-row">
+                <div
+                  class="splitt-form__table--row splitt-equally-table-row"
+                  data-user-id="2"
+                >
                   <input
                     type="checkbox"
                     class="splitt-equally-checkbox"
@@ -397,7 +403,10 @@
                     >
                   </div>
                 </div>
-                <div class="splitt-form__table--row splitt-equally-table-row">
+                <div
+                  class="splitt-form__table--row splitt-equally-table-row"
+                  data-user-id="3"
+                >
                   <input
                     type="checkbox"
                     class="splitt-equally-checkbox"
@@ -418,7 +427,10 @@
                     >
                   </div>
                 </div>
-                <div class="splitt-form__table--row splitt-equally-table-row">
+                <div
+                  class="splitt-form__table--row splitt-equally-table-row"
+                  data-user-id="4"
+                >
                   <input
                     type="checkbox"
                     class="splitt-equally-checkbox"
@@ -441,7 +453,10 @@
               </div>
               <!-- ЧАСТЯМИ (₽) -->
               <div class="splitt-form__table" id="splitt-parts-table">
-                <div class="splitt-form__table--row">
+                <div
+                  class="splitt-form__table--row splitt-parts-table-row"
+                  data-user-id="1"
+                >
                   <img
                     class="account__avatar"
                     src="images/avatar-peter.png"
@@ -449,13 +464,16 @@
                   />
                   <div class="splitt-form__table--user">Пётр</div>
                   <input
-                    class="splitt-amount__input input-amount"
+                    class="splitt-amount__input input-amount splitt-parts-amount"
                     name="splitt-amount-input"
                     type="text"
                     value="0,00&nbsp;₽"
                   />
                 </div>
-                <div class="splitt-form__table--row">
+                <div
+                  class="splitt-form__table--row splitt-parts-table-row"
+                  data-user-id="2"
+                >
                   <img
                     class="account__avatar"
                     src="images/avatar-kate.png"
@@ -463,13 +481,16 @@
                   />
                   <div class="splitt-form__table--user">Катерина</div>
                   <input
-                    class="splitt-amount__input input-amount"
+                    class="splitt-amount__input input-amount splitt-parts-amount"
                     name="splitt-amount-input"
                     type="text"
                     value="0,00&nbsp;₽"
                   />
                 </div>
-                <div class="splitt-form__table--row">
+                <div
+                  class="splitt-form__table--row splitt-parts-table-row"
+                  data-user-id="3"
+                >
                   <img
                     class="account__avatar"
                     src="images/avatar-paul.png"
@@ -480,22 +501,25 @@
                   Константин Константинопольский
                 </div> -->
                   <input
-                    class="splitt-amount__input input-amount"
+                    class="splitt-amount__input input-amount splitt-parts-amount"
                     name="splitt-amount-input"
                     type="text"
                     value="0,00&nbsp;₽"
                   />
                 </div>
-                <div class="splitt-form__table--row">
+                <div
+                  class="splitt-form__table--row splitt-parts-table-row"
+                  data-user-id="4"
+                >
                   <img
                     class="account__avatar"
                     src="images/avatar-sanya.png"
-                    alt="Пётр"
+                    alt="Саня"
                   />
                   <!-- <div class="splitt-form__table--user">Саня</div> -->
                   <div class="splitt-form__table--user">Арсений Тарковский</div>
                   <input
-                    class="splitt-amount__input input-amount"
+                    class="splitt-amount__input input-amount splitt-parts-amount"
                     name="splitt-amount-input"
                     type="text"
                     value="0,00&nbsp;₽"

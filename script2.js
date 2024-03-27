@@ -15,12 +15,22 @@ document.addEventListener('DOMContentLoaded', function () {
   let activeSplittOptionsTable = null;
   let activeEmojiField = null;
   // TODO1 проверить целесообразность
-  let currentAddExpenseForm = {
+  let addExpenseFormModel = {
     title: '',
     amount: 0,
     paidBy: {},
     splitt: {},
     comment: null,
+  };
+  let splittEquallyCheckedRows = [];
+
+  let splittPartsModel = {
+    splitts: new Map(),
+    total: 0,
+    remainder: 0,
+    splittsFields: new Map(),
+    totalField: null,
+    remainderField: null,
   };
 
   function isActive(element) {
@@ -107,8 +117,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // e: Add Expense: Splitt Form
   const splittOptionButtons = document.querySelectorAll(
-    '.splitt-from__toggle input[type="radio"]'
+    '.splitt-form__toggle input[type="radio"]'
   );
+  // TODO1 возможно, переделать для Splitt Parts
+  const splittAmountInputs = document.querySelectorAll('.splitt-amount__input');
+
+  // e: Add Expense: Splitt Form - Equally
   const splittEquallyTable = document.getElementById('splitt-equally-table');
   const splittEquallyTableRows = document.querySelectorAll(
     '.splitt-equally-table-row'
@@ -119,7 +133,22 @@ document.addEventListener('DOMContentLoaded', function () {
   const splittEquallyAmounts = document.querySelectorAll(
     '.splitt-equally-amount'
   );
-  const splittAmountInputs = document.querySelectorAll('.splitt-amount__input');
+
+  // e: Add Expense: Splitt Form - Parts
+  const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
+  const splittPartsTotalField = document.querySelector('.splitt-parts__total');
+  const splittPartsRemainderField = document.querySelector(
+    '.splitt-parts__remainder'
+  );
+  const splittPartsRowsArray = [...splittPartsRows];
+  splittPartsRowsArray.forEach(row => {
+    const userId = parseInt(row.dataset.userId, 10);
+    const amountField = row.querySelector('.splitt-parts-amount');
+    splittPartsModel.splitts.set(userId, 0);
+    splittPartsModel.splittsFields.set(userId, amountField);
+  });
+  splittPartsModel.totalField = splittPartsTotalField;
+  splittPartsModel.remainderField = splittPartsRemainderField;
 
   // e: Add Expense: Note Form
   const addExpenseNoteInput = document.querySelector(
@@ -487,48 +516,39 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateSplitts() {
-    // Step 1: Count the number of checked checkboxes
-    let checkedCount = 0;
-    splittEquallyCheckboxes.forEach((checkbox, index) => {
-      if (checkbox.checked) {
-        checkedCount++;
-      }
-    });
+    const splittEquallyTableRowsArray = Array.from(splittEquallyTableRows);
 
-    // Step 2: Divide the amount evenly
+    const checkedRows = splittEquallyTableRowsArray.filter(row =>
+      splittEquallyCheckedRows.includes(row.dataset.userId)
+    );
+
     let baseAmount = 0;
     let remainder = 0;
-    if (checkedCount > 0) {
-      baseAmount = Math.floor(currentAddExpenseForm.amount / checkedCount);
-      remainder = currentAddExpenseForm.amount % checkedCount;
+    if (checkedRows.length > 0) {
+      baseAmount = Math.floor(addExpenseFormModel.amount / checkedRows.length);
+      remainder = addExpenseFormModel.amount % checkedRows.length;
     }
 
-    // Step 3: Generate random indices for rows that will receive higher amount
-    let checkedIndices = new Set();
-    while (checkedIndices.size < remainder) {
-      const randomIndex = Math.floor(
-        Math.random() * splittEquallyTableRows.length
-      );
-      checkedIndices.add(randomIndex);
+    let usersWithHigherAmounts = new Set();
+    while (usersWithHigherAmounts.size < remainder) {
+      const randomIndex = Math.floor(Math.random() * checkedRows.length);
+      const randomUserId = splittEquallyCheckedRows[randomIndex];
+      usersWithHigherAmounts.add(randomUserId);
     }
 
-    // Step 4: Update the amount for each row
-    splittEquallyTableRows.forEach((row, index) => {
-      if (!row.classList.contains('inactive')) {
-        let amountToAdd = baseAmount;
-        if (checkedIndices.has(index)) {
-          // Add higher amount to rows in the set
-          amountToAdd += 1;
-        }
-        splittEquallyAmounts[index].textContent =
-          formatAmountForOutput(amountToAdd);
+    checkedRows.forEach(row => {
+      const amountField = row.querySelector('.splitt-equally-amount');
+      let amountToAdd = baseAmount;
+      if (usersWithHigherAmounts.has(row.dataset.userId)) {
+        amountToAdd += 1;
       }
+      amountField.textContent = formatAmountForOutput(amountToAdd);
     });
   }
 
   function saveAddExpenseAmount(amount) {
-    currentAddExpenseForm.amount = amount;
-    testingExpenseAmountLog.textContent = currentAddExpenseForm.amount;
+    addExpenseFormModel.amount = amount;
+    testingExpenseAmountLog.textContent = addExpenseFormModel.amount;
     updateSplitts();
   }
 
@@ -558,15 +578,23 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleSplittEquallyCheckboxChange() {
     const row = this.closest('.splitt-equally-table-row');
     const amount = row.querySelector('.splitt-equally-amount');
+    const userId = row.dataset.userId;
+
     if (!this.checked) {
       row.classList.add(INACTIVE_CLASS);
       amount.classList.add(INACTIVE_CLASS);
-      // updateSplitts();
+      const index = splittEquallyCheckedRows.indexOf(userId);
+      if (index !== -1) {
+        splittEquallyCheckedRows.splice(index, 1);
+      }
       amount.textContent = DEFAULT_AMOUNT;
       updateSplitts();
     } else {
       row.classList.remove(INACTIVE_CLASS);
       amount.classList.remove(INACTIVE_CLASS);
+      if (!splittEquallyCheckedRows.includes(userId)) {
+        splittEquallyCheckedRows.push(userId);
+      }
       updateSplitts();
     }
   }
@@ -728,6 +756,13 @@ document.addEventListener('DOMContentLoaded', function () {
   splittAmountInputs.forEach(inputAmount =>
     inputAmount.addEventListener('input', handleSplittAmountInput)
   );
+
+  splittEquallyTableRows.forEach(row => {
+    const userId = row.dataset.userId;
+    if (!splittEquallyCheckedRows.includes(userId)) {
+      splittEquallyCheckedRows.push(userId);
+    }
+  });
 
   // el: Add Expense: Note Form
 
