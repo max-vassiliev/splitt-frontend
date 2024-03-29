@@ -5,8 +5,13 @@ document.addEventListener('DOMContentLoaded', function () {
   const INACTIVE_CLASS = 'inactive';
   const HIDDEN_CLASS = 'hidden';
   const DISABLED_ATTRIBUTE = 'disabled';
+  const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
+  const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
+
+  // TODO1 нейминг: можно добавить STR к DEFAULT_AMOUNT
   const MAX_AMOUNT = 10000000000;
-  const DEFAULT_AMOUNT = '0,00 ₽';
+  // const DEFAULT_AMOUNT = '0,00 ₽';
+  const DEFAULT_AMOUNT = 0;
 
   let currentGroupId = 1;
   let activePopup = null;
@@ -19,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
     title: '',
     amount: 0,
     paidBy: {},
-    splitt: {},
+    splittType: 'equally',
+    splitts: {},
     comment: null,
   };
   let splittEquallyCheckedRows = [];
@@ -119,8 +125,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const splittOptionButtons = document.querySelectorAll(
     '.splitt-form__toggle input[type="radio"]'
   );
+  const splittPartsAmountInputs = document.querySelectorAll(
+    '.splitt-parts-amount'
+  );
+  const splittCalculatorRemainder = document.querySelector(
+    '.splitt-calculator__remainder'
+  );
+
   // TODO1 возможно, переделать для Splitt Parts
-  const splittAmountInputs = document.querySelectorAll('.splitt-amount__input');
+  // const splittAmountInputs = document.querySelectorAll('.splitt-amount__input');
 
   // e: Add Expense: Splitt Form - Equally
   const splittEquallyTable = document.getElementById('splitt-equally-table');
@@ -133,6 +146,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const splittEquallyAmounts = document.querySelectorAll(
     '.splitt-equally-amount'
   );
+
+  activate(splittEquallyTable);
+
+  activeSplittOptionsTable = splittEquallyTable;
+
+  splittEquallyTableRows.forEach(row => {
+    const userId = row.dataset.userId;
+    if (!splittEquallyCheckedRows.includes(userId)) {
+      splittEquallyCheckedRows.push(userId);
+    }
+  });
 
   // e: Add Expense: Splitt Form - Parts
   const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
@@ -245,9 +269,29 @@ document.addEventListener('DOMContentLoaded', function () {
     return amount > MAX_AMOUNT ? Math.floor(amount / 10) : amount;
   }
 
+  function verifySplittInputAmount(amount) {
+    console.log('verifySplittInputAmount()');
+    console.log(amount);
+    console.log(addExpenseFormModel.amount);
+
+    // return amount > addExpenseFormModel.amount
+    //   ? Math.floor(amount / 10)
+    //   : amount;
+
+    const verifiedAmount =
+      amount > addExpenseFormModel.amount ? Math.floor(amount / 10) : amount;
+    console.log(verifiedAmount);
+    return verifiedAmount;
+  }
+
   function processInputAmount(value) {
     const parsedAmount = parseInputAmount(value);
     return verifyInputAmount(parsedAmount);
+  }
+
+  function processSplittInputAmount(value) {
+    const parsedAmount = parseInputAmount(value);
+    return verifySplittInputAmount(parsedAmount);
   }
 
   function formatAmountForOutput(amount) {
@@ -515,7 +559,92 @@ document.addEventListener('DOMContentLoaded', function () {
     activeAddExpenseHiddenForm = { form, button };
   }
 
+  function handleAddExpenseAmountInput(event) {
+    const cursorPosition = this.selectionStart;
+    const inputAmount = event.target.value;
+    const processedAmount = processInputAmount(inputAmount);
+    saveAddExpenseAmount(processedAmount);
+    const outputAmount = formatAmountForOutput(processedAmount);
+    this.value = outputAmount;
+    setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  }
+
+  function saveAddExpenseAmount(amount) {
+    addExpenseFormModel.amount = amount;
+    testingExpenseAmountLog.textContent = addExpenseFormModel.amount;
+    updateSplitts();
+  }
+
+  // f: Add Expense: Splitt Form
+
+  function handleSplittOptionChange() {
+    if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
+
+    const selectedButton = this.getAttribute('id');
+    const selectedTableName = selectedButton.replace('-button', '-table');
+    const selectedTable = document.getElementById(selectedTableName);
+
+    activate(selectedTable);
+    activeSplittOptionsTable = selectedTable;
+    loadSplittForm(selectedButton);
+  }
+
   function updateSplitts() {
+    switch (addExpenseFormModel.splittType) {
+      case 'parts':
+        updateSplittsParts();
+        break;
+      case 'shares':
+        updateSplittsShares();
+        break;
+      default:
+        updateSplittsEqually();
+    }
+  }
+
+  function loadSplittForm(splittOptionButton) {
+    const splittType = splittOptionButton.replace(/^splitt-(.*)-button$/, '$1');
+    addExpenseFormModel.splittType = splittType;
+
+    switch (splittType) {
+      case 'parts':
+        loadSplittPartsForm();
+        break;
+      case 'shares':
+        // TODO1 replace
+        console.log('Splitt by Shares');
+        break;
+      default:
+        // TODO1 replace
+        console.log('Splitt Equally');
+    }
+  }
+
+  function handleSplittEquallyCheckboxChange() {
+    const row = this.closest('.splitt-equally-table-row');
+    const amount = row.querySelector('.splitt-equally-amount');
+    const userId = row.dataset.userId;
+
+    if (!this.checked) {
+      row.classList.add(INACTIVE_CLASS);
+      amount.classList.add(INACTIVE_CLASS);
+      const index = splittEquallyCheckedRows.indexOf(userId);
+      if (index !== -1) {
+        splittEquallyCheckedRows.splice(index, 1);
+      }
+      amount.textContent = formatAmountForOutput(DEFAULT_AMOUNT);
+      updateSplitts();
+    } else {
+      row.classList.remove(INACTIVE_CLASS);
+      amount.classList.remove(INACTIVE_CLASS);
+      if (!splittEquallyCheckedRows.includes(userId)) {
+        splittEquallyCheckedRows.push(userId);
+      }
+      updateSplitts();
+    }
+  }
+
+  function updateSplittsEqually() {
     const splittEquallyTableRowsArray = Array.from(splittEquallyTableRows);
 
     const checkedRows = splittEquallyTableRowsArray.filter(row =>
@@ -546,65 +675,83 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function saveAddExpenseAmount(amount) {
-    addExpenseFormModel.amount = amount;
-    testingExpenseAmountLog.textContent = addExpenseFormModel.amount;
-    updateSplitts();
+  function updateSplittsParts() {
+    console.log(
+      `Update Splitts Parts. Expense Amount: ${formatAmountForOutput(
+        addExpenseFormModel.amount
+      )}`
+    );
+    calculateSplittParts();
   }
 
-  function handleSplittOptionChange() {
-    if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
+  // TODO1 проверить целесообразность
+  function loadSplittPartsForm() {
+    calculateSplittParts();
+  }
 
-    const selectedTableName = this.getAttribute('id').replace(
-      '-button',
-      '-table'
+  function calculateSplittParts() {
+    const total = Array.from(splittPartsModel.splitts.values()).reduce(
+      (acc, currentValue) => acc + currentValue,
+      0
     );
 
-    const selectedTable = document.getElementById(selectedTableName);
-    activate(selectedTable);
-    activeSplittOptionsTable = selectedTable;
+    splittPartsModel.total = total;
+    splittPartsModel.remainder =
+      addExpenseFormModel.amount - splittPartsModel.total;
+
+    splittPartsModel.totalField.textContent = formatAmountForOutput(
+      splittPartsModel.total
+    );
+    splittPartsModel.remainderField.textContent = formatAmountForOutput(
+      splittPartsModel.remainder
+    );
+    restyleSplittRemainder();
   }
 
-  function handleAddExpenseAmountInput(event) {
-    const cursorPosition = this.selectionStart;
-    const inputAmount = event.target.value;
-    const processedAmount = processInputAmount(inputAmount);
-    saveAddExpenseAmount(processedAmount);
-    const outputAmount = formatAmountForOutput(processedAmount);
-    this.value = outputAmount;
-    setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  function updateSplittsShares() {
+    console.log(
+      `Update Splitts Shares. Expense Amount: ${formatAmountForOutput(
+        addExpenseFormModel.amount
+      )}`
+    );
   }
 
-  function handleSplittEquallyCheckboxChange() {
-    const row = this.closest('.splitt-equally-table-row');
-    const amount = row.querySelector('.splitt-equally-amount');
-    const userId = row.dataset.userId;
-
-    if (!this.checked) {
-      row.classList.add(INACTIVE_CLASS);
-      amount.classList.add(INACTIVE_CLASS);
-      const index = splittEquallyCheckedRows.indexOf(userId);
-      if (index !== -1) {
-        splittEquallyCheckedRows.splice(index, 1);
-      }
-      amount.textContent = DEFAULT_AMOUNT;
-      updateSplitts();
-    } else {
-      row.classList.remove(INACTIVE_CLASS);
-      amount.classList.remove(INACTIVE_CLASS);
-      if (!splittEquallyCheckedRows.includes(userId)) {
-        splittEquallyCheckedRows.push(userId);
-      }
-      updateSplitts();
+  function restyleSplittRemainder() {
+    if (splittPartsModel.remainder === 0) {
+      splittCalculatorRemainder.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
+      splittCalculatorRemainder.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
+      return;
+    }
+    if (
+      splittPartsModel.remainder < 0 &&
+      !splittCalculatorRemainder.classList.contains(ABOVE_EXPENSE_AMOUNT_CLASS)
+    ) {
+      splittCalculatorRemainder.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
+      splittCalculatorRemainder.classList.add(ABOVE_EXPENSE_AMOUNT_CLASS);
+      return;
+    }
+    if (
+      splittPartsModel.remainder > 0 &&
+      !splittCalculatorRemainder.classList.contains(BELOW_EXPENSE_AMOUNT_CLASS)
+    ) {
+      splittCalculatorRemainder.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
+      splittCalculatorRemainder.classList.add(BELOW_EXPENSE_AMOUNT_CLASS);
     }
   }
 
-  function handleSplittAmountInput(event) {
+  function handleSplittPartsAmountInput(event) {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
-    // TODO1 нужна верификация: лимит не больше текущей суммы траты
+    const row = this.closest('.splitt-parts-table-row');
+    const userId = row.dataset.userId;
+
     const processedAmount = processInputAmount(inputAmount);
-    const outputAmount = formatAmountForOutput(processedAmount);
+    splittPartsModel.splitts.set(userId, processedAmount);
+    calculateSplittParts();
+
+    const outputAmount = formatAmountForOutput(
+      splittPartsModel.splitts.get(userId)
+    );
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
   }
@@ -746,23 +893,14 @@ document.addEventListener('DOMContentLoaded', function () {
   splittOptionButtons.forEach(splittOptionButton => {
     splittOptionButton.addEventListener('change', handleSplittOptionChange);
   });
-  activate(splittEquallyTable);
-  activeSplittOptionsTable = splittEquallyTable;
 
   splittEquallyCheckboxes.forEach(checkbox =>
     checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
   );
 
-  splittAmountInputs.forEach(inputAmount =>
-    inputAmount.addEventListener('input', handleSplittAmountInput)
+  splittPartsAmountInputs.forEach(inputAmount =>
+    inputAmount.addEventListener('input', handleSplittPartsAmountInput)
   );
-
-  splittEquallyTableRows.forEach(row => {
-    const userId = row.dataset.userId;
-    if (!splittEquallyCheckedRows.includes(userId)) {
-      splittEquallyCheckedRows.push(userId);
-    }
-  });
 
   // el: Add Expense: Note Form
 
