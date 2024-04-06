@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-document.addEventListener("DOMContentLoaded", function () {
-  const ACTIVE_CLASS = "active";
-  const INACTIVE_CLASS = "inactive";
-  const HIDDEN_CLASS = "hidden";
-  const DISABLED_ATTRIBUTE = "disabled";
-  const BELOW_EXPENSE_AMOUNT_CLASS = "below-expense-amount";
-  const ABOVE_EXPENSE_AMOUNT_CLASS = "above-expense-amount";
+document.addEventListener('DOMContentLoaded', function () {
+  const ACTIVE_CLASS = 'active';
+  const INACTIVE_CLASS = 'inactive';
+  const HIDDEN_CLASS = 'hidden';
+  const DISABLED_ATTRIBUTE = 'disabled';
+  const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
+  const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
 
   // TODO1 нейминг: можно добавить STR к DEFAULT_AMOUNT
   const MAX_AMOUNT = 10000000000;
@@ -22,10 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let activeEmojiField = null;
   // TODO1 проверить целесообразность
   let addExpenseFormModel = {
-    title: "",
+    title: '',
     amount: 0,
     paidBy: {},
-    splittType: "equally",
+    splittType: 'equally',
     splitts: {},
     comment: null,
   };
@@ -68,11 +68,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function isEmptyString(str) {
-    return str.trim() === "";
+    return str.trim() === '';
   }
 
   function clearText(textElement) {
-    textElement.value = "";
+    textElement.value = '';
   }
 
   function removeWhiteSpace(textElement) {
@@ -85,89 +85,90 @@ document.addEventListener("DOMContentLoaded", function () {
   // --------------
 
   // e: Menu
-  const openMenuPopupBtn = document.querySelector(".menu__btn--open");
-  const closeMenuPopupBtn = document.querySelector(".menu__btn--close");
-  const menuAccount = document.querySelector(".menu__account");
-  const menuPopup = document.querySelector(".menu__popup");
+  const openMenuPopupBtn = document.querySelector('.menu__btn--open');
+  const closeMenuPopupBtn = document.querySelector('.menu__btn--close');
+  const menuAccount = document.querySelector('.menu__account');
+  const menuPopup = document.querySelector('.menu__popup');
 
   // e: Utils
-  const overlay = document.querySelector(".overlay");
-  const btnClosePopup = document.querySelectorAll(".btn__close_popup");
-  const percentInput = document.querySelectorAll(".input-percent");
+  const overlay = document.querySelector('.overlay');
+  const btnClosePopup = document.querySelectorAll('.btn__close_popup');
+
+  // TODO1 удалить
+  // const percentInput = document.querySelectorAll('.input-percent');
   // TODO1 удалить
   const testingExpenseAmountLog = document.querySelector(
-    ".testing-expense-amount-log"
+    '.testing-expense-amount-log'
   );
 
   // e: Emoji Picker
   const emojiPickerContainer = document.querySelector(
-    ".emoji-picker-container"
+    '.emoji-picker-container'
   );
   const emojiPickerOptions = {
     onEmojiSelect: handleEmojiSelect,
-    searchPosition: "static",
-    previewPosition: "none",
-    locale: "ru",
+    searchPosition: 'static',
+    previewPosition: 'none',
+    locale: 'ru',
   };
   const emojiPicker = new EmojiMart.Picker(emojiPickerOptions);
-  document.getElementById("emoji-picker")?.appendChild(emojiPicker);
+  document.getElementById('emoji-picker')?.appendChild(emojiPicker);
 
   // e: Group
-  const groupHeader = document.querySelector(".group__info");
-  const groupSettingsLink = document.querySelector(".link__group--settings");
-  const groupPopup = document.querySelector(".group__popup");
-  const groupSwitch = document.querySelector(".group__switch");
-  const groupSwitchBtn = document.querySelector(".group__switch_btn");
+  const groupHeader = document.querySelector('.group__info');
+  const groupSettingsLink = document.querySelector('.link__group--settings');
+  const groupPopup = document.querySelector('.group__popup');
+  const groupSwitch = document.querySelector('.group__switch');
+  const groupSwitchBtn = document.querySelector('.group__switch_btn');
 
   // e: Add Expense: Main Form
-  const addExpenseBtn = document.querySelector(".add-expense__btn");
-  const addExpenseForm = document.querySelector(".add-expense__form");
-  const addExpenseBtnEdit = document.querySelectorAll(".add-expense__btn-edit");
-  const addExpenseAmountInput = document.querySelector(".add-expense-amount");
+  const addExpenseBtn = document.querySelector('.add-expense__btn');
+  const addExpenseForm = document.querySelector('.add-expense__form');
+  const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
+  const addExpenseAmountInput = document.querySelector('.add-expense-amount');
   const addExpenseEmojiInputField = document.querySelector(
-    ".emoji-input.add-expense"
+    '.emoji-input.add-expense'
   );
   const addExpenseEmojiPickerSwitchBtn = document.querySelector(
-    ".btn__emoji-picker--switch.add-expense"
+    '.btn__emoji-picker--switch.add-expense'
   );
   const addExpenseEmojiRemoveBtn = document.querySelector(
-    ".btn__emoji-remove.add-expense"
+    '.btn__emoji-remove.add-expense'
   );
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
-    ".add-expense__form_btn-close"
+    '.add-expense__form_btn-close'
   );
 
   // e: Add Expense: Splitt Form
   const splittOptionButtons = document.querySelectorAll(
     '.splitt-form__toggle input[type="radio"]'
   );
-  const splittPartsAmountInputs = document.querySelectorAll(
-    ".splitt-parts-amount"
-  );
+
+  // TODO1: пересмотреть; есть два элемента с классом 'splitt-calculator__remainder'
   const splittCalculatorRemainder = document.querySelector(
-    ".splitt-calculator__remainder"
+    '.splitt-calculator__remainder'
   );
 
   // TODO1 возможно, переделать для Splitt Parts
   // const splittAmountInputs = document.querySelectorAll('.splitt-amount__input');
 
   // e: Add Expense: Splitt Form - Equally
-  const splittEquallyTable = document.getElementById("splitt-equally-table");
+  const splittEquallyTable = document.getElementById('splitt-equally-table');
   const splittEquallyTableRows = document.querySelectorAll(
-    ".splitt-equally-table-row"
+    '.splitt-equally-table-row'
   );
   const splittEquallyCheckboxes = document.querySelectorAll(
-    ".splitt-equally-checkbox"
+    '.splitt-equally-checkbox'
   );
   const splittEquallyAmounts = document.querySelectorAll(
-    ".splitt-equally-amount"
+    '.splitt-equally-amount'
   );
 
   activate(splittEquallyTable);
 
   activeSplittOptionsTable = splittEquallyTable;
 
-  splittEquallyTableRows.forEach((row) => {
+  splittEquallyTableRows.forEach(row => {
     const userId = row.dataset.userId;
     if (!splittEquallyCheckedRows.includes(userId)) {
       splittEquallyCheckedRows.push(userId);
@@ -175,33 +176,76 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // e: Add Expense: Splitt Form - Parts
-  const splittPartsRows = document.querySelectorAll(".splitt-parts-table-row");
-  const splittPartsTotalField = document.querySelector(".splitt-parts__total");
+  const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
+  const splittPartsTotalField = document.querySelector('.splitt-parts__total');
   const splittPartsRemainderField = document.querySelector(
-    ".splitt-parts__remainder"
+    '.splitt-parts__remainder'
+  );
+  const splittPartsAmountInputs = document.querySelectorAll(
+    '.splitt-parts-amount'
   );
   const splittPartsRowsArray = [...splittPartsRows];
-  splittPartsRowsArray.forEach((row) => {
+  splittPartsRowsArray.forEach(row => {
     const userId = parseInt(row.dataset.userId, 10);
-    const amountField = row.querySelector(".splitt-parts-amount");
+    const amountField = row.querySelector('.splitt-parts-amount');
     splittPartsModel.splitts.set(userId, 0);
     splittPartsModel.splittsFields.set(userId, amountField);
   });
   splittPartsModel.totalField = splittPartsTotalField;
   splittPartsModel.remainderField = splittPartsRemainderField;
 
+  // e: Add Expense: Splitt Form - Shares
+  const splittSharesRows = document.querySelectorAll(
+    '.splitt-shares-table-row'
+  );
+  const splittSharesTotalShareField = document.querySelector(
+    '.splitt-shares__total-share'
+  );
+  const splittSharesTotalAmountField = document.querySelector(
+    '.splitt-shares__total-amount'
+  );
+  const splittSharesRemainderRow = document.querySelector(
+    '.splitt-shares-remainder-row'
+  );
+  const splittSharesRemainderShareField = document.querySelector(
+    '.splitt-shares__remainder-share'
+  );
+  const splittSharesRemainderAmountField = document.querySelector(
+    '.splitt-shares__remainder-amount'
+  );
+  const splittSharesInputs = document.querySelectorAll('.splitt-share__input');
+  const splittSharesRowsArray = [...splittSharesRows];
+  // TODO1 заполнить мапы в splittSharesModel
+  splittSharesRowsArray.forEach(row => {
+    const userId = parseInt(row.dataset.userId, 10);
+    const amountField = row.querySelector('.splitt-share__amount');
+    const shareField = row.querySelector('.splitt-share__input');
+    // TODO1: удалить
+    // splittSharesModel.splittShares.set(userId, 10);
+    // splittSharesModel.splittAmounts.set(userId, 1000);
+    splittSharesModel.splittShares.set(userId, DEFAULT_AMOUNT);
+    splittSharesModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
+
+    splittSharesModel.splittSharesFields.set(userId, shareField);
+    splittSharesModel.splittAmountsFields.set(userId, amountField);
+  });
+  splittSharesModel.totalShareField = splittSharesTotalShareField;
+  splittSharesModel.totalAmountField = splittSharesTotalAmountField;
+  splittSharesModel.remainderShareField = splittSharesRemainderShareField;
+  splittSharesModel.remainderAmountField = splittSharesRemainderAmountField;
+
   // e: Add Expense: Note Form
   const addExpenseNoteInput = document.querySelector(
-    ".add-transaction__form_input-note#expense-note"
+    '.add-transaction__form_input-note#expense-note'
   );
   const addExpenseNoteCounter = document.querySelector(
-    ".character-count.expense-note"
+    '.character-count.expense-note'
   );
   const addExpenseNoteBtnCancel = document.querySelector(
-    ".add-expense__form_btn-cancel"
+    '.add-expense__form_btn-cancel'
   );
   const addExpenseNoteBtnSave = document.querySelector(
-    ".add-expense__form_note__btn--save"
+    '.add-expense__form_note__btn--save'
   );
 
   const addExpenseNoteForm = {
@@ -213,39 +257,39 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   // e: Add Repayment: Main Form
-  const addRepaymentBtn = document.querySelector(".add-repayment__btn");
-  const addRepaymentForm = document.querySelector(".add-repayment__form");
+  const addRepaymentBtn = document.querySelector('.add-repayment__btn');
+  const addRepaymentForm = document.querySelector('.add-repayment__form');
   const addRepaymentBtnEdit = document.querySelectorAll(
-    ".add-repayment__btn-edit"
+    '.add-repayment__btn-edit'
   );
   const addRepaymentHiddenFormBtnClose = document.querySelectorAll(
-    ".add-repayment__form_btn-close"
+    '.add-repayment__form_btn-close'
   );
   const addRepaymentAmountInput = document.querySelector(
-    ".add-repayment-amount"
+    '.add-repayment-amount'
   );
   const addRepaymentEmojiInputField = document.querySelector(
-    ".emoji-input.add-repayment"
+    '.emoji-input.add-repayment'
   );
   const addRepaymentEmojiPickerSwitchBtn = document.querySelector(
-    ".btn__emoji-picker--switch.add-repayment"
+    '.btn__emoji-picker--switch.add-repayment'
   );
   const addRepaymentEmojiRemoveBtn = document.querySelector(
-    ".btn__emoji-remove.add-repayment"
+    '.btn__emoji-remove.add-repayment'
   );
 
   // e: Add Repayment: Note Form
   const addRepaymentNoteInput = document.querySelector(
-    ".add-transaction__form_input-note#repayment-note"
+    '.add-transaction__form_input-note#repayment-note'
   );
   const addRepaymentNoteCounter = document.querySelector(
-    ".character-count.repayment-note"
+    '.character-count.repayment-note'
   );
   const addRepaymentNoteBtnCancel = document.querySelector(
-    ".add-repayment__form_btn-cancel"
+    '.add-repayment__form_btn-cancel'
   );
   const addRepaymentNoteBtnSave = document.querySelector(
-    ".add-repayment__form_note__btn--save"
+    '.add-repayment__form_note__btn--save'
   );
   const addRepaymentNoteForm = {
     noteInput: addRepaymentNoteInput,
@@ -262,11 +306,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // f: Util
 
   function addOverlay() {
-    overlay.classList.remove("hidden");
+    overlay.classList.remove('hidden');
   }
 
   function hideOverlay() {
-    overlay.classList.add("hidden");
+    overlay.classList.add('hidden');
   }
 
   function closeActivePopup() {
@@ -277,7 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function parseInputAmount(value) {
-    const cleanedValue = value.replace(/\D/g, "");
+    const cleanedValue = value.replace(/\D/g, '');
     return cleanedValue ? parseInt(cleanedValue) : 0;
   }
 
@@ -286,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function verifySplittInputAmount(amount) {
-    console.log("verifySplittInputAmount()");
+    console.log('verifySplittInputAmount()');
     console.log(amount);
     console.log(addExpenseFormModel.amount);
 
@@ -312,12 +356,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function formatAmountForOutput(amount) {
-    let formattedAmount = (amount / 100).toLocaleString("ru-RU", {
+    let formattedAmount = (amount / 100).toLocaleString('ru-RU', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
 
-    formattedAmount += " ₽";
+    formattedAmount += ' ₽';
 
     return formattedAmount;
   }
@@ -337,11 +381,34 @@ document.addEventListener("DOMContentLoaded", function () {
     context.setSelectionRange(newCursorPosition, newCursorPosition);
   }
 
+  function parsePercentInputString(value) {
+    let percent;
+    let cleanedValue = value.replace(/\D/g, '');
+
+    if (cleanedValue === '' || isNaN(cleanedValue)) {
+      percent = 0;
+    } else {
+      let finalPercent;
+      let cleanedValueParsed = parseInt(cleanedValue);
+      cleanedValueParsed > ONE_HUNDRED_PERCENT
+        ? (finalPercent = Math.floor(cleanedValueParsed / 10))
+        : (finalPercent = cleanedValueParsed);
+
+      percent = Math.max(finalPercent, 0);
+    }
+
+    return percent;
+  }
+
+  function calculateSplittShareAmount(splittShare, totalAmount) {
+    return Math.round((totalAmount * splittShare) / ONE_HUNDRED_PERCENT);
+  }
+
   function formatPercentString(value) {
     let percent;
-    let cleanedValue = value.replace(/\D/g, "");
+    let cleanedValue = value.replace(/\D/g, '');
 
-    if (cleanedValue === "" || isNaN(cleanedValue)) {
+    if (cleanedValue === '' || isNaN(cleanedValue)) {
       percent = 0;
     } else {
       let finalPercent;
@@ -353,8 +420,22 @@ document.addEventListener("DOMContentLoaded", function () {
       percent = Math.max(finalPercent, 0);
     }
 
-    let formattedPercent = percent + " %";
+    let formattedPercent = percent + ' %';
     return formattedPercent;
+  }
+
+  // TODO1 разбить на функции — process и format
+  function formatPercentForOutput(value) {
+    let finalPercent;
+    value > 100
+      ? (finalPercent = Math.floor(value / 10))
+      : (finalPercent = value);
+
+    return `${value} %`;
+  }
+
+  function formatPercentForOutputLite(value) {
+    return `${value} %`;
   }
 
   function handlePercentInput(event) {
@@ -392,12 +473,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function openMenuPopup() {
     menuPopup.classList.add(ACTIVE_CLASS);
-    document.addEventListener("click", handleClickOutsideMenuPopup);
+    document.addEventListener('click', handleClickOutsideMenuPopup);
   }
 
   function closeMenuPopup() {
     menuPopup.classList.remove(ACTIVE_CLASS);
-    document.removeEventListener("click", handleClickOutsideMenuPopup);
+    document.removeEventListener('click', handleClickOutsideMenuPopup);
   }
 
   // f: Group
@@ -468,7 +549,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function removeEmoji() {
-    activeEmojiField.emojiInputField.value = "";
+    activeEmojiField.emojiInputField.value = '';
     activeEmojiField.emojiInputField.classList.remove(ACTIVE_CLASS);
     activeEmojiField.emojiRemoveBtn.classList.remove(ACTIVE_CLASS);
     activeEmojiField.emojiPickerSwitchBtn.classList.remove(HIDDEN_CLASS);
@@ -478,13 +559,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function openEmojiPicker() {
     if (isActive(emojiPickerContainer)) return;
     emojiPickerContainer.classList.add(ACTIVE_CLASS);
-    document.addEventListener("click", clickOutsideEmojiPicker);
+    document.addEventListener('click', clickOutsideEmojiPicker);
   }
 
   function closeEmojiPicker() {
     if (!isActive(emojiPickerContainer)) return;
     emojiPickerContainer.classList.remove(ACTIVE_CLASS);
-    document.removeEventListener("click", clickOutsideEmojiPicker);
+    document.removeEventListener('click', clickOutsideEmojiPicker);
   }
 
   function toggleEmojiPicker(event) {
@@ -524,12 +605,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!isEmptyString(form.noteInput.value) && !isActive(form.saveButton)) {
       activate(form.saveButton);
       form.saveButton.removeAttribute(DISABLED_ATTRIBUTE);
-      changeMainFormButtonText("редактировать", form.isExpense);
+      changeMainFormButtonText('редактировать', form.isExpense);
     }
     if (isEmptyString(form.noteInput.value) && isActive(form.saveButton)) {
       deactivate(form.saveButton);
       form.saveButton.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
-      changeMainFormButtonText("написать", form.isExpense);
+      changeMainFormButtonText('написать', form.isExpense);
     }
   }
 
@@ -597,8 +678,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleSplittOptionChange() {
     if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
 
-    const selectedButton = this.getAttribute("id");
-    const selectedTableName = selectedButton.replace("-button", "-table");
+    const selectedButton = this.getAttribute('id');
+    const selectedTableName = selectedButton.replace('-button', '-table');
     const selectedTable = document.getElementById(selectedTableName);
 
     activate(selectedTable);
@@ -607,29 +688,34 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function loadSplittForm(splittOptionButton) {
-    const splittType = splittOptionButton.replace(/^splitt-(.*)-button$/, "$1");
+    const splittType = splittOptionButton.replace(/^splitt-(.*)-button$/, '$1');
     addExpenseFormModel.splittType = splittType;
 
     switch (splittType) {
-      case "parts":
+      case 'parts':
         loadSplittPartsForm();
         break;
-      case "shares":
+      case 'shares':
         // TODO1 replace
-        console.log("Splitt by Shares");
+        loadSplittSharesForm();
+        console.log('Splitt by Shares');
         break;
       default:
         // TODO1 replace
-        console.log("Splitt Equally");
+        console.log('Splitt Equally');
     }
+  }
+
+  function loadSplittSharesForm() {
+    calculateSplittShares();
   }
 
   function updateSplitts() {
     switch (addExpenseFormModel.splittType) {
-      case "parts":
+      case 'parts':
         updateSplittsParts();
         break;
-      case "shares":
+      case 'shares':
         updateSplittsShares();
         break;
       default:
@@ -638,8 +724,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function handleSplittEquallyCheckboxChange() {
-    const row = this.closest(".splitt-equally-table-row");
-    const amount = row.querySelector(".splitt-equally-amount");
+    const row = this.closest('.splitt-equally-table-row');
+    const amount = row.querySelector('.splitt-equally-amount');
     const userId = row.dataset.userId;
 
     if (!this.checked) {
@@ -664,7 +750,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateSplittsEqually() {
     const splittEquallyTableRowsArray = Array.from(splittEquallyTableRows);
 
-    const checkedRows = splittEquallyTableRowsArray.filter((row) =>
+    const checkedRows = splittEquallyTableRowsArray.filter(row =>
       splittEquallyCheckedRows.includes(row.dataset.userId)
     );
 
@@ -682,8 +768,8 @@ document.addEventListener("DOMContentLoaded", function () {
       usersWithHigherAmounts.add(randomUserId);
     }
 
-    checkedRows.forEach((row) => {
-      const amountField = row.querySelector(".splitt-equally-amount");
+    checkedRows.forEach(row => {
+      const amountField = row.querySelector('.splitt-equally-amount');
       let amountToAdd = baseAmount;
       if (usersWithHigherAmounts.has(row.dataset.userId)) {
         amountToAdd += 1;
@@ -692,12 +778,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // TODO1 проверить целесообразность
   function updateSplittsParts() {
-    console.log(
-      `Update Splitts Parts. Expense Amount: ${formatAmountForOutput(
-        addExpenseFormModel.amount
-      )}`
-    );
     calculateSplittParts();
   }
 
@@ -722,80 +804,22 @@ document.addEventListener("DOMContentLoaded", function () {
     splittPartsModel.remainderField.textContent = formatAmountForOutput(
       splittPartsModel.remainder
     );
-    restyleSplittRemainder();
-  }
 
-  function calculateSplittShares() {
-    const totalAmount = Array.from(
-      splittSharesModel.splittAmounts.values()
-    ).reduce((acc, currentValue) => acc + currentValue, 0);
-    const totalShare = Array.from(
-      splittSharesModel.splittShares.values()
-    ).reduce((acc, currentValue) => acc + currentValue, 0);
-
-    splittSharesModel.totalAmount = totalAmount;
-    splittSharesModel.totalShare = totalShare;
-
-    splittSharesModel.remainderAmount =
-      addExpenseFormModel.amount - splittSharesModel.totalAmount;
-
-    // TODO1 попробовать оба варианта, но первый должен работать
-    splittSharesModel.remainderShare = ONE_HUNDRED_PERCENT - totalShare;
-    // splittSharesModel.remainderShare = Math.round(
-    //   (splittSharesModel.remainderAmount / addExpenseFormModel.amount) * 100
-    // );
-
-    splittSharesModel.totalAmountField.textContent = formatAmountForOutput(
-      splittSharesModel.totalAmount
-    );
-    splittSharesModel.remainderAmountField.textContent = formatAmountForOutput(
-      splittSharesModel.remainderAmount
-    );
-
-    // TODO1 возможно, не лучшая функция для форматирования процентов
-    splittSharesModel.totalShareField.textContent = formatPercentString(
-      splittSharesModel.totalShare
-    );
-    splittSharesModel.remainderShareField.textContent = formatPercentString(
-      splittSharesModel.remainderShare
+    restyleSplittRemainder(
+      splittPartsModel.remainder,
+      splittCalculatorRemainder
     );
   }
 
+  // TODO1 проверить целесообразность
   function updateSplittsShares() {
-    console.log(
-      `Update Splitts Shares. Expense Amount: ${formatAmountForOutput(
-        addExpenseFormModel.amount
-      )}`
-    );
-  }
-
-  function restyleSplittRemainder() {
-    if (splittPartsModel.remainder === 0) {
-      splittCalculatorRemainder.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
-      splittCalculatorRemainder.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
-      return;
-    }
-    if (
-      splittPartsModel.remainder < 0 &&
-      !splittCalculatorRemainder.classList.contains(ABOVE_EXPENSE_AMOUNT_CLASS)
-    ) {
-      splittCalculatorRemainder.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
-      splittCalculatorRemainder.classList.add(ABOVE_EXPENSE_AMOUNT_CLASS);
-      return;
-    }
-    if (
-      splittPartsModel.remainder > 0 &&
-      !splittCalculatorRemainder.classList.contains(BELOW_EXPENSE_AMOUNT_CLASS)
-    ) {
-      splittCalculatorRemainder.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
-      splittCalculatorRemainder.classList.add(BELOW_EXPENSE_AMOUNT_CLASS);
-    }
+    calculateSplittShares();
   }
 
   function handleSplittPartsAmountInput(event) {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
-    const row = this.closest(".splitt-parts-table-row");
+    const row = this.closest('.splitt-parts-table-row');
     const userId = row.dataset.userId;
 
     const processedAmount = processInputAmount(inputAmount);
@@ -807,6 +831,92 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  }
+
+  function handleSplittSharesInput(event) {
+    const cursorPosition = this.selectionStart;
+    const inputValue = event.target.value;
+    const row = this.closest('.splitt-shares-table-row');
+    const userId = parseInt(row.dataset.userId, 10);
+
+    const splittShare = parsePercentInputString(inputValue);
+    const splittAmount = calculateSplittShareAmount(
+      splittShare,
+      addExpenseFormModel.amount
+    );
+
+    splittSharesModel.splittShares.set(userId, splittShare);
+    splittSharesModel.splittAmounts.set(userId, splittAmount);
+    calculateSplittShares();
+
+    const splittAmountOut = formatAmountForOutput(splittAmount);
+    const splittAmountField = splittSharesModel.splittAmountsFields.get(userId);
+    splittAmountField.textContent = splittAmountOut;
+    const splittShareOut = formatPercentForOutputLite(splittShare);
+    this.value = splittShareOut;
+
+    setAmountCursorPosition(inputValue, splittShareOut, cursorPosition, this);
+  }
+
+  function calculateSplittShares() {
+    const totalAmount = Array.from(
+      splittSharesModel.splittAmounts.values()
+    ).reduce((acc, currentValue) => acc + currentValue, 0);
+
+    const totalShare = Array.from(
+      splittSharesModel.splittShares.values()
+    ).reduce((acc, currentValue) => acc + currentValue, 0);
+
+    splittSharesModel.totalAmount = totalAmount;
+    splittSharesModel.totalShare = totalShare;
+
+    splittSharesModel.remainderAmount =
+      addExpenseFormModel.amount - splittSharesModel.totalAmount;
+
+    splittSharesModel.remainderShare =
+      addExpenseFormModel.amount === 0 ? 0 : ONE_HUNDRED_PERCENT - totalShare;
+
+    splittSharesModel.totalAmountField.textContent = formatAmountForOutput(
+      splittSharesModel.totalAmount
+    );
+    splittSharesModel.remainderAmountField.textContent = formatAmountForOutput(
+      splittSharesModel.remainderAmount
+    );
+
+    splittSharesModel.totalShareField.textContent = formatPercentForOutput(
+      splittSharesModel.totalShare
+    );
+    splittSharesModel.remainderShareField.textContent = formatPercentForOutput(
+      splittSharesModel.remainderShare
+    );
+
+    restyleSplittRemainder(
+      splittSharesModel.remainderShare,
+      splittSharesRemainderRow
+    );
+  }
+
+  function restyleSplittRemainder(remainder, remainderRow) {
+    if (remainder === 0) {
+      remainderRow.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
+      remainderRow.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
+      return;
+    }
+    if (
+      remainder < 0 &&
+      !remainderRow.classList.contains(ABOVE_EXPENSE_AMOUNT_CLASS)
+    ) {
+      remainderRow.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
+      remainderRow.classList.add(ABOVE_EXPENSE_AMOUNT_CLASS);
+      return;
+    }
+    if (
+      remainder > 0 &&
+      !remainderRow.classList.contains(BELOW_EXPENSE_AMOUNT_CLASS)
+    ) {
+      remainderRow.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
+      remainderRow.classList.add(BELOW_EXPENSE_AMOUNT_CLASS);
+    }
   }
 
   function closeAddExpenseHiddenForm() {
@@ -862,13 +972,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // f: Auxiliary
 
   function toggleHiddenForm(button, transactionType) {
-    button.addEventListener("click", function (event) {
+    button.addEventListener('click', function (event) {
       event.preventDefault();
       const hiddenFormName = this.dataset.form;
       const hiddenForm = document.querySelector(
         `.add-${transactionType}__form_${hiddenFormName}`
       );
-      transactionType === "expense"
+      transactionType === 'expense'
         ? toggleAddExpenseHiddenForm(hiddenForm, this)
         : toggleAddRepaymentHiddenForm(hiddenForm, this);
     });
@@ -876,149 +986,151 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // el: Menu
 
-  openMenuPopupBtn.addEventListener("click", openMenuPopup);
+  openMenuPopupBtn.addEventListener('click', openMenuPopup);
 
-  menuAccount.addEventListener("click", openMenuPopup);
+  menuAccount.addEventListener('click', openMenuPopup);
 
-  closeMenuPopupBtn.addEventListener("click", closeMenuPopup);
+  closeMenuPopupBtn.addEventListener('click', closeMenuPopup);
 
   // el: Group
 
-  groupHeader.addEventListener("click", openGroupPopup);
+  groupHeader.addEventListener('click', openGroupPopup);
 
-  groupSettingsLink.addEventListener("click", function (event) {
+  groupSettingsLink.addEventListener('click', function (event) {
     event.preventDefault();
     closeMenuPopup();
     openGroupPopup();
   });
 
-  groupSwitch.addEventListener("change", handleGroupSwitchChange);
+  groupSwitch.addEventListener('change', handleGroupSwitchChange);
 
   // el: Emoji Picker
 
-  addExpenseEmojiPickerSwitchBtn.addEventListener("click", function (event) {
+  addExpenseEmojiPickerSwitchBtn.addEventListener('click', function (event) {
     activeEmojiField = addExpenseEmojiField;
     toggleEmojiPicker(event);
   });
 
-  addExpenseEmojiInputField.addEventListener("click", function (event) {
+  addExpenseEmojiInputField.addEventListener('click', function (event) {
     activeEmojiField = addExpenseEmojiField;
     toggleEmojiPicker(event);
   });
 
-  addExpenseEmojiRemoveBtn.addEventListener("click", function () {
+  addExpenseEmojiRemoveBtn.addEventListener('click', function () {
     activeEmojiField = addExpenseEmojiField;
     removeEmoji();
   });
 
-  addRepaymentEmojiPickerSwitchBtn.addEventListener("click", function (event) {
+  addRepaymentEmojiPickerSwitchBtn.addEventListener('click', function (event) {
     activeEmojiField = addRepaymentEmojiField;
     toggleEmojiPicker(event);
   });
 
-  addRepaymentEmojiInputField.addEventListener("click", function (event) {
+  addRepaymentEmojiInputField.addEventListener('click', function (event) {
     activeEmojiField = addRepaymentEmojiField;
     toggleEmojiPicker(event);
   });
 
-  addRepaymentEmojiRemoveBtn.addEventListener("click", function () {
+  addRepaymentEmojiRemoveBtn.addEventListener('click', function () {
     activeEmojiField = addRepaymentEmojiField;
     removeEmoji();
   });
 
   // el: Add Expense: Main Form
 
-  addExpenseBtn.addEventListener("click", openAddExpense);
+  addExpenseBtn.addEventListener('click', openAddExpense);
 
-  addExpenseBtnEdit.forEach((button) => toggleHiddenForm(button, "expense"));
+  addExpenseBtnEdit.forEach(button => toggleHiddenForm(button, 'expense'));
 
-  addExpenseHiddenFormBtnClose.forEach((button) => {
-    button.addEventListener("click", function (event) {
+  addExpenseHiddenFormBtnClose.forEach(button => {
+    button.addEventListener('click', function (event) {
       event.preventDefault();
       closeAddExpenseHiddenForm();
     });
   });
 
-  addExpenseAmountInput.addEventListener("input", handleAddExpenseAmountInput);
+  addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
 
   // el: Add Expense: Splitt Form
 
-  splittOptionButtons.forEach((splittOptionButton) => {
-    splittOptionButton.addEventListener("change", handleSplittOptionChange);
+  splittOptionButtons.forEach(splittOptionButton => {
+    splittOptionButton.addEventListener('change', handleSplittOptionChange);
   });
 
-  splittEquallyCheckboxes.forEach((checkbox) =>
-    checkbox.addEventListener("change", handleSplittEquallyCheckboxChange)
+  splittEquallyCheckboxes.forEach(checkbox =>
+    checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
   );
 
-  splittPartsAmountInputs.forEach((inputAmount) =>
-    inputAmount.addEventListener("input", handleSplittPartsAmountInput)
+  splittPartsAmountInputs.forEach(inputAmount =>
+    inputAmount.addEventListener('input', handleSplittPartsAmountInput)
+  );
+  splittSharesInputs.forEach(inputShare =>
+    inputShare.addEventListener('input', handleSplittSharesInput)
   );
 
   // el: Add Expense: Note Form
 
-  addExpenseNoteInput.addEventListener("input", () =>
+  addExpenseNoteInput.addEventListener('input', () =>
     handleTransactionNoteInput(addExpenseNoteForm)
   );
 
-  addExpenseNoteBtnCancel.addEventListener("click", function (event) {
+  addExpenseNoteBtnCancel.addEventListener('click', function (event) {
     handleTransactionNoteCancel(event, addExpenseNoteForm);
   });
 
-  addExpenseNoteBtnSave.addEventListener("click", (event) =>
+  addExpenseNoteBtnSave.addEventListener('click', event =>
     handleSaveNote(event, addExpenseNoteForm)
   );
 
   // el: Add Repayment: Main Form
 
-  addRepaymentBtn.addEventListener("click", openAddRepayment);
+  addRepaymentBtn.addEventListener('click', openAddRepayment);
 
-  addRepaymentBtnEdit.forEach((button) =>
-    toggleHiddenForm(button, "repayment")
-  );
+  addRepaymentBtnEdit.forEach(button => toggleHiddenForm(button, 'repayment'));
 
-  addRepaymentHiddenFormBtnClose.forEach((button) => {
-    button.addEventListener("click", function (event) {
+  addRepaymentHiddenFormBtnClose.forEach(button => {
+    button.addEventListener('click', function (event) {
       event.preventDefault();
       closeAddRepaymentHiddenForm();
     });
   });
 
   addRepaymentAmountInput.addEventListener(
-    "input",
+    'input',
     handleAddRepaymentAmountInput
   );
 
   // el: Add Repayment: Note Form
 
-  addRepaymentNoteInput.addEventListener("input", () =>
+  addRepaymentNoteInput.addEventListener('input', () =>
     handleTransactionNoteInput(addRepaymentNoteForm)
   );
 
-  addRepaymentNoteBtnCancel.addEventListener("click", function (event) {
+  addRepaymentNoteBtnCancel.addEventListener('click', function (event) {
     handleTransactionNoteCancel(event, addRepaymentNoteForm);
   });
 
-  addRepaymentNoteBtnSave.addEventListener("click", (event) =>
+  addRepaymentNoteBtnSave.addEventListener('click', event =>
     handleSaveNote(event, addRepaymentNoteForm)
   );
 
   // el: Util
 
-  overlay.addEventListener("click", closeActivePopup);
+  overlay.addEventListener('click', closeActivePopup);
 
-  percentInput.forEach((inputField) => {
-    inputField.addEventListener("input", handlePercentInput);
-  });
+  // TODO1: удалить при случае
+  // percentInput.forEach(inputField => {
+  //   inputField.addEventListener('input', handlePercentInput);
+  // });
 
-  btnClosePopup.forEach((button) => {
-    button.addEventListener("click", closeActivePopup);
+  btnClosePopup.forEach(button => {
+    button.addEventListener('click', closeActivePopup);
   });
 
   // TODO1: to delete: enable Splitt Form
 
   const addExpenseHiddenFormSplitt = document.querySelector(
-    ".add-transaction__form_hidden.add-expense__form_splitt"
+    '.add-transaction__form_hidden.add-expense__form_splitt'
   );
   openAddExpense();
   addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);

@@ -540,7 +540,10 @@
               </div>
               <!-- ДОЛЯМИ (%) -->
               <div class="splitt-form__table" id="splitt-shares-table">
-                <div class="splitt-form__table--row">
+                <div
+                  class="splitt-form__table--row splitt-shares-table-row"
+                  data-user-id="1"
+                >
                   <img
                     class="account__avatar"
                     src="images/avatar-peter.png"
@@ -548,35 +551,41 @@
                   />
                   <div class="splitt-form__table--user">Пётр</div>
                   <input
-                    class="splitt-share__input input-percent"
+                    class="splitt-share__input input-percent splitt-shares-share"
                     name="splitt-share"
                     type="text"
                     value="0&nbsp;%"
                   />
                   <div class="splitt-form__table--amount splitt-share__amount">
                     <!-- <span class="splitt-amount">1&nbsp;025,00</span>&nbsp;₽ -->
-                    <span class="splitt-amount">250,00</span>&nbsp;₽
+                    <span class="splitt-amount">0,00&nbsp;₽</span>
                   </div>
                 </div>
-                <div class="splitt-form__table--row">
+                <div
+                  class="splitt-form__table--row splitt-shares-table-row"
+                  data-user-id="2"
+                >
                   <img
                     class="account__avatar"
                     src="images/avatar-kate.png"
-                    alt="Пётр"
+                    alt="Катерина"
                   />
                   <div class="splitt-form__table--user">Катерина</div>
                   <input
-                    class="splitt-share__input input-percent"
+                    class="splitt-share__input input-percent splitt-shares-share"
                     name="splitt-share"
                     type="text"
-                    value="75&nbsp;%"
+                    value="0&nbsp;%"
                   />
                   <div class="splitt-form__table--amount splitt-share__amount">
                     <!-- <span class="splitt-amount">2&nbsp;025,00</span>&nbsp;₽ -->
-                    <span class="splitt-amount">250,00</span>&nbsp;₽
+                    <span class="splitt-amount">0,00&nbsp;₽</span>
                   </div>
                 </div>
-                <div class="splitt-form__table--row">
+                <div
+                  class="splitt-form__table--row splitt-shares-table-row"
+                  data-user-id="3"
+                >
                   <img
                     class="account__avatar"
                     src="images/avatar-paul.png"
@@ -587,32 +596,35 @@
                     Константин Константинопольский
                   </div>
                   <input
-                    class="splitt-share__input input-percent"
+                    class="splitt-share__input input-percent splitt-shares-share"
                     name="splitt-share"
                     type="text"
                     value="0&nbsp;%"
                   />
                   <div class="splitt-form__table--amount splitt-share__amount">
                     <!-- <span class="splitt-amount">12&nbsp;025,00</span>&nbsp;₽ -->
-                    <span class="splitt-amount">250,99</span>&nbsp;₽
+                    <span class="splitt-amount">0,00&nbsp;₽</span>
                   </div>
                 </div>
-                <div class="splitt-form__table--row">
+                <div
+                  class="splitt-form__table--row splitt-shares-table-row"
+                  data-user-id="4"
+                >
                   <img
                     class="account__avatar"
                     src="images/avatar-sanya.png"
-                    alt="Пётр"
+                    alt="Саня"
                   />
                   <!-- <div class="splitt-form__table--user">Саня</div> -->
                   <div class="splitt-form__table--user">Арсений Тарковский</div>
                   <input
-                    class="splitt-share__input input-percent"
+                    class="splitt-share__input input-percent splitt-shares-share"
                     name="splitt-share"
                     type="text"
                     value="0&nbsp;%"
                   />
                   <div class="splitt-form__table--amount splitt-share__amount">
-                    <span class="splitt-amount">250,00</span>&nbsp;₽
+                    <span class="splitt-amount">0,00</span>&nbsp;₽
                   </div>
                 </div>
                 <div class="splitt-calculator splitt-shares-calculator">
@@ -625,7 +637,9 @@
                       999,99&nbsp;₽
                     </div>
                   </div>
-                  <div class="splitt-calculator__remainder">
+                  <div
+                    class="splitt-calculator__remainder splitt-shares-remainder-row"
+                  >
                     <div class="splitt-calculator__label">Осталось</div>
                     <div class="splitt-shares__remainder-share">
                       10&thinsp;%

@@ -826,16 +826,19 @@ header {
   color: #555;
 }
 
-.splitt-calculator__remainder {
+.splitt-calculator__remainder,
+.splitt-shares-remainder-row {
   color: #fff;
   font-weight: 400;
 }
 
-.splitt-calculator__remainder.below-expense-amount {
+.splitt-calculator__remainder.below-expense-amount,
+.splitt-shares-remainder-row.below-expense-amount {
   color: #aaa;
 }
 
-.splitt-calculator__remainder.above-expense-amount {
+.splitt-calculator__remainder.above-expense-amount,
+.splitt-shares-remainder-row.above-expense-amount {
   color: rgba(255, 85, 85, 0.8);
 }
 
