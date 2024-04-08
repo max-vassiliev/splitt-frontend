@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     title: '',
     amount: 0,
     paidBy: {},
+    activeSplittFormOption: 'equally',
     splittType: 'equally',
     splitts: {},
     comment: null,
@@ -93,13 +94,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // e: Utils
   const overlay = document.querySelector('.overlay');
   const btnClosePopup = document.querySelectorAll('.btn__close_popup');
-
-  // TODO1 удалить
-  // const percentInput = document.querySelectorAll('.input-percent');
-  // TODO1 удалить
-  const testingExpenseAmountLog = document.querySelector(
-    '.testing-expense-amount-log'
-  );
 
   // e: Emoji Picker
   const emojiPickerContainer = document.querySelector(
@@ -330,9 +324,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function verifySplittInputAmount(amount) {
-    console.log('verifySplittInputAmount()');
-    console.log(amount);
-    console.log(addExpenseFormModel.amount);
+    // TODO1 удалить
+    // console.log('verifySplittInputAmount()');
+    // console.log(amount);
+    // console.log(addExpenseFormModel.amount);
 
     // return amount > addExpenseFormModel.amount
     //   ? Math.floor(amount / 10)
@@ -340,7 +335,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const verifiedAmount =
       amount > addExpenseFormModel.amount ? Math.floor(amount / 10) : amount;
-    console.log(verifiedAmount);
+
+    // TODO1 удалить
+    // console.log(verifiedAmount);
+
     return verifiedAmount;
   }
 
@@ -398,10 +396,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     return percent;
-  }
-
-  function calculateSplittShareAmount(splittShare, totalAmount) {
-    return Math.round((totalAmount * splittShare) / ONE_HUNDRED_PERCENT);
   }
 
   function formatPercentString(value) {
@@ -669,7 +663,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function saveAddExpenseAmount(amount) {
     addExpenseFormModel.amount = amount;
-    testingExpenseAmountLog.textContent = addExpenseFormModel.amount;
     updateSplitts();
   }
 
@@ -685,20 +678,27 @@ document.addEventListener('DOMContentLoaded', function () {
     activate(selectedTable);
     activeSplittOptionsTable = selectedTable;
     loadSplittForm(selectedButton);
+
+    // TODO1 удалить
+    // console.log(addExpenseFormModel);
   }
 
   function loadSplittForm(splittOptionButton) {
-    const splittType = splittOptionButton.replace(/^splitt-(.*)-button$/, '$1');
-    addExpenseFormModel.splittType = splittType;
+    const splittOption = splittOptionButton.replace(
+      /^splitt-(.*)-button$/,
+      '$1'
+    );
 
-    switch (splittType) {
+    // TODO1 удалить?
+    // addExpenseFormModel.splittType = splittType;
+    addExpenseFormModel.activeSplittFormOption = splittOption;
+
+    switch (splittOption) {
       case 'parts':
         loadSplittPartsForm();
         break;
       case 'shares':
-        // TODO1 replace
         loadSplittSharesForm();
-        console.log('Splitt by Shares');
         break;
       default:
         // TODO1 replace
@@ -707,11 +707,13 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function loadSplittSharesForm() {
+    calculateSplittSharesAmounts();
     calculateSplittShares();
+    renderSplittShares();
   }
 
   function updateSplitts() {
-    switch (addExpenseFormModel.splittType) {
+    switch (addExpenseFormModel.activeSplittFormOption) {
       case 'parts':
         updateSplittsParts();
         break;
@@ -788,6 +790,7 @@ document.addEventListener('DOMContentLoaded', function () {
     calculateSplittParts();
   }
 
+  // TODO1:
   function calculateSplittParts() {
     const total = Array.from(splittPartsModel.splitts.values()).reduce(
       (acc, currentValue) => acc + currentValue,
@@ -811,11 +814,6 @@ document.addEventListener('DOMContentLoaded', function () {
     );
   }
 
-  // TODO1 проверить целесообразность
-  function updateSplittsShares() {
-    calculateSplittShares();
-  }
-
   function handleSplittPartsAmountInput(event) {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
@@ -833,6 +831,13 @@ document.addEventListener('DOMContentLoaded', function () {
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
   }
 
+  // TODO1 проверить целесообразность
+  function updateSplittsShares() {
+    calculateSplittSharesAmounts();
+    calculateSplittShares();
+    renderSplittShares();
+  }
+
   function handleSplittSharesInput(event) {
     const cursorPosition = this.selectionStart;
     const inputValue = event.target.value;
@@ -848,17 +853,31 @@ document.addEventListener('DOMContentLoaded', function () {
     splittSharesModel.splittShares.set(userId, splittShare);
     splittSharesModel.splittAmounts.set(userId, splittAmount);
     calculateSplittShares();
+    renderSplittShares();
 
-    const splittAmountOut = formatAmountForOutput(splittAmount);
-    const splittAmountField = splittSharesModel.splittAmountsFields.get(userId);
-    splittAmountField.textContent = splittAmountOut;
     const splittShareOut = formatPercentForOutputLite(splittShare);
     this.value = splittShareOut;
 
     setAmountCursorPosition(inputValue, splittShareOut, cursorPosition, this);
   }
 
+  function calculateSplittShareAmount(splittShare, totalAmount) {
+    return Math.round((totalAmount * splittShare) / ONE_HUNDRED_PERCENT);
+  }
+
+  function calculateSplittSharesAmounts() {
+    splittSharesModel.splittShares.forEach((splittShare, userId) => {
+      const splittAmount = calculateSplittShareAmount(
+        splittShare,
+        addExpenseFormModel.amount
+      );
+      splittSharesModel.splittAmounts.set(userId, splittAmount);
+    });
+  }
+
   function calculateSplittShares() {
+    // calculateSplittSharesAmounts();
+
     const totalAmount = Array.from(
       splittSharesModel.splittAmounts.values()
     ).reduce((acc, currentValue) => acc + currentValue, 0);
@@ -875,6 +894,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     splittSharesModel.remainderShare =
       addExpenseFormModel.amount === 0 ? 0 : ONE_HUNDRED_PERCENT - totalShare;
+  }
+
+  function renderSplittShares() {
+    splittSharesModel.splittAmounts.forEach((splittAmount, userId) => {
+      const splittAmountField =
+        splittSharesModel.splittAmountsFields.get(userId);
+      splittAmountField.textContent = formatAmountForOutput(splittAmount);
+    });
 
     splittSharesModel.totalAmountField.textContent = formatAmountForOutput(
       splittSharesModel.totalAmount
