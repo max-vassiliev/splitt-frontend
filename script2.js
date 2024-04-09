@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
     amount: 0,
     paidBy: {},
     activeSplittFormOption: 'equally',
-    splittType: 'equally',
-    splitts: {},
+    splittType: 'equally', // TODO1 можно удалить
+    splitt: {},
     comment: null,
   };
 
@@ -35,21 +35,24 @@ document.addEventListener('DOMContentLoaded', function () {
   let splittEquallyCheckedRows = [];
 
   let splittEquallyModel = {
-    splitts: new Map(),
-    splittsFields: new Map(),
-    checkedRowsSet: new Set(),
+    splittType: 'equally',
+    splittAmounts: new Map(),
+    splittFields: new Map(),
+    checkedRows: new Set(),
   };
 
   let splittPartsModel = {
-    splitts: new Map(),
+    splittType: 'parts',
+    splittAmounts: new Map(),
     total: 0,
     remainder: 0,
-    splittsFields: new Map(),
+    splittFields: new Map(),
     totalField: null,
     remainderField: null,
   };
 
   let splittSharesModel = {
+    splittType: 'shares',
     splittShares: new Map(),
     splittAmounts: new Map(),
     totalShare: 0,
@@ -176,10 +179,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!splittEquallyCheckedRows.includes(userId)) {
       splittEquallyCheckedRows.push(userId);
     }
-    splittEquallyModel.splitts.set(userId, DEFAULT_AMOUNT);
-    splittEquallyModel.splittsFields.set(userId, splittField);
-    // splittEquallyModel.checkedRows.set(userId, true);
-    splittEquallyModel.checkedRowsSet.add(userId);
+    splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
+    splittEquallyModel.splittFields.set(userId, splittField);
+    splittEquallyModel.checkedRows.add(userId);
   });
   const splittEquallyTableRowsArray = Array.from(splittEquallyTableRows);
 
@@ -196,8 +198,8 @@ document.addEventListener('DOMContentLoaded', function () {
   splittPartsRowsArray.forEach(row => {
     const userId = parseInt(row.dataset.userId, 10);
     const amountField = row.querySelector('.splitt-parts-amount');
-    splittPartsModel.splitts.set(userId, 0);
-    splittPartsModel.splittsFields.set(userId, amountField);
+    splittPartsModel.splittAmounts.set(userId, 0);
+    splittPartsModel.splittFields.set(userId, amountField);
   });
   splittPartsModel.totalField = splittPartsTotalField;
   splittPartsModel.remainderField = splittPartsRemainderField;
@@ -770,10 +772,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // TODO1 надо ли добавлять INACTIVE_CLASS?
     if (!isChecked) {
-      splittEquallyModel.checkedRowsSet.delete(userId);
-      splittEquallyModel.splitts.set(userId, DEFAULT_AMOUNT);
+      splittEquallyModel.checkedRows.delete(userId);
+      splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
     } else {
-      splittEquallyModel.checkedRowsSet.add(userId);
+      splittEquallyModel.checkedRows.add(userId);
     }
 
     updateSplittsEqually();
@@ -810,16 +812,14 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function setDefaultSplittsEqually() {
-    splittEquallyModel.splitts.forEach((_, userId, splittsMap) => {
+    splittEquallyModel.splittAmounts.forEach((_, userId, splittsMap) => {
       splittsMap.set(userId, DEFAULT_AMOUNT);
     });
   }
 
   function updateSplittsEqually() {
-    if (
-      addExpenseFormModel.amount === 0 ||
-      splittEquallyModel.checkedRowsSet.size === 0
-    ) {
+    const checkedRowsCount = splittEquallyModel.checkedRows.size;
+    if (addExpenseFormModel.amount === 0 || checkedRowsCount === 0) {
       setDefaultSplittsEqually();
       renderSplittEqually();
       return;
@@ -827,33 +827,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let baseAmount = 0;
     let remainder = 0;
-    if (splittEquallyModel.checkedRowsSet.size > 0) {
-      baseAmount = Math.floor(
-        addExpenseFormModel.amount / splittEquallyModel.checkedRowsSet.size
-      );
-      remainder =
-        addExpenseFormModel.amount % splittEquallyModel.checkedRowsSet.size;
+    if (checkedRowsCount > 0) {
+      baseAmount = Math.floor(addExpenseFormModel.amount / checkedRowsCount);
+      remainder = addExpenseFormModel.amount % checkedRowsCount;
     }
 
     const usersWithHigherAmounts = selectUsersWithHigherAmounts(
-      splittEquallyModel.checkedRowsSet,
+      splittEquallyModel.checkedRows,
       remainder
     );
 
-    splittEquallyModel.checkedRowsSet.forEach(userId => {
+    splittEquallyModel.checkedRows.forEach(userId => {
       let splittAmount = baseAmount;
       if (usersWithHigherAmounts.has(userId)) {
         splittAmount += 1;
       }
-      splittEquallyModel.splitts.set(userId, splittAmount);
+      splittEquallyModel.splittAmounts.set(userId, splittAmount);
     });
 
     renderSplittEqually();
   }
 
   function renderSplittEqually() {
-    splittEquallyModel.splitts.forEach((splittAmount, userId) => {
-      const splittField = splittEquallyModel.splittsFields.get(userId);
+    splittEquallyModel.splittAmounts.forEach((splittAmount, userId) => {
+      const splittField = splittEquallyModel.splittFields.get(userId);
       splittField.textContent = formatAmountForOutput(splittAmount);
     });
   }
@@ -878,7 +875,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // TODO1:
   function calculateSplittParts() {
-    const total = Array.from(splittPartsModel.splitts.values()).reduce(
+    const total = Array.from(splittPartsModel.splittAmounts.values()).reduce(
       (acc, currentValue) => acc + currentValue,
       0
     );
@@ -907,11 +904,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const userId = row.dataset.userId;
 
     const processedAmount = processInputAmount(inputAmount);
-    splittPartsModel.splitts.set(userId, processedAmount);
+    splittPartsModel.splittAmounts.set(userId, processedAmount);
     calculateSplittParts();
 
     const outputAmount = formatAmountForOutput(
-      splittPartsModel.splitts.get(userId)
+      splittPartsModel.splittAmounts.get(userId)
     );
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
