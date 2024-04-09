@@ -30,7 +30,15 @@ document.addEventListener('DOMContentLoaded', function () {
     splitts: {},
     comment: null,
   };
+
+  // TODO1 удалить
   let splittEquallyCheckedRows = [];
+
+  let splittEquallyModel = {
+    splitts: new Map(),
+    splittsFields: new Map(),
+    checkedRowsSet: new Set(),
+  };
 
   let splittPartsModel = {
     splitts: new Map(),
@@ -164,10 +172,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   splittEquallyTableRows.forEach(row => {
     const userId = row.dataset.userId;
+    const splittField = row.querySelector('.splitt-equally-amount');
     if (!splittEquallyCheckedRows.includes(userId)) {
       splittEquallyCheckedRows.push(userId);
     }
+    splittEquallyModel.splitts.set(userId, DEFAULT_AMOUNT);
+    splittEquallyModel.splittsFields.set(userId, splittField);
+    // splittEquallyModel.checkedRows.set(userId, true);
+    splittEquallyModel.checkedRowsSet.add(userId);
   });
+  const splittEquallyTableRowsArray = Array.from(splittEquallyTableRows);
 
   // e: Add Expense: Splitt Form - Parts
   const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
@@ -701,8 +715,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loadSplittSharesForm();
         break;
       default:
-        // TODO1 replace
-        console.log('Splitt Equally');
+        updateSplittsEqually();
     }
   }
 
@@ -725,7 +738,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function handleSplittEquallyCheckboxChange() {
+  // TODO1 удалить
+  function handleSplittEquallyCheckboxChangeOLD() {
     const row = this.closest('.splitt-equally-table-row');
     const amount = row.querySelector('.splitt-equally-amount');
     const userId = row.dataset.userId;
@@ -749,9 +763,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function updateSplittsEqually() {
-    const splittEquallyTableRowsArray = Array.from(splittEquallyTableRows);
+  function handleSplittEquallyCheckboxChange() {
+    const row = this.closest('.splitt-equally-table-row');
+    const userId = row.dataset.userId;
+    const isChecked = this.checked;
 
+    // TODO1 надо ли добавлять INACTIVE_CLASS?
+    if (!isChecked) {
+      splittEquallyModel.checkedRowsSet.delete(userId);
+      splittEquallyModel.splitts.set(userId, DEFAULT_AMOUNT);
+    } else {
+      splittEquallyModel.checkedRowsSet.add(userId);
+    }
+
+    updateSplittsEqually();
+  }
+
+  // TODO1 удалить
+  function updateSplittsEquallyOLD() {
     const checkedRows = splittEquallyTableRowsArray.filter(row =>
       splittEquallyCheckedRows.includes(row.dataset.userId)
     );
@@ -778,6 +807,63 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       amountField.textContent = formatAmountForOutput(amountToAdd);
     });
+  }
+
+  function setDefaultSplittsEqually() {
+    splittEquallyModel.splitts.forEach((_, userId, splittsMap) => {
+      splittsMap.set(userId, DEFAULT_AMOUNT);
+    });
+  }
+
+  function updateSplittsEqually() {
+    if (
+      addExpenseFormModel.amount === 0 ||
+      splittEquallyModel.checkedRowsSet.size === 0
+    ) {
+      setDefaultSplittsEqually();
+      renderSplittEqually();
+      return;
+    }
+
+    let baseAmount = 0;
+    let remainder = 0;
+    if (splittEquallyModel.checkedRowsSet.size > 0) {
+      baseAmount = Math.floor(
+        addExpenseFormModel.amount / splittEquallyModel.checkedRowsSet.size
+      );
+      remainder =
+        addExpenseFormModel.amount % splittEquallyModel.checkedRowsSet.size;
+    }
+
+    const usersWithHigherAmounts = selectUsersWithHigherAmounts(
+      splittEquallyModel.checkedRowsSet,
+      remainder
+    );
+
+    splittEquallyModel.checkedRowsSet.forEach(userId => {
+      let splittAmount = baseAmount;
+      if (usersWithHigherAmounts.has(userId)) {
+        splittAmount += 1;
+      }
+      splittEquallyModel.splitts.set(userId, splittAmount);
+    });
+
+    renderSplittEqually();
+  }
+
+  function renderSplittEqually() {
+    splittEquallyModel.splitts.forEach((splittAmount, userId) => {
+      const splittField = splittEquallyModel.splittsFields.get(userId);
+      splittField.textContent = formatAmountForOutput(splittAmount);
+    });
+  }
+
+  function selectUsersWithHigherAmounts(users, count) {
+    if (count === 0) return new Set();
+    let usersToSelect = Array.from(users);
+    usersToSelect.sort(() => Math.random() - 0.5);
+    let selectedUsers = usersToSelect.slice(0, count);
+    return new Set(selectedUsers);
   }
 
   // TODO1 проверить целесообразность
