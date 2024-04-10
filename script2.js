@@ -8,9 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
   const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
 
-  // TODO1 нейминг: можно добавить STR к DEFAULT_AMOUNT
   const MAX_AMOUNT = 10000000000;
-  // const DEFAULT_AMOUNT = '0,00 ₽';
   const DEFAULT_AMOUNT = 0;
   const ONE_HUNDRED_PERCENT = 100;
 
@@ -18,23 +16,19 @@ document.addEventListener('DOMContentLoaded', function () {
   let activePopup = null;
   let activeAddExpenseHiddenForm = null;
   let activeAddRepaymentHiddenForm = null;
-  let activeSplittOptionsTable = null;
   let activeEmojiField = null;
-  // TODO1 проверить целесообразность
+
   let addExpenseFormModel = {
     title: '',
     amount: 0,
     paidBy: {},
-    activeSplittFormOption: 'equally', // TODO1 удалить
-    activeSplittFormElement: null, // TODO2 убрать в подформы
-    activeSplittFormModel: null, // TODO1 удалить
-    splittType: 'equally', // TODO1 можно удалить
     splitt: {},
     comment: null,
   };
 
   let splittEquallyModel = {
     splittType: 'equally',
+    element: null,
     splittAmounts: new Map(),
     splittFields: new Map(),
     checkedRows: new Set(),
@@ -42,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let splittPartsModel = {
     splittType: 'parts',
+    element: null,
     splittAmounts: new Map(),
     total: 0,
     remainder: 0,
@@ -52,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let splittSharesModel = {
     splittType: 'shares',
+    element: null,
     splittShares: new Map(),
     splittAmounts: new Map(),
     totalShare: 0,
@@ -167,14 +163,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const splittEquallyCheckboxes = document.querySelectorAll(
     '.splitt-equally-checkbox'
   );
-  const splittEquallyAmounts = document.querySelectorAll(
-    '.splitt-equally-amount'
-  );
-
-  activate(splittEquallyTable);
-  activeSplittOptionsTable = splittEquallyTable; // TODO1 удалить (возможно)
-  addExpenseFormModel.activeSplittFormElement = splittEquallyTable;
-  addExpenseFormModel.activeSplittFormModel = splittEquallyModel;
 
   splittEquallyTableRows.forEach(row => {
     const userId = row.dataset.userId;
@@ -184,7 +172,12 @@ document.addEventListener('DOMContentLoaded', function () {
     splittEquallyModel.checkedRows.add(userId);
   });
 
+  activate(splittEquallyTable);
+  splittEquallyModel.element = splittEquallyTable;
+  addExpenseFormModel.splitt = splittEquallyModel;
+
   // e: Add Expense: Splitt Form - Parts
+  const splittPartsTable = document.getElementById('splitt-parts-table');
   const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
   const splittPartsTotalField = document.querySelector('.splitt-parts__total');
   const splittPartsRemainderField = document.querySelector(
@@ -202,8 +195,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   splittPartsModel.totalField = splittPartsTotalField;
   splittPartsModel.remainderField = splittPartsRemainderField;
+  splittPartsModel.element = splittPartsTable;
 
   // e: Add Expense: Splitt Form - Shares
+  const splittSharesTable = document.getElementById('splitt-shares-table');
   const splittSharesRows = document.querySelectorAll(
     '.splitt-shares-table-row'
   );
@@ -224,14 +219,10 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const splittSharesInputs = document.querySelectorAll('.splitt-share__input');
   const splittSharesRowsArray = [...splittSharesRows];
-  // TODO1 заполнить мапы в splittSharesModel
   splittSharesRowsArray.forEach(row => {
     const userId = parseInt(row.dataset.userId, 10);
     const amountField = row.querySelector('.splitt-share__amount');
     const shareField = row.querySelector('.splitt-share__input');
-    // TODO1: удалить
-    // splittSharesModel.splittShares.set(userId, 10);
-    // splittSharesModel.splittAmounts.set(userId, 1000);
     splittSharesModel.splittShares.set(userId, DEFAULT_AMOUNT);
     splittSharesModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
 
@@ -242,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
   splittSharesModel.totalAmountField = splittSharesTotalAmountField;
   splittSharesModel.remainderShareField = splittSharesRemainderShareField;
   splittSharesModel.remainderAmountField = splittSharesRemainderAmountField;
+  splittSharesModel.element = splittSharesTable;
 
   // e: Add Expense: Note Form
   const addExpenseNoteInput = document.querySelector(
@@ -683,43 +675,49 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // f: Add Expense: Splitt Form
 
-  function handleSplittOptionChange() {
-    if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
-    // TODO1 заменить на activeSplittForm из модели addExpenseFormModel
-    if (addExpenseFormModel.activeSplittFormElement) deactivate;
-
-    const selectedButton = this.getAttribute('id');
-    const selectedTableName = selectedButton.replace('-button', '-table');
-    const selectedTable = document.getElementById(selectedTableName);
-
-    activate(selectedTable);
-    activeSplittOptionsTable = selectedTable;
-    loadSplittForm(selectedButton);
-
-    // TODO1 удалить
-    // console.log(addExpenseFormModel);
+  function selectSplittForm(splittType) {
+    let selectedSplittForm;
+    switch (splittType) {
+      case 'parts':
+        selectedSplittForm = splittPartsModel;
+        break;
+      case 'shares':
+        selectedSplittForm = splittSharesModel;
+        break;
+      default:
+        selectedSplittForm = splittEquallyModel;
+    }
+    return selectSplittForm;
   }
 
-  function loadSplittForm(splittOptionButton) {
-    const splittOption = splittOptionButton.replace(
-      /^splitt-(.*)-button$/,
-      '$1'
-    );
+  function handleSplittOptionChange() {
+    if (addExpenseFormModel.splitt && addExpenseFormModel.splitt.element) {
+      deactivate(addExpenseFormModel.splitt.element);
+    }
+    const selectedButton = this.getAttribute('id');
+    const splittOption = selectedButton.replace(/^splitt-(.*)-button$/, '$1');
+    loadSplittForm(splittOption);
+  }
 
-    // TODO1 удалить?
-    // addExpenseFormModel.splittType = splittType;
-    addExpenseFormModel.activeSplittFormOption = splittOption;
+  function loadSplittForm(splittOption) {
+    let selectedSplittForm;
 
     switch (splittOption) {
       case 'parts':
+        selectedSplittForm = splittPartsModel;
         loadSplittPartsForm();
         break;
       case 'shares':
+        selectedSplittForm = splittSharesModel;
         loadSplittSharesForm();
         break;
       default:
+        selectedSplittForm = splittEquallyModel;
         updateSplittsEqually();
     }
+
+    addExpenseFormModel.splitt = selectedSplittForm;
+    activate(addExpenseFormModel.splitt.element);
   }
 
   function loadSplittSharesForm() {
@@ -729,7 +727,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateSplitts() {
-    switch (addExpenseFormModel.activeSplittFormOption) {
+    switch (addExpenseFormModel.splitt.splittType) {
       case 'parts':
         updateSplittsParts();
         break;
@@ -975,25 +973,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function isSplittFormValidForSubmission() {
-    //
-  }
-
-  function handleSplittFormChange() {
-    let activeSplittForm;
-    switch (addExpenseFormModel.activeSplittFormOption) {
-      case 'shares':
-        activeSplittForm = splittSharesModel;
-        break;
-      case 'parts':
-        activeSplittForm = splittPartsModel;
-      default:
-        activeSplittForm = splittEquallyModel;
-    }
-
-    const isValid = isSplittFormValidForSubmission(activeSplittForm);
-  }
-
   function closeAddExpenseHiddenForm() {
     activeAddExpenseHiddenForm.form.classList.remove(ACTIVE_CLASS);
     activeAddExpenseHiddenForm.button.classList.remove(ACTIVE_CLASS);
@@ -1207,12 +1186,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // TODO1: to delete: enable Splitt Form
 
-  const addExpenseHiddenFormSplitt = document.querySelector(
-    '.add-transaction__form_hidden.add-expense__form_splitt'
-  );
-  openAddExpense();
-  addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
-  activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
+  // const addExpenseHiddenFormSplitt = document.querySelector(
+  //   '.add-transaction__form_hidden.add-expense__form_splitt'
+  // );
+  // openAddExpense();
+  // addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
+  // activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
 
   // TODO1: to delete: enable Note Form
   // const addExpenseHiddenFormNote = document.querySelector(
