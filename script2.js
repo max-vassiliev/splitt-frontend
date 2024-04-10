@@ -25,14 +25,13 @@ document.addEventListener('DOMContentLoaded', function () {
     title: '',
     amount: 0,
     paidBy: {},
-    activeSplittFormOption: 'equally',
+    activeSplittFormOption: 'equally', // TODO1 удалить
+    activeSplittFormElement: null, // TODO2 убрать в подформы
+    activeSplittFormModel: null, // TODO1 удалить
     splittType: 'equally', // TODO1 можно удалить
     splitt: {},
     comment: null,
   };
-
-  // TODO1 удалить
-  let splittEquallyCheckedRows = [];
 
   let splittEquallyModel = {
     splittType: 'equally',
@@ -149,13 +148,16 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-form__toggle input[type="radio"]'
   );
 
+  const splittFormContainer = document.querySelector('.splitt-form-container');
+
+  const splittSubmitBtn = document.querySelector(
+    '.add-expense__form_splitt__btn--submit'
+  );
+
   // TODO1: пересмотреть; есть два элемента с классом 'splitt-calculator__remainder'
   const splittCalculatorRemainder = document.querySelector(
     '.splitt-calculator__remainder'
   );
-
-  // TODO1 возможно, переделать для Splitt Parts
-  // const splittAmountInputs = document.querySelectorAll('.splitt-amount__input');
 
   // e: Add Expense: Splitt Form - Equally
   const splittEquallyTable = document.getElementById('splitt-equally-table');
@@ -170,20 +172,17 @@ document.addEventListener('DOMContentLoaded', function () {
   );
 
   activate(splittEquallyTable);
-
-  activeSplittOptionsTable = splittEquallyTable;
+  activeSplittOptionsTable = splittEquallyTable; // TODO1 удалить (возможно)
+  addExpenseFormModel.activeSplittFormElement = splittEquallyTable;
+  addExpenseFormModel.activeSplittFormModel = splittEquallyModel;
 
   splittEquallyTableRows.forEach(row => {
     const userId = row.dataset.userId;
     const splittField = row.querySelector('.splitt-equally-amount');
-    if (!splittEquallyCheckedRows.includes(userId)) {
-      splittEquallyCheckedRows.push(userId);
-    }
     splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
     splittEquallyModel.splittFields.set(userId, splittField);
     splittEquallyModel.checkedRows.add(userId);
   });
-  const splittEquallyTableRowsArray = Array.from(splittEquallyTableRows);
 
   // e: Add Expense: Splitt Form - Parts
   const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
@@ -686,6 +685,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function handleSplittOptionChange() {
     if (activeSplittOptionsTable) deactivate(activeSplittOptionsTable);
+    // TODO1 заменить на activeSplittForm из модели addExpenseFormModel
+    if (addExpenseFormModel.activeSplittFormElement) deactivate;
 
     const selectedButton = this.getAttribute('id');
     const selectedTableName = selectedButton.replace('-button', '-table');
@@ -740,31 +741,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // TODO1 удалить
-  function handleSplittEquallyCheckboxChangeOLD() {
-    const row = this.closest('.splitt-equally-table-row');
-    const amount = row.querySelector('.splitt-equally-amount');
-    const userId = row.dataset.userId;
-
-    if (!this.checked) {
-      row.classList.add(INACTIVE_CLASS);
-      amount.classList.add(INACTIVE_CLASS);
-      const index = splittEquallyCheckedRows.indexOf(userId);
-      if (index !== -1) {
-        splittEquallyCheckedRows.splice(index, 1);
-      }
-      amount.textContent = formatAmountForOutput(DEFAULT_AMOUNT);
-      updateSplitts();
-    } else {
-      row.classList.remove(INACTIVE_CLASS);
-      amount.classList.remove(INACTIVE_CLASS);
-      if (!splittEquallyCheckedRows.includes(userId)) {
-        splittEquallyCheckedRows.push(userId);
-      }
-      updateSplitts();
-    }
-  }
-
   function handleSplittEquallyCheckboxChange() {
     const row = this.closest('.splitt-equally-table-row');
     const userId = row.dataset.userId;
@@ -779,36 +755,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     updateSplittsEqually();
-  }
-
-  // TODO1 удалить
-  function updateSplittsEquallyOLD() {
-    const checkedRows = splittEquallyTableRowsArray.filter(row =>
-      splittEquallyCheckedRows.includes(row.dataset.userId)
-    );
-
-    let baseAmount = 0;
-    let remainder = 0;
-    if (checkedRows.length > 0) {
-      baseAmount = Math.floor(addExpenseFormModel.amount / checkedRows.length);
-      remainder = addExpenseFormModel.amount % checkedRows.length;
-    }
-
-    let usersWithHigherAmounts = new Set();
-    while (usersWithHigherAmounts.size < remainder) {
-      const randomIndex = Math.floor(Math.random() * checkedRows.length);
-      const randomUserId = splittEquallyCheckedRows[randomIndex];
-      usersWithHigherAmounts.add(randomUserId);
-    }
-
-    checkedRows.forEach(row => {
-      const amountField = row.querySelector('.splitt-equally-amount');
-      let amountToAdd = baseAmount;
-      if (usersWithHigherAmounts.has(row.dataset.userId)) {
-        amountToAdd += 1;
-      }
-      amountField.textContent = formatAmountForOutput(amountToAdd);
-    });
   }
 
   function setDefaultSplittsEqually() {
@@ -1029,6 +975,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function isSplittFormValidForSubmission() {
+    //
+  }
+
+  function handleSplittFormChange() {
+    let activeSplittForm;
+    switch (addExpenseFormModel.activeSplittFormOption) {
+      case 'shares':
+        activeSplittForm = splittSharesModel;
+        break;
+      case 'parts':
+        activeSplittForm = splittPartsModel;
+      default:
+        activeSplittForm = splittEquallyModel;
+    }
+
+    const isValid = isSplittFormValidForSubmission(activeSplittForm);
+  }
+
   function closeAddExpenseHiddenForm() {
     activeAddExpenseHiddenForm.form.classList.remove(ACTIVE_CLASS);
     activeAddExpenseHiddenForm.button.classList.remove(ACTIVE_CLASS);
@@ -1174,9 +1139,12 @@ document.addEventListener('DOMContentLoaded', function () {
   splittPartsAmountInputs.forEach(inputAmount =>
     inputAmount.addEventListener('input', handleSplittPartsAmountInput)
   );
+
   splittSharesInputs.forEach(inputShare =>
     inputShare.addEventListener('input', handleSplittSharesInput)
   );
+
+  // splittFormContainer.addEventListener('click')
 
   // el: Add Expense: Note Form
 
