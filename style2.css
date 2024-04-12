@@ -186,7 +186,7 @@ header {
 .menu__btn--close {
   cursor: pointer;
   margin-left: auto;
-  border: none;
+  /* border: none; */
   border: 1px solid #eee;
   padding-bottom: 10px;
   border-radius: 50%;
@@ -728,13 +728,15 @@ header {
 
 .splitt-form__table.active {
   display: block;
+  /* border: 1px solid #eee; */
+  /* box-sizing: border-box; */
 }
 
 .splitt-form__table--row {
   display: flex;
   align-items: center;
   margin-bottom: 0.3rem;
-  background-color: bisque;
+  /* background-color: bisque; */
 }
 
 .splitt-form__table--row img {
@@ -763,8 +765,16 @@ header {
   color: #777;
 }
 
+.splitt-equally-amount {
+  width: 6.7rem;
+  right: 0;
+  text-align: right;
+  /* background-color: tan; */
+}
+
 .splitt-amount__input {
   margin-left: auto;
+  right: 0;
   border: none;
   font-family: inherit;
   color: #777;
@@ -786,7 +796,7 @@ header {
   font-size: 1.5rem;
   text-align: right;
   width: 7rem;
-  background-color: lightskyblue;
+  /* background-color: lightskyblue; */
 }
 
 .splitt-share__amount {
@@ -798,7 +808,7 @@ header {
   /* TODO1 тест */
   /* width: 11rem; */
   width: 8rem;
-  background-color: cornsilk;
+  /* background-color: cornsilk; */
 }
 
 .splitt-calculator {
@@ -853,6 +863,8 @@ header {
   margin-left: auto;
 }
 
+.splitt-parts__total,
+.splitt-parts__remainder,
 .splitt-shares__total-amount,
 .splitt-shares__remainder-amount {
   /* width: 11rem; */

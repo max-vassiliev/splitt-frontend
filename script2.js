@@ -32,6 +32,19 @@ document.addEventListener('DOMContentLoaded', function () {
     splittAmounts: new Map(),
     splittFields: new Map(),
     checkedRows: new Set(),
+    amountWidthOptions: new Map([
+      [1, '6.7rem'],
+      [2, '6.7rem'],
+      [3, '6.7rem'],
+      [4, '6.7rem'],
+      [5, '6.7rem'],
+      [6, '8.2rem'],
+      [7, '9.2rem'],
+      [8, '10.2rem'],
+      [9, '12.5rem'],
+      [10, '13.2rem'],
+      [11, '14.2rem'],
+    ]),
   };
 
   let splittPartsModel = {
@@ -43,6 +56,19 @@ document.addEventListener('DOMContentLoaded', function () {
     splittFields: new Map(),
     totalField: null,
     remainderField: null,
+    amountWidthOptions: new Map([
+      [1, '8rem'],
+      [2, '8rem'],
+      [3, '8rem'],
+      [4, '8rem'],
+      [5, '8rem'],
+      [6, '9.5rem'],
+      [7, '10.5rem'],
+      [8, '11.5rem'],
+      [9, '13.8rem'],
+      [10, '14.5rem'],
+      [11, '15.5rem'],
+    ]),
   };
 
   let splittSharesModel = {
@@ -60,6 +86,19 @@ document.addEventListener('DOMContentLoaded', function () {
     totalAmountField: null,
     remainderShareField: null,
     remainderAmountField: null,
+    amountWidthOptions: new Map([
+      [1, '8rem'],
+      [2, '8rem'],
+      [3, '8rem'],
+      [4, '8rem'],
+      [5, '8rem'],
+      [6, '10rem'],
+      [7, '11rem'],
+      [8, '12rem'],
+      [9, '13rem'],
+      [10, '14.5rem'],
+      [11, '15rem'],
+    ]),
   };
 
   function isActive(element) {
@@ -790,12 +829,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     renderSplittEqually();
+    adjustSplittEquallyColumnWidth();
   }
 
   function renderSplittEqually() {
     splittEquallyModel.splittAmounts.forEach((splittAmount, userId) => {
       const splittField = splittEquallyModel.splittFields.get(userId);
       splittField.textContent = formatAmountForOutput(splittAmount);
+    });
+  }
+
+  function adjustSplittEquallyColumnWidth() {
+    const referenceAmountLength = addExpenseFormModel.amount.toString().length;
+    const adjustedWidth =
+      splittEquallyModel.amountWidthOptions.get(referenceAmountLength) ||
+      '14rem';
+    splittEquallyModel.splittFields.forEach(field => {
+      field.style.width = adjustedWidth;
     });
   }
 
@@ -839,6 +889,24 @@ document.addEventListener('DOMContentLoaded', function () {
       splittPartsModel.remainder,
       splittCalculatorRemainder
     );
+
+    adjustSplittPartsColumnWidth();
+  }
+
+  function adjustSplittPartsColumnWidth() {
+    const referenceAmount =
+      addExpenseFormModel.amount > splittPartsModel.total
+        ? addExpenseFormModel.amount
+        : splittPartsModel.total;
+
+    const expenseAmountLength = referenceAmount.toString().length;
+    const adjustedWidth =
+      splittPartsModel.amountWidthOptions.get(expenseAmountLength) || '14rem';
+    splittPartsModel.splittFields.forEach(field => {
+      field.style.width = adjustedWidth;
+    });
+    splittPartsModel.totalField.style.width = adjustedWidth;
+    splittPartsModel.remainderField.style.width = adjustedWidth;
   }
 
   function handleSplittPartsAmountInput(event) {
@@ -948,6 +1016,26 @@ document.addEventListener('DOMContentLoaded', function () {
       splittSharesModel.remainderShare,
       splittSharesRemainderRow
     );
+
+    adjustSplittSharesColumnWidth();
+  }
+
+  function adjustSplittSharesColumnWidth() {
+    const referenceAmount =
+      addExpenseFormModel.amount > splittSharesModel.totalAmount
+        ? addExpenseFormModel.amount
+        : splittSharesModel.totalAmount;
+
+    const expenseAmountLength = referenceAmount.toString().length;
+    const adjustedWidth =
+      splittSharesModel.amountWidthOptions.get(expenseAmountLength) || '14rem';
+
+    splittSharesModel.splittAmountsFields.forEach(field => {
+      field.style.width = adjustedWidth;
+    });
+
+    splittSharesModel.totalAmountField.style.width = adjustedWidth;
+    splittSharesModel.remainderAmountField.style.width = adjustedWidth;
   }
 
   function restyleSplittRemainder(remainder, remainderRow) {
@@ -1186,12 +1274,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // TODO1: to delete: enable Splitt Form
 
-  // const addExpenseHiddenFormSplitt = document.querySelector(
-  //   '.add-transaction__form_hidden.add-expense__form_splitt'
-  // );
-  // openAddExpense();
-  // addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
-  // activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
+  const addExpenseHiddenFormSplitt = document.querySelector(
+    '.add-transaction__form_hidden.add-expense__form_splitt'
+  );
+  openAddExpense();
+  addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
+  activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
 
   // TODO1: to delete: enable Note Form
   // const addExpenseHiddenFormNote = document.querySelector(
