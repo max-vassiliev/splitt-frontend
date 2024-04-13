@@ -194,26 +194,50 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-calculator__remainder'
   );
 
-  // e: Add Expense: Splitt Form - Equally
-  const splittEquallyTable = document.getElementById('splitt-equally-table');
-  const splittEquallyTableRows = document.querySelectorAll(
-    '.splitt-equally-table-row'
+  // TODO1 переименовать — убрать "2" из названий
+  // e: Add Expense: Splitt Form - Equally (<table>)
+  const splittEquallyTable2 = document.getElementById('splitt-equally-table');
+  const splittEquallyTableRows2 = document.querySelectorAll(
+    '.splitt-equally__row'
   );
-  const splittEquallyCheckboxes = document.querySelectorAll(
+  const splittEquallyCheckboxes2 = document.querySelectorAll(
     '.splitt-equally-checkbox'
   );
 
-  splittEquallyTableRows.forEach(row => {
+  splittEquallyTableRows2.forEach(row => {
     const userId = row.dataset.userId;
-    const splittField = row.querySelector('.splitt-equally-amount');
+    const splittField = row.querySelector('.splitt-equally-column__amount');
     splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
     splittEquallyModel.splittFields.set(userId, splittField);
     splittEquallyModel.checkedRows.add(userId);
   });
 
-  activate(splittEquallyTable);
-  splittEquallyModel.element = splittEquallyTable;
-  addExpenseFormModel.splitt = splittEquallyModel;
+  // TODO1 раскомментировать
+  // activate(splittEquallyTable2);
+  // splittEquallyModel.element = splittEquallyTable2;
+  // addExpenseFormModel.splitt = splittEquallyModel;
+
+  // TODO1 удалить ненужное
+  // e: Add Expense: Splitt Form - Equally (<div>)
+  // const splittEquallyTable = document.getElementById('splitt-equally-table');
+  // const splittEquallyTableRows = document.querySelectorAll(
+  //   '.splitt-equally-table-row'
+  // );
+  // const splittEquallyCheckboxes = document.querySelectorAll(
+  //   '.splitt-equally-checkbox'
+  // );
+
+  // splittEquallyTableRows.forEach(row => {
+  //   const userId = row.dataset.userId;
+  //   const splittField = row.querySelector('.splitt-equally-amount');
+  //   splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
+  //   splittEquallyModel.splittFields.set(userId, splittField);
+  //   splittEquallyModel.checkedRows.add(userId);
+  // });
+
+  // activate(splittEquallyTable);
+  // splittEquallyModel.element = splittEquallyTable;
+  // addExpenseFormModel.splitt = splittEquallyModel;
 
   // e: Add Expense: Splitt Form - Parts
   const splittPartsTable = document.getElementById('splitt-parts-table');
@@ -235,6 +259,11 @@ document.addEventListener('DOMContentLoaded', function () {
   splittPartsModel.totalField = splittPartsTotalField;
   splittPartsModel.remainderField = splittPartsRemainderField;
   splittPartsModel.element = splittPartsTable;
+
+  // TODO1 удалить
+  activate(splittPartsTable);
+  splittEquallyModel.element = splittPartsTable;
+  addExpenseFormModel.splitt = splittPartsModel;
 
   // e: Add Expense: Splitt Form - Shares
   const splittSharesTable = document.getElementById('splitt-shares-table');
@@ -778,6 +807,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // TODO1 удалить
   function handleSplittEquallyCheckboxChange() {
     const row = this.closest('.splitt-equally-table-row');
     const userId = row.dataset.userId;
@@ -785,6 +815,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // TODO1 надо ли добавлять INACTIVE_CLASS?
     if (!isChecked) {
+      splittEquallyModel.checkedRows.delete(userId);
+      splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
+    } else {
+      splittEquallyModel.checkedRows.add(userId);
+    }
+
+    updateSplittsEqually();
+  }
+
+  // TODO1 переименовать
+  function handleSplittEquallyCheckboxChange2() {
+    const row = this.closest('.splitt-equally__row');
+    const userId = row.dataset.userId;
+    const isChecked = this.checked;
+
+    // TODO1 надо ли добавлять INACTIVE_CLASS?
+    if (!isChecked) {
+      splittEquallyModel.checkedRows.delete(userId);
+      splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
+    } else {
+      splittEquallyModel.checkedRows.add(userId);
+    }
+
+    updateSplittsEqually();
+  }
+
+  function handleSplittEquallyRowClick(event) {
+    if (event.target.classList.contains('splitt-equally-checkbox')) {
+      return;
+    }
+
+    const userId = this.dataset.userId;
+    const checkbox = this.querySelector('.splitt-equally-checkbox');
+    const isChecked = checkbox.checked;
+    checkbox.checked = !isChecked;
+
+    // TODO1 надо ли добавлять INACTIVE_CLASS?
+    if (!checkbox.checked) {
       splittEquallyModel.checkedRows.delete(userId);
       splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
     } else {
@@ -829,7 +897,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     renderSplittEqually();
-    adjustSplittEquallyColumnWidth();
   }
 
   function renderSplittEqually() {
@@ -1199,8 +1266,15 @@ document.addEventListener('DOMContentLoaded', function () {
     splittOptionButton.addEventListener('change', handleSplittOptionChange);
   });
 
-  splittEquallyCheckboxes.forEach(checkbox =>
-    checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
+  // splittEquallyCheckboxes.forEach(checkbox =>
+  //   checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
+  // );
+  splittEquallyCheckboxes2.forEach(checkbox =>
+    checkbox.addEventListener('change', handleSplittEquallyCheckboxChange2)
+  );
+
+  splittEquallyTableRows2.forEach(row =>
+    row.addEventListener('click', handleSplittEquallyRowClick)
   );
 
   splittPartsAmountInputs.forEach(inputAmount =>
