@@ -733,51 +733,60 @@ header {
 }
 
 .splitt-form__equally,
-.splitt-form__parts {
+.splitt-form__parts,
+.splitt-form__shares {
   min-width: 100%;
+  /* width: 100%; */
   border-collapse: collapse;
   border-spacing: 0;
 }
 
 .splitt-form__equally tr,
-.splitt-form__parts tr,
+.splitt-parts__row,
+.splitt-shares__row,
 .splitt-equally-checkbox,
-.splitt-parts-amount {
+.splitt-parts-amount,
+.splitt-form__shares input {
   cursor: pointer;
 }
 
 .splitt-form__equally tr:hover,
-.splitt-form__parts tr:hover {
+.splitt-parts__row:hover,
+.splitt-shares__row:hover {
   background-color: #f9f9f9;
 }
 
 .splitt-form__equally td,
-.splitt-form__parts td {
-  /* border: 1px solid #ededed; */
-  /* border: 1px solid #e6e6e6; */
+.splitt-parts__row td,
+.splitt-shares__row td {
   border: 1px solid #e9e9e9;
   vertical-align: middle;
   white-space: nowrap;
   padding-top: 3px;
   padding-bottom: 3px;
-  /* font-size: 1.5rem;
-  font-weight: 500;
-  color: #666; */
+}
+
+.splitt-parts__row-separator,
+.splitt-shares__row-separator {
+  height: 2.8rem;
 }
 
 .splitt-form__equally img,
 .splitt-form__parts img,
+.splitt-form__shares img,
 .splitt-form__equally input {
   display: block;
   margin: auto;
 }
 
-.splitt-form__parts input {
+.splitt-form__parts input,
+.splitt-form__shares input {
   background-color: transparent;
 }
 
 .splitt-form__equally img,
-.splitt-form__parts img {
+.splitt-form__parts img,
+.splitt-form__shares img {
   height: 2.7rem;
   width: 2.7rem;
 }
@@ -791,8 +800,13 @@ header {
   width: 4.2rem;
 }
 
+.splitt-shares-column__avatar {
+  width: 40px;
+}
+
 .splitt-equally-column__username,
-.splitt-parts-column__username {
+.splitt-parts-column__username,
+.splitt-shares-column__username {
   min-width: 16rem;
   padding-left: 6px;
   padding-right: 10px;
@@ -802,7 +816,8 @@ header {
 }
 
 .splitt-equally-column__amount,
-.splitt-parts-column__amount {
+.splitt-parts-column__amount,
+.splitt-shares-column__amount {
   min-width: 6.7rem;
   text-align: right;
   padding-left: 10px;
@@ -811,6 +826,86 @@ header {
   font-weight: 400;
   color: #777;
 }
+
+.splitt-form__parts-calculator {
+  margin-top: 3rem;
+  min-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 1.7rem;
+  /* border: 1px solid #eee; */
+}
+
+.splitt-form__parts-calculator td {
+  font-size: 1.7rem;
+  vertical-align: middle;
+  white-space: nowrap;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  border: 1px solid #eee;
+}
+
+.splitt-parts__row-total,
+.splitt-shares__row-total {
+  color: #555;
+  font-weight: 700;
+  font-size: 1.7rem;
+}
+
+.splitt-parts__row-remainder,
+.splitt-shares__row-remainder {
+  /* TODO1 вернуть */
+  /* color: #fff; */
+  color: #aaa;
+  font-weight: 400;
+  font-size: 1.7rem;
+}
+
+.splitt-parts__row-remainder.below-expense-amount,
+.splitt-shares__row-remainder.below-expense-amount {
+  color: #aaa;
+}
+
+.splitt-parts__row-remainder.above-expense-amount,
+.splitt-shares__row-remainder.above-expense-amount {
+  color: rgba(255, 85, 85, 0.8);
+}
+
+.splitt-parts-column__total-label,
+.splitt-parts-column__remainder-label,
+.splitt-shares-column__total-label,
+.splitt-shares-column__remainder-label {
+  padding-left: 10px;
+}
+
+.splitt-shares-column__total-label,
+.splitt-shares-column__remainder-label {
+  min-width: 180px;
+}
+
+.splitt-parts-column__total-amount,
+.splitt-parts-column__remainder-amount,
+.splitt-shares-column__total-share,
+.splitt-shares-column__total-amount,
+.splitt-shares-column__remainder-share,
+.splitt-shares-column__remainder-amount {
+  text-align: right;
+  padding-right: 6px;
+  padding-left: 16px;
+}
+
+/* TODO1 Testing - проверить, влияет ли на что-либо */
+.splitt-shares-column__share,
+.splitt-shares-column__total-share,
+.splitt-shares-column__remainder-share {
+  width: 77px;
+}
+
+/* TODO1 Testing (удалить потом) */
+/* .splitt-shares-column__amount {
+  min-width: auto;
+  width: 800px !important;
+} */
 
 .splitt-form__table--row {
   display: flex;
@@ -860,7 +955,7 @@ header {
   color: #777;
   font-size: 1.5rem;
   text-align: right;
-  width: 11rem;
+  width: 7.8rem;
 }
 
 .splitt-share__input {

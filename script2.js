@@ -260,36 +260,34 @@ document.addEventListener('DOMContentLoaded', function () {
   splittPartsModel.remainderField = splittPartsRemainderField;
   splittPartsModel.element = splittPartsTable;
 
-  // TODO1 удалить
+  // TODO1 Testing (удалить потом)
   activate(splittPartsTable);
-  splittEquallyModel.element = splittPartsTable;
+  splittPartsModel.element = splittPartsTable;
   addExpenseFormModel.splitt = splittPartsModel;
 
-  // e: Add Expense: Splitt Form - Shares
-  const splittSharesTable = document.getElementById('splitt-shares-table');
-  const splittSharesRows = document.querySelectorAll(
-    '.splitt-shares-table-row'
+  // e: Add Expense: Splitt Form - Shares (<table>)
+  const splittSharesTable2 = document.getElementById('splitt-shares-table');
+  const splittSharesRows2 = document.querySelectorAll('.splitt-shares__row');
+  const splittSharesTotalShareField2 = document.querySelector(
+    '.splitt-shares-column__total-share'
   );
-  const splittSharesTotalShareField = document.querySelector(
-    '.splitt-shares__total-share'
+  const splittSharesTotalAmountField2 = document.querySelector(
+    '.splitt-shares-column__total-amount'
   );
-  const splittSharesTotalAmountField = document.querySelector(
-    '.splitt-shares__total-amount'
+  const splittSharesRemainderRow2 = document.querySelector(
+    '.splitt-shares__row-remainder'
   );
-  const splittSharesRemainderRow = document.querySelector(
-    '.splitt-shares-remainder-row'
+  const splittSharesRemainderShareField2 = document.querySelector(
+    '.splitt-shares-column__remainder-share'
   );
-  const splittSharesRemainderShareField = document.querySelector(
-    '.splitt-shares__remainder-share'
+  const splittSharesRemainderAmountField2 = document.querySelector(
+    '.splitt-shares-column__remainder-amount'
   );
-  const splittSharesRemainderAmountField = document.querySelector(
-    '.splitt-shares__remainder-amount'
-  );
-  const splittSharesInputs = document.querySelectorAll('.splitt-share__input');
-  const splittSharesRowsArray = [...splittSharesRows];
-  splittSharesRowsArray.forEach(row => {
+  const splittSharesInputs2 = document.querySelectorAll('.splitt-share__input');
+  const splittSharesRowsArray2 = [...splittSharesRows2];
+  splittSharesRowsArray2.forEach(row => {
     const userId = parseInt(row.dataset.userId, 10);
-    const amountField = row.querySelector('.splitt-share__amount');
+    const amountField = row.querySelector('.splitt-shares-column__amount');
     const shareField = row.querySelector('.splitt-share__input');
     splittSharesModel.splittShares.set(userId, DEFAULT_AMOUNT);
     splittSharesModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
@@ -297,11 +295,54 @@ document.addEventListener('DOMContentLoaded', function () {
     splittSharesModel.splittSharesFields.set(userId, shareField);
     splittSharesModel.splittAmountsFields.set(userId, amountField);
   });
-  splittSharesModel.totalShareField = splittSharesTotalShareField;
-  splittSharesModel.totalAmountField = splittSharesTotalAmountField;
-  splittSharesModel.remainderShareField = splittSharesRemainderShareField;
-  splittSharesModel.remainderAmountField = splittSharesRemainderAmountField;
-  splittSharesModel.element = splittSharesTable;
+  splittSharesModel.totalShareField = splittSharesTotalShareField2;
+  splittSharesModel.totalAmountField = splittSharesTotalAmountField2;
+  splittSharesModel.remainderShareField = splittSharesRemainderShareField2;
+  splittSharesModel.remainderAmountField = splittSharesRemainderAmountField2;
+  splittSharesModel.element = splittSharesTable2;
+
+  // TODO1 Testing (удалить потом)
+  // activate(splittSharesTable2);
+  // splittSharesModel.element = splittSharesTable2;
+  // addExpenseFormModel.splitt = splittSharesModel;
+
+  // e: Add Expense: Splitt Form - Shares (<div>)
+  // const splittSharesTable = document.getElementById('splitt-shares-table');
+  // const splittSharesRows = document.querySelectorAll(
+  //   '.splitt-shares-table-row'
+  // );
+  // const splittSharesTotalShareField = document.querySelector(
+  //   '.splitt-shares__total-share'
+  // );
+  // const splittSharesTotalAmountField = document.querySelector(
+  //   '.splitt-shares__total-amount'
+  // );
+  // const splittSharesRemainderRow = document.querySelector(
+  //   '.splitt-shares-remainder-row'
+  // );
+  // const splittSharesRemainderShareField = document.querySelector(
+  //   '.splitt-shares__remainder-share'
+  // );
+  // const splittSharesRemainderAmountField = document.querySelector(
+  //   '.splitt-shares__remainder-amount'
+  // );
+  // const splittSharesInputs = document.querySelectorAll('.splitt-share__input');
+  // const splittSharesRowsArray = [...splittSharesRows];
+  // splittSharesRowsArray.forEach(row => {
+  //   const userId = parseInt(row.dataset.userId, 10);
+  //   const amountField = row.querySelector('.splitt-share__amount');
+  //   const shareField = row.querySelector('.splitt-share__input');
+  //   splittSharesModel.splittShares.set(userId, DEFAULT_AMOUNT);
+  //   splittSharesModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
+
+  //   splittSharesModel.splittSharesFields.set(userId, shareField);
+  //   splittSharesModel.splittAmountsFields.set(userId, amountField);
+  // });
+  // splittSharesModel.totalShareField = splittSharesTotalShareField;
+  // splittSharesModel.totalAmountField = splittSharesTotalAmountField;
+  // splittSharesModel.remainderShareField = splittSharesRemainderShareField;
+  // splittSharesModel.remainderAmountField = splittSharesRemainderAmountField;
+  // splittSharesModel.element = splittSharesTable;
 
   // e: Add Expense: Note Form
   const addExpenseNoteInput = document.querySelector(
@@ -1003,7 +1044,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleSplittSharesInput(event) {
     const cursorPosition = this.selectionStart;
     const inputValue = event.target.value;
-    const row = this.closest('.splitt-shares-table-row');
+    // const row = this.closest('.splitt-shares-table-row');
+    const row = this.closest('.splitt-shares__row');
     const userId = parseInt(row.dataset.userId, 10);
 
     const splittShare = parsePercentInputString(inputValue);
@@ -1081,7 +1123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     restyleSplittRemainder(
       splittSharesModel.remainderShare,
-      splittSharesRemainderRow
+      splittSharesRemainderRow2
     );
 
     adjustSplittSharesColumnWidth();
@@ -1281,7 +1323,7 @@ document.addEventListener('DOMContentLoaded', function () {
     inputAmount.addEventListener('input', handleSplittPartsAmountInput)
   );
 
-  splittSharesInputs.forEach(inputShare =>
+  splittSharesInputs2.forEach(inputShare =>
     inputShare.addEventListener('input', handleSplittSharesInput)
   );
 
