@@ -850,15 +850,15 @@ header {
   color: #555;
   font-weight: 700;
   font-size: 1.7rem;
+  white-space: nowrap;
 }
 
 .splitt-parts__row-remainder,
 .splitt-shares__row-remainder {
-  /* TODO1 вернуть */
-  /* color: #fff; */
-  color: #aaa;
+  color: #fff;
   font-weight: 400;
   font-size: 1.7rem;
+  white-space: nowrap;
 }
 
 .splitt-parts__row-remainder.below-expense-amount,

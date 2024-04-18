@@ -1126,9 +1126,10 @@ document.addEventListener('DOMContentLoaded', function () {
       splittSharesRemainderRow2
     );
 
-    adjustSplittSharesColumnWidth();
+    // adjustSplittSharesColumnWidth();
   }
 
+  // TODO1
   function adjustSplittSharesColumnWidth() {
     const referenceAmount =
       addExpenseFormModel.amount > splittSharesModel.totalAmount
