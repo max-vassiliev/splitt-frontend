@@ -213,9 +213,9 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // TODO1 раскомментировать
-  // activate(splittEquallyTable2);
-  // splittEquallyModel.element = splittEquallyTable2;
-  // addExpenseFormModel.splitt = splittEquallyModel;
+  activate(splittEquallyTable2);
+  splittEquallyModel.element = splittEquallyTable2;
+  addExpenseFormModel.splitt = splittEquallyModel;
 
   // TODO1 удалить ненужное
   // e: Add Expense: Splitt Form - Equally (<div>)
@@ -240,30 +240,35 @@ document.addEventListener('DOMContentLoaded', function () {
   // addExpenseFormModel.splitt = splittEquallyModel;
 
   // e: Add Expense: Splitt Form - Parts (<table>)
-  const splittPartsTable = document.getElementById('splitt-parts-table');
-  const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
-  const splittPartsTotalField = document.querySelector('.splitt-parts__total');
-  const splittPartsRemainderField = document.querySelector(
-    '.splitt-parts__remainder'
+  const splittPartsTable2 = document.getElementById('splitt-parts-table');
+  const splittPartsRows2 = document.querySelectorAll('.splitt-parts__row');
+  const splittPartsTotalField2 = document.querySelector(
+    '.splitt-parts-column__total-amount'
   );
-  const splittPartsAmountInputs = document.querySelectorAll(
-    '.splitt-parts-amount'
+  const splittPartsRemainderField2 = document.querySelector(
+    '.splitt-parts-column__remainder-amount'
   );
-  const splittPartsRowsArray = [...splittPartsRows];
-  splittPartsRowsArray.forEach(row => {
+  const splittPartsRemainderRow2 = document.querySelector(
+    '.splitt-parts__row-remainder'
+  );
+  const splittPartsAmountInputs2 = document.querySelectorAll(
+    '.splitt-parts-amount-input'
+  );
+  const splittPartsRowsArray2 = [...splittPartsRows2];
+  splittPartsRowsArray2.forEach(row => {
     const userId = parseInt(row.dataset.userId, 10);
-    const amountField = row.querySelector('.splitt-parts-amount');
+    const amountField = row.querySelector('.splitt-parts-amount-input');
     splittPartsModel.splittAmounts.set(userId, 0);
     splittPartsModel.splittFields.set(userId, amountField);
   });
-  splittPartsModel.totalField = splittPartsTotalField;
-  splittPartsModel.remainderField = splittPartsRemainderField;
-  splittPartsModel.element = splittPartsTable;
+  splittPartsModel.totalField = splittPartsTotalField2;
+  splittPartsModel.remainderField = splittPartsRemainderField2;
+  splittPartsModel.element = splittPartsTable2;
 
   // TODO1 Testing (удалить потом)
-  activate(splittPartsTable);
-  splittPartsModel.element = splittPartsTable;
-  addExpenseFormModel.splitt = splittPartsModel;
+  // activate(splittPartsTable2);
+  // splittPartsModel.element = splittPartsTable2;
+  // addExpenseFormModel.splitt = splittPartsModel;
 
   // e: Add Expense: Splitt Form - Parts (<div>)
   // const splittPartsTable = document.getElementById('splitt-parts-table');
@@ -1019,12 +1024,12 @@ document.addEventListener('DOMContentLoaded', function () {
       splittPartsModel.remainder
     );
 
+    adjustSplittPartsColumnWidth();
+
     restyleSplittRemainder(
       splittPartsModel.remainder,
-      splittCalculatorRemainder
+      splittPartsRemainderRow2
     );
-
-    adjustSplittPartsColumnWidth();
   }
 
   function adjustSplittPartsColumnWidth() {
@@ -1039,15 +1044,16 @@ document.addEventListener('DOMContentLoaded', function () {
     splittPartsModel.splittFields.forEach(field => {
       field.style.width = adjustedWidth;
     });
-    splittPartsModel.totalField.style.width = adjustedWidth;
-    splittPartsModel.remainderField.style.width = adjustedWidth;
+    // splittPartsModel.totalField.style.width = adjustedWidth;
+    // splittPartsModel.remainderField.style.width = adjustedWidth;
   }
 
   function handleSplittPartsAmountInput(event) {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
-    const row = this.closest('.splitt-parts-table-row');
-    const userId = row.dataset.userId;
+    const row = this.closest('.splitt-parts__row');
+    // const userId = row.dataset.userId;
+    const userId = parseInt(row.dataset.userId, 10);
 
     const processedAmount = processInputAmount(inputAmount);
     splittPartsModel.splittAmounts.set(userId, processedAmount);
@@ -1058,6 +1064,13 @@ document.addEventListener('DOMContentLoaded', function () {
     );
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  }
+
+  function handleSplittPartsRowClick(event) {
+    const amountInput = event.currentTarget.querySelector(
+      '.splitt-parts-amount-input'
+    );
+    amountInput.focus();
   }
 
   // TODO1 проверить целесообразность
@@ -1089,6 +1102,13 @@ document.addEventListener('DOMContentLoaded', function () {
     this.value = splittShareOut;
 
     setAmountCursorPosition(inputValue, splittShareOut, cursorPosition, this);
+  }
+
+  function handleSplittSharesRowClick(event) {
+    const shareInput = event.currentTarget.querySelector(
+      '.splitt-share__input'
+    );
+    shareInput.focus();
   }
 
   function calculateSplittShareAmount(splittShare, totalAmount) {
@@ -1346,12 +1366,25 @@ document.addEventListener('DOMContentLoaded', function () {
     row.addEventListener('click', handleSplittEquallyRowClick)
   );
 
-  splittPartsAmountInputs.forEach(inputAmount =>
+  // TODO1 переименовать / удалить
+  // splittPartsAmountInputs.forEach(inputAmount =>
+  //   inputAmount.addEventListener('input', handleSplittPartsAmountInput)
+  // );
+
+  splittPartsAmountInputs2.forEach(inputAmount =>
     inputAmount.addEventListener('input', handleSplittPartsAmountInput)
+  );
+
+  splittPartsRows2.forEach(row =>
+    row.addEventListener('click', handleSplittPartsRowClick)
   );
 
   splittSharesInputs2.forEach(inputShare =>
     inputShare.addEventListener('input', handleSplittSharesInput)
+  );
+
+  splittSharesRows2.forEach(row =>
+    row.addEventListener('click', handleSplittSharesRowClick)
   );
 
   // splittFormContainer.addEventListener('click')
