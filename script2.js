@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // splittEquallyModel.element = splittEquallyTable;
   // addExpenseFormModel.splitt = splittEquallyModel;
 
-  // e: Add Expense: Splitt Form - Parts
+  // e: Add Expense: Splitt Form - Parts (<table>)
   const splittPartsTable = document.getElementById('splitt-parts-table');
   const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
   const splittPartsTotalField = document.querySelector('.splitt-parts__total');
@@ -264,6 +264,32 @@ document.addEventListener('DOMContentLoaded', function () {
   activate(splittPartsTable);
   splittPartsModel.element = splittPartsTable;
   addExpenseFormModel.splitt = splittPartsModel;
+
+  // e: Add Expense: Splitt Form - Parts (<div>)
+  // const splittPartsTable = document.getElementById('splitt-parts-table');
+  // const splittPartsRows = document.querySelectorAll('.splitt-parts-table-row');
+  // const splittPartsTotalField = document.querySelector('.splitt-parts__total');
+  // const splittPartsRemainderField = document.querySelector(
+  //   '.splitt-parts__remainder'
+  // );
+  // const splittPartsAmountInputs = document.querySelectorAll(
+  //   '.splitt-parts-amount'
+  // );
+  // const splittPartsRowsArray = [...splittPartsRows];
+  // splittPartsRowsArray.forEach(row => {
+  //   const userId = parseInt(row.dataset.userId, 10);
+  //   const amountField = row.querySelector('.splitt-parts-amount');
+  //   splittPartsModel.splittAmounts.set(userId, 0);
+  //   splittPartsModel.splittFields.set(userId, amountField);
+  // });
+  // splittPartsModel.totalField = splittPartsTotalField;
+  // splittPartsModel.remainderField = splittPartsRemainderField;
+  // splittPartsModel.element = splittPartsTable;
+
+  // TODO1 Testing (удалить потом)
+  // activate(splittPartsTable);
+  // splittPartsModel.element = splittPartsTable;
+  // addExpenseFormModel.splitt = splittPartsModel;
 
   // e: Add Expense: Splitt Form - Shares (<table>)
   const splittSharesTable2 = document.getElementById('splitt-shares-table');
