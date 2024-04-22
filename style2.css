@@ -894,44 +894,48 @@ header {
   padding-left: 16px;
 }
 
-.splitt-form__table--row {
+/* TODO2 удалить */
+/* .splitt-form__table--row {
   display: flex;
   align-items: center;
   margin-bottom: 0.3rem;
-}
+} */
 
-.splitt-form__table--row img {
+/* TODO2 удалить */
+/* .splitt-form__table--row img {
   margin: 0 1rem;
-}
+} */
 
-.splitt-form__table--row input[type='checkbox'] {
+/* TODO2 удалить */
+/* .splitt-form__table--row input[type='checkbox'] {
   cursor: pointer;
-}
+} */
 
-.splitt-form__table--user {
+/* TODO2 удалить */
+/* .splitt-form__table--user {
   margin-right: 1rem;
   font-size: 1.5rem;
   font-weight: 500;
   color: #666;
   min-width: 15rem;
-  /* max-width: 30rem; */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
+} */
 
-.splitt-form__table--amount {
+/* TODO2 удалить */
+/* .splitt-form__table--amount {
   margin-left: auto;
   font-size: 1.5rem;
   color: #777;
-}
+} */
 
-.splitt-equally-amount {
+/* TODO2 удалить */
+/* .splitt-equally-amount {
   width: 6.7rem;
   right: 0;
   text-align: right;
-  /* background-color: tan; */
-}
+} */
 
 .splitt-amount__input {
   margin-left: auto;
