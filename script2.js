@@ -90,8 +90,8 @@ document.addEventListener('DOMContentLoaded', function () {
       [1, '8rem'],
       [2, '8rem'],
       [3, '8rem'],
-      [4, '8rem'],
-      [5, '8rem'],
+      [4, '8.5rem'],
+      [5, '9.5rem'],
       [6, '10rem'],
       [7, '11rem'],
       [8, '12rem'],
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-shares-column__total-share'
   );
   const splittSharesTotalAmountField2 = document.querySelector(
-    '.splitt-shares-column__total-amount'
+    '.splitt-shares-column__total-amount-value'
   );
   const splittSharesRemainderRow2 = document.querySelector(
     '.splitt-shares__row-remainder'
@@ -861,6 +861,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function loadSplittSharesForm() {
+    // TODO1 раскомментировать
     calculateSplittSharesAmounts();
     calculateSplittShares();
     renderSplittShares();
@@ -1044,8 +1045,6 @@ document.addEventListener('DOMContentLoaded', function () {
     splittPartsModel.splittFields.forEach(field => {
       field.style.width = adjustedWidth;
     });
-    // splittPartsModel.totalField.style.width = adjustedWidth;
-    // splittPartsModel.remainderField.style.width = adjustedWidth;
   }
 
   function handleSplittPartsAmountInput(event) {
@@ -1156,6 +1155,7 @@ document.addEventListener('DOMContentLoaded', function () {
     splittSharesModel.totalAmountField.textContent = formatAmountForOutput(
       splittSharesModel.totalAmount
     );
+    console.log(splittSharesModel.totalAmountField.textContent);
     splittSharesModel.remainderAmountField.textContent = formatAmountForOutput(
       splittSharesModel.remainderAmount
     );
@@ -1172,10 +1172,9 @@ document.addEventListener('DOMContentLoaded', function () {
       splittSharesRemainderRow2
     );
 
-    // adjustSplittSharesColumnWidth();
+    adjustSplittSharesColumnWidth();
   }
 
-  // TODO1
   function adjustSplittSharesColumnWidth() {
     const referenceAmount =
       addExpenseFormModel.amount > splittSharesModel.totalAmount
@@ -1186,12 +1185,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const adjustedWidth =
       splittSharesModel.amountWidthOptions.get(expenseAmountLength) || '14rem';
 
-    splittSharesModel.splittAmountsFields.forEach(field => {
-      field.style.width = adjustedWidth;
-    });
-
+    console.log(`Adjusted width: ${adjustedWidth}`);
     splittSharesModel.totalAmountField.style.width = adjustedWidth;
-    splittSharesModel.remainderAmountField.style.width = adjustedWidth;
   }
 
   function restyleSplittRemainder(remainder, remainderRow) {

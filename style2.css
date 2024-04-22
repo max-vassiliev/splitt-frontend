@@ -894,24 +894,10 @@ header {
   padding-left: 16px;
 }
 
-/* TODO1 Testing - проверить, влияет ли на что-либо */
-.splitt-shares-column__share,
-.splitt-shares-column__total-share,
-.splitt-shares-column__remainder-share {
-  width: 77px;
-}
-
-/* TODO1 Testing (удалить потом) */
-/* .splitt-shares-column__amount {
-  min-width: auto;
-  width: 800px !important;
-} */
-
 .splitt-form__table--row {
   display: flex;
   align-items: center;
   margin-bottom: 0.3rem;
-  /* background-color: bisque; */
 }
 
 .splitt-form__table--row img {
