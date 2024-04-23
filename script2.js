@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const DISABLED_ATTRIBUTE = 'disabled';
   const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
   const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
+  const CURRENCY_SYMBOL = '₽';
+  const CURRENT_LOCALE = 'ru-RU';
 
   const MAX_AMOUNT = 10000000000;
   const DEFAULT_AMOUNT = 0;
@@ -176,12 +178,6 @@ document.addEventListener('DOMContentLoaded', function () {
     '.add-expense__form_splitt__btn--submit'
   );
 
-  // TODO1: пересмотреть; есть два элемента с классом 'splitt-calculator__remainder'
-  const splittCalculatorRemainder = document.querySelector(
-    '.splitt-calculator__remainder'
-  );
-
-  // TODO1 переименовать — убрать "2" из названий
   // e: Add Expense: Splitt Form - Equally (<table>)
   const splittEquallyTable = document.getElementById('splitt-equally-table');
   const splittEquallyTableRows = document.querySelectorAll(
@@ -360,27 +356,9 @@ document.addEventListener('DOMContentLoaded', function () {
     return amount > MAX_AMOUNT ? Math.floor(amount / 10) : amount;
   }
 
-  function verifySplittInputAmount(amount) {
-    const verifiedAmount =
-      amount > addExpenseFormModel.amount ? Math.floor(amount / 10) : amount;
-
-    return verifiedAmount;
-  }
-
   function processInputAmount(value) {
     const parsedAmount = parseInputAmount(value);
     return verifyInputAmount(parsedAmount);
-  }
-
-  function formatAmountForOutput(amount) {
-    let formattedAmount = (amount / 100).toLocaleString('ru-RU', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-    formattedAmount += ' ₽';
-
-    return formattedAmount;
   }
 
   function setAmountCursorPosition(
@@ -398,9 +376,9 @@ document.addEventListener('DOMContentLoaded', function () {
     context.setSelectionRange(newCursorPosition, newCursorPosition);
   }
 
-  function parsePercentInputString(value) {
+  function parsePercentInputString(percentString) {
     let percent;
-    let cleanedValue = value.replace(/\D/g, '');
+    let cleanedValue = percentString.replace(/\D/g, '');
 
     if (cleanedValue === '' || isNaN(cleanedValue)) {
       percent = 0;
@@ -417,55 +395,17 @@ document.addEventListener('DOMContentLoaded', function () {
     return percent;
   }
 
-  function formatPercentString(value) {
-    let percent;
-    let cleanedValue = value.replace(/\D/g, '');
+  function formatAmountForOutput(amount) {
+    let formattedAmount = (amount / 100).toLocaleString(CURRENT_LOCALE, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
-    if (cleanedValue === '' || isNaN(cleanedValue)) {
-      percent = 0;
-    } else {
-      let finalPercent;
-      let cleanedValueParsed = parseInt(cleanedValue);
-      cleanedValueParsed > 100
-        ? (finalPercent = Math.floor(cleanedValueParsed / 10))
-        : (finalPercent = cleanedValueParsed);
-
-      percent = Math.max(finalPercent, 0);
-    }
-
-    let formattedPercent = percent + ' %';
-    return formattedPercent;
+    return `${formattedAmount}\u00A0${CURRENCY_SYMBOL}`;
   }
 
-  // TODO1 разбить на функции — process и format
   function formatPercentForOutput(value) {
-    let finalPercent;
-    value > 100
-      ? (finalPercent = Math.floor(value / 10))
-      : (finalPercent = value);
-
-    return `${value} %`;
-  }
-
-  function formatPercentForOutputLite(value) {
-    return `${value} %`;
-  }
-
-  function handlePercentInput(event) {
-    const cursorPosition = this.selectionStart;
-    let currentValue = event.target.value;
-
-    const formattedPercent = formatPercentString(currentValue);
-    const lengthDifference = formattedPercent.length - currentValue.length;
-
-    this.value = formattedPercent;
-
-    let newCursorPosition = cursorPosition + lengthDifference;
-    newCursorPosition = Math.max(
-      0,
-      Math.min(this.value.length, newCursorPosition)
-    );
-    this.setSelectionRange(newCursorPosition, newCursorPosition);
+    return `${value}\u202F%`;
   }
 
   // f: Menu
@@ -768,10 +708,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!checkbox.checked) {
       splittEquallyModel.checkedRows.delete(userId);
       splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
-      row.classList.add(INACTIVE_CLASS);
+      this.classList.add(INACTIVE_CLASS);
     } else {
       splittEquallyModel.checkedRows.add(userId);
-      row.classList.remove(INACTIVE_CLASS);
+      this.classList.remove(INACTIVE_CLASS);
     }
 
     updateSplittsEqually();
@@ -931,7 +871,7 @@ document.addEventListener('DOMContentLoaded', function () {
     calculateSplittShares();
     renderSplittShares();
 
-    const splittShareOut = formatPercentForOutputLite(splittShare);
+    const splittShareOut = formatPercentForOutput(splittShare);
     this.value = splittShareOut;
 
     setAmountCursorPosition(inputValue, splittShareOut, cursorPosition, this);
@@ -1249,29 +1189,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   overlay.addEventListener('click', closeActivePopup);
 
-  // TODO1: удалить при случае
-  // percentInput.forEach(inputField => {
-  //   inputField.addEventListener('input', handlePercentInput);
-  // });
-
   btnClosePopup.forEach(button => {
     button.addEventListener('click', closeActivePopup);
   });
 
   // TODO1: to delete: enable Splitt Form
-
-  const addExpenseHiddenFormSplitt = document.querySelector(
-    '.add-transaction__form_hidden.add-expense__form_splitt'
-  );
-  openAddExpense();
-  addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
-  activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
-
-  // TODO1: to delete: enable Note Form
-  // const addExpenseHiddenFormNote = document.querySelector(
-  //   '.add-transaction__form_hidden.add-expense__form_note'
+  // const addExpenseHiddenFormSplitt = document.querySelector(
+  //   '.add-transaction__form_hidden.add-expense__form_splitt'
   // );
   // openAddExpense();
-  // addExpenseHiddenFormNote.classList.add(ACTIVE_CLASS);
-  // activeAddExpenseHiddenForm = addExpenseHiddenFormNote;
+  // addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
+  // activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
 });

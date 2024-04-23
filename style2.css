@@ -723,29 +723,25 @@ header {
   min-width: 93%;
   margin-top: 3rem;
   display: none;
-  /* background-color: rgb(251, 247, 232); */
 }
 
 .splitt-form__table.active {
   display: block;
-  /* border: 1px solid #eee; */
-  /* box-sizing: border-box; */
 }
 
 .splitt-form__equally,
 .splitt-form__parts,
 .splitt-form__shares {
   min-width: 100%;
-  /* width: 100%; */
   border-collapse: collapse;
   border-spacing: 0;
 }
 
 .splitt-form__equally tr,
-.splitt-parts__row,
-.splitt-shares__row,
 .splitt-equally-checkbox,
+.splitt-parts__row,
 .splitt-parts-amount,
+.splitt-shares__row,
 .splitt-form__shares input {
   cursor: pointer;
 }
@@ -772,9 +768,9 @@ header {
 }
 
 .splitt-form__equally img,
+.splitt-form__equally input,
 .splitt-form__parts img,
-.splitt-form__shares img,
-.splitt-form__equally input {
+.splitt-form__shares img {
   display: block;
   margin: auto;
 }
@@ -796,12 +792,9 @@ header {
 }
 
 .splitt-equally-column__avatar,
-.splitt-parts-column__avatar {
-  width: 4.2rem;
-}
-
+.splitt-parts-column__avatar,
 .splitt-shares-column__avatar {
-  width: 40px;
+  width: 4.2rem;
 }
 
 .splitt-equally-column__username,
@@ -825,24 +818,6 @@ header {
   font-size: 1.5rem;
   font-weight: 400;
   color: #777;
-}
-
-.splitt-form__parts-calculator {
-  margin-top: 3rem;
-  min-width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  font-size: 1.7rem;
-  /* border: 1px solid #eee; */
-}
-
-.splitt-form__parts-calculator td {
-  font-size: 1.7rem;
-  vertical-align: middle;
-  white-space: nowrap;
-  padding-top: 1px;
-  padding-bottom: 1px;
-  border: 1px solid #eee;
 }
 
 .splitt-parts__row-total,
@@ -894,49 +869,6 @@ header {
   padding-left: 16px;
 }
 
-/* TODO2 удалить */
-/* .splitt-form__table--row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.3rem;
-} */
-
-/* TODO2 удалить */
-/* .splitt-form__table--row img {
-  margin: 0 1rem;
-} */
-
-/* TODO2 удалить */
-/* .splitt-form__table--row input[type='checkbox'] {
-  cursor: pointer;
-} */
-
-/* TODO2 удалить */
-/* .splitt-form__table--user {
-  margin-right: 1rem;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #666;
-  min-width: 15rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-} */
-
-/* TODO2 удалить */
-/* .splitt-form__table--amount {
-  margin-left: auto;
-  font-size: 1.5rem;
-  color: #777;
-} */
-
-/* TODO2 удалить */
-/* .splitt-equally-amount {
-  width: 6.7rem;
-  right: 0;
-  text-align: right;
-} */
-
 .splitt-amount__input {
   margin-left: auto;
   right: 0;
@@ -949,11 +881,8 @@ header {
 }
 
 .splitt-share__input {
-  /* TODO1 testing */
-  /* position: absolute; */
   right: 0;
   margin-left: auto;
-  /* margin-left: 2rem; */
   margin-right: 0.6rem;
   border: none;
   font-family: inherit;
@@ -961,81 +890,6 @@ header {
   font-size: 1.5rem;
   text-align: right;
   width: 7rem;
-  /* background-color: lightskyblue; */
-}
-
-.splitt-share__amount {
-  color: #aaa;
-  right: 0;
-  margin-left: 1rem;
-  display: flex;
-  justify-content: flex-end;
-  /* TODO1 тест */
-  /* width: 11rem; */
-  width: 8rem;
-  /* background-color: cornsilk; */
-}
-
-.splitt-calculator {
-  /* margin-left: 1.1rem; */
-  /* margin-top: 2.5rem; */
-  margin: 3rem 0.2rem 0 0.2rem;
-  font-size: 1.7rem;
-  font-weight: 700;
-  /* background-color: cornsilk; */
-}
-
-.splitt-calculator__total,
-.splitt-calculator__remainder {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.splitt-calculator__label {
-  /* margin-left: 1rem; */
-  margin-left: 1.1rem;
-}
-
-.splitt-calculator__total {
-  color: #555;
-}
-
-.splitt-calculator__remainder,
-.splitt-shares-remainder-row {
-  color: #fff;
-  font-weight: 400;
-}
-
-.splitt-calculator__remainder.below-expense-amount,
-.splitt-shares-remainder-row.below-expense-amount {
-  color: #aaa;
-}
-
-.splitt-calculator__remainder.above-expense-amount,
-.splitt-shares-remainder-row.above-expense-amount {
-  color: rgba(255, 85, 85, 0.8);
-}
-
-.splitt-shares-calculator .splitt-calculator__total,
-.splitt-shares-calculator .splitt-calculator__remainder {
-  justify-content: initial;
-}
-
-.splitt-shares__total-share,
-.splitt-shares__remainder-share {
-  margin-right: 0.6rem;
-  margin-left: auto;
-}
-
-.splitt-parts__total,
-.splitt-parts__remainder,
-.splitt-shares__total-amount,
-.splitt-shares__remainder-amount {
-  /* width: 11rem; */
-  width: 8rem;
-  margin-left: 1rem;
-  text-align: right;
 }
 
 /* ADD TRANSACTION: Note Form */
