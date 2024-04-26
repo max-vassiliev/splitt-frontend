@@ -276,8 +276,18 @@
               </div>
             </div>
             <div class="add-transaction__form_field field-splitt-comment">
-              <div class="add-transaction__form_input-splitt-comment">
-                (с каждого по 250&nbsp;₽)
+              <div
+                class="add-transaction__form_input-splitt-comment splitt-balance-note"
+              >
+                <!-- (с каждого по 250&nbsp;₽) -->
+                <!-- (ваш баланс: +750&nbsp;₽) -->
+                <!-- ваш баланс:&nbsp;<span>+750&nbsp;₽</span> -->
+                <!-- ваш баланс:&nbsp;<span>–333,34&nbsp;₽</span> -->
+                <!-- ваш баланс:&nbsp; 0,00&nbsp;₽ -->
+                <span class="splitt-balance-note__label"
+                  >ваш баланс:&nbsp;</span
+                >
+                <span class="splitt-balance-note__amount">0,00&nbsp;₽</span>
               </div>
             </div>
             <div class="add-transaction__form_field">

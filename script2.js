@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const DISABLED_ATTRIBUTE = 'disabled';
   const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
   const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
+  const POSITIVE_CLASS = 'positive';
+  const NEGATIVE_CLASS = 'negative';
   const CURRENCY_SYMBOL = '₽';
   const CURRENT_LOCALE = 'ru-RU';
 
@@ -14,7 +16,17 @@ document.addEventListener('DOMContentLoaded', function () {
   const DEFAULT_AMOUNT = 0;
   const ONE_HUNDRED_PERCENT = 100;
 
+  // TODO1 Testing (START)
+  // временная переменная; удалить, когда будет раздел "кто платил"
+  const currentUserExpense = 100000;
+  // const currentUserExpense = 75000;
+  // const currentUserExpense = 0;
+  // const currentUserExpense = 25000;
+  // const currentUserExpense = 15000;
+  // TODO1 Testing (END)
+
   let currentGroupId = 1;
+  let currentUserId = '4';
   let activePopup = null;
   let activeAddExpenseHiddenForm = null;
   let activeAddRepaymentHiddenForm = null;
@@ -25,7 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
     amount: 0,
     paidBy: {},
     splitt: {},
+    isSplittValid: true,
     comment: null,
+    balanceOptions: [POSITIVE_CLASS, NEGATIVE_CLASS, HIDDEN_CLASS],
   };
 
   let splittEquallyModel = {
@@ -163,6 +177,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseEmojiRemoveBtn = document.querySelector(
     '.btn__emoji-remove.add-expense'
   );
+  const addExpenseSplittBalanceNoteLabel = document.querySelector(
+    '.splitt-balance-note__label'
+  );
+  const addExpenseSplittBalanceNoteAmount = document.querySelector(
+    '.splitt-balance-note__amount'
+  );
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
     '.add-expense__form_btn-close'
   );
@@ -178,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.add-expense__form_splitt__btn--submit'
   );
 
-  // e: Add Expense: Splitt Form - Equally (<table>)
+  // e: Add Expense: Splitt Form - Equally
   const splittEquallyTable = document.getElementById('splitt-equally-table');
   const splittEquallyTableRows = document.querySelectorAll(
     '.splitt-equally__row'
@@ -199,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
   splittEquallyModel.element = splittEquallyTable;
   addExpenseFormModel.splitt = splittEquallyModel;
 
-  // e: Add Expense: Splitt Form - Parts (<table>)
+  // e: Add Expense: Splitt Form - Parts
   const splittPartsTable = document.getElementById('splitt-parts-table');
   const splittPartsRows = document.querySelectorAll('.splitt-parts__row');
   const splittPartsTotalField = document.querySelector(
@@ -216,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const splittPartsRowsArray = [...splittPartsRows];
   splittPartsRowsArray.forEach(row => {
-    const userId = parseInt(row.dataset.userId, 10);
+    const userId = row.dataset.userId;
     const amountField = row.querySelector('.splitt-parts-amount-input');
     splittPartsModel.splittAmounts.set(userId, 0);
     splittPartsModel.splittFields.set(userId, amountField);
@@ -225,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
   splittPartsModel.remainderField = splittPartsRemainderField;
   splittPartsModel.element = splittPartsTable;
 
-  // e: Add Expense: Splitt Form - Shares (<table>)
+  // e: Add Expense: Splitt Form - Shares
   const splittSharesTable = document.getElementById('splitt-shares-table');
   const splittSharesRows = document.querySelectorAll('.splitt-shares__row');
   const splittSharesTotalShareField = document.querySelector(
@@ -246,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const splittSharesInputs = document.querySelectorAll('.splitt-share__input');
   const splittSharesRowsArray = [...splittSharesRows];
   splittSharesRowsArray.forEach(row => {
-    const userId = parseInt(row.dataset.userId, 10);
+    const userId = row.dataset.userId;
     const amountField = row.querySelector('.splitt-shares-column__amount');
     const shareField = row.querySelector('.splitt-share__input');
     splittSharesModel.splittShares.set(userId, DEFAULT_AMOUNT);
@@ -648,18 +668,16 @@ document.addEventListener('DOMContentLoaded', function () {
     switch (splittOption) {
       case 'parts':
         selectedSplittForm = splittPartsModel;
-        loadSplittPartsForm();
         break;
       case 'shares':
         selectedSplittForm = splittSharesModel;
-        loadSplittSharesForm();
         break;
       default:
         selectedSplittForm = splittEquallyModel;
-        updateSplittsEqually();
     }
 
     addExpenseFormModel.splitt = selectedSplittForm;
+    updateSplitts();
     activate(addExpenseFormModel.splitt.element);
   }
 
@@ -725,9 +743,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateSplittsEqually() {
     const checkedRowsCount = splittEquallyModel.checkedRows.size;
+    addExpenseFormModel.isSplittValid = checkedRowsCount === 0 ? false : true;
+
     if (addExpenseFormModel.amount === 0 || checkedRowsCount === 0) {
       setDefaultSplittsEqually();
       renderSplittEqually();
+      updateSplittBalanceNote();
       return;
     }
 
@@ -752,6 +773,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     renderSplittEqually();
+    updateSplittBalanceNote();
   }
 
   function renderSplittEqually() {
@@ -773,6 +795,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateSplittsParts() {
     calculateSplittParts();
+    updateSplittBalanceNote();
   }
 
   function loadSplittPartsForm() {
@@ -788,6 +811,8 @@ document.addEventListener('DOMContentLoaded', function () {
     splittPartsModel.total = total;
     splittPartsModel.remainder =
       addExpenseFormModel.amount - splittPartsModel.total;
+    addExpenseFormModel.isSplittValid =
+      splittPartsModel.remainder < 0 ? false : true;
 
     splittPartsModel.totalField.textContent = formatAmountForOutput(
       splittPartsModel.total
@@ -819,12 +844,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
     const row = this.closest('.splitt-parts__row');
-    // const userId = row.dataset.userId;
-    const userId = parseInt(row.dataset.userId, 10);
+    const userId = row.dataset.userId;
 
     const processedAmount = processInputAmount(inputAmount);
     splittPartsModel.splittAmounts.set(userId, processedAmount);
     calculateSplittParts();
+    // if (userId === currentUserId) updateSplittBalanceNote();
+    updateSplittBalanceNote();
 
     const outputAmount = formatAmountForOutput(
       splittPartsModel.splittAmounts.get(userId)
@@ -852,13 +878,14 @@ document.addEventListener('DOMContentLoaded', function () {
     calculateSplittSharesAmounts();
     calculateSplittShares();
     renderSplittShares();
+    updateSplittBalanceNote();
   }
 
   function handleSplittSharesInput(event) {
     const cursorPosition = this.selectionStart;
     const inputValue = event.target.value;
     const row = this.closest('.splitt-shares__row');
-    const userId = parseInt(row.dataset.userId, 10);
+    const userId = row.dataset.userId;
 
     const splittShare = parsePercentInputString(inputValue);
     const splittAmount = calculateSplittShareAmount(
@@ -870,6 +897,8 @@ document.addEventListener('DOMContentLoaded', function () {
     splittSharesModel.splittAmounts.set(userId, splittAmount);
     calculateSplittShares();
     renderSplittShares();
+    // if (userId === currentUserId) updateSplittBalanceNote();
+    updateSplittBalanceNote();
 
     const splittShareOut = formatPercentForOutput(splittShare);
     this.value = splittShareOut;
@@ -915,6 +944,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     splittSharesModel.remainderShare =
       addExpenseFormModel.amount === 0 ? 0 : ONE_HUNDRED_PERCENT - totalShare;
+
+    addExpenseFormModel.isSplittValid =
+      splittSharesModel.remainderAmount < 0 ? false : true;
   }
 
   function renderSplittShares() {
@@ -981,6 +1013,61 @@ document.addEventListener('DOMContentLoaded', function () {
       remainderRow.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
       remainderRow.classList.add(BELOW_EXPENSE_AMOUNT_CLASS);
     }
+  }
+
+  function removeAdditionalClasses(element, additionalClasses) {
+    additionalClasses.forEach(additionalClass => {
+      element.classList.remove(additionalClass);
+    });
+  }
+
+  function updateSplittBalanceNote() {
+    removeAdditionalClasses(
+      addExpenseSplittBalanceNoteAmount,
+      addExpenseFormModel.balanceOptions
+    );
+
+    if (addExpenseFormModel.amount === 0) {
+      renderSplittBalanceNote(DEFAULT_AMOUNT);
+      return;
+    }
+
+    // TODO1 добавить потом: если невалидна сумма в «кто платил»
+    if (!addExpenseFormModel.isSplittValid) {
+      addExpenseSplittBalanceNoteLabel.textContent = '(сумма не сходится)';
+      addExpenseSplittBalanceNoteAmount.classList.add(HIDDEN_CLASS);
+      return;
+    }
+
+    const balance = countSplittBalance();
+    renderSplittBalanceNote(balance);
+  }
+
+  function countSplittBalance() {
+    if (!addExpenseFormModel.splitt) return 0;
+
+    // TODO1 заменить переменную currentUserExpense, когда будет готов раздел "кто платил"
+    const userSplittAmount =
+      addExpenseFormModel.splitt.splittAmounts.get(currentUserId);
+    const userExpenseAmount = currentUserExpense;
+
+    return userExpenseAmount - userSplittAmount;
+  }
+
+  function renderSplittBalanceNote(balance) {
+    addExpenseSplittBalanceNoteLabel.textContent = 'ваш баланс:\u00A0';
+    let formattedBalance = formatAmountForOutput(balance);
+    addExpenseSplittBalanceNoteAmount.textContent = formattedBalance;
+
+    if (balance === 0) {
+      return;
+    }
+    if (balance < 0) {
+      addExpenseSplittBalanceNoteAmount.classList.add(NEGATIVE_CLASS);
+      return;
+    }
+    addExpenseSplittBalanceNoteAmount.textContent = `+${formattedBalance}`;
+    addExpenseSplittBalanceNoteAmount.classList.add(POSITIVE_CLASS);
   }
 
   // f: Add Repayment
@@ -1194,10 +1281,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // TODO1: to delete: enable Splitt Form
-  // const addExpenseHiddenFormSplitt = document.querySelector(
-  //   '.add-transaction__form_hidden.add-expense__form_splitt'
-  // );
-  // openAddExpense();
-  // addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
-  // activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
+  const addExpenseHiddenFormSplitt = document.querySelector(
+    '.add-transaction__form_hidden.add-expense__form_splitt'
+  );
+  openAddExpense();
+  addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
+  activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
 });

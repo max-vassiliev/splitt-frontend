@@ -637,9 +637,22 @@ header {
 }
 
 .add-transaction__form_input-splitt-comment {
+  margin-top: 0.1rem;
   margin-left: 14.1rem;
   font-size: 1.3rem;
-  color: #666;
+  color: #777;
+}
+
+.splitt-balance-note__amount.negative {
+  color: rgb(233, 116, 116);
+}
+
+.splitt-balance-note__amount.positive {
+  color: rgb(123, 167, 47);
+}
+
+.splitt-balance-note__amount.hidden {
+  display: none;
 }
 
 .add-transaction__form_btn-close,
