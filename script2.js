@@ -1280,6 +1280,8 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', closeActivePopup);
   });
 
+  // TODO1: to delete: enable Paid By Form
+
   // TODO1: to delete: enable Splitt Form
   const addExpenseHiddenFormSplitt = document.querySelector(
     '.add-transaction__form_hidden.add-expense__form_splitt'
