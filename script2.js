@@ -1280,13 +1280,19 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', closeActivePopup);
   });
 
-  // TODO1: to delete: enable Paid By Form
-
-  // TODO1: to delete: enable Splitt Form
-  const addExpenseHiddenFormSplitt = document.querySelector(
-    '.add-transaction__form_hidden.add-expense__form_splitt'
+  // TODO1: to delete: enable Payer Form
+  const addExpenseHiddenFormPayer = document.querySelector(
+    '.add-expense__form_payer'
   );
   openAddExpense();
-  addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
-  activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
+  activate(addExpenseHiddenFormPayer);
+  activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
+
+  // TODO1: to delete: enable Splitt Form
+  // const addExpenseHiddenFormSplitt = document.querySelector(
+  //   '.add-transaction__form_hidden.add-expense__form_splitt'
+  // );
+  // openAddExpense();
+  // addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
+  // activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
 });

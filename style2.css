@@ -905,6 +905,92 @@ header {
   width: 7rem;
 }
 
+/* ADD TRANSACTION: Payer Form */
+
+.payer-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.payer-table-row {
+  cursor: pointer;
+}
+
+.payer-table-row td:first-child {
+  visibility: hidden;
+}
+
+.payer-table-row:hover td:first-child {
+  visibility: visible;
+}
+
+.payer-table-row td:nth-child(n + 2) {
+  border: 1px solid #e9e9e9;
+  vertical-align: middle;
+  white-space: nowrap;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.payer-table-row:hover td:nth-child(n + 2) {
+  background-color: #f9f9f9;
+}
+
+.payer-table-column__remove-payer {
+  width: 1.7rem;
+  font-size: 1.4rem;
+  color: #999;
+}
+
+.payer-table-column__remove-payer:hover {
+  color: red;
+}
+
+.payer-table-column__remove-payer:active {
+  color: rgb(193, 8, 8);
+}
+
+.payer-table-column__avatar {
+  width: 4.2rem;
+}
+
+.payer-table-column__username {
+  min-width: 16rem;
+  padding-left: 6px;
+  padding-right: 10px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.payer-table-column__avatar img {
+  display: block;
+  margin: auto;
+}
+
+.payer-table-column__amount input {
+  background: transparent;
+}
+
+.payer-table-column__add-payer {
+  height: 50px;
+  padding-top: 10px;
+}
+
+.add-payer-container {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+  background-color: lightskyblue;
+}
+
+.add-payer-caption {
+  background-color: coral;
+}
+
 /* ADD TRANSACTION: Note Form */
 
 .add-transaction__form_note-container {
