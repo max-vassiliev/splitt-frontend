@@ -330,7 +330,11 @@
             <div class="payer-form-container">
               <table class="payer-table">
                 <tr class="payer-table-row" data-user-id="4">
-                  <td class="payer-table-column__remove-payer">&times;</td>
+                  <td class="payer-table-column__remove-payer">
+                    <div class="remove-payer-button" title="удалить">
+                      &times;
+                    </div>
+                  </td>
                   <td class="payer-table-column__avatar">
                     <img
                       class="account__avatar"
@@ -349,10 +353,13 @@
                       value="1&nbsp;000,00&nbsp;₽"
                     />
                   </td>
-                  <!-- <td class="payer-table-column__remove-payer">&times;</td> -->
                 </tr>
                 <tr class="payer-table-row" data-user-id="3">
-                  <td class="payer-table-column__remove-payer">&times;</td>
+                  <td class="payer-table-column__remove-payer">
+                    <div class="remove-payer-button" title="удалить">
+                      &times;
+                    </div>
+                  </td>
                   <td class="payer-table-column__avatar">
                     <img
                       class="account__avatar"
@@ -364,7 +371,12 @@
                     Константин Константинопольский
                   </td>
                   <td class="payer-table-column__amount">
-                    1&nbsp;000,00&nbsp;₽
+                    <input
+                      class="payer-amount__input input-amount"
+                      name="expense-payer-amount-input"
+                      type="text"
+                      value="1&nbsp;000,00&nbsp;₽"
+                    />
                   </td>
                   <!-- <td class="payer-table-column__remove-payer">&times;</td> -->
                 </tr>
@@ -373,12 +385,15 @@
                   <td class="payer-table-column__add-payer" colspan="3">
                     <div class="add-payer-container">
                       <span class="add-payer-button material-symbols-outlined">
-                        add_circle
+                        <!-- add_circle -->
+                        add_box
                       </span>
+                      <!-- <span class="add-payer-caption">+ добавить</span> -->
                       <span class="add-payer-caption">добавить</span>
                     </div>
                   </td>
                 </tr>
+                <!-- <tr class="payer-table-row__total hidden"> -->
                 <tr class="payer-table-row__total">
                   <td></td>
                   <td class="payer-table-column__total-label" colspan="2">
@@ -388,6 +403,7 @@
                     1&nbsp;000,00&nbsp;₽
                   </td>
                 </tr>
+                <!-- <tr class="payer-table-row__remainder hidden"> -->
                 <tr class="payer-table-row__remainder">
                   <td></td>
                   <td class="payer-table-column__remainder-label" colspan="2">

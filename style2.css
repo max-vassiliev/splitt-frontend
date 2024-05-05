@@ -29,8 +29,8 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(230, 230, 230, 0.3);
-  /* background: rgba(210, 210, 210, 0.4); */
-  /* background: rgba(100, 100, 100, 0.4);  */
+  /* background: rgba(230, 230, 230, 0.4); */
+  /* background: rgba(100, 100, 100, 0.4); */
   z-index: 1;
 }
 
@@ -823,7 +823,8 @@ header {
 
 .splitt-equally-column__amount,
 .splitt-parts-column__amount,
-.splitt-shares-column__amount {
+.splitt-shares-column__amount,
+.payer-table-column__amount {
   min-width: 6.7rem;
   text-align: right;
   padding-left: 10px;
@@ -834,7 +835,8 @@ header {
 }
 
 .splitt-parts__row-total,
-.splitt-shares__row-total {
+.splitt-shares__row-total,
+.payer-table-row__total {
   color: #555;
   font-weight: 700;
   font-size: 1.7rem;
@@ -842,7 +844,8 @@ header {
 }
 
 .splitt-parts__row-remainder,
-.splitt-shares__row-remainder {
+.splitt-shares__row-remainder,
+.payer-table-row__remainder {
   color: #fff;
   font-weight: 400;
   font-size: 1.7rem;
@@ -862,7 +865,9 @@ header {
 .splitt-parts-column__total-label,
 .splitt-parts-column__remainder-label,
 .splitt-shares-column__total-label,
-.splitt-shares-column__remainder-label {
+.splitt-shares-column__remainder-label,
+.payer-table-column__total-label,
+.payer-table-column__remainder-label {
   padding-left: 10px;
 }
 
@@ -876,13 +881,16 @@ header {
 .splitt-shares-column__total-share,
 .splitt-shares-column__total-amount,
 .splitt-shares-column__remainder-share,
-.splitt-shares-column__remainder-amount {
+.splitt-shares-column__remainder-amount,
+.payer-table-column__total-amount,
+.payer-table-column__remainder-amount {
   text-align: right;
   padding-right: 6px;
   padding-left: 16px;
 }
 
-.splitt-amount__input {
+.splitt-amount__input,
+.payer-amount__input {
   margin-left: auto;
   right: 0;
   border: none;
@@ -908,7 +916,8 @@ header {
 /* ADD TRANSACTION: Payer Form */
 
 .payer-table {
-  width: 100%;
+  /* width: 100%; */
+  margin-left: -1.5rem;
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -917,13 +926,13 @@ header {
   cursor: pointer;
 }
 
-.payer-table-row td:first-child {
+/* .payer-table-row td:first-child {
   visibility: hidden;
 }
 
 .payer-table-row:hover td:first-child {
   visibility: visible;
-}
+} */
 
 .payer-table-row td:nth-child(n + 2) {
   border: 1px solid #e9e9e9;
@@ -931,10 +940,20 @@ header {
   white-space: nowrap;
   padding-top: 3px;
   padding-bottom: 3px;
+  transition: background-color 0.15s ease-in;
 }
 
 .payer-table-row:hover td:nth-child(n + 2) {
   background-color: #f9f9f9;
+}
+
+.remove-payer-button {
+  opacity: 0;
+  transition: opacity 0.15s ease-in;
+}
+
+.payer-table-row:hover .remove-payer-button {
+  opacity: 1;
 }
 
 .payer-table-column__remove-payer {
@@ -948,7 +967,7 @@ header {
 }
 
 .payer-table-column__remove-payer:active {
-  color: rgb(193, 8, 8);
+  color: rgb(170, 10, 10);
 }
 
 .payer-table-column__avatar {
@@ -973,9 +992,20 @@ header {
   background: transparent;
 }
 
+.payer-table-column__amount {
+  padding-left: 10px;
+  padding-right: 6px;
+}
+
+.payer-amount__input {
+  background: transparent;
+  cursor: pointer;
+}
+
 .payer-table-column__add-payer {
-  height: 50px;
-  padding-top: 10px;
+  /* height: 50px; */
+  padding-top: 15px;
+  padding-bottom: 50px;
 }
 
 .add-payer-container {
@@ -984,11 +1014,44 @@ header {
   align-content: center;
   text-align: center;
   justify-content: center;
-  background-color: lightskyblue;
+  cursor: pointer;
+  color: #f97e4b;
+  transition: color 0.15s ease-in;
+
+  /* color: coral; */
+  /* background-color: aliceblue; */
+}
+
+.add-payer-container:hover {
+  color: #c9653b;
+  transform: translateY(0.03rem);
+}
+
+.add-payer-container:active {
+  color: #c9653b;
+  transform: translateY(0.07rem);
+}
+
+.add-payer-button {
+  font-size: 1.2rem;
 }
 
 .add-payer-caption {
-  background-color: coral;
+  /* font-weight: 500; */
+  margin-left: 0.4rem;
+  font-size: 1.4rem;
+  padding-bottom: 3px;
+}
+
+.payer-table-row__remainder {
+  color: #aaa;
+}
+
+.payer-table-row__total.hidden,
+.payer-table-row__remainder.hidden {
+  /* visibility: hidden; */
+  /* opacity: 0; */
+  display: none;
 }
 
 /* ADD TRANSACTION: Note Form */
