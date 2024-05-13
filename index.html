@@ -329,7 +329,7 @@
           <form class="add-transaction__form_body">
             <div class="payer-form-container">
               <table class="payer-table">
-                <tr class="payer-table-row" data-user-id="4">
+                <tr class="payer-table-row" data-row-id="1" data-user-id="4">
                   <td class="payer-table-column__remove-payer">
                     <div class="remove-payer-button" title="удалить">
                       &times;
@@ -343,7 +343,16 @@
                     />
                   </td>
                   <td class="payer-table-column__username">
-                    Арсений Тарковский
+                    <select class="payer__switch">
+                      <option value="" disabled>-- выбрать --</option>
+                      <option value="1">Пётр</option>
+                      <option value="2">Катерина</option>
+                      <option value="3" disabled>
+                        Константин Константинопольский
+                      </option>
+                      <option value="4" selected>Арсений Тарковский</option>
+                    </select>
+                    <!-- Арсений Тарковский -->
                   </td>
                   <td class="payer-table-column__amount">
                     <input
@@ -354,7 +363,7 @@
                     />
                   </td>
                 </tr>
-                <tr class="payer-table-row" data-user-id="3">
+                <tr class="payer-table-row" data-row-id="2" data-user-id="3">
                   <td class="payer-table-column__remove-payer">
                     <div class="remove-payer-button" title="удалить">
                       &times;
@@ -368,7 +377,14 @@
                     />
                   </td>
                   <td class="payer-table-column__username">
-                    Константин Константинопольский
+                    <select class="payer__switch">
+                      <option value="" disabled>-- выбрать --</option>
+                      <option value="1">Пётр</option>
+                      <option value="2">Катерина</option>
+                      <option value="3" selected>
+                        Константин Константинопольский
+                      </option>
+                    </select>
                   </td>
                   <td class="payer-table-column__amount">
                     <input
@@ -379,6 +395,37 @@
                     />
                   </td>
                   <!-- <td class="payer-table-column__remove-payer">&times;</td> -->
+                </tr>
+                <tr class="payer-table-row" data-row-id="3">
+                  <td class="payer-table-column__remove-payer">
+                    <div class="remove-payer-button" title="удалить">
+                      &times;
+                    </div>
+                  </td>
+                  <td class="payer-table-column__avatar">
+                    <img
+                      class="account__avatar"
+                      src="images/avatar-empty.png"
+                    />
+                  </td>
+                  <td class="payer-table-column__username">
+                    <select class="payer__switch">
+                      <!-- <option value="0">-- выбрать --</option> -->
+                      <option value="" disabled selected>-- выбрать --</option>
+                      <option value="1">Пётр</option>
+                      <option value="2">Катерина</option>
+                      <option value="3">Константин Константинопольский</option>
+                    </select>
+                    <!-- выбрать -->
+                  </td>
+                  <td class="payer-table-column__amount">
+                    <input
+                      class="payer-amount__input input-amount"
+                      name="expense-payer-amount-input"
+                      type="text"
+                      value="0,00&nbsp;₽"
+                    />
+                  </td>
                 </tr>
                 <tr class="payer-table-row__add-payer">
                   <td></td>

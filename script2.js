@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const DEFAULT_AMOUNT = 0;
   const ONE_HUNDRED_PERCENT = 100;
 
+  const DEFAULT_AVATAR = 'images/avatar-empty.png';
+
   // TODO1 Testing (START)
   // временная переменная; удалить, когда будет раздел "кто платил"
   const currentUserExpense = 100000;
@@ -32,6 +34,37 @@ document.addEventListener('DOMContentLoaded', function () {
   let activeAddRepaymentHiddenForm = null;
   let activeEmojiField = null;
 
+  const users = new Map([
+    [
+      '1',
+      {
+        name: 'Пётр',
+        avatar: 'images/avatar-peter.png',
+      },
+    ],
+    [
+      '2',
+      {
+        name: 'Катерина',
+        avatar: 'images/avatar-kate.png',
+      },
+    ],
+    [
+      '3',
+      {
+        name: 'Константин Константинопольский',
+        avatar: 'images/avatar-paul.png',
+      },
+    ],
+    [
+      '4',
+      {
+        name: 'Арсений Тарковский',
+        avatar: 'images/avatar-sanya.png',
+      },
+    ],
+  ]);
+
   let addExpenseFormModel = {
     title: '',
     amount: 0,
@@ -40,6 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
     isSplittValid: true,
     comment: null,
     balanceOptions: [POSITIVE_CLASS, NEGATIVE_CLASS, HIDDEN_CLASS],
+  };
+
+  let payerTableModel = {
+    rows: new Map(), // [ rowId, { userId, amount, payerSwitch } ]
   };
 
   let splittEquallyModel = {
@@ -186,6 +223,24 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
     '.add-expense__form_btn-close'
   );
+
+  // e: Add Expense: Payer Form
+  const payerTable = document.querySelector('.payer-table');
+  const payerSwitches = document.querySelectorAll('.payer__switch');
+  const payerTableRows = document.querySelectorAll('.payer-table-row');
+
+  // TODO1 временный код; переписать;
+  // при загрузке страницы нужно заполнить один ряд — добавить userId текущего пользователя
+  payerTableRows.forEach(row => {
+    const rowId = parseInt(row.dataset.rowId, 10);
+    const userId = row.dataset.userId;
+    const payerSwitch = row.querySelector('.payer__switch');
+    payerTableModel.rows.set(rowId, {
+      userId,
+      payerSwitch,
+      amount: DEFAULT_AMOUNT,
+    });
+  });
 
   // e: Add Expense: Splitt Form
   const splittOptionButtons = document.querySelectorAll(
@@ -649,6 +704,54 @@ document.addEventListener('DOMContentLoaded', function () {
     activeAddExpenseHiddenForm.form.classList.remove(ACTIVE_CLASS);
     activeAddExpenseHiddenForm.button.classList.remove(ACTIVE_CLASS);
     activeAddExpenseHiddenForm = null;
+  }
+
+  // f: Add Expense: Payer Form
+
+  function handlePayerSwitch(event) {
+    const row = this.closest('.payer-table-row');
+    const rowId = parseInt(row.dataset.rowId, 10);
+    const previousPayerId = row.dataset.userId;
+    const newPayerId = event.target.value;
+
+    updatePayerRowOnSelect(row, rowId, newPayerId);
+    updatePayerSwitchesOnSelect(rowId, previousPayerId, newPayerId);
+  }
+
+  function updatePayerRowOnSelect(rowElement, rowId, newPayerId) {
+    const rowData = payerTableModel.rows.get(rowId);
+    rowData.userId = newPayerId;
+    rowElement.dataset.userId = newPayerId;
+
+    const rowAvatar = rowElement.querySelector('.account__avatar');
+    let newPayerAvatar = users.get(newPayerId).avatar;
+    if (!newPayerAvatar) {
+      newPayerAvatar = DEFAULT_AVATAR;
+    }
+    rowAvatar.src = newPayerAvatar;
+  }
+
+  function updatePayerSwitchesOnSelect(
+    selectedRowId,
+    previousPayerId,
+    newPayerId
+  ) {
+    const payerSwitchesToUpdate = Array.from(payerTableModel.rows.entries())
+      .filter(([rowId]) => rowId !== selectedRowId)
+      .map(([_, row]) => row.payerSwitch);
+
+    const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(payerSwitch => {
+      return Array.from(payerSwitch.querySelectorAll('option'));
+    });
+
+    switchOptionsToUpdate.forEach(option => {
+      if (previousPayerId && option.value === previousPayerId) {
+        option.removeAttribute(DISABLED_ATTRIBUTE);
+      }
+      if (option.value === newPayerId) {
+        option.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
+      }
+    });
   }
 
   // f: Add Expense: Splitt Form
@@ -1195,6 +1298,11 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
+
+  // el: Add Expense: Payer Form
+  payerSwitches.forEach(payerSwitch => {
+    payerSwitch.addEventListener('change', handlePayerSwitch);
+  });
 
   // el: Add Expense: Splitt Form
 
