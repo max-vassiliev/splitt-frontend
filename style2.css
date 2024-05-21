@@ -853,12 +853,15 @@ header {
 }
 
 .splitt-parts__row-remainder.below-expense-amount,
-.splitt-shares__row-remainder.below-expense-amount {
+.splitt-shares__row-remainder.below-expense-amount,
+.payer-table-row__total.below-expense-amount,
+.payer-table-row__remainder.below-expense-amount {
   color: #aaa;
 }
 
 .splitt-parts__row-remainder.above-expense-amount,
-.splitt-shares__row-remainder.above-expense-amount {
+.splitt-shares__row-remainder.above-expense-amount,
+.payer-table-row__remainder.above-expense-amount {
   color: rgba(255, 85, 85, 0.8);
 }
 
@@ -1054,15 +1057,13 @@ header {
   padding-bottom: 3px;
 }
 
-.payer-table-row__remainder {
-  color: #aaa;
+.payer-table-row__total {
+  visibility: hidden;
 }
 
 .payer-table-row__total.hidden,
 .payer-table-row__remainder.hidden {
-  /* visibility: hidden; */
-  /* opacity: 0; */
-  display: none;
+  visibility: hidden;
 }
 
 /* ADD TRANSACTION: Note Form */

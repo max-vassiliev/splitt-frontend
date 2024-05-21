@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     amount: 0,
     paidBy: {},
     splitt: {},
+    isPaidByValid: true,
     isSplittValid: true,
     comment: null,
     balanceOptions: [POSITIVE_CLASS, NEGATIVE_CLASS, HIDDEN_CLASS],
@@ -77,6 +78,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let payerTableModel = {
     rows: new Map(), // [ rowId, { userId, amount, payerSwitch } ]
+    total: {}, // { amount, element }
+    remainder: {}, // { amount, element }
+    amountWidthOptions: new Map([
+      [1, '8rem'],
+      [2, '8rem'],
+      [3, '8rem'],
+      [4, '8rem'],
+      [5, '8rem'],
+      [6, '9.5rem'],
+      [7, '10.5rem'],
+      [8, '11.5rem'],
+      [9, '13.8rem'],
+      [10, '14.5rem'],
+      [11, '15.5rem'],
+    ]),
   };
 
   let splittEquallyModel = {
@@ -228,6 +244,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const payerTable = document.querySelector('.payer-table');
   const payerSwitches = document.querySelectorAll('.payer__switch');
   const payerTableRows = document.querySelectorAll('.payer-table-row');
+  const payerAvatarColumns = document.querySelectorAll(
+    '.payer-table-column__avatar'
+  );
+  const payerAmountInputs = document.querySelectorAll('.payer-amount__input');
+  const payerTotalElement = document.querySelector(
+    '.payer-table-column__total-amount'
+  );
+  const payerTotalRow = document.querySelector('.payer-table-row__total');
+  const payerRemainderElement = document.querySelector(
+    '.payer-table-column__remainder-amount'
+  );
+  const payerRemainderRow = document.querySelector(
+    '.payer-table-row__remainder'
+  );
 
   // TODO1 временный код; переписать;
   // при загрузке страницы нужно заполнить один ряд — добавить userId текущего пользователя
@@ -241,6 +271,8 @@ document.addEventListener('DOMContentLoaded', function () {
       amount: DEFAULT_AMOUNT,
     });
   });
+  payerTableModel.total = { amount: 0, element: payerTotalElement };
+  payerTableModel.remainder = { amount: 0, element: payerRemainderElement };
 
   // e: Add Expense: Splitt Form
   const splittOptionButtons = document.querySelectorAll(
@@ -698,6 +730,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function saveAddExpenseAmount(amount) {
     addExpenseFormModel.amount = amount;
     updateSplitts();
+    updatePaidByOnExpenseChange();
   }
 
   function closeAddExpenseHiddenForm() {
@@ -708,6 +741,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // f: Add Expense: Payer Form
 
+  function handlePayerAvatarClick() {
+    const row = this.closest('.payer-table-row');
+    const amountInput = row.querySelector('.payer-amount__input');
+    amountInput.focus();
+  }
+
   function handlePayerSwitch(event) {
     const row = this.closest('.payer-table-row');
     const rowId = parseInt(row.dataset.rowId, 10);
@@ -716,6 +755,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updatePayerRowOnSelect(row, rowId, newPayerId);
     updatePayerSwitchesOnSelect(rowId, previousPayerId, newPayerId);
+    calculatePaidBy();
+    updateSplittBalanceNote();
+  }
+
+  function handlePayerAmountInput(event) {
+    const cursorPosition = this.selectionStart;
+    const inputAmount = event.target.value;
+    const row = this.closest('.payer-table-row');
+    const rowId = parseInt(row.dataset.rowId, 10);
+    const payerData = payerTableModel.rows.get(rowId);
+
+    const processedAmount = processInputAmount(inputAmount);
+    payerData.amount = processedAmount;
+    calculatePaidBy();
+    updateSplittBalanceNote();
+
+    const outputAmount = formatAmountForOutput(payerData.amount);
+    this.value = outputAmount;
+    setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  }
+
+  // TODO1 проверить работоспособность
+  function updatePaidByOnExpenseChange() {
+    if (payerTableModel.rows.size !== 1) return;
+    const paidByRow = payerTableModel.rows.values().next().value;
+    paidByRow.amount = addExpenseFormModel.amount;
   }
 
   function updatePayerRowOnSelect(rowElement, rowId, newPayerId) {
@@ -752,6 +817,61 @@ document.addEventListener('DOMContentLoaded', function () {
         option.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
       }
     });
+  }
+
+  function calculatePaidBy() {
+    const total = Array.from(payerTableModel.rows.values()).reduce(
+      (acc, row) => acc + row.amount,
+      0
+    );
+
+    payerTableModel.total.amount = total;
+    payerTableModel.remainder.amount =
+      addExpenseFormModel.amount - payerTableModel.total.amount;
+    addExpenseFormModel.isPaidByValid =
+      payerTableModel.remainder.amount < 0 ? false : true;
+
+    payerTableModel.total.element.textContent = formatAmountForOutput(
+      payerTableModel.total.amount
+    );
+    payerTableModel.remainder.element.textContent = formatAmountForOutput(
+      payerTableModel.remainder.amount
+    );
+
+    if (payerTableModel.remainder.amount === 0) {
+      payerTotalRow.style.visibility = 'hidden';
+    } else {
+      payerTotalRow.style.visibility = 'visible';
+    }
+
+    restyleSplittRemainder2(
+      payerTableModel.remainder.amount,
+      payerRemainderRow
+    );
+
+    adjustPayerAmountInputWidth();
+  }
+
+  function adjustPayerAmountInputWidth() {
+    const referenceAmount =
+      addExpenseFormModel.amount > payerTableModel.total.amount
+        ? addExpenseFormModel.amount
+        : payerTableModel.total.amount;
+
+    const referenceAmountLength = referenceAmount.toString().length;
+    const adjustedWidth =
+      payerTableModel.amountWidthOptions.get(referenceAmountLength) || '14rem';
+    payerAmountInputs.forEach(inputElement => {
+      inputElement.style.width = adjustedWidth;
+    });
+  }
+
+  function getAmountByPayerId(payerId) {
+    const rowEntry = Array.from(payerTableModel.rows.entries()).find(
+      ([_, row]) => row.userId === payerId
+    );
+
+    return rowEntry ? rowEntry[1].amount : DEFAULT_AMOUNT;
   }
 
   // f: Add Expense: Splitt Form
@@ -952,7 +1072,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const processedAmount = processInputAmount(inputAmount);
     splittPartsModel.splittAmounts.set(userId, processedAmount);
     calculateSplittParts();
-    // if (userId === currentUserId) updateSplittBalanceNote();
     updateSplittBalanceNote();
 
     const outputAmount = formatAmountForOutput(
@@ -1095,6 +1214,23 @@ document.addEventListener('DOMContentLoaded', function () {
     splittSharesModel.totalAmountField.style.width = adjustedWidth;
   }
 
+  // TODO1 сделать основным; убрать "2"
+  function restyleSplittRemainder2(remainder, remainderRow) {
+    removeAdditionalClasses(remainderRow, [
+      ABOVE_EXPENSE_AMOUNT_CLASS,
+      BELOW_EXPENSE_AMOUNT_CLASS,
+    ]);
+
+    if (remainder === 0) {
+      return;
+    }
+    if (remainder < 0) {
+      remainderRow.classList.add(ABOVE_EXPENSE_AMOUNT_CLASS);
+    }
+    remainderRow.classList.add(BELOW_EXPENSE_AMOUNT_CLASS);
+  }
+
+  // TODO1 можно удалить
   function restyleSplittRemainder(remainder, remainderRow) {
     if (remainder === 0) {
       remainderRow.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
@@ -1135,9 +1271,16 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    // TODO1 добавить потом: если невалидна сумма в «кто платил»
+    if (!addExpenseFormModel.isPaidByValid) {
+      addExpenseSplittBalanceNoteLabel.textContent =
+        'проверьте форму «Кто платил»';
+      addExpenseSplittBalanceNoteAmount.classList.add(HIDDEN_CLASS);
+      return;
+    }
+
     if (!addExpenseFormModel.isSplittValid) {
-      addExpenseSplittBalanceNoteLabel.textContent = '(сумма не сходится)';
+      addExpenseSplittBalanceNoteLabel.textContent =
+        'проверьте форму «Поделить»';
       addExpenseSplittBalanceNoteAmount.classList.add(HIDDEN_CLASS);
       return;
     }
@@ -1152,7 +1295,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // TODO1 заменить переменную currentUserExpense, когда будет готов раздел "кто платил"
     const userSplittAmount =
       addExpenseFormModel.splitt.splittAmounts.get(currentUserId);
-    const userExpenseAmount = currentUserExpense;
+    // const userExpenseAmount = currentUserExpense;
+    const userExpenseAmount = getAmountByPayerId(currentUserId);
 
     return userExpenseAmount - userSplittAmount;
   }
@@ -1300,9 +1444,18 @@ document.addEventListener('DOMContentLoaded', function () {
   addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
 
   // el: Add Expense: Payer Form
+
+  payerAvatarColumns.forEach(column => {
+    column.addEventListener('click', handlePayerAvatarClick);
+  });
+
   payerSwitches.forEach(payerSwitch => {
     payerSwitch.addEventListener('change', handlePayerSwitch);
   });
+
+  payerAmountInputs.forEach(payerAmount =>
+    payerAmount.addEventListener('input', handlePayerAmountInput)
+  );
 
   // el: Add Expense: Splitt Form
 
