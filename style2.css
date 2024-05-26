@@ -973,6 +973,13 @@ header {
   color: rgb(170, 10, 10);
 }
 
+.payer-table-column__remove-payer.inactive,
+.payer-table-column__remove-payer.inactive:hover,
+.payer-table-column__remove-payer.inactive:active {
+  visibility: hidden;
+  cursor: auto;
+}
+
 .payer-table-column__avatar {
   width: 4.2rem;
 }
@@ -1027,7 +1034,7 @@ header {
   padding-bottom: 50px;
 }
 
-.add-payer-container {
+.add-payer-button {
   display: flex;
   align-items: center;
   align-content: center;
@@ -1038,15 +1045,15 @@ header {
   transition: color 0.15s ease-in;
 }
 
-.add-payer-container:hover {
+.add-payer-button:hover {
   color: #f97e4b;
 }
 
-.add-payer-container:active {
+.add-payer-button:active {
   transform: translateY(0.1rem);
 }
 
-.add-payer-button {
+.add-payer-icon {
   font-size: 1.2rem;
 }
 
@@ -1055,6 +1062,11 @@ header {
   margin-left: 0.4rem;
   font-size: 1.4rem;
   padding-bottom: 3px;
+}
+
+.add-payer-button.hidden {
+  visibility: hidden;
+  cursor: auto;
 }
 
 .payer-table-row__total {

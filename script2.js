@@ -248,6 +248,8 @@ document.addEventListener('DOMContentLoaded', function () {
     '.payer-table-column__avatar'
   );
   const payerAmountInputs = document.querySelectorAll('.payer-amount__input');
+  const addPayerRow = document.querySelector('.payer-table-row__add-payer');
+  const addPayerButton = document.querySelector('.add-payer-button');
   const payerTotalElement = document.querySelector(
     '.payer-table-column__total-amount'
   );
@@ -262,14 +264,15 @@ document.addEventListener('DOMContentLoaded', function () {
   // TODO1 временный код; переписать;
   // при загрузке страницы нужно заполнить один ряд — добавить userId текущего пользователя
   payerTableRows.forEach(row => {
-    const rowId = parseInt(row.dataset.rowId, 10);
-    const userId = row.dataset.userId;
-    const payerSwitch = row.querySelector('.payer__switch');
-    payerTableModel.rows.set(rowId, {
-      userId,
-      payerSwitch,
-      amount: DEFAULT_AMOUNT,
-    });
+    // const rowId = parseInt(row.dataset.rowId, 10);
+    // const userId = row.dataset.userId;
+    // const payerSwitch = row.querySelector('.payer__switch');
+    // payerTableModel.rows.set(rowId, {
+    //   userId,
+    //   payerSwitch,
+    //   amount: DEFAULT_AMOUNT,
+    // });
+    addPayerRowToModel(row);
   });
   payerTableModel.total = { amount: 0, element: payerTotalElement };
   payerTableModel.remainder = { amount: 0, element: payerRemainderElement };
@@ -741,6 +744,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // f: Add Expense: Payer Form
 
+  function handleRemovePayerButtonClick() {
+    console.log('handleRemovePayerButtonClick');
+  }
+
   function handlePayerAvatarClick() {
     const row = this.closest('.payer-table-row');
     const amountInput = row.querySelector('.payer-amount__input');
@@ -774,6 +781,103 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputAmount = formatAmountForOutput(payerData.amount);
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  }
+
+  function handleAddPayerClick() {
+    if (payerTableModel.rows.size === users.size) return;
+
+    const rowId = generateNewPayerRowId();
+    const payerOptionsHTML = generatePayerOptionsHTML();
+    const newPayerRowHTML = generateNewPayerRowHTML(rowId, payerOptionsHTML);
+
+    addPayerRow.insertAdjacentHTML('beforebegin', newPayerRowHTML);
+
+    const newPayerRow = addPayerRow.previousElementSibling;
+    addEventListenersToPayerRow(newPayerRow);
+    addPayerRowToModel(newPayerRow);
+
+    if (payerTableModel.rows.size === users.size) {
+      addPayerButton.classList.add(HIDDEN_CLASS);
+    }
+  }
+
+  function generateNewPayerRowId() {
+    let maxRowId = Math.max(...payerTableModel.rows.keys());
+    return maxRowId + 1;
+  }
+
+  function addEventListenersToPayerRow(row) {
+    const removePayerButton = row.querySelector(
+      '.payer-table-column__remove-payer'
+    );
+    const payerAvatarColumn = row.querySelector('.payer-table-column__avatar');
+    const payerSwitch = row.querySelector('.payer__switch');
+    const payerAmountInput = row.querySelector('.payer-amount__input');
+
+    removePayerButton.addEventListener('click', handleRemovePayerButtonClick);
+    payerAvatarColumn.addEventListener('click', handlePayerAvatarClick);
+    payerSwitch.addEventListener('change', handlePayerSwitch);
+    payerAmountInput.addEventListener('input', handlePayerAmountInput);
+  }
+
+  function addPayerRowToModel(row) {
+    const rowId = parseInt(row.dataset.rowId, 10);
+    const userId = row.dataset.userId;
+    const payerSwitch = row.querySelector('.payer__switch');
+    payerTableModel.rows.set(rowId, {
+      userId,
+      payerSwitch,
+      amount: DEFAULT_AMOUNT,
+    });
+  }
+
+  function generatePayerOptionsHTML() {
+    let payerOptionsHTML = '';
+
+    const payersToDisable = new Set(
+      Array.from(payerTableModel.rows.values()).map(row => row.userId)
+    );
+
+    Array.from(users.entries()).forEach(([userId, userData]) => {
+      const disabledAttribute = payersToDisable.has(userId) ? ' disabled' : '';
+      payerOptionsHTML += `<option value="${userId}"${disabledAttribute}>${userData.name}</option>\n`;
+    });
+
+    return payerOptionsHTML;
+  }
+
+  // получить готовую строку с HTML-кодом:
+  // есть отдельная функция, которая должна принимать ID ряда и сгенерированный payerSwitchHTML
+
+  function generateNewPayerRowHTML(rowId, payerOptionsHTML) {
+    const newPayerRowHTML = `<tr class="payer-table-row" data-row-id="${rowId}">
+        <td class="payer-table-column__remove-payer">
+          <div class="remove-payer-button" title="удалить">
+            &times;
+          </div>
+        </td>
+        <td class="payer-table-column__avatar">
+          <img
+            class="account__avatar"
+            src="${DEFAULT_AVATAR}"
+          />
+        </td>
+        <td class="payer-table-column__username">
+          <select class="payer__switch">
+            <option value="" disabled selected>-- выбрать --</option>
+            ${payerOptionsHTML}
+          </select>
+        </td>
+        <td class="payer-table-column__amount">
+          <input
+            class="payer-amount__input input-amount"
+            name="expense-payer-amount-input"
+            type="text"
+            value="0,00&nbsp;₽"
+          />
+        </td>
+      </tr>`;
+    return newPayerRowHTML;
   }
 
   // TODO1 проверить работоспособность
@@ -1456,6 +1560,8 @@ document.addEventListener('DOMContentLoaded', function () {
   payerAmountInputs.forEach(payerAmount =>
     payerAmount.addEventListener('input', handlePayerAmountInput)
   );
+
+  addPayerButton.addEventListener('click', handleAddPayerClick);
 
   // el: Add Expense: Splitt Form
 
