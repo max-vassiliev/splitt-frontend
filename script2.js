@@ -261,17 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.payer-table-row__remainder'
   );
 
-  // TODO1 временный код; переписать;
-  // при загрузке страницы нужно заполнить один ряд — добавить userId текущего пользователя
   payerTableRows.forEach(row => {
-    // const rowId = parseInt(row.dataset.rowId, 10);
-    // const userId = row.dataset.userId;
-    // const payerSwitch = row.querySelector('.payer__switch');
-    // payerTableModel.rows.set(rowId, {
-    //   userId,
-    //   payerSwitch,
-    //   amount: DEFAULT_AMOUNT,
-    // });
     addPayerRowToModel(row);
   });
   payerTableModel.total = { amount: 0, element: payerTotalElement };
@@ -732,8 +722,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function saveAddExpenseAmount(amount) {
     addExpenseFormModel.amount = amount;
-    updateSplitts();
     updatePaidByOnExpenseChange();
+    updateSplitts();
   }
 
   function closeAddExpenseHiddenForm() {
@@ -824,9 +814,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const rowId = parseInt(row.dataset.rowId, 10);
     const userId = row.dataset.userId;
     const payerSwitch = row.querySelector('.payer__switch');
+    const amountInput = row.querySelector('.payer-amount__input');
     payerTableModel.rows.set(rowId, {
       userId,
       payerSwitch,
+      amountElement: amountInput,
       amount: DEFAULT_AMOUNT,
     });
   }
@@ -845,9 +837,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     return payerOptionsHTML;
   }
-
-  // получить готовую строку с HTML-кодом:
-  // есть отдельная функция, которая должна принимать ID ряда и сгенерированный payerSwitchHTML
 
   function generateNewPayerRowHTML(rowId, payerOptionsHTML) {
     const newPayerRowHTML = `<tr class="payer-table-row" data-row-id="${rowId}">
@@ -880,11 +869,15 @@ document.addEventListener('DOMContentLoaded', function () {
     return newPayerRowHTML;
   }
 
-  // TODO1 проверить работоспособность
   function updatePaidByOnExpenseChange() {
     if (payerTableModel.rows.size !== 1) return;
+
     const paidByRow = payerTableModel.rows.values().next().value;
     paidByRow.amount = addExpenseFormModel.amount;
+    paidByRow.amountElement.value = formatAmountForOutput(
+      addExpenseFormModel.amount
+    );
+    calculatePaidBy();
   }
 
   function updatePayerRowOnSelect(rowElement, rowId, newPayerId) {
@@ -933,7 +926,7 @@ document.addEventListener('DOMContentLoaded', function () {
     payerTableModel.remainder.amount =
       addExpenseFormModel.amount - payerTableModel.total.amount;
     addExpenseFormModel.isPaidByValid =
-      payerTableModel.remainder.amount < 0 ? false : true;
+      payerTableModel.remainder.amount === 0 ? true : false;
 
     payerTableModel.total.element.textContent = formatAmountForOutput(
       payerTableModel.total.amount
@@ -1365,6 +1358,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateSplittBalanceNote() {
+    console.log('updateSplittBalanceNote');
     removeAdditionalClasses(
       addExpenseSplittBalanceNoteAmount,
       addExpenseFormModel.balanceOptions
