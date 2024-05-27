@@ -870,7 +870,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updatePaidByOnExpenseChange() {
-    if (payerTableModel.rows.size !== 1) return;
+    if (payerTableModel.rows.size !== 1) {
+      calculatePaidBy();
+      return;
+    }
 
     const paidByRow = payerTableModel.rows.values().next().value;
     paidByRow.amount = addExpenseFormModel.amount;
@@ -925,8 +928,11 @@ document.addEventListener('DOMContentLoaded', function () {
     payerTableModel.total.amount = total;
     payerTableModel.remainder.amount =
       addExpenseFormModel.amount - payerTableModel.total.amount;
-    addExpenseFormModel.isPaidByValid =
-      payerTableModel.remainder.amount === 0 ? true : false;
+
+    // TODO1 заменить на validatePayerTable()
+    // addExpenseFormModel.isPaidByValid =
+    //   payerTableModel.remainder.amount === 0 ? true : false;
+    validatePayerTable();
 
     payerTableModel.total.element.textContent = formatAmountForOutput(
       payerTableModel.total.amount
@@ -944,6 +950,29 @@ document.addEventListener('DOMContentLoaded', function () {
     restyleSplittRemainder(payerTableModel.remainder.amount, payerRemainderRow);
 
     adjustPayerAmountInputWidth();
+  }
+
+  function validatePayerTable() {
+    if (!isPayerTableRemainderZero()) {
+      addExpenseFormModel.isPaidByValid = false;
+      return;
+    }
+    if (!isPayerTableWithValidUsers()) {
+      addExpenseFormModel.isPaidByValid = false;
+      return;
+    }
+    addExpenseFormModel.isPaidByValid = true;
+  }
+
+  function isPayerTableRemainderZero() {
+    return payerTableModel.remainder.amount === 0;
+  }
+
+  function isPayerTableWithValidUsers() {
+    const rowsWithoutPayers = Array.from(payerTableModel.rows.entries()).filter(
+      ([_, rowData]) => !rowData.userId
+    );
+    return rowsWithoutPayers.length === 0;
   }
 
   function adjustPayerAmountInputWidth() {
@@ -1329,7 +1358,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateSplittBalanceNote() {
-    console.log('updateSplittBalanceNote');
     removeAdditionalClasses(
       addExpenseSplittBalanceNoteAmount,
       addExpenseFormModel.balanceOptions
@@ -1361,10 +1389,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function countSplittBalance() {
     if (!addExpenseFormModel.splitt) return 0;
 
-    // TODO1 заменить переменную currentUserExpense, когда будет готов раздел "кто платил"
     const userSplittAmount =
       addExpenseFormModel.splitt.splittAmounts.get(currentUserId);
-    // const userExpenseAmount = currentUserExpense;
     const userExpenseAmount = getAmountByPayerId(currentUserId);
 
     return userExpenseAmount - userSplittAmount;
