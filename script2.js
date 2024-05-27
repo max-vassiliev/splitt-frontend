@@ -941,10 +941,7 @@ document.addEventListener('DOMContentLoaded', function () {
       payerTotalRow.style.visibility = 'visible';
     }
 
-    restyleSplittRemainder2(
-      payerTableModel.remainder.amount,
-      payerRemainderRow
-    );
+    restyleSplittRemainder(payerTableModel.remainder.amount, payerRemainderRow);
 
     adjustPayerAmountInputWidth();
   }
@@ -1142,7 +1139,6 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
     adjustSplittPartsColumnWidth();
-
     restyleSplittRemainder(splittPartsModel.remainder, splittPartsRemainderRow);
   }
 
@@ -1311,8 +1307,7 @@ document.addEventListener('DOMContentLoaded', function () {
     splittSharesModel.totalAmountField.style.width = adjustedWidth;
   }
 
-  // TODO1 сделать основным; убрать "2"
-  function restyleSplittRemainder2(remainder, remainderRow) {
+  function restyleSplittRemainder(remainder, remainderRow) {
     removeAdditionalClasses(remainderRow, [
       ABOVE_EXPENSE_AMOUNT_CLASS,
       BELOW_EXPENSE_AMOUNT_CLASS,
@@ -1325,30 +1320,6 @@ document.addEventListener('DOMContentLoaded', function () {
       remainderRow.classList.add(ABOVE_EXPENSE_AMOUNT_CLASS);
     }
     remainderRow.classList.add(BELOW_EXPENSE_AMOUNT_CLASS);
-  }
-
-  // TODO1 можно удалить
-  function restyleSplittRemainder(remainder, remainderRow) {
-    if (remainder === 0) {
-      remainderRow.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
-      remainderRow.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
-      return;
-    }
-    if (
-      remainder < 0 &&
-      !remainderRow.classList.contains(ABOVE_EXPENSE_AMOUNT_CLASS)
-    ) {
-      remainderRow.classList.remove(BELOW_EXPENSE_AMOUNT_CLASS);
-      remainderRow.classList.add(ABOVE_EXPENSE_AMOUNT_CLASS);
-      return;
-    }
-    if (
-      remainder > 0 &&
-      !remainderRow.classList.contains(BELOW_EXPENSE_AMOUNT_CLASS)
-    ) {
-      remainderRow.classList.remove(ABOVE_EXPENSE_AMOUNT_CLASS);
-      remainderRow.classList.add(BELOW_EXPENSE_AMOUNT_CLASS);
-    }
   }
 
   function removeAdditionalClasses(element, additionalClasses) {
