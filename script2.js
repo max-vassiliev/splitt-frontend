@@ -743,7 +743,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // f: Add Expense: Payer Form
 
   function handleRemovePayerButtonClick() {
-    console.log('handleRemovePayerButtonClick');
     const row = this.closest('.payer-table-row');
     const rowId = parseInt(row.dataset.rowId, 10);
 
