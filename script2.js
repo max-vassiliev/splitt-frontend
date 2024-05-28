@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   let payerTableModel = {
-    rows: new Map(), // [ rowId, { userId, amount, payerSwitch } ]
+    rows: new Map(), // [ rowId, { userId, amount, amountElement, payerSwitch } ]
     total: {}, // { amount, element }
     remainder: {}, // { amount, element }
     amountWidthOptions: new Map([
@@ -167,6 +167,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function deactivate(element) {
     element.classList.remove(ACTIVE_CLASS);
+  }
+
+  function hideElement(element) {
+    element.classList.add(HIDDEN_CLASS);
+  }
+
+  function unhideElement(element) {
+    element.classList.remove(HIDDEN_CLASS);
   }
 
   function isEmptyString(str) {
@@ -736,6 +744,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function handleRemovePayerButtonClick() {
     console.log('handleRemovePayerButtonClick');
+    const row = this.closest('.payer-table-row');
+    const rowId = parseInt(row.dataset.rowId, 10);
+
+    if (payerTableModel.rows.size === users.size) {
+      unhideElement(addPayerButton);
+    }
+
+    payerTableModel.rows.delete(rowId);
+    row.remove();
   }
 
   function handlePayerAvatarClick() {
@@ -787,7 +804,7 @@ document.addEventListener('DOMContentLoaded', function () {
     addPayerRowToModel(newPayerRow);
 
     if (payerTableModel.rows.size === users.size) {
-      addPayerButton.classList.add(HIDDEN_CLASS);
+      hideElement(addPayerButton);
     }
   }
 
@@ -826,11 +843,12 @@ document.addEventListener('DOMContentLoaded', function () {
   function generatePayerOptionsHTML() {
     let payerOptionsHTML = '';
 
-    const payersToDisable = new Set(
-      Array.from(payerTableModel.rows.values()).map(row => row.userId)
-    );
+    const payersToDisable = new Set();
+    payerTableModel.rows.forEach(row => {
+      payersToDisable.add(row.userId);
+    });
 
-    Array.from(users.entries()).forEach(([userId, userData]) => {
+    users.forEach((userData, userId) => {
       const disabledAttribute = payersToDisable.has(userId) ? ' disabled' : '';
       payerOptionsHTML += `<option value="${userId}"${disabledAttribute}>${userData.name}</option>\n`;
     });
@@ -969,10 +987,12 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function isPayerTableWithValidUsers() {
-    const rowsWithoutPayers = Array.from(payerTableModel.rows.entries()).filter(
-      ([_, rowData]) => !rowData.userId
-    );
-    return rowsWithoutPayers.length === 0;
+    for (const [_, rowData] of payerTableModel.rows) {
+      if (!rowData.userId) {
+        return false;
+      }
+    }
+    return true;
   }
 
   function adjustPayerAmountInputWidth() {
