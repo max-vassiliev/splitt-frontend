@@ -752,6 +752,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     payerTableModel.rows.delete(rowId);
     row.remove();
+
+    calculatePaidBy();
+    updateSplittBalanceNote();
   }
 
   function handlePayerAvatarClick() {
