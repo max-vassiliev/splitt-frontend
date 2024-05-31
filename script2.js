@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let payerTableModel = {
     rows: new Map(), // [ rowId, { userId, amount, amountElement, payerSwitch } ]
+    hasSinglePayer: true,
     total: {}, // { amount, element }
     remainder: {}, // { amount, element }
     amountWidthOptions: new Map([
@@ -238,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseEmojiRemoveBtn = document.querySelector(
     '.btn__emoji-remove.add-expense'
   );
+  const addExpensePaidByButton = document.querySelector('.btn__paid-by');
   const addExpenseSplittBalanceNoteLabel = document.querySelector(
     '.splitt-balance-note__label'
   );
@@ -940,8 +942,14 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function calculatePaidBy() {
+    const payers = new Set();
     const total = Array.from(payerTableModel.rows.values()).reduce(
-      (acc, row) => acc + row.amount,
+      (acc, row) => {
+        if (row.amount !== 0 && row.userId) {
+          payers.add(row.userId);
+        }
+        return acc + row.amount;
+      },
       0
     );
 
@@ -949,9 +957,6 @@ document.addEventListener('DOMContentLoaded', function () {
     payerTableModel.remainder.amount =
       addExpenseFormModel.amount - payerTableModel.total.amount;
 
-    // TODO1 заменить на validatePayerTable()
-    // addExpenseFormModel.isPaidByValid =
-    //   payerTableModel.remainder.amount === 0 ? true : false;
     validatePayerTable();
 
     payerTableModel.total.element.textContent = formatAmountForOutput(
@@ -968,8 +973,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     restyleSplittRemainder(payerTableModel.remainder.amount, payerRemainderRow);
-
     adjustPayerAmountInputWidth();
+    updatePaidByButton(payers);
+  }
+
+  function updatePaidByButton(payers) {
+    if (payers.size === 0) {
+      addExpensePaidByButton.textContent = 'пока никто';
+      return;
+    }
+    if (payers.size > 1) {
+      addExpensePaidByButton.textContent = 'совместно';
+      return;
+    }
+
+    const payerId = payers.values().next().value;
+
+    if (payerId === currentUserId) {
+      addExpensePaidByButton.textContent = 'вы';
+      return;
+    }
+    const payer = users.get(payerId);
+    const payerLabel = payer.name ? payer.name : 'кто-то один';
+    addExpensePaidByButton.textContent = payerLabel;
   }
 
   function validatePayerTable() {
@@ -1386,7 +1412,9 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
     if (addExpenseFormModel.amount === 0) {
-      renderSplittBalanceNote(DEFAULT_AMOUNT);
+      // renderSplittBalanceNote(DEFAULT_AMOUNT);
+      addExpenseSplittBalanceNoteLabel.textContent = 'не указана сумма траты';
+      addExpenseSplittBalanceNoteAmount.classList.add(HIDDEN_CLASS);
       return;
     }
 
