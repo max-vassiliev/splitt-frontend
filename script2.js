@@ -987,7 +987,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
     const payer = users.get(payerId);
-    const payerLabel = payer.name ? payer.name : 'кто-то один';
+    const payerLabel = payer.name ? payer.name : 'другой пользователь';
     addExpensePaidByButton.textContent = payerLabel;
   }
 
@@ -1680,12 +1680,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // TODO1: to delete: enable Payer Form
-  const addExpenseHiddenFormPayer = document.querySelector(
-    '.add-expense__form_payer'
-  );
-  openAddExpense();
-  activate(addExpenseHiddenFormPayer);
-  activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
+  // const addExpenseHiddenFormPayer = document.querySelector(
+  //   '.add-expense__form_payer'
+  // );
+  // openAddExpense();
+  // activate(addExpenseHiddenFormPayer);
+  // activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
 
   // TODO1: to delete: enable Splitt Form
   // const addExpenseHiddenFormSplitt = document.querySelector(
