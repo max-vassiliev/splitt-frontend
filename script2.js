@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let payerTableModel = {
     rows: new Map(), // [ rowId, { userId, amount, amountElement, payerSwitch } ]
-    hasSinglePayer: true,
     total: {}, // { amount, element }
     remainder: {}, // { amount, element }
     amountWidthOptions: new Map([
