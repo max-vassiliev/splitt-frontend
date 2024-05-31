@@ -943,15 +943,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function calculatePaidBy() {
     const payers = new Set();
-    const total = Array.from(payerTableModel.rows.values()).reduce(
-      (acc, row) => {
-        if (row.amount !== 0 && row.userId) {
-          payers.add(row.userId);
-        }
-        return acc + row.amount;
-      },
-      0
-    );
+    const total = payerTableModel.rows.values().reduce((acc, row) => {
+      if (row.amount !== 0 && row.userId) {
+        payers.add(row.userId);
+      }
+      return acc + row.amount;
+    }, 0);
 
     payerTableModel.total.amount = total;
     payerTableModel.remainder.amount =
@@ -966,11 +963,8 @@ document.addEventListener('DOMContentLoaded', function () {
       payerTableModel.remainder.amount
     );
 
-    if (payerTableModel.remainder.amount === 0) {
-      payerTotalRow.style.visibility = 'hidden';
-    } else {
-      payerTotalRow.style.visibility = 'visible';
-    }
+    payerTotalRow.style.visibility =
+      payerTableModel.remainder.amount === 0 ? 'hidden' : 'visible';
 
     restyleSplittRemainder(payerTableModel.remainder.amount, payerRemainderRow);
     adjustPayerAmountInputWidth();
@@ -1412,9 +1406,7 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
     if (addExpenseFormModel.amount === 0) {
-      // renderSplittBalanceNote(DEFAULT_AMOUNT);
-      addExpenseSplittBalanceNoteLabel.textContent = 'не указана сумма траты';
-      addExpenseSplittBalanceNoteAmount.classList.add(HIDDEN_CLASS);
+      renderSplittBalanceNote(DEFAULT_AMOUNT);
       return;
     }
 
