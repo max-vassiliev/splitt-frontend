@@ -1680,12 +1680,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // TODO1: to delete: enable Payer Form
-  // const addExpenseHiddenFormPayer = document.querySelector(
-  //   '.add-expense__form_payer'
-  // );
-  // openAddExpense();
-  // activate(addExpenseHiddenFormPayer);
-  // activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
+  const addExpenseHiddenFormPayer = document.querySelector(
+    '.add-expense__form_payer'
+  );
+  openAddExpense();
+  activate(addExpenseHiddenFormPayer);
+  activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
 
   // TODO1: to delete: enable Splitt Form
   // const addExpenseHiddenFormSplitt = document.querySelector(
