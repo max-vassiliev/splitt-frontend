@@ -1041,7 +1041,7 @@ header {
   text-align: center;
   justify-content: center;
   cursor: pointer;
-  color: #888;
+  color: #999;
   transition: color 0.15s ease-in;
 }
 

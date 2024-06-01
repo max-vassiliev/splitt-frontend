@@ -377,18 +377,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseNoteCounter = document.querySelector(
     '.character-count.expense-note'
   );
-  const addExpenseNoteBtnCancel = document.querySelector(
-    '.add-expense__form_btn-cancel'
-  );
-  const addExpenseNoteBtnSave = document.querySelector(
-    '.add-expense__form_note__btn--save'
-  );
+  // TODO1 удалить (ненужно)
+  // const addExpenseNoteBtnCancel = document.querySelector(
+  //   '.add-expense__form_btn-cancel'
+  // );
+  // const addExpenseNoteBtnSave = document.querySelector(
+  //   '.add-expense__form_note__btn--save'
+  // );
 
+  // TODO1 удалить ненужные элементы (когда будет понятно, какие)
   const addExpenseNoteForm = {
     noteInput: addExpenseNoteInput,
     counter: addExpenseNoteCounter,
-    saveButton: addExpenseNoteBtnSave,
-    cancelButton: addExpenseNoteBtnCancel,
+    // saveButton: addExpenseNoteBtnSave,
+    // cancelButton: addExpenseNoteBtnCancel,
     isExpense: true,
   };
 
@@ -421,17 +423,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const addRepaymentNoteCounter = document.querySelector(
     '.character-count.repayment-note'
   );
-  const addRepaymentNoteBtnCancel = document.querySelector(
-    '.add-repayment__form_btn-cancel'
-  );
+  // TODO1 удалить (ненужное)
+  // const addRepaymentNoteBtnCancel = document.querySelector(
+  //   '.add-repayment__form_btn-cancel'
+  // );
   const addRepaymentNoteBtnSave = document.querySelector(
     '.add-repayment__form_note__btn--save'
   );
+
+  // TODO1 удалить (ненужное)
   const addRepaymentNoteForm = {
     noteInput: addRepaymentNoteInput,
     counter: addRepaymentNoteCounter,
     saveButton: addRepaymentNoteBtnSave,
-    cancelButton: addRepaymentNoteBtnCancel,
+    // cancelButton: addRepaymentNoteBtnCancel,
     isExpense: false,
   };
 
@@ -652,29 +657,42 @@ document.addEventListener('DOMContentLoaded', function () {
     counter.textContent = inputText.length;
   }
 
-  function handleSaveNote(event, form) {
-    event.preventDefault();
-    closeHiddenForm(form.isExpense);
-  }
+  // TODO1 удалить (ненужно)
+  // function handleSaveNote(event, form) {
+  //   event.preventDefault();
+  //   closeHiddenForm(form.isExpense);
+  // }
 
+  // TODO1 удалить (ненужно) — заменить на функцию ниже
   function changeMainFormButtonText(text, isExpense) {
     isExpense
       ? (activeAddExpenseHiddenForm.button.textContent = text)
       : (activeAddRepaymentHiddenForm.button.textContent = text);
   }
 
-  function toggleNoteSaveBtn(form) {
-    if (!isEmptyString(form.noteInput.value) && !isActive(form.saveButton)) {
-      activate(form.saveButton);
-      form.saveButton.removeAttribute(DISABLED_ATTRIBUTE);
-      changeMainFormButtonText('редактировать', form.isExpense);
-    }
-    if (isEmptyString(form.noteInput.value) && isActive(form.saveButton)) {
-      deactivate(form.saveButton);
-      form.saveButton.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
-      changeMainFormButtonText('написать', form.isExpense);
-    }
+  function changeMainFormNoteButtonText(noteForm) {
+    const targetNoteForm = noteForm.isExpense
+      ? activeAddExpenseHiddenForm
+      : activeAddRepaymentHiddenForm;
+
+    targetNoteForm.button.textContent = !isEmptyString(noteForm.noteInput.value)
+      ? 'редактировать'
+      : 'написать';
   }
+
+  // TODO1 удалить (ненужно)
+  // function toggleNoteSaveBtn(form) {
+  //   if (!isEmptyString(form.noteInput.value) && !isActive(form.saveButton)) {
+  //     activate(form.saveButton);
+  //     form.saveButton.removeAttribute(DISABLED_ATTRIBUTE);
+  //     changeMainFormButtonText('редактировать', form.isExpense);
+  //   }
+  //   if (isEmptyString(form.noteInput.value) && isActive(form.saveButton)) {
+  //     deactivate(form.saveButton);
+  //     form.saveButton.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
+  //     changeMainFormButtonText('написать', form.isExpense);
+  //   }
+  // }
 
   function closeHiddenForm(isExpense) {
     isExpense ? closeAddExpenseHiddenForm() : closeAddRepaymentHiddenForm();
@@ -683,14 +701,16 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleTransactionNoteInput(noteForm) {
     removeWhiteSpace(noteForm.noteInput);
     countNoteLength(noteForm.counter, noteForm.noteInput.value);
-    toggleNoteSaveBtn(noteForm);
+    changeMainFormNoteButtonText(noteForm);
   }
 
+  // TODO1 удалить (ненужно)
   function handleTransactionNoteCancel(event, noteForm) {
     event.preventDefault();
     clearText(noteForm.noteInput);
     countNoteLength(noteForm.counter, noteForm.noteInput.value);
-    toggleNoteSaveBtn(noteForm);
+    // TODO1 удалить (ненужно)
+    // toggleNoteSaveBtn(noteForm);
     closeHiddenForm(noteForm.isExpense);
   }
 
@@ -1631,13 +1651,14 @@ document.addEventListener('DOMContentLoaded', function () {
     handleTransactionNoteInput(addExpenseNoteForm)
   );
 
-  addExpenseNoteBtnCancel.addEventListener('click', function (event) {
-    handleTransactionNoteCancel(event, addExpenseNoteForm);
-  });
+  // TODO1 удалить ненужно
+  // addExpenseNoteBtnCancel.addEventListener('click', function (event) {
+  //   handleTransactionNoteCancel(event, addExpenseNoteForm);
+  // });
 
-  addExpenseNoteBtnSave.addEventListener('click', event =>
-    handleSaveNote(event, addExpenseNoteForm)
-  );
+  // addExpenseNoteBtnSave.addEventListener('click', event =>
+  //   handleSaveNote(event, addExpenseNoteForm)
+  // );
 
   // el: Add Repayment: Main Form
 
@@ -1663,13 +1684,14 @@ document.addEventListener('DOMContentLoaded', function () {
     handleTransactionNoteInput(addRepaymentNoteForm)
   );
 
-  addRepaymentNoteBtnCancel.addEventListener('click', function (event) {
-    handleTransactionNoteCancel(event, addRepaymentNoteForm);
-  });
+  // addRepaymentNoteBtnCancel.addEventListener('click', function (event) {
+  //   handleTransactionNoteCancel(event, addRepaymentNoteForm);
+  // });
 
-  addRepaymentNoteBtnSave.addEventListener('click', event =>
-    handleSaveNote(event, addRepaymentNoteForm)
-  );
+  // TODO1 удалить (ненужно)
+  // addRepaymentNoteBtnSave.addEventListener('click', event =>
+  //   handleSaveNote(event, addRepaymentNoteForm)
+  // );
 
   // el: Util
 
@@ -1680,12 +1702,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // TODO1: to delete: enable Payer Form
-  const addExpenseHiddenFormPayer = document.querySelector(
-    '.add-expense__form_payer'
-  );
-  openAddExpense();
-  activate(addExpenseHiddenFormPayer);
-  activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
+  // const addExpenseHiddenFormPayer = document.querySelector(
+  //   '.add-expense__form_payer'
+  // );
+  // openAddExpense();
+  // activate(addExpenseHiddenFormPayer);
+  // activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
 
   // TODO1: to delete: enable Splitt Form
   // const addExpenseHiddenFormSplitt = document.querySelector(
