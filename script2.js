@@ -65,6 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
     isSplittValid: true,
     comment: null,
     balanceOptions: [POSITIVE_CLASS, NEGATIVE_CLASS, HIDDEN_CLASS],
+    splittBtnOptions: new Map([
+      ['equally', 'поровну'],
+      ['parts', 'частями'],
+      ['shares', 'долями'],
+    ]),
   };
 
   let payerTableModel = {
@@ -230,6 +235,9 @@ document.addEventListener('DOMContentLoaded', function () {
     '.btn__emoji-remove.add-expense'
   );
   const addExpensePaidByButton = document.querySelector('.btn__paid-by');
+  const addExpenseSplittButton = document.querySelector(
+    '.btn__open-splitt-form'
+  );
   const addExpenseSplittBalanceNoteLabel = document.querySelector(
     '.splitt-balance-note__label'
   );
@@ -1017,6 +1025,11 @@ document.addEventListener('DOMContentLoaded', function () {
       default:
         selectedSplittForm = splittEquallyModel;
     }
+
+    addExpenseSplittButton.textContent =
+      addExpenseFormModel.splittBtnOptions.has(splittOption)
+        ? addExpenseFormModel.splittBtnOptions.get(splittOption)
+        : 'поровну';
 
     addExpenseFormModel.splitt = selectedSplittForm;
     updateSplitts();
