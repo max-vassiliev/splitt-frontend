@@ -1108,25 +1108,6 @@ header {
   outline: none;
 }
 
-.add-expense__form_note__btn--save.active,
-.add-repayment__form_note__btn--save.active {
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-}
-
-.add-expense__form_note__btn--save.active:hover,
-.add-repayment__form_note__btn--save.active:hover {
-  transform: translateY(-0.06rem);
-}
-
-.add-expense__form_note__btn--save.active:active,
-.add-repayment__form_note__btn--save.active:active {
-  transform: translateY(0rem);
-}
-
 .add-transaction__form_input-note__counter {
   display: flex;
   justify-content: right;
