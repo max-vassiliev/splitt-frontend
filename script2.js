@@ -1029,7 +1029,7 @@ document.addEventListener('DOMContentLoaded', function () {
     addExpenseSplittButton.textContent =
       addExpenseFormModel.splittBtnOptions.has(splittOption)
         ? addExpenseFormModel.splittBtnOptions.get(splittOption)
-        : 'поровну';
+        : 'редактировать';
 
     addExpenseFormModel.splitt = selectedSplittForm;
     updateSplitts();
@@ -1167,7 +1167,7 @@ document.addEventListener('DOMContentLoaded', function () {
     splittPartsModel.remainder =
       addExpenseFormModel.amount - splittPartsModel.total;
     addExpenseFormModel.isSplittValid =
-      splittPartsModel.remainder < 0 ? false : true;
+      splittPartsModel.remainder !== 0 ? false : true;
 
     splittPartsModel.totalField.textContent = formatAmountForOutput(
       splittPartsModel.total
@@ -1299,7 +1299,7 @@ document.addEventListener('DOMContentLoaded', function () {
       addExpenseFormModel.amount === 0 ? 0 : ONE_HUNDRED_PERCENT - totalShare;
 
     addExpenseFormModel.isSplittValid =
-      splittSharesModel.remainderAmount < 0 ? false : true;
+      splittSharesModel.remainderAmount !== 0 ? false : true;
   }
 
   function renderSplittShares() {

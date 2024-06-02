@@ -505,7 +505,6 @@ header {
   position: absolute;
   align-items: center;
   top: 5rem;
-  min-width: 450px;
   background: #fff;
   z-index: 2;
   overflow-y: auto;
@@ -515,10 +514,12 @@ header {
 
 .add-transaction__form_main {
   left: 4rem;
+  width: 457px;
 }
 
 .add-transaction__form_hidden {
-  left: calc(4rem + 450px + 4rem);
+  min-width: 457px;
+  left: calc(4rem + 457px + 4rem);
   z-index: 3;
 }
 
@@ -532,7 +533,11 @@ header {
   padding: 2rem 0;
 }
 
-.add-transaction__form_body {
+.add-transaction__form_main .add-transaction__form_body {
+  padding: 3rem 1.5rem 3rem 4rem;
+}
+
+.add-transaction__form_hidden .add-transaction__form_body {
   padding: 3rem 4rem;
 }
 
@@ -570,6 +575,7 @@ header {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 1.7rem;
+  width: 25rem;
   padding: 0.5rem 0.8rem;
   box-sizing: border-box;
 }
@@ -622,6 +628,9 @@ header {
   color: #666;
   background-color: #f6f6f6;
   border: 1px solid #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
 }
 
