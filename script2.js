@@ -709,11 +709,13 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleRemovePayerButtonClick() {
     const row = this.closest('.payer-table-row');
     const rowId = parseInt(row.dataset.rowId, 10);
+    const payerId = row.dataset.userId;
 
     if (payerTableModel.rows.size === users.size) {
       unhideElement(addPayerButton);
     }
 
+    updatePayerSwitchesOnRowRemove(rowId, payerId);
     payerTableModel.rows.delete(rowId);
     row.remove();
 
@@ -885,13 +887,7 @@ document.addEventListener('DOMContentLoaded', function () {
     previousPayerId,
     newPayerId
   ) {
-    const payerSwitchesToUpdate = Array.from(payerTableModel.rows.entries())
-      .filter(([rowId]) => rowId !== selectedRowId)
-      .map(([_, row]) => row.payerSwitch);
-
-    const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(payerSwitch => {
-      return Array.from(payerSwitch.querySelectorAll('option'));
-    });
+    const switchOptionsToUpdate = getPayerSwitchOptionsToUpdate(selectedRowId);
 
     switchOptionsToUpdate.forEach(option => {
       if (previousPayerId && option.value === previousPayerId) {
@@ -901,6 +897,29 @@ document.addEventListener('DOMContentLoaded', function () {
         option.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
       }
     });
+  }
+
+  function updatePayerSwitchesOnRowRemove(removedRowId, removedPayerId) {
+    const payerSwitchOptionsToUpdate =
+      getPayerSwitchOptionsToUpdate(removedRowId);
+
+    payerSwitchOptionsToUpdate.forEach(option => {
+      option.value === removedPayerId &&
+        option.removeAttribute(DISABLED_ATTRIBUTE);
+    });
+  }
+
+  function getPayerSwitchOptionsToUpdate(rowIdToRemove) {
+    const payerSwitchesToUpdate = payerTableModel.rows
+      .entries()
+      .filter(([rowId]) => rowId !== rowIdToRemove)
+      .map(([_, row]) => row.payerSwitch);
+
+    const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(payerSwitch => {
+      return Array.from(payerSwitch.querySelectorAll('option'));
+    });
+
+    return switchOptionsToUpdate;
   }
 
   function calculatePaidBy() {
