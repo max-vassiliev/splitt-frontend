@@ -269,11 +269,30 @@ document.addEventListener('DOMContentLoaded', function () {
     '.payer-table-row__remainder'
   );
 
-  payerTableRows.forEach(row => {
-    addPayerRowToModel(row);
-  });
+  function createFirstPayerRow() {
+    const rowId = generateNewPayerRowId();
+    const payerOptionsHTML = generateFirstRowOptionsHTML();
+    const defaultPayerRowHTML = generateNewPayerRowHTML(
+      rowId,
+      payerOptionsHTML,
+      true
+    );
+
+    addPayerRow.insertAdjacentHTML('beforebegin', defaultPayerRowHTML);
+
+    const defaultPayerRow = addPayerRow.previousElementSibling;
+    addEventListenersToPayerRow(defaultPayerRow, true);
+    addPayerRowToModel(defaultPayerRow);
+
+    if (payerTableModel.rows.size === users.size) {
+      hideElement(addPayerButton);
+    }
+  }
+  createFirstPayerRow();
+
   payerTableModel.total = { amount: 0, element: payerTotalElement };
   payerTableModel.remainder = { amount: 0, element: payerRemainderElement };
+  console.log(payerTableModel.rows);
 
   // e: Add Expense: Splitt Form
   const splittOptionButtons = document.querySelectorAll(
@@ -777,11 +796,14 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function generateNewPayerRowId() {
-    let maxRowId = Math.max(...payerTableModel.rows.keys());
+    const maxRowId =
+      payerTableModel.rows.size > 0
+        ? Math.max(...payerTableModel.rows.keys())
+        : 0;
     return maxRowId + 1;
   }
 
-  function addEventListenersToPayerRow(row) {
+  function addEventListenersToPayerRow(row, isFirstRow = false) {
     const removePayerButton = row.querySelector(
       '.payer-table-column__remove-payer'
     );
@@ -789,7 +811,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const payerSwitch = row.querySelector('.payer__switch');
     const payerAmountInput = row.querySelector('.payer-amount__input');
 
-    removePayerButton.addEventListener('click', handleRemovePayerButtonClick);
+    if (!isFirstRow) {
+      removePayerButton.addEventListener('click', handleRemovePayerButtonClick);
+    }
     payerAvatarColumn.addEventListener('click', handlePayerAvatarClick);
     payerSwitch.addEventListener('change', handlePayerSwitch);
     payerAmountInput.addEventListener('input', handlePayerAmountInput);
@@ -824,9 +848,34 @@ document.addEventListener('DOMContentLoaded', function () {
     return payerOptionsHTML;
   }
 
-  function generateNewPayerRowHTML(rowId, payerOptionsHTML) {
-    const newPayerRowHTML = `<tr class="payer-table-row" data-row-id="${rowId}">
-        <td class="payer-table-column__remove-payer">
+  function generateFirstRowOptionsHTML() {
+    let payerOptionsHTML = '';
+
+    users.forEach((userData, userId) => {
+      const selectedAttribute = userId === currentUserId ? ' selected' : '';
+      payerOptionsHTML += `<option value="${userId}"${selectedAttribute}>${userData.name}</option>\n`;
+    });
+
+    return payerOptionsHTML;
+  }
+
+  function generateNewPayerRowHTML(
+    rowId,
+    payerOptionsHTML,
+    isFirstRow = false
+  ) {
+    let avatar = DEFAULT_AVATAR;
+    let dataUserId = '';
+    let removeColumnAttribute = '';
+
+    if (isFirstRow) {
+      avatar = users.get(currentUserId)?.avatar ?? DEFAULT_AVATAR;
+      dataUserId = currentUserId ? ` data-user-id="${currentUserId}"` : '';
+      removeColumnAttribute = ' inactive';
+    }
+
+    const newPayerRowHTML = `<tr class="payer-table-row" data-row-id="${rowId}"${dataUserId}>
+        <td class="payer-table-column__remove-payer${removeColumnAttribute}">
           <div class="remove-payer-button" title="удалить">
             &times;
           </div>
@@ -834,7 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <td class="payer-table-column__avatar">
           <img
             class="account__avatar"
-            src="${DEFAULT_AVATAR}"
+            src="${avatar}"
           />
         </td>
         <td class="payer-table-column__username">
@@ -852,6 +901,7 @@ document.addEventListener('DOMContentLoaded', function () {
           />
         </td>
       </tr>`;
+
     return newPayerRowHTML;
   }
 

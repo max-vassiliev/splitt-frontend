@@ -330,70 +330,6 @@
           <form class="add-transaction__form_body">
             <div class="payer-form-container">
               <table class="payer-table">
-                <tr class="payer-table-row" data-row-id="1" data-user-id="4">
-                  <td class="payer-table-column__remove-payer inactive">
-                    <div class="remove-payer-button" title="удалить">
-                      &times;
-                    </div>
-                  </td>
-                  <td class="payer-table-column__avatar">
-                    <img
-                      class="account__avatar"
-                      src="images/avatar-sanya.png"
-                      alt="Арсений Тарковский"
-                    />
-                  </td>
-                  <td class="payer-table-column__username">
-                    <select class="payer__switch">
-                      <option value="" disabled>-- выбрать --</option>
-                      <option value="1">Пётр</option>
-                      <option value="2">Катерина</option>
-                      <option value="3">Константин Константинопольский</option>
-                      <option value="4" selected>Арсений Тарковский</option>
-                    </select>
-                  </td>
-                  <td class="payer-table-column__amount">
-                    <input
-                      class="payer-amount__input input-amount"
-                      name="expense-payer-amount-input"
-                      type="text"
-                      value="0,00&nbsp;₽"
-                    />
-                  </td>
-                </tr>
-                <!-- <tr class="payer-table-row" data-row-id="2" data-user-id="3">
-                  <td class="payer-table-column__remove-payer">
-                    <div class="remove-payer-button" title="удалить">
-                      &times;
-                    </div>
-                  </td>
-                  <td class="payer-table-column__avatar">
-                    <img
-                      class="account__avatar"
-                      src="images/avatar-paul.png"
-                      alt="Константин Константинопольский"
-                    />
-                  </td>
-                  <td class="payer-table-column__username">
-                    <select class="payer__switch">
-                      <option value="" disabled>-- выбрать --</option>
-                      <option value="1">Пётр</option>
-                      <option value="2">Катерина</option>
-                      <option value="3" selected>
-                        Константин Константинопольский
-                      </option>
-                      <option value="4" disabled>Арсений Тарковский</option>
-                    </select>
-                  </td>
-                  <td class="payer-table-column__amount">
-                    <input
-                      class="payer-amount__input input-amount"
-                      name="expense-payer-amount-input"
-                      type="text"
-                      value="0,00&nbsp;₽"
-                    />
-                  </td>
-                </tr> -->
                 <tr class="payer-table-row__add-payer">
                   <td></td>
                   <td class="payer-table-column__add-payer" colspan="3">
@@ -405,7 +341,6 @@
                     </div>
                   </td>
                 </tr>
-                <!-- <tr class="payer-table-row__total hidden"> -->
                 <tr class="payer-table-row__total">
                   <td></td>
                   <td class="payer-table-column__total-label" colspan="2">
@@ -413,7 +348,6 @@
                   </td>
                   <td class="payer-table-column__total-amount">0,00&nbsp;₽</td>
                 </tr>
-                <!-- <tr class="payer-table-row__remainder hidden"> -->
                 <tr class="payer-table-row__remainder">
                   <td></td>
                   <td class="payer-table-column__remainder-label" colspan="2">
@@ -424,8 +358,6 @@
                   </td>
                 </tr>
               </table>
-              <!-- TODO1 можно поменять на класс button -->
-              <div></div>
             </div>
             <div class="add-transaction__form_footer">
               <button
