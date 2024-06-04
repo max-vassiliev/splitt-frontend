@@ -1535,12 +1535,72 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // v: Add Expense: Splitt
+
+  // function
+  function createSplittFormTables() {
+    let splittEquallyTableRows = '';
+
+    // итерация по users, составление splittEquallyTableRows
+
+    const splittEquallyTableHTML = generateSplittEquallyTableHTML(
+      splittEquallyTableRows
+    );
+
+    const testRow = `<p>Some text</p>`;
+
+    // splittEquallyTable.insertAdjacentHTML('beforeend', splittEquallyTableHTML);
+    splittEquallyTable.insertAdjacentHTML('beforeend', testRow);
+
+    // доработать при рефакторинге
+  }
+
+  createSplittFormTables();
+
+  function generateSplittEquallyTableHTML(rows) {
+    return `<table class="splitt-form__equally">
+      ${rows}
+    </table>`;
+  }
+
+  function generateSplittEquallyRowHTML(userId) {
+    if (!users.contains(userId)) return;
+
+    const userName = users.get(userId).name;
+    const avatar = users.get(userId).avatar ?? DEFAULT_AVATAR;
+
+    const splittEquallyRowHTML = `
+      <tr class="splitt-equally__row" data-user-id=${userId}>
+        <td class="splitt-equally-column__checkbox">
+          <input
+            type="checkbox"
+            class="splitt-equally-checkbox"
+            checked
+          />
+        </td>
+        <td class="splitt-equally-column__avatar">
+          <img
+            class="account__avatar"
+            src="${avatar}"
+            alt="${userName}"
+          />
+        </td>
+        <td class="splitt-equally-column__username">${userName}</td>
+        <td class="splitt-equally-column__amount">0,00&nbsp;${CURRENCY_SYMBOL}</td>
+      </tr>`;
+
+    return splittEquallyRowHTML;
+  }
+
   // ----------------------
   // Load Content (load:)
   // ----------------------
 
   // load: Add Expense: Payer Form
   createFirstPayerRow();
+
+  // load: Add Expense: Splitt
+  // TODO1 вызвать функцию
 
   // ----------------------
   // Event Listeners (el:)
@@ -1721,10 +1781,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
 
   // TODO1: to delete: enable Splitt Form
-  // const addExpenseHiddenFormSplitt = document.querySelector(
-  //   '.add-transaction__form_hidden.add-expense__form_splitt'
-  // );
-  // openAddExpense();
-  // addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
-  // activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
+  const addExpenseHiddenFormSplitt = document.querySelector(
+    '.add-transaction__form_hidden.add-expense__form_splitt'
+  );
+  openAddExpense();
+  addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
+  activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
 });
