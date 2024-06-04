@@ -292,7 +292,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   payerTableModel.total = { amount: 0, element: payerTotalElement };
   payerTableModel.remainder = { amount: 0, element: payerRemainderElement };
-  console.log(payerTableModel.rows);
 
   // e: Add Expense: Splitt Form
   const splittOptionButtons = document.querySelectorAll(
