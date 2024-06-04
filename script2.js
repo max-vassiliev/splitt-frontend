@@ -1547,15 +1547,12 @@ document.addEventListener('DOMContentLoaded', function () {
       splittEquallyTableRows
     );
 
-    const testRow = `<p>Some text</p>`;
-
-    // splittEquallyTable.insertAdjacentHTML('beforeend', splittEquallyTableHTML);
-    splittEquallyTable.insertAdjacentHTML('beforeend', testRow);
+    splittEquallyTable.insertAdjacentHTML('beforeend', splittEquallyTableHTML);
 
     // доработать при рефакторинге
   }
 
-  createSplittFormTables();
+  // createSplittFormTables();
 
   function generateSplittEquallyTableHTML(rows) {
     return `<table class="splitt-form__equally">
