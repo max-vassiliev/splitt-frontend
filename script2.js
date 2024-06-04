@@ -269,27 +269,6 @@ document.addEventListener('DOMContentLoaded', function () {
     '.payer-table-row__remainder'
   );
 
-  function createFirstPayerRow() {
-    const rowId = generateNewPayerRowId();
-    const payerOptionsHTML = generateFirstRowOptionsHTML();
-    const defaultPayerRowHTML = generateNewPayerRowHTML(
-      rowId,
-      payerOptionsHTML,
-      true
-    );
-
-    addPayerRow.insertAdjacentHTML('beforebegin', defaultPayerRowHTML);
-
-    const defaultPayerRow = addPayerRow.previousElementSibling;
-    addEventListenersToPayerRow(defaultPayerRow, true);
-    addPayerRowToModel(defaultPayerRow);
-
-    if (payerTableModel.rows.size === users.size) {
-      hideElement(addPayerButton);
-    }
-  }
-  createFirstPayerRow();
-
   payerTableModel.total = { amount: 0, element: payerTotalElement };
   payerTableModel.remainder = { amount: 0, element: payerRemainderElement };
 
@@ -831,79 +810,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  function generatePayerOptionsHTML() {
-    let payerOptionsHTML = '';
-
-    const payersToDisable = new Set();
-    payerTableModel.rows.forEach(row => {
-      payersToDisable.add(row.userId);
-    });
-
-    users.forEach((userData, userId) => {
-      const disabledAttribute = payersToDisable.has(userId) ? ' disabled' : '';
-      payerOptionsHTML += `<option value="${userId}"${disabledAttribute}>${userData.name}</option>\n`;
-    });
-
-    return payerOptionsHTML;
-  }
-
-  function generateFirstRowOptionsHTML() {
-    let payerOptionsHTML = '';
-
-    users.forEach((userData, userId) => {
-      const selectedAttribute = userId === currentUserId ? ' selected' : '';
-      payerOptionsHTML += `<option value="${userId}"${selectedAttribute}>${userData.name}</option>\n`;
-    });
-
-    return payerOptionsHTML;
-  }
-
-  function generateNewPayerRowHTML(
-    rowId,
-    payerOptionsHTML,
-    isFirstRow = false
-  ) {
-    let avatar = DEFAULT_AVATAR;
-    let dataUserId = '';
-    let removeColumnAttribute = '';
-
-    if (isFirstRow) {
-      avatar = users.get(currentUserId)?.avatar ?? DEFAULT_AVATAR;
-      dataUserId = currentUserId ? ` data-user-id="${currentUserId}"` : '';
-      removeColumnAttribute = ' inactive';
-    }
-
-    const newPayerRowHTML = `<tr class="payer-table-row" data-row-id="${rowId}"${dataUserId}>
-        <td class="payer-table-column__remove-payer${removeColumnAttribute}">
-          <div class="remove-payer-button" title="удалить">
-            &times;
-          </div>
-        </td>
-        <td class="payer-table-column__avatar">
-          <img
-            class="account__avatar"
-            src="${avatar}"
-          />
-        </td>
-        <td class="payer-table-column__username">
-          <select class="payer__switch">
-            <option value="" disabled selected>-- выбрать --</option>
-            ${payerOptionsHTML}
-          </select>
-        </td>
-        <td class="payer-table-column__amount">
-          <input
-            class="payer-amount__input input-amount"
-            name="expense-payer-amount-input"
-            type="text"
-            value="0,00&nbsp;₽"
-          />
-        </td>
-      </tr>`;
-
-    return newPayerRowHTML;
-  }
-
   function updatePaidByOnExpenseChange() {
     if (payerTableModel.rows.size !== 1) {
       calculatePaidBy();
@@ -1001,27 +907,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updatePaidByButton(payers);
   }
 
-  function updatePaidByButton(payers) {
-    if (payers.size === 0) {
-      addExpensePaidByButton.textContent = 'пока никто';
-      return;
-    }
-    if (payers.size > 1) {
-      addExpensePaidByButton.textContent = 'совместно';
-      return;
-    }
-
-    const payerId = payers.values().next().value;
-
-    if (payerId === currentUserId) {
-      addExpensePaidByButton.textContent = 'вы';
-      return;
-    }
-    const payer = users.get(payerId);
-    const payerLabel = payer.name ? payer.name : 'другой пользователь';
-    addExpensePaidByButton.textContent = payerLabel;
-  }
-
   function validatePayerTable() {
     if (!isPayerTableRemainderZero()) {
       addExpenseFormModel.isPaidByValid = false;
@@ -1045,20 +930,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
     return true;
-  }
-
-  function adjustPayerAmountInputWidth() {
-    const referenceAmount =
-      addExpenseFormModel.amount > payerTableModel.total.amount
-        ? addExpenseFormModel.amount
-        : payerTableModel.total.amount;
-
-    const referenceAmountLength = referenceAmount.toString().length;
-    const adjustedWidth =
-      payerTableModel.amountWidthOptions.get(referenceAmountLength) || '14rem';
-    payerAmountInputs.forEach(inputElement => {
-      inputElement.style.width = adjustedWidth;
-    });
   }
 
   function getAmountByPayerId(payerId) {
@@ -1158,23 +1029,27 @@ document.addEventListener('DOMContentLoaded', function () {
     updateSplittsEqually();
   }
 
-  function setDefaultSplittsEqually() {
-    splittEquallyModel.splittAmounts.forEach((_, userId, splittsMap) => {
-      splittsMap.set(userId, DEFAULT_AMOUNT);
-    });
-  }
-
   function updateSplittsEqually() {
     const checkedRowsCount = splittEquallyModel.checkedRows.size;
     addExpenseFormModel.isSplittValid = checkedRowsCount === 0 ? false : true;
 
     if (addExpenseFormModel.amount === 0 || checkedRowsCount === 0) {
       setDefaultSplittsEqually();
-      renderSplittEqually();
-      updateSplittBalanceNote();
-      return;
+    } else {
+      calculateSplittsEqually(checkedRowsCount);
     }
 
+    renderSplittEqually();
+    updateSplittBalanceNote();
+  }
+
+  function setDefaultSplittsEqually() {
+    splittEquallyModel.splittAmounts.forEach((_, userId, splittsMap) => {
+      splittsMap.set(userId, DEFAULT_AMOUNT);
+    });
+  }
+
+  function calculateSplittsEqually(checkedRowsCount) {
     let baseAmount = 0;
     let remainder = 0;
     if (checkedRowsCount > 0) {
@@ -1194,9 +1069,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       splittEquallyModel.splittAmounts.set(userId, splittAmount);
     });
-
-    renderSplittEqually();
-    updateSplittBalanceNote();
   }
 
   function renderSplittEqually() {
@@ -1530,10 +1402,151 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ----------------------
+  // View (v:)
+  // ----------------------
+
+  // v: Add Expense: Payer Form
+
+  function createFirstPayerRow() {
+    const rowId = generateNewPayerRowId();
+    const payerOptionsHTML = generateFirstRowOptionsHTML();
+    const defaultPayerRowHTML = generateNewPayerRowHTML(
+      rowId,
+      payerOptionsHTML,
+      true
+    );
+
+    addPayerRow.insertAdjacentHTML('beforebegin', defaultPayerRowHTML);
+
+    const defaultPayerRow = addPayerRow.previousElementSibling;
+    addEventListenersToPayerRow(defaultPayerRow, true);
+    addPayerRowToModel(defaultPayerRow);
+
+    if (payerTableModel.rows.size === users.size) {
+      hideElement(addPayerButton);
+    }
+  }
+
+  function generateFirstRowOptionsHTML() {
+    let payerOptionsHTML = '';
+
+    users.forEach((userData, userId) => {
+      const selectedAttribute = userId === currentUserId ? ' selected' : '';
+      payerOptionsHTML += `<option value="${userId}"${selectedAttribute}>${userData.name}</option>\n`;
+    });
+
+    return payerOptionsHTML;
+  }
+
+  function generatePayerOptionsHTML() {
+    let payerOptionsHTML = '';
+
+    const payersToDisable = new Set();
+    payerTableModel.rows.forEach(row => {
+      payersToDisable.add(row.userId);
+    });
+
+    users.forEach((userData, userId) => {
+      const disabledAttribute = payersToDisable.has(userId) ? ' disabled' : '';
+      payerOptionsHTML += `<option value="${userId}"${disabledAttribute}>${userData.name}</option>\n`;
+    });
+
+    return payerOptionsHTML;
+  }
+
+  function generateNewPayerRowHTML(
+    rowId,
+    payerOptionsHTML,
+    isFirstRow = false
+  ) {
+    let avatar = DEFAULT_AVATAR;
+    let dataUserId = '';
+    let removeColumnAttribute = '';
+
+    if (isFirstRow) {
+      avatar = users.get(currentUserId)?.avatar ?? DEFAULT_AVATAR;
+      dataUserId = currentUserId ? ` data-user-id="${currentUserId}"` : '';
+      removeColumnAttribute = ' inactive';
+    }
+
+    const newPayerRowHTML = `<tr class="payer-table-row" data-row-id="${rowId}"${dataUserId}>
+        <td class="payer-table-column__remove-payer${removeColumnAttribute}">
+          <div class="remove-payer-button" title="удалить">
+            &times;
+          </div>
+        </td>
+        <td class="payer-table-column__avatar">
+          <img
+            class="account__avatar"
+            src="${avatar}"
+          />
+        </td>
+        <td class="payer-table-column__username">
+          <select class="payer__switch">
+            <option value="" disabled selected>-- выбрать --</option>
+            ${payerOptionsHTML}
+          </select>
+        </td>
+        <td class="payer-table-column__amount">
+          <input
+            class="payer-amount__input input-amount"
+            name="expense-payer-amount-input"
+            type="text"
+            value="0,00&nbsp;₽"
+          />
+        </td>
+      </tr>`;
+
+    return newPayerRowHTML;
+  }
+
+  function updatePaidByButton(payers) {
+    if (payers.size === 0) {
+      addExpensePaidByButton.textContent = 'пока никто';
+      return;
+    }
+    if (payers.size > 1) {
+      addExpensePaidByButton.textContent = 'совместно';
+      return;
+    }
+
+    const payerId = payers.values().next().value;
+
+    if (payerId === currentUserId) {
+      addExpensePaidByButton.textContent = 'вы';
+      return;
+    }
+    const payer = users.get(payerId);
+    const payerLabel = payer.name ? payer.name : 'другой пользователь';
+    addExpensePaidByButton.textContent = payerLabel;
+  }
+
+  function adjustPayerAmountInputWidth() {
+    const referenceAmount =
+      addExpenseFormModel.amount > payerTableModel.total.amount
+        ? addExpenseFormModel.amount
+        : payerTableModel.total.amount;
+
+    const referenceAmountLength = referenceAmount.toString().length;
+    const adjustedWidth =
+      payerTableModel.amountWidthOptions.get(referenceAmountLength) || '14rem';
+    payerAmountInputs.forEach(inputElement => {
+      inputElement.style.width = adjustedWidth;
+    });
+  }
+
+  // ----------------------
+  // Load Content (load:)
+  // ----------------------
+
+  // load: Add Expense: Payer Form
+  createFirstPayerRow();
+
+  // ----------------------
   // Event Listeners (el:)
   // ----------------------
 
-  // f: Auxiliary
+  // el: Auxiliary
 
   function toggleHiddenForm(button, transactionType) {
     button.addEventListener('click', function (event) {
