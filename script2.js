@@ -390,6 +390,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const addRepaymentAmountInput = document.querySelector(
     '.add-repayment-amount'
   );
+  const addRepaymentSwitchFrom = document.getElementById(
+    'add-repayment__switch-from'
+  );
+  const addRepaymentSwitchTo = document.getElementById(
+    'add-repayment__switch-to'
+  );
   const addRepaymentEmojiInputField = document.querySelector(
     '.emoji-input.add-repayment'
   );
@@ -1589,6 +1595,39 @@ document.addEventListener('DOMContentLoaded', function () {
     return splittEquallyRowHTML;
   }
 
+  // v: Add Repayment: Main Form
+
+  function createRepaymentOptions() {
+    const repaymentOptionsHTML = generateRepaymentOptionsHTML();
+    addRepaymentSwitchFrom.innerHTML = repaymentOptionsHTML.optionsFrom;
+    addRepaymentSwitchTo.innerHTML = repaymentOptionsHTML.optionsTo;
+  }
+
+  function generateRepaymentOptionsHTML() {
+    let optionsFrom = '';
+    let optionsTo =
+      '<option value="" selected disabled>-- выбрать --</option>\n';
+
+    users.forEach((userData, userId) => {
+      let selectedFrom = '';
+      let disabledTo = '';
+      let userNameFrom = userData.name;
+      let userNameTo = userData.name;
+
+      if (userId === currentUserId) {
+        selectedFrom = ' selected';
+        disabledTo = ' disabled';
+        userNameFrom = 'от вас';
+        userNameTo = 'вам';
+      }
+
+      optionsFrom += `<option value="${userId}"${selectedFrom}>${userNameFrom}</option>\n`;
+      optionsTo += `<option value="${userId}"${disabledTo}>${userNameTo}</option>\n`;
+    });
+
+    return { optionsFrom, optionsTo };
+  }
+
   // ----------------------
   // Load Content (load:)
   // ----------------------
@@ -1598,6 +1637,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // load: Add Expense: Splitt
   // TODO1 вызвать функцию
+
+  // load: Add Repayment: Main Form
+  createRepaymentOptions();
 
   // ----------------------
   // Event Listeners (el:)
@@ -1769,6 +1811,9 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', closeActivePopup);
   });
 
+  // TODO1: to delete: enable Repayment Form
+  openAddRepayment();
+
   // TODO1: to delete: enable Payer Form
   // const addExpenseHiddenFormPayer = document.querySelector(
   //   '.add-expense__form_payer'
@@ -1778,10 +1823,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
 
   // TODO1: to delete: enable Splitt Form
-  const addExpenseHiddenFormSplitt = document.querySelector(
-    '.add-transaction__form_hidden.add-expense__form_splitt'
-  );
-  openAddExpense();
-  addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
-  activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
+  // const addExpenseHiddenFormSplitt = document.querySelector(
+  //   '.add-transaction__form_hidden.add-expense__form_splitt'
+  // );
+  // openAddExpense();
+  // addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
+  // activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
 });
