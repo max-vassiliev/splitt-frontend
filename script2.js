@@ -1598,9 +1598,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // v: Add Repayment: Main Form
 
   function createRepaymentOptions() {
-    const repaymentOptionsHTML = generateRepaymentOptionsHTML();
-    addRepaymentSwitchFrom.innerHTML = repaymentOptionsHTML.optionsFrom;
-    addRepaymentSwitchTo.innerHTML = repaymentOptionsHTML.optionsTo;
+    const { optionsFrom, optionsTo } = generateRepaymentOptionsHTML();
+    addRepaymentSwitchFrom.innerHTML = optionsFrom;
+    addRepaymentSwitchTo.innerHTML = optionsTo;
   }
 
   function generateRepaymentOptionsHTML() {
