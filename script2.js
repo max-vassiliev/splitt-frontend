@@ -153,6 +153,17 @@ document.addEventListener('DOMContentLoaded', function () {
     ]),
   };
 
+  let addRepaymentFormModel = {
+    title: '',
+    amount: 0,
+    userFrom: null,
+    userTo: null,
+    optionsFrom: new Map(),
+    optionsTo: new Map(),
+    note: null,
+    isValid: false,
+  };
+
   function isActive(element) {
     return element.classList.contains(ACTIVE_CLASS);
   }
@@ -1398,6 +1409,13 @@ document.addEventListener('DOMContentLoaded', function () {
     activeAddRepaymentHiddenForm = null;
   }
 
+  function handleAddRepaymentFromChange(event) {
+    console.log('handleAddRepaymentFromChange');
+    const selectedUserId = event.target.value;
+
+    addRepaymentFormModel.fromUser = selectedUserId;
+  }
+
   function handleAddRepaymentAmountInput(event) {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
@@ -1601,6 +1619,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const { optionsFrom, optionsTo } = generateRepaymentOptionsHTML();
     addRepaymentSwitchFrom.innerHTML = optionsFrom;
     addRepaymentSwitchTo.innerHTML = optionsTo;
+
+    // TODO1 add option elements to model
+    addRepaymentOptionsToModel();
+  }
+
+  function addRepaymentOptionsToModel() {
+    console.log('addRepaymentOptionsToModel');
+    const optionsFrom = addRepaymentSwitchFrom.options;
+    const optionsTo = addRepaymentSwitchTo.options;
+
+    [...optionsFrom].forEach(option => {
+      addRepaymentFormModel.optionsFrom.set(option.value, option);
+    });
+
+    [...optionsTo].forEach(option => {
+      if (option.value === '') return;
+      addRepaymentFormModel.optionsTo.set(option.value, option);
+    });
   }
 
   function generateRepaymentOptionsHTML() {
@@ -1791,6 +1827,11 @@ document.addEventListener('DOMContentLoaded', function () {
       closeAddRepaymentHiddenForm();
     });
   });
+
+  addRepaymentSwitchFrom.addEventListener(
+    'change',
+    handleAddRepaymentFromChange
+  );
 
   addRepaymentAmountInput.addEventListener(
     'input',
