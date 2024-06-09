@@ -1,25 +1,25 @@
-"use strict";
+'use strict';
 
-document.addEventListener("DOMContentLoaded", function () {
-  const ACTIVE_CLASS = "active";
-  const INACTIVE_CLASS = "inactive";
-  const HIDDEN_CLASS = "hidden";
-  const DISABLED_ATTRIBUTE = "disabled";
-  const BELOW_EXPENSE_AMOUNT_CLASS = "below-expense-amount";
-  const ABOVE_EXPENSE_AMOUNT_CLASS = "above-expense-amount";
-  const POSITIVE_CLASS = "positive";
-  const NEGATIVE_CLASS = "negative";
-  const CURRENCY_SYMBOL = "₽";
-  const CURRENT_LOCALE = "ru-RU";
+document.addEventListener('DOMContentLoaded', function () {
+  const ACTIVE_CLASS = 'active';
+  const INACTIVE_CLASS = 'inactive';
+  const HIDDEN_CLASS = 'hidden';
+  const DISABLED_ATTRIBUTE = 'disabled';
+  const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
+  const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
+  const POSITIVE_CLASS = 'positive';
+  const NEGATIVE_CLASS = 'negative';
+  const CURRENCY_SYMBOL = '₽';
+  const CURRENT_LOCALE = 'ru-RU';
 
   const MAX_AMOUNT = 10000000000;
   const DEFAULT_AMOUNT = 0;
   const ONE_HUNDRED_PERCENT = 100;
 
-  const DEFAULT_AVATAR = "images/avatar-empty.png";
+  const DEFAULT_AVATAR = 'images/avatar-empty.png';
 
   let currentGroupId = 1;
-  let currentUserId = "4";
+  let currentUserId = '4';
   let activePopup = null;
   let activeAddExpenseHiddenForm = null;
   let activeAddRepaymentHiddenForm = null;
@@ -27,37 +27,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const users = new Map([
     [
-      "1",
+      '1',
       {
-        name: "Пётр",
-        avatar: "images/avatar-peter.png",
+        name: 'Пётр',
+        avatar: 'images/avatar-peter.png',
       },
     ],
     [
-      "2",
+      '2',
       {
-        name: "Катерина",
-        avatar: "images/avatar-kate.png",
+        name: 'Катерина',
+        avatar: 'images/avatar-kate.png',
       },
     ],
     [
-      "3",
+      '3',
       {
-        name: "Константин Константинопольский",
-        avatar: "images/avatar-paul.png",
+        name: 'Константин Константинопольский',
+        avatar: 'images/avatar-paul.png',
       },
     ],
     [
-      "4",
+      '4',
       {
-        name: "Арсений Тарковский",
-        avatar: "images/avatar-sanya.png",
+        name: 'Арсений Тарковский',
+        avatar: 'images/avatar-sanya.png',
       },
     ],
   ]);
 
   let addExpenseFormModel = {
-    title: "",
+    title: '',
     amount: 0,
     paidBy: {},
     splitt: {},
@@ -66,9 +66,9 @@ document.addEventListener("DOMContentLoaded", function () {
     comment: null,
     balanceOptions: [POSITIVE_CLASS, NEGATIVE_CLASS, HIDDEN_CLASS],
     splittBtnOptions: new Map([
-      ["equally", "поровну"],
-      ["parts", "частями"],
-      ["shares", "долями"],
+      ['equally', 'поровну'],
+      ['parts', 'частями'],
+      ['shares', 'долями'],
     ]),
   };
 
@@ -77,22 +77,22 @@ document.addEventListener("DOMContentLoaded", function () {
     total: {}, // { amount, element }
     remainder: {}, // { amount, element }
     amountWidthOptions: new Map([
-      [1, "8rem"],
-      [2, "8rem"],
-      [3, "8rem"],
-      [4, "8rem"],
-      [5, "8rem"],
-      [6, "9.5rem"],
-      [7, "10.5rem"],
-      [8, "11.5rem"],
-      [9, "13.8rem"],
-      [10, "14.5rem"],
-      [11, "15.5rem"],
+      [1, '8rem'],
+      [2, '8rem'],
+      [3, '8rem'],
+      [4, '8rem'],
+      [5, '8rem'],
+      [6, '9.5rem'],
+      [7, '10.5rem'],
+      [8, '11.5rem'],
+      [9, '13.8rem'],
+      [10, '14.5rem'],
+      [11, '15.5rem'],
     ]),
   };
 
   let splittEquallyModel = {
-    splittType: "equally",
+    splittType: 'equally',
     element: null,
     splittAmounts: new Map(),
     splittFields: new Map(),
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   let splittPartsModel = {
-    splittType: "parts",
+    splittType: 'parts',
     element: null,
     splittAmounts: new Map(),
     total: 0,
@@ -109,22 +109,22 @@ document.addEventListener("DOMContentLoaded", function () {
     totalField: null,
     remainderField: null,
     amountWidthOptions: new Map([
-      [1, "8rem"],
-      [2, "8rem"],
-      [3, "8rem"],
-      [4, "8rem"],
-      [5, "8rem"],
-      [6, "9.5rem"],
-      [7, "10.5rem"],
-      [8, "11.5rem"],
-      [9, "13.8rem"],
-      [10, "14.5rem"],
-      [11, "15.5rem"],
+      [1, '8rem'],
+      [2, '8rem'],
+      [3, '8rem'],
+      [4, '8rem'],
+      [5, '8rem'],
+      [6, '9.5rem'],
+      [7, '10.5rem'],
+      [8, '11.5rem'],
+      [9, '13.8rem'],
+      [10, '14.5rem'],
+      [11, '15.5rem'],
     ]),
   };
 
   let splittSharesModel = {
-    splittType: "shares",
+    splittType: 'shares',
     element: null,
     splittShares: new Map(),
     splittAmounts: new Map(),
@@ -139,22 +139,22 @@ document.addEventListener("DOMContentLoaded", function () {
     remainderShareField: null,
     remainderAmountField: null,
     amountWidthOptions: new Map([
-      [1, "8rem"],
-      [2, "8rem"],
-      [3, "8rem"],
-      [4, "8.5rem"],
-      [5, "9.5rem"],
-      [6, "10rem"],
-      [7, "11rem"],
-      [8, "12rem"],
-      [9, "13rem"],
-      [10, "14.5rem"],
-      [11, "15rem"],
+      [1, '8rem'],
+      [2, '8rem'],
+      [3, '8rem'],
+      [4, '8.5rem'],
+      [5, '9.5rem'],
+      [6, '10rem'],
+      [7, '11rem'],
+      [8, '12rem'],
+      [9, '13rem'],
+      [10, '14.5rem'],
+      [11, '15rem'],
     ]),
   };
 
   let addRepaymentFormModel = {
-    title: "",
+    title: '',
     amount: 0,
     userFrom: currentUserId,
     userTo: null,
@@ -185,11 +185,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function isEmptyString(str) {
-    return str.trim() === "";
+    return str.trim() === '';
   }
 
   function clearText(textElement) {
-    textElement.value = "";
+    textElement.value = '';
   }
 
   function removeWhiteSpace(textElement) {
@@ -202,83 +202,83 @@ document.addEventListener("DOMContentLoaded", function () {
   // --------------
 
   // e: Menu
-  const openMenuPopupBtn = document.querySelector(".menu__btn--open");
-  const closeMenuPopupBtn = document.querySelector(".menu__btn--close");
-  const menuAccount = document.querySelector(".menu__account");
-  const menuPopup = document.querySelector(".menu__popup");
+  const openMenuPopupBtn = document.querySelector('.menu__btn--open');
+  const closeMenuPopupBtn = document.querySelector('.menu__btn--close');
+  const menuAccount = document.querySelector('.menu__account');
+  const menuPopup = document.querySelector('.menu__popup');
 
   // e: Utils
-  const overlay = document.querySelector(".overlay");
-  const btnClosePopup = document.querySelectorAll(".btn__close_popup");
+  const overlay = document.querySelector('.overlay');
+  const btnClosePopup = document.querySelectorAll('.btn__close_popup');
 
   // e: Emoji Picker
   const emojiPickerContainer = document.querySelector(
-    ".emoji-picker-container"
+    '.emoji-picker-container'
   );
   const emojiPickerOptions = {
     onEmojiSelect: handleEmojiSelect,
-    searchPosition: "static",
-    previewPosition: "none",
-    locale: "ru",
+    searchPosition: 'static',
+    previewPosition: 'none',
+    locale: 'ru',
   };
   const emojiPicker = new EmojiMart.Picker(emojiPickerOptions);
-  document.getElementById("emoji-picker")?.appendChild(emojiPicker);
+  document.getElementById('emoji-picker')?.appendChild(emojiPicker);
 
   // e: Group
-  const groupHeader = document.querySelector(".group__info");
-  const groupSettingsLink = document.querySelector(".link__group--settings");
-  const groupPopup = document.querySelector(".group__popup");
-  const groupSwitch = document.querySelector(".group__switch");
-  const groupSwitchBtn = document.querySelector(".group__switch_btn");
+  const groupHeader = document.querySelector('.group__info');
+  const groupSettingsLink = document.querySelector('.link__group--settings');
+  const groupPopup = document.querySelector('.group__popup');
+  const groupSwitch = document.querySelector('.group__switch');
+  const groupSwitchBtn = document.querySelector('.group__switch_btn');
 
   // e: Add Expense: Main Form
-  const addExpenseBtn = document.querySelector(".add-expense__btn");
-  const addExpenseForm = document.querySelector(".add-expense__form");
-  const addExpenseBtnEdit = document.querySelectorAll(".add-expense__btn-edit");
-  const addExpenseTitleInput = document.querySelector(".add-expense-title");
-  const addExpenseAmountInput = document.querySelector(".add-expense-amount");
+  const addExpenseBtn = document.querySelector('.add-expense__btn');
+  const addExpenseForm = document.querySelector('.add-expense__form');
+  const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
+  const addExpenseTitleInput = document.querySelector('.add-expense-title');
+  const addExpenseAmountInput = document.querySelector('.add-expense-amount');
   const addExpenseEmojiInputField = document.querySelector(
-    ".emoji-input.add-expense"
+    '.emoji-input.add-expense'
   );
   const addExpenseEmojiPickerSwitchBtn = document.querySelector(
-    ".btn__emoji-picker--switch.add-expense"
+    '.btn__emoji-picker--switch.add-expense'
   );
   const addExpenseEmojiRemoveBtn = document.querySelector(
-    ".btn__emoji-remove.add-expense"
+    '.btn__emoji-remove.add-expense'
   );
-  const addExpensePaidByButton = document.querySelector(".btn__paid-by");
+  const addExpensePaidByButton = document.querySelector('.btn__paid-by');
   const addExpenseSplittButton = document.querySelector(
-    ".btn__open-splitt-form"
+    '.btn__open-splitt-form'
   );
   const addExpenseSplittBalanceNoteLabel = document.querySelector(
-    ".splitt-balance-note__label"
+    '.splitt-balance-note__label'
   );
   const addExpenseSplittBalanceNoteAmount = document.querySelector(
-    ".splitt-balance-note__amount"
+    '.splitt-balance-note__amount'
   );
   const addExpenseHiddenFormBtnClose = document.querySelectorAll(
-    ".add-expense__form_btn-close"
+    '.add-expense__form_btn-close'
   );
 
   // e: Add Expense: Payer Form
-  const payerTable = document.querySelector(".payer-table");
-  const payerSwitches = document.querySelectorAll(".payer__switch");
-  const payerTableRows = document.querySelectorAll(".payer-table-row");
+  const payerTable = document.querySelector('.payer-table');
+  const payerSwitches = document.querySelectorAll('.payer__switch');
+  const payerTableRows = document.querySelectorAll('.payer-table-row');
   const payerAvatarColumns = document.querySelectorAll(
-    ".payer-table-column__avatar"
+    '.payer-table-column__avatar'
   );
-  const payerAmountInputs = document.querySelectorAll(".payer-amount__input");
-  const addPayerRow = document.querySelector(".payer-table-row__add-payer");
-  const addPayerButton = document.querySelector(".add-payer-button");
+  const payerAmountInputs = document.querySelectorAll('.payer-amount__input');
+  const addPayerRow = document.querySelector('.payer-table-row__add-payer');
+  const addPayerButton = document.querySelector('.add-payer-button');
   const payerTotalElement = document.querySelector(
-    ".payer-table-column__total-amount"
+    '.payer-table-column__total-amount'
   );
-  const payerTotalRow = document.querySelector(".payer-table-row__total");
+  const payerTotalRow = document.querySelector('.payer-table-row__total');
   const payerRemainderElement = document.querySelector(
-    ".payer-table-column__remainder-amount"
+    '.payer-table-column__remainder-amount'
   );
   const payerRemainderRow = document.querySelector(
-    ".payer-table-row__remainder"
+    '.payer-table-row__remainder'
   );
 
   payerTableModel.total = { amount: 0, element: payerTotalElement };
@@ -289,24 +289,24 @@ document.addEventListener("DOMContentLoaded", function () {
     '.splitt-form__toggle input[type="radio"]'
   );
 
-  const splittFormContainer = document.querySelector(".splitt-form-container");
+  const splittFormContainer = document.querySelector('.splitt-form-container');
 
   const splittSubmitBtn = document.querySelector(
-    ".add-expense__form_splitt__btn--submit"
+    '.add-expense__form_splitt__btn--submit'
   );
 
   // e: Add Expense: Splitt Form - Equally
-  const splittEquallyTable = document.getElementById("splitt-equally-table");
+  const splittEquallyTable = document.getElementById('splitt-equally-table');
   const splittEquallyTableRows = document.querySelectorAll(
-    ".splitt-equally__row"
+    '.splitt-equally__row'
   );
   const splittEquallyCheckboxes = document.querySelectorAll(
-    ".splitt-equally-checkbox"
+    '.splitt-equally-checkbox'
   );
 
   splittEquallyTableRows.forEach((row) => {
     const userId = row.dataset.userId;
-    const splittField = row.querySelector(".splitt-equally-column__amount");
+    const splittField = row.querySelector('.splitt-equally-column__amount');
     splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
     splittEquallyModel.splittFields.set(userId, splittField);
     splittEquallyModel.checkedRows.add(userId);
@@ -317,24 +317,24 @@ document.addEventListener("DOMContentLoaded", function () {
   addExpenseFormModel.splitt = splittEquallyModel;
 
   // e: Add Expense: Splitt Form - Parts
-  const splittPartsTable = document.getElementById("splitt-parts-table");
-  const splittPartsRows = document.querySelectorAll(".splitt-parts__row");
+  const splittPartsTable = document.getElementById('splitt-parts-table');
+  const splittPartsRows = document.querySelectorAll('.splitt-parts__row');
   const splittPartsTotalField = document.querySelector(
-    ".splitt-parts-column__total-amount"
+    '.splitt-parts-column__total-amount'
   );
   const splittPartsRemainderField = document.querySelector(
-    ".splitt-parts-column__remainder-amount"
+    '.splitt-parts-column__remainder-amount'
   );
   const splittPartsRemainderRow = document.querySelector(
-    ".splitt-parts__row-remainder"
+    '.splitt-parts__row-remainder'
   );
   const splittPartsAmountInputs = document.querySelectorAll(
-    ".splitt-parts-amount-input"
+    '.splitt-parts-amount-input'
   );
   const splittPartsRowsArray = [...splittPartsRows];
   splittPartsRowsArray.forEach((row) => {
     const userId = row.dataset.userId;
-    const amountField = row.querySelector(".splitt-parts-amount-input");
+    const amountField = row.querySelector('.splitt-parts-amount-input');
     splittPartsModel.splittAmounts.set(userId, 0);
     splittPartsModel.splittFields.set(userId, amountField);
   });
@@ -343,29 +343,29 @@ document.addEventListener("DOMContentLoaded", function () {
   splittPartsModel.element = splittPartsTable;
 
   // e: Add Expense: Splitt Form - Shares
-  const splittSharesTable = document.getElementById("splitt-shares-table");
-  const splittSharesRows = document.querySelectorAll(".splitt-shares__row");
+  const splittSharesTable = document.getElementById('splitt-shares-table');
+  const splittSharesRows = document.querySelectorAll('.splitt-shares__row');
   const splittSharesTotalShareField = document.querySelector(
-    ".splitt-shares-column__total-share"
+    '.splitt-shares-column__total-share'
   );
   const splittSharesTotalAmountField = document.querySelector(
-    ".splitt-shares-column__total-amount-value"
+    '.splitt-shares-column__total-amount-value'
   );
   const splittSharesRemainderRow = document.querySelector(
-    ".splitt-shares__row-remainder"
+    '.splitt-shares__row-remainder'
   );
   const splittSharesRemainderShareField = document.querySelector(
-    ".splitt-shares-column__remainder-share"
+    '.splitt-shares-column__remainder-share'
   );
   const splittSharesRemainderAmountField = document.querySelector(
-    ".splitt-shares-column__remainder-amount"
+    '.splitt-shares-column__remainder-amount'
   );
-  const splittSharesInputs = document.querySelectorAll(".splitt-share__input");
+  const splittSharesInputs = document.querySelectorAll('.splitt-share__input');
   const splittSharesRowsArray = [...splittSharesRows];
   splittSharesRowsArray.forEach((row) => {
     const userId = row.dataset.userId;
-    const amountField = row.querySelector(".splitt-shares-column__amount");
-    const shareField = row.querySelector(".splitt-share__input");
+    const amountField = row.querySelector('.splitt-shares-column__amount');
+    const shareField = row.querySelector('.splitt-share__input');
     splittSharesModel.splittShares.set(userId, DEFAULT_AMOUNT);
     splittSharesModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
 
@@ -380,10 +380,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // e: Add Expense: Note Form
   const addExpenseNoteInput = document.querySelector(
-    ".add-transaction__form_input-note#expense-note"
+    '.add-transaction__form_input-note#expense-note'
   );
   const addExpenseNoteCounter = document.querySelector(
-    ".character-count.expense-note"
+    '.character-count.expense-note'
   );
 
   const addExpenseNoteForm = {
@@ -393,40 +393,40 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   // e: Add Repayment: Main Form
-  const addRepaymentBtn = document.querySelector(".add-repayment__btn");
-  const addRepaymentForm = document.querySelector(".add-repayment__form");
+  const addRepaymentBtn = document.querySelector('.add-repayment__btn');
+  const addRepaymentForm = document.querySelector('.add-repayment__form');
   const addRepaymentBtnEdit = document.querySelectorAll(
-    ".add-repayment__btn-edit"
+    '.add-repayment__btn-edit'
   );
 
   const addRepaymentAmountInput = document.querySelector(
-    ".add-repayment-amount"
+    '.add-repayment-amount'
   );
   const addRepaymentSwitchFrom = document.getElementById(
-    "add-repayment__switch-from"
+    'add-repayment__switch-from'
   );
   const addRepaymentSwitchTo = document.getElementById(
-    "add-repayment__switch-to"
+    'add-repayment__switch-to'
   );
   const addRepaymentEmojiInputField = document.querySelector(
-    ".emoji-input.add-repayment"
+    '.emoji-input.add-repayment'
   );
   const addRepaymentEmojiPickerSwitchBtn = document.querySelector(
-    ".btn__emoji-picker--switch.add-repayment"
+    '.btn__emoji-picker--switch.add-repayment'
   );
   const addRepaymentEmojiRemoveBtn = document.querySelector(
-    ".btn__emoji-remove.add-repayment"
+    '.btn__emoji-remove.add-repayment'
   );
 
   // e: Add Repayment: Note Form
   const addRepaymentNoteInput = document.querySelector(
-    ".add-transaction__form_input-note#repayment-note"
+    '.add-transaction__form_input-note#repayment-note'
   );
   const addRepaymentNoteCounter = document.querySelector(
-    ".character-count.repayment-note"
+    '.character-count.repayment-note'
   );
   const addRepaymentHiddenFormBtnClose = document.querySelectorAll(
-    ".add-repayment__form_btn-close"
+    '.add-repayment__form_btn-close'
   );
 
   const addRepaymentNoteForm = {
@@ -442,11 +442,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // f: Util
 
   function addOverlay() {
-    overlay.classList.remove("hidden");
+    overlay.classList.remove('hidden');
   }
 
   function hideOverlay() {
-    overlay.classList.add("hidden");
+    overlay.classList.add('hidden');
   }
 
   function closeActivePopup() {
@@ -457,7 +457,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function parseInputAmount(value) {
-    const cleanedValue = value.replace(/\D/g, "");
+    const cleanedValue = value.replace(/\D/g, '');
     return cleanedValue ? parseInt(cleanedValue) : 0;
   }
 
@@ -487,9 +487,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function parsePercentInputString(percentString) {
     let percent;
-    let cleanedValue = percentString.replace(/\D/g, "");
+    let cleanedValue = percentString.replace(/\D/g, '');
 
-    if (cleanedValue === "" || isNaN(cleanedValue)) {
+    if (cleanedValue === '' || isNaN(cleanedValue)) {
       percent = 0;
     } else {
       let finalPercent;
@@ -535,12 +535,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function openMenuPopup() {
     menuPopup.classList.add(ACTIVE_CLASS);
-    document.addEventListener("click", handleClickOutsideMenuPopup);
+    document.addEventListener('click', handleClickOutsideMenuPopup);
   }
 
   function closeMenuPopup() {
     menuPopup.classList.remove(ACTIVE_CLASS);
-    document.removeEventListener("click", handleClickOutsideMenuPopup);
+    document.removeEventListener('click', handleClickOutsideMenuPopup);
   }
 
   // f: Group
@@ -611,7 +611,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function removeEmoji() {
-    activeEmojiField.emojiInputField.value = "";
+    activeEmojiField.emojiInputField.value = '';
     activeEmojiField.emojiInputField.classList.remove(ACTIVE_CLASS);
     activeEmojiField.emojiRemoveBtn.classList.remove(ACTIVE_CLASS);
     activeEmojiField.emojiPickerSwitchBtn.classList.remove(HIDDEN_CLASS);
@@ -621,13 +621,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function openEmojiPicker() {
     if (isActive(emojiPickerContainer)) return;
     emojiPickerContainer.classList.add(ACTIVE_CLASS);
-    document.addEventListener("click", clickOutsideEmojiPicker);
+    document.addEventListener('click', clickOutsideEmojiPicker);
   }
 
   function closeEmojiPicker() {
     if (!isActive(emojiPickerContainer)) return;
     emojiPickerContainer.classList.remove(ACTIVE_CLASS);
-    document.removeEventListener("click", clickOutsideEmojiPicker);
+    document.removeEventListener('click', clickOutsideEmojiPicker);
   }
 
   function toggleEmojiPicker(event) {
@@ -658,8 +658,8 @@ document.addEventListener("DOMContentLoaded", function () {
       : activeAddRepaymentHiddenForm;
 
     targetNoteForm.button.textContent = !isEmptyString(noteForm.noteInput.value)
-      ? "редактировать"
-      : "написать";
+      ? 'редактировать'
+      : 'написать';
   }
 
   function closeHiddenForm(isExpense) {
@@ -727,7 +727,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // f: Add Expense: Payer Form
 
   function handleRemovePayerButtonClick() {
-    const row = this.closest(".payer-table-row");
+    const row = this.closest('.payer-table-row');
     const rowId = parseInt(row.dataset.rowId, 10);
     const payerId = row.dataset.userId;
 
@@ -744,13 +744,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function handlePayerAvatarClick() {
-    const row = this.closest(".payer-table-row");
-    const amountInput = row.querySelector(".payer-amount__input");
+    const row = this.closest('.payer-table-row');
+    const amountInput = row.querySelector('.payer-amount__input');
     amountInput.focus();
   }
 
   function handlePayerSwitch(event) {
-    const row = this.closest(".payer-table-row");
+    const row = this.closest('.payer-table-row');
     const rowId = parseInt(row.dataset.rowId, 10);
     const previousPayerId = row.dataset.userId;
     const newPayerId = event.target.value;
@@ -764,7 +764,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function handlePayerAmountInput(event) {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
-    const row = this.closest(".payer-table-row");
+    const row = this.closest('.payer-table-row');
     const rowId = parseInt(row.dataset.rowId, 10);
     const payerData = payerTableModel.rows.get(rowId);
 
@@ -785,7 +785,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const payerOptionsHTML = generatePayerOptionsHTML();
     const newPayerRowHTML = generateNewPayerRowHTML(rowId, payerOptionsHTML);
 
-    addPayerRow.insertAdjacentHTML("beforebegin", newPayerRowHTML);
+    addPayerRow.insertAdjacentHTML('beforebegin', newPayerRowHTML);
 
     const newPayerRow = addPayerRow.previousElementSibling;
     addEventListenersToPayerRow(newPayerRow);
@@ -806,25 +806,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function addEventListenersToPayerRow(row, isFirstRow = false) {
     const removePayerButton = row.querySelector(
-      ".payer-table-column__remove-payer"
+      '.payer-table-column__remove-payer'
     );
-    const payerAvatarColumn = row.querySelector(".payer-table-column__avatar");
-    const payerSwitch = row.querySelector(".payer__switch");
-    const payerAmountInput = row.querySelector(".payer-amount__input");
+    const payerAvatarColumn = row.querySelector('.payer-table-column__avatar');
+    const payerSwitch = row.querySelector('.payer__switch');
+    const payerAmountInput = row.querySelector('.payer-amount__input');
 
     if (!isFirstRow) {
-      removePayerButton.addEventListener("click", handleRemovePayerButtonClick);
+      removePayerButton.addEventListener('click', handleRemovePayerButtonClick);
     }
-    payerAvatarColumn.addEventListener("click", handlePayerAvatarClick);
-    payerSwitch.addEventListener("change", handlePayerSwitch);
-    payerAmountInput.addEventListener("input", handlePayerAmountInput);
+    payerAvatarColumn.addEventListener('click', handlePayerAvatarClick);
+    payerSwitch.addEventListener('change', handlePayerSwitch);
+    payerAmountInput.addEventListener('input', handlePayerAmountInput);
   }
 
   function addPayerRowToModel(row) {
     const rowId = parseInt(row.dataset.rowId, 10);
     const userId = row.dataset.userId;
-    const payerSwitch = row.querySelector(".payer__switch");
-    const amountInput = row.querySelector(".payer-amount__input");
+    const payerSwitch = row.querySelector('.payer__switch');
+    const amountInput = row.querySelector('.payer-amount__input');
     payerTableModel.rows.set(rowId, {
       userId,
       payerSwitch,
@@ -852,7 +852,7 @@ document.addEventListener("DOMContentLoaded", function () {
     rowData.userId = newPayerId;
     rowElement.dataset.userId = newPayerId;
 
-    const rowAvatar = rowElement.querySelector(".account__avatar");
+    const rowAvatar = rowElement.querySelector('.account__avatar');
     let newPayerAvatar = users.get(newPayerId).avatar;
     if (!newPayerAvatar) {
       newPayerAvatar = DEFAULT_AVATAR;
@@ -895,7 +895,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(
       (payerSwitch) => {
-        return Array.from(payerSwitch.querySelectorAll("option"));
+        return Array.from(payerSwitch.querySelectorAll('option'));
       }
     );
 
@@ -925,7 +925,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     payerTotalRow.style.visibility =
-      payerTableModel.remainder.amount === 0 ? "hidden" : "visible";
+      payerTableModel.remainder.amount === 0 ? 'hidden' : 'visible';
 
     restyleSplittRemainder(payerTableModel.remainder.amount, payerRemainderRow);
     adjustPayerAmountInputWidth();
@@ -971,8 +971,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (addExpenseFormModel.splitt && addExpenseFormModel.splitt.element) {
       deactivate(addExpenseFormModel.splitt.element);
     }
-    const selectedButton = this.getAttribute("id");
-    const splittOption = selectedButton.replace(/^splitt-(.*)-button$/, "$1");
+    const selectedButton = this.getAttribute('id');
+    const splittOption = selectedButton.replace(/^splitt-(.*)-button$/, '$1');
     loadSplittForm(splittOption);
   }
 
@@ -980,10 +980,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedSplittForm;
 
     switch (splittOption) {
-      case "parts":
+      case 'parts':
         selectedSplittForm = splittPartsModel;
         break;
-      case "shares":
+      case 'shares':
         selectedSplittForm = splittSharesModel;
         break;
       default:
@@ -993,7 +993,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addExpenseSplittButton.textContent =
       addExpenseFormModel.splittBtnOptions.has(splittOption)
         ? addExpenseFormModel.splittBtnOptions.get(splittOption)
-        : "редактировать";
+        : 'редактировать';
 
     addExpenseFormModel.splitt = selectedSplittForm;
     updateSplitts();
@@ -1002,10 +1002,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updateSplitts() {
     switch (addExpenseFormModel.splitt.splittType) {
-      case "parts":
+      case 'parts':
         updateSplittsParts();
         break;
-      case "shares":
+      case 'shares':
         updateSplittsShares();
         break;
       default:
@@ -1016,7 +1016,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // f: Add Expense: Splitt Form - Equally
 
   function handleSplittEquallyCheckboxChange() {
-    const row = this.closest(".splitt-equally__row");
+    const row = this.closest('.splitt-equally__row');
     const userId = row.dataset.userId;
     const isChecked = this.checked;
 
@@ -1033,12 +1033,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function handleSplittEquallyRowClick(event) {
-    if (event.target.classList.contains("splitt-equally-checkbox")) {
+    if (event.target.classList.contains('splitt-equally-checkbox')) {
       return;
     }
 
     const userId = this.dataset.userId;
-    const checkbox = this.querySelector(".splitt-equally-checkbox");
+    const checkbox = this.querySelector('.splitt-equally-checkbox');
     const isChecked = checkbox.checked;
     checkbox.checked = !isChecked;
 
@@ -1153,7 +1153,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const expenseAmountLength = referenceAmount.toString().length;
     const adjustedWidth =
-      splittPartsModel.amountWidthOptions.get(expenseAmountLength) || "14rem";
+      splittPartsModel.amountWidthOptions.get(expenseAmountLength) || '14rem';
     splittPartsModel.splittFields.forEach((field) => {
       field.style.width = adjustedWidth;
     });
@@ -1162,7 +1162,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleSplittPartsAmountInput(event) {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
-    const row = this.closest(".splitt-parts__row");
+    const row = this.closest('.splitt-parts__row');
     const userId = row.dataset.userId;
 
     const processedAmount = processInputAmount(inputAmount);
@@ -1179,7 +1179,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function handleSplittPartsRowClick(event) {
     const amountInput = event.currentTarget.querySelector(
-      ".splitt-parts-amount-input"
+      '.splitt-parts-amount-input'
     );
     amountInput.focus();
   }
@@ -1202,7 +1202,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleSplittSharesInput(event) {
     const cursorPosition = this.selectionStart;
     const inputValue = event.target.value;
-    const row = this.closest(".splitt-shares__row");
+    const row = this.closest('.splitt-shares__row');
     const userId = row.dataset.userId;
 
     const splittShare = parsePercentInputString(inputValue);
@@ -1226,7 +1226,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function handleSplittSharesRowClick(event) {
     const shareInput = event.currentTarget.querySelector(
-      ".splitt-share__input"
+      '.splitt-share__input'
     );
     shareInput.focus();
   }
@@ -1305,7 +1305,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const expenseAmountLength = referenceAmount.toString().length;
     const adjustedWidth =
-      splittSharesModel.amountWidthOptions.get(expenseAmountLength) || "14rem";
+      splittSharesModel.amountWidthOptions.get(expenseAmountLength) || '14rem';
 
     splittSharesModel.totalAmountField.style.width = adjustedWidth;
   }
@@ -1344,14 +1344,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!addExpenseFormModel.isPaidByValid) {
       addExpenseSplittBalanceNoteLabel.textContent =
-        "проверьте форму «Кто платил»";
+        'проверьте форму «Кто платил»';
       addExpenseSplittBalanceNoteAmount.classList.add(HIDDEN_CLASS);
       return;
     }
 
     if (!addExpenseFormModel.isSplittValid) {
       addExpenseSplittBalanceNoteLabel.textContent =
-        "проверьте форму «Поделить»";
+        'проверьте форму «Поделить»';
       addExpenseSplittBalanceNoteAmount.classList.add(HIDDEN_CLASS);
       return;
     }
@@ -1371,7 +1371,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function renderSplittBalanceNote(balance) {
-    addExpenseSplittBalanceNoteLabel.textContent = "ваш баланс:\u00A0";
+    addExpenseSplittBalanceNoteLabel.textContent = 'ваш баланс:\u00A0';
     let formattedBalance = formatAmountForOutput(balance);
     addExpenseSplittBalanceNoteAmount.textContent = formattedBalance;
 
@@ -1472,7 +1472,7 @@ document.addEventListener("DOMContentLoaded", function () {
       true
     );
 
-    addPayerRow.insertAdjacentHTML("beforebegin", defaultPayerRowHTML);
+    addPayerRow.insertAdjacentHTML('beforebegin', defaultPayerRowHTML);
 
     const defaultPayerRow = addPayerRow.previousElementSibling;
     addEventListenersToPayerRow(defaultPayerRow, true);
@@ -1484,10 +1484,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function generateFirstRowOptionsHTML() {
-    let payerOptionsHTML = "";
+    let payerOptionsHTML = '';
 
     users.forEach((userData, userId) => {
-      const selectedAttribute = userId === currentUserId ? " selected" : "";
+      const selectedAttribute = userId === currentUserId ? ' selected' : '';
       payerOptionsHTML += `<option value="${userId}"${selectedAttribute}>${userData.name}</option>\n`;
     });
 
@@ -1495,7 +1495,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function generatePayerOptionsHTML() {
-    let payerOptionsHTML = "";
+    let payerOptionsHTML = '';
 
     const payersToDisable = new Set();
     payerTableModel.rows.forEach((row) => {
@@ -1503,7 +1503,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     users.forEach((userData, userId) => {
-      const disabledAttribute = payersToDisable.has(userId) ? " disabled" : "";
+      const disabledAttribute = payersToDisable.has(userId) ? ' disabled' : '';
       payerOptionsHTML += `<option value="${userId}"${disabledAttribute}>${userData.name}</option>\n`;
     });
 
@@ -1516,13 +1516,13 @@ document.addEventListener("DOMContentLoaded", function () {
     isFirstRow = false
   ) {
     let avatar = DEFAULT_AVATAR;
-    let dataUserId = "";
-    let removeColumnAttribute = "";
+    let dataUserId = '';
+    let removeColumnAttribute = '';
 
     if (isFirstRow) {
       avatar = users.get(currentUserId)?.avatar ?? DEFAULT_AVATAR;
-      dataUserId = currentUserId ? ` data-user-id="${currentUserId}"` : "";
-      removeColumnAttribute = " inactive";
+      dataUserId = currentUserId ? ` data-user-id="${currentUserId}"` : '';
+      removeColumnAttribute = ' inactive';
     }
 
     const newPayerRowHTML = `<tr class="payer-table-row" data-row-id="${rowId}"${dataUserId}>
@@ -1558,22 +1558,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updatePaidByButton(payers) {
     if (payers.size === 0) {
-      addExpensePaidByButton.textContent = "пока никто";
+      addExpensePaidByButton.textContent = 'пока никто';
       return;
     }
     if (payers.size > 1) {
-      addExpensePaidByButton.textContent = "совместно";
+      addExpensePaidByButton.textContent = 'совместно';
       return;
     }
 
     const payerId = payers.values().next().value;
 
     if (payerId === currentUserId) {
-      addExpensePaidByButton.textContent = "вы";
+      addExpensePaidByButton.textContent = 'вы';
       return;
     }
     const payer = users.get(payerId);
-    const payerLabel = payer.name ? payer.name : "другой пользователь";
+    const payerLabel = payer.name ? payer.name : 'другой пользователь';
     addExpensePaidByButton.textContent = payerLabel;
   }
 
@@ -1585,7 +1585,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const referenceAmountLength = referenceAmount.toString().length;
     const adjustedWidth =
-      payerTableModel.amountWidthOptions.get(referenceAmountLength) || "14rem";
+      payerTableModel.amountWidthOptions.get(referenceAmountLength) || '14rem';
     payerAmountInputs.forEach((inputElement) => {
       inputElement.style.width = adjustedWidth;
     });
@@ -1595,7 +1595,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // function
   function createSplittFormTables() {
-    let splittEquallyTableRows = "";
+    let splittEquallyTableRows = '';
 
     // итерация по users, составление splittEquallyTableRows
 
@@ -1603,7 +1603,7 @@ document.addEventListener("DOMContentLoaded", function () {
       splittEquallyTableRows
     );
 
-    splittEquallyTable.insertAdjacentHTML("beforeend", splittEquallyTableHTML);
+    splittEquallyTable.insertAdjacentHTML('beforeend', splittEquallyTableHTML);
 
     // доработать при рефакторинге
   }
@@ -1666,27 +1666,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     [...optionsTo].forEach((option) => {
-      if (option.value === "") return;
+      if (option.value === '') return;
       addRepaymentFormModel.optionsTo.set(option.value, option);
     });
   }
 
   function generateRepaymentOptionsHTML() {
-    let optionsFrom = "";
+    let optionsFrom = '';
     let optionsTo =
       '<option value="" selected disabled>-- выбрать --</option>\n';
 
     users.forEach((userData, userId) => {
-      let selectedFrom = "";
-      let disabledTo = "";
+      let selectedFrom = '';
+      let disabledTo = '';
       let userNameFrom = userData.name;
       let userNameTo = userData.name;
 
       if (userId === currentUserId) {
-        selectedFrom = " selected";
-        disabledTo = " disabled";
-        userNameFrom = "от вас";
-        userNameTo = "вам";
+        selectedFrom = ' selected';
+        disabledTo = ' disabled';
+        userNameFrom = 'от вас';
+        userNameTo = 'вам';
       }
 
       optionsFrom += `<option value="${userId}"${selectedFrom}>${userNameFrom}</option>\n`;
@@ -1716,13 +1716,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // el: Auxiliary
 
   function toggleHiddenForm(button, transactionType) {
-    button.addEventListener("click", function (event) {
+    button.addEventListener('click', function (event) {
       event.preventDefault();
       const hiddenFormName = this.dataset.form;
       const hiddenForm = document.querySelector(
         `.add-${transactionType}__form_${hiddenFormName}`
       );
-      transactionType === "expense"
+      transactionType === 'expense'
         ? toggleAddExpenseHiddenForm(hiddenForm, this)
         : toggleAddRepaymentHiddenForm(hiddenForm, this);
     });
@@ -1730,164 +1730,164 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // el: Menu
 
-  openMenuPopupBtn.addEventListener("click", openMenuPopup);
+  openMenuPopupBtn.addEventListener('click', openMenuPopup);
 
-  menuAccount.addEventListener("click", openMenuPopup);
+  menuAccount.addEventListener('click', openMenuPopup);
 
-  closeMenuPopupBtn.addEventListener("click", closeMenuPopup);
+  closeMenuPopupBtn.addEventListener('click', closeMenuPopup);
 
   // el: Group
 
-  groupHeader.addEventListener("click", openGroupPopup);
+  groupHeader.addEventListener('click', openGroupPopup);
 
-  groupSettingsLink.addEventListener("click", function (event) {
+  groupSettingsLink.addEventListener('click', function (event) {
     event.preventDefault();
     closeMenuPopup();
     openGroupPopup();
   });
 
-  groupSwitch.addEventListener("change", handleGroupSwitchChange);
+  groupSwitch.addEventListener('change', handleGroupSwitchChange);
 
   // el: Emoji Picker
 
-  addExpenseEmojiPickerSwitchBtn.addEventListener("click", function (event) {
+  addExpenseEmojiPickerSwitchBtn.addEventListener('click', function (event) {
     activeEmojiField = addExpenseEmojiField;
     toggleEmojiPicker(event);
   });
 
-  addExpenseEmojiInputField.addEventListener("click", function (event) {
+  addExpenseEmojiInputField.addEventListener('click', function (event) {
     activeEmojiField = addExpenseEmojiField;
     toggleEmojiPicker(event);
   });
 
-  addExpenseEmojiRemoveBtn.addEventListener("click", function () {
+  addExpenseEmojiRemoveBtn.addEventListener('click', function () {
     activeEmojiField = addExpenseEmojiField;
     removeEmoji();
   });
 
-  addRepaymentEmojiPickerSwitchBtn.addEventListener("click", function (event) {
+  addRepaymentEmojiPickerSwitchBtn.addEventListener('click', function (event) {
     activeEmojiField = addRepaymentEmojiField;
     toggleEmojiPicker(event);
   });
 
-  addRepaymentEmojiInputField.addEventListener("click", function (event) {
+  addRepaymentEmojiInputField.addEventListener('click', function (event) {
     activeEmojiField = addRepaymentEmojiField;
     toggleEmojiPicker(event);
   });
 
-  addRepaymentEmojiRemoveBtn.addEventListener("click", function () {
+  addRepaymentEmojiRemoveBtn.addEventListener('click', function () {
     activeEmojiField = addRepaymentEmojiField;
     removeEmoji();
   });
 
   // el: Add Expense: Main Form
 
-  addExpenseBtn.addEventListener("click", openAddExpense);
+  addExpenseBtn.addEventListener('click', openAddExpense);
 
-  addExpenseBtnEdit.forEach((button) => toggleHiddenForm(button, "expense"));
+  addExpenseBtnEdit.forEach((button) => toggleHiddenForm(button, 'expense'));
 
   addExpenseHiddenFormBtnClose.forEach((button) => {
-    button.addEventListener("click", function (event) {
+    button.addEventListener('click', function (event) {
       event.preventDefault();
       closeAddExpenseHiddenForm();
     });
   });
 
-  addExpenseTitleInput.addEventListener("input", handleAddExpenseTitleInput);
+  addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
 
-  addExpenseAmountInput.addEventListener("input", handleAddExpenseAmountInput);
+  addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
 
   // el: Add Expense: Payer Form
 
   payerAvatarColumns.forEach((column) => {
-    column.addEventListener("click", handlePayerAvatarClick);
+    column.addEventListener('click', handlePayerAvatarClick);
   });
 
   payerSwitches.forEach((payerSwitch) => {
-    payerSwitch.addEventListener("change", handlePayerSwitch);
+    payerSwitch.addEventListener('change', handlePayerSwitch);
   });
 
   payerAmountInputs.forEach((payerAmount) =>
-    payerAmount.addEventListener("input", handlePayerAmountInput)
+    payerAmount.addEventListener('input', handlePayerAmountInput)
   );
 
-  addPayerButton.addEventListener("click", handleAddPayerClick);
+  addPayerButton.addEventListener('click', handleAddPayerClick);
 
   // el: Add Expense: Splitt Form
 
   splittOptionButtons.forEach((splittOptionButton) => {
-    splittOptionButton.addEventListener("change", handleSplittOptionChange);
+    splittOptionButton.addEventListener('change', handleSplittOptionChange);
   });
 
   splittEquallyCheckboxes.forEach((checkbox) =>
-    checkbox.addEventListener("change", handleSplittEquallyCheckboxChange)
+    checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
   );
 
   splittEquallyTableRows.forEach((row) =>
-    row.addEventListener("click", handleSplittEquallyRowClick)
+    row.addEventListener('click', handleSplittEquallyRowClick)
   );
 
   splittPartsAmountInputs.forEach((inputAmount) =>
-    inputAmount.addEventListener("input", handleSplittPartsAmountInput)
+    inputAmount.addEventListener('input', handleSplittPartsAmountInput)
   );
 
   splittPartsRows.forEach((row) =>
-    row.addEventListener("click", handleSplittPartsRowClick)
+    row.addEventListener('click', handleSplittPartsRowClick)
   );
 
   splittSharesInputs.forEach((inputShare) =>
-    inputShare.addEventListener("input", handleSplittSharesInput)
+    inputShare.addEventListener('input', handleSplittSharesInput)
   );
 
   splittSharesRows.forEach((row) =>
-    row.addEventListener("click", handleSplittSharesRowClick)
+    row.addEventListener('click', handleSplittSharesRowClick)
   );
 
   // el: Add Expense: Note Form
 
-  addExpenseNoteInput.addEventListener("input", () =>
+  addExpenseNoteInput.addEventListener('input', () =>
     handleTransactionNoteInput(addExpenseNoteForm)
   );
 
   // el: Add Repayment: Main Form
 
-  addRepaymentBtn.addEventListener("click", openAddRepayment);
+  addRepaymentBtn.addEventListener('click', openAddRepayment);
 
   addRepaymentBtnEdit.forEach((button) =>
-    toggleHiddenForm(button, "repayment")
+    toggleHiddenForm(button, 'repayment')
   );
 
   addRepaymentHiddenFormBtnClose.forEach((button) => {
-    button.addEventListener("click", function (event) {
+    button.addEventListener('click', function (event) {
       event.preventDefault();
       closeAddRepaymentHiddenForm();
     });
   });
 
   addRepaymentSwitchFrom.addEventListener(
-    "change",
+    'change',
     handleAddRepaymentFromChange
   );
 
-  addRepaymentSwitchTo.addEventListener("change", handleAddRepaymentToChange);
+  addRepaymentSwitchTo.addEventListener('change', handleAddRepaymentToChange);
 
   addRepaymentAmountInput.addEventListener(
-    "input",
+    'input',
     handleAddRepaymentAmountInput
   );
 
   // el: Add Repayment: Note Form
 
-  addRepaymentNoteInput.addEventListener("input", () =>
+  addRepaymentNoteInput.addEventListener('input', () =>
     handleTransactionNoteInput(addRepaymentNoteForm)
   );
 
   // el: Util
 
-  overlay.addEventListener("click", closeActivePopup);
+  overlay.addEventListener('click', closeActivePopup);
 
   btnClosePopup.forEach((button) => {
-    button.addEventListener("click", closeActivePopup);
+    button.addEventListener('click', closeActivePopup);
   });
 
   // TODO1: to delete: enable Repayment Form
