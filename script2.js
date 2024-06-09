@@ -235,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const addExpenseBtn = document.querySelector(".add-expense__btn");
   const addExpenseForm = document.querySelector(".add-expense__form");
   const addExpenseBtnEdit = document.querySelectorAll(".add-expense__btn-edit");
+  const addExpenseTitleInput = document.querySelector(".add-expense-title");
   const addExpenseAmountInput = document.querySelector(".add-expense-amount");
   const addExpenseEmojiInputField = document.querySelector(
     ".emoji-input.add-expense"
@@ -694,6 +695,11 @@ document.addEventListener("DOMContentLoaded", function () {
     button.classList.add(ACTIVE_CLASS);
 
     activeAddExpenseHiddenForm = { form, button };
+  }
+
+  function handleAddExpenseTitleInput(event) {
+    removeWhiteSpace(event.target);
+    // TODO1 вызвать валидацию кнопки "добавить"
   }
 
   function handleAddExpenseAmountInput(event) {
@@ -1787,6 +1793,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  addExpenseTitleInput.addEventListener("input", handleAddExpenseTitleInput);
+
   addExpenseAmountInput.addEventListener("input", handleAddExpenseAmountInput);
 
   // el: Add Expense: Payer Form
@@ -1883,7 +1891,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // TODO1: to delete: enable Repayment Form
-  openAddRepayment();
+  // openAddRepayment();
+  openAddExpense();
 
   // TODO1: to delete: enable Payer Form
   // const addExpenseHiddenFormPayer = document.querySelector(
