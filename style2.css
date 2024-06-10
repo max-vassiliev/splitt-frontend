@@ -1250,7 +1250,23 @@ header {
 .add-expense__btn--submit.active {
   background-color: #f97e4b;
   color: #fff;
+  font-weight: 700;
+  border: none;
   cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+.add-expense__btn--submit.active:hover {
+  background-color: #ea7746;
+}
+
+.add-expense__btn--submit.active:active {
+  background-color: #c35121;
+}
+
+.add-expense__btn--submit.active:hover,
+.add-expense__btn--submit.active:active {
+  box-shadow: 0 0px 1.2rem #ecc9bb;
 }
 
 /*  ADD REPAYMENT  */
