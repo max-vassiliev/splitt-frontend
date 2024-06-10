@@ -699,6 +699,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function handleAddExpenseTitleInput(event) {
     removeWhiteSpace(event.target);
+    addExpenseFormModel.title = event.target.value;
     // TODO1 вызвать валидацию кнопки "добавить"
   }
 
@@ -710,6 +711,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputAmount = formatAmountForOutput(processedAmount);
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+
+    // TODO1 удалить (тест)
+    const isFormValid = isExpenseFormValid();
+    console.log(`isFormValid: ${isFormValid}`);
+  }
+
+  function isExpenseFormValid() {
+    // TODO1 добавить проверку календаря
+    return (
+      !isEmptyString(addExpenseFormModel.title) &&
+      addExpenseFormModel.amount > 0 &&
+      addExpenseFormModel.isPaidByValid &&
+      addExpenseFormModel.isSplittValid
+    );
   }
 
   function saveAddExpenseAmount(amount) {
