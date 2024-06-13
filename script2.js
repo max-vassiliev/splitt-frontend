@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const MAX_AMOUNT = 10000000000;
   const DEFAULT_AMOUNT = 0;
   const ONE_HUNDRED_PERCENT = 100;
+  const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
   const DEFAULT_AVATAR = 'images/avatar-empty.png';
 
@@ -24,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
   let activeAddExpenseHiddenForm = null;
   let activeAddRepaymentHiddenForm = null;
   let activeEmojiField = null;
+
+  // TODO1 удалить ненужное
+  let today;
+  let todayString;
 
   const users = new Map([
     [
@@ -60,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     title: '',
     amount: 0,
     paidBy: {},
+    date: null,
     splitt: {},
     isValid: false,
     isPaidByValid: true,
@@ -155,8 +161,8 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   let addRepaymentFormModel = {
-    title: '',
     amount: 0,
+    date: null,
     userFrom: currentUserId,
     userTo: null,
     optionsFrom: new Map(),
@@ -238,6 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
   const addExpenseTitleInput = document.querySelector('.add-expense-title');
   const addExpenseAmountInput = document.querySelector('.add-expense-amount');
+  const addExpenseDateInput = document.querySelector('.add-expense-date');
   const addExpenseEmojiInputField = document.querySelector(
     '.emoji-input.add-expense'
   );
@@ -406,6 +413,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const addRepaymentAmountInput = document.querySelector(
     '.add-repayment-amount'
   );
+  const addRepaymentDateInput = document.querySelector('.add-repayment-date');
   const addRepaymentSwitchFrom = document.getElementById(
     'add-repayment__switch-from'
   );
@@ -519,6 +527,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function formatPercentForOutput(value) {
     return `${value}\u202F%`;
+  }
+
+  function calculateDayDifference(date, dateToCompareWith) {
+    const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const dayToCompareWith = new Date(
+      dateToCompareWith.getFullYear(),
+      dateToCompareWith.getMonth(),
+      dateToCompareWith.getDate()
+    );
+
+    const dayDifference = (day - dayToCompareWith) / MILLISECONDS_PER_DAY;
+    return Math.round(dayDifference) || 0;
   }
 
   // f: Menu
@@ -676,6 +696,11 @@ document.addEventListener('DOMContentLoaded', function () {
     changeMainFormNoteButtonText(noteForm);
   }
 
+  function updateTransactionDateInputs() {
+    updateAddExpenseDateInput();
+    updateAddRepaymentDateInput();
+  }
+
   // f: Add Expense
 
   function openAddExpense() {
@@ -718,6 +743,20 @@ document.addEventListener('DOMContentLoaded', function () {
     updateAddExpenseSubmitButton();
   }
 
+  function handleAddExpenseDateInput(event) {
+    if (event.target.value === '') {
+      event.target.value = todayString;
+    }
+    const inputDate = new Date(event.target.value);
+    const rightNow = new Date();
+
+    // [inputDate, rightNow].forEach(date => date.setHours(0, 0, 0, 0));
+
+    if (inputDate > rightNow) {
+      event.target.value = todayString;
+    }
+  }
+
   function updateAddExpenseSubmitButton() {
     validateAddExpenseForm();
     renderAddExpenseSubmitButton();
@@ -751,6 +790,13 @@ document.addEventListener('DOMContentLoaded', function () {
     addExpenseFormModel.amount = amount;
     updatePaidByOnExpenseChange();
     updateSplitts();
+  }
+
+  function updateAddExpenseDateInput() {
+    addExpenseDateInput.setAttribute('max', todayString);
+    if (addExpenseFormModel.date === null || addExpenseFormModel.date === '') {
+      addExpenseDateInput.value = todayString;
+    }
   }
 
   function closeAddExpenseHiddenForm() {
@@ -1257,7 +1303,6 @@ document.addEventListener('DOMContentLoaded', function () {
     splittSharesModel.splittAmounts.set(userId, splittAmount);
     calculateSplittShares();
     renderSplittShares();
-    // if (userId === currentUserId) updateSplittBalanceNote();
     updateSplittBalanceNote();
     updateAddExpenseSubmitButton();
 
@@ -1498,6 +1543,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputAmount = formatAmountForOutput(processedAmount);
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+  }
+
+  function updateAddRepaymentDateInput() {
+    addRepaymentDateInput.setAttribute('max', todayString);
+
+    if (
+      addRepaymentFormModel.date === null ||
+      addRepaymentFormModel.date === ''
+    ) {
+      addRepaymentDateInput.value = todayString;
+    }
   }
 
   // ----------------------
@@ -1752,6 +1808,44 @@ document.addEventListener('DOMContentLoaded', function () {
   // load: Add Repayment: Main Form
   createRepaymentOptions();
 
+  // load: Auxiliary
+
+  function getMillisecondsUntilMidnight(now) {
+    const nextMidnight = new Date(now);
+    nextMidnight.setHours(24, 0, 0, 0);
+
+    const millisecondsUntilMidnight = nextMidnight - now;
+
+    // TODO1 удалить (тест)
+    console.log(`nextMidnight: ${nextMidnight}`);
+    console.log(`millisecondsUntilMidnight: ${millisecondsUntilMidnight}`);
+
+    return millisecondsUntilMidnight;
+  }
+
+  function resetDate() {
+    console.log('fetchDate');
+    const now = newDate();
+    today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    todayString = today.toISOString().split('T')[0];
+
+    // TODO1 удалить (тест)
+    console.log(`now: ${now}`);
+    console.log(`today: ${today}`);
+
+    updateTransactionDateInputs();
+    const millisecondsUntilMidnight = getMillisecondsUntilMidnight(now);
+    setTimeout(resetDate, millisecondsUntilMidnight);
+  }
+
+  resetDate();
+
+  // TODO1 включить потом
+  // setInterval(fetchDate, 60000);
+
+  // TODO1 удалить (testing)
+  // setInterval(fetchDate, 6000);
+
   // ----------------------
   // Event Listeners (el:)
   // ----------------------
@@ -1839,6 +1933,8 @@ document.addEventListener('DOMContentLoaded', function () {
   addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
 
   addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
+
+  addExpenseDateInput.addEventListener('input', handleAddExpenseDateInput);
 
   // el: Add Expense: Payer Form
 
