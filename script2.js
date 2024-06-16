@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let activeAddRepaymentHiddenForm = null;
   let activeEmojiField = null;
 
-  // TODO1 удалить ненужное
   let today;
   let todayString;
 
@@ -315,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-equally-checkbox'
   );
 
-  splittEquallyTableRows.forEach(row => {
+  splittEquallyTableRows.forEach((row) => {
     const userId = row.dataset.userId;
     const splittField = row.querySelector('.splitt-equally-column__amount');
     splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
@@ -343,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-parts-amount-input'
   );
   const splittPartsRowsArray = [...splittPartsRows];
-  splittPartsRowsArray.forEach(row => {
+  splittPartsRowsArray.forEach((row) => {
     const userId = row.dataset.userId;
     const amountField = row.querySelector('.splitt-parts-amount-input');
     splittPartsModel.splittAmounts.set(userId, 0);
@@ -373,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const splittSharesInputs = document.querySelectorAll('.splitt-share__input');
   const splittSharesRowsArray = [...splittSharesRows];
-  splittSharesRowsArray.forEach(row => {
+  splittSharesRowsArray.forEach((row) => {
     const userId = row.dataset.userId;
     const amountField = row.querySelector('.splitt-shares-column__amount');
     const shareField = row.querySelector('.splitt-share__input');
@@ -763,7 +762,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function validateAddExpenseForm() {
-    // TODO1 добавить валидацию даты
     const isValid =
       !isEmptyString(addExpenseFormModel.title) &&
       addExpenseFormModel.amount > 0 &&
@@ -951,7 +949,7 @@ document.addEventListener('DOMContentLoaded', function () {
   ) {
     const switchOptionsToUpdate = getPayerSwitchOptionsToUpdate(selectedRowId);
 
-    switchOptionsToUpdate.forEach(option => {
+    switchOptionsToUpdate.forEach((option) => {
       if (previousPayerId && option.value === previousPayerId) {
         option.removeAttribute(DISABLED_ATTRIBUTE);
       }
@@ -965,7 +963,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const payerSwitchOptionsToUpdate =
       getPayerSwitchOptionsToUpdate(removedRowId);
 
-    payerSwitchOptionsToUpdate.forEach(option => {
+    payerSwitchOptionsToUpdate.forEach((option) => {
       option.value === removedPayerId &&
         option.removeAttribute(DISABLED_ATTRIBUTE);
     });
@@ -977,9 +975,11 @@ document.addEventListener('DOMContentLoaded', function () {
       .filter(([rowId]) => rowId !== rowIdToRemove)
       .map(([_, row]) => row.payerSwitch);
 
-    const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(payerSwitch => {
-      return Array.from(payerSwitch.querySelectorAll('option'));
-    });
+    const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(
+      (payerSwitch) => {
+        return Array.from(payerSwitch.querySelectorAll('option'));
+      }
+    );
 
     return switchOptionsToUpdate;
   }
@@ -1173,7 +1173,7 @@ document.addEventListener('DOMContentLoaded', function () {
       remainder
     );
 
-    splittEquallyModel.checkedRows.forEach(userId => {
+    splittEquallyModel.checkedRows.forEach((userId) => {
       let splittAmount = baseAmount;
       if (usersWithHigherAmounts.has(userId)) {
         splittAmount += 1;
@@ -1241,7 +1241,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const expenseAmountLength = referenceAmount.toString().length;
     const adjustedWidth =
       splittPartsModel.amountWidthOptions.get(expenseAmountLength) || '14rem';
-    splittPartsModel.splittFields.forEach(field => {
+    splittPartsModel.splittFields.forEach((field) => {
       field.style.width = adjustedWidth;
     });
   }
@@ -1414,7 +1414,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function removeAdditionalClasses(element, additionalClasses) {
-    additionalClasses.forEach(additionalClass => {
+    additionalClasses.forEach((additionalClass) => {
       element.classList.remove(additionalClass);
     });
   }
@@ -1597,7 +1597,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let payerOptionsHTML = '';
 
     const payersToDisable = new Set();
-    payerTableModel.rows.forEach(row => {
+    payerTableModel.rows.forEach((row) => {
       payersToDisable.add(row.userId);
     });
 
@@ -1685,7 +1685,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const referenceAmountLength = referenceAmount.toString().length;
     const adjustedWidth =
       payerTableModel.amountWidthOptions.get(referenceAmountLength) || '14rem';
-    payerAmountInputs.forEach(inputElement => {
+    payerAmountInputs.forEach((inputElement) => {
       inputElement.style.width = adjustedWidth;
     });
   }
@@ -1760,11 +1760,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const optionsFrom = addRepaymentSwitchFrom.options;
     const optionsTo = addRepaymentSwitchTo.options;
 
-    [...optionsFrom].forEach(option => {
+    [...optionsFrom].forEach((option) => {
       addRepaymentFormModel.optionsFrom.set(option.value, option);
     });
 
-    [...optionsTo].forEach(option => {
+    [...optionsTo].forEach((option) => {
       if (option.value === '') return;
       addRepaymentFormModel.optionsTo.set(option.value, option);
     });
@@ -1808,43 +1808,33 @@ document.addEventListener('DOMContentLoaded', function () {
   // load: Add Repayment: Main Form
   createRepaymentOptions();
 
-  // load: Auxiliary
+  // load: Auxiliary: Date
 
-  function getMillisecondsUntilMidnight(now) {
-    const nextMidnight = new Date(now);
-    nextMidnight.setHours(24, 0, 0, 0);
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
-    const millisecondsUntilMidnight = nextMidnight - now;
+  function getMillisecondsUntilNextDay(now) {
+    const nextDay = new Date(now);
+    nextDay.setDate(nextDay.getDate() + 1);
+    nextDay.setHours(0, 0, 10, 0);
 
-    // TODO1 удалить (тест)
-    console.log(`nextMidnight: ${nextMidnight}`);
-    console.log(`millisecondsUntilMidnight: ${millisecondsUntilMidnight}`);
-
-    return millisecondsUntilMidnight;
+    return nextDay - now;
   }
 
   function resetDate() {
-    console.log('fetchDate');
-    const now = newDate();
+    const now = new Date();
     today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    todayString = today.toISOString().split('T')[0];
-
-    // TODO1 удалить (тест)
-    console.log(`now: ${now}`);
-    console.log(`today: ${today}`);
+    todayString = formatDate(today);
 
     updateTransactionDateInputs();
-    const millisecondsUntilMidnight = getMillisecondsUntilMidnight(now);
-    setTimeout(resetDate, millisecondsUntilMidnight);
+    const millisecondsUntilNextDay = getMillisecondsUntilNextDay(now);
+    setTimeout(resetDate, millisecondsUntilNextDay);
   }
-
   resetDate();
-
-  // TODO1 включить потом
-  // setInterval(fetchDate, 60000);
-
-  // TODO1 удалить (testing)
-  // setInterval(fetchDate, 6000);
 
   // ----------------------
   // Event Listeners (el:)
@@ -1921,9 +1911,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   addExpenseBtn.addEventListener('click', openAddExpense);
 
-  addExpenseBtnEdit.forEach(button => toggleHiddenForm(button, 'expense'));
+  addExpenseBtnEdit.forEach((button) => toggleHiddenForm(button, 'expense'));
 
-  addExpenseHiddenFormBtnClose.forEach(button => {
+  addExpenseHiddenFormBtnClose.forEach((button) => {
     button.addEventListener('click', function (event) {
       event.preventDefault();
       closeAddExpenseHiddenForm();
@@ -1938,15 +1928,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // el: Add Expense: Payer Form
 
-  payerAvatarColumns.forEach(column => {
+  payerAvatarColumns.forEach((column) => {
     column.addEventListener('click', handlePayerAvatarClick);
   });
 
-  payerSwitches.forEach(payerSwitch => {
+  payerSwitches.forEach((payerSwitch) => {
     payerSwitch.addEventListener('change', handlePayerSwitch);
   });
 
-  payerAmountInputs.forEach(payerAmount =>
+  payerAmountInputs.forEach((payerAmount) =>
     payerAmount.addEventListener('input', handlePayerAmountInput)
   );
 
@@ -1954,31 +1944,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // el: Add Expense: Splitt Form
 
-  splittOptionButtons.forEach(splittOptionButton => {
+  splittOptionButtons.forEach((splittOptionButton) => {
     splittOptionButton.addEventListener('change', handleSplittOptionChange);
   });
 
-  splittEquallyCheckboxes.forEach(checkbox =>
+  splittEquallyCheckboxes.forEach((checkbox) =>
     checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
   );
 
-  splittEquallyTableRows.forEach(row =>
+  splittEquallyTableRows.forEach((row) =>
     row.addEventListener('click', handleSplittEquallyRowClick)
   );
 
-  splittPartsAmountInputs.forEach(inputAmount =>
+  splittPartsAmountInputs.forEach((inputAmount) =>
     inputAmount.addEventListener('input', handleSplittPartsAmountInput)
   );
 
-  splittPartsRows.forEach(row =>
+  splittPartsRows.forEach((row) =>
     row.addEventListener('click', handleSplittPartsRowClick)
   );
 
-  splittSharesInputs.forEach(inputShare =>
+  splittSharesInputs.forEach((inputShare) =>
     inputShare.addEventListener('input', handleSplittSharesInput)
   );
 
-  splittSharesRows.forEach(row =>
+  splittSharesRows.forEach((row) =>
     row.addEventListener('click', handleSplittSharesRowClick)
   );
 
@@ -1992,9 +1982,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   addRepaymentBtn.addEventListener('click', openAddRepayment);
 
-  addRepaymentBtnEdit.forEach(button => toggleHiddenForm(button, 'repayment'));
+  addRepaymentBtnEdit.forEach((button) =>
+    toggleHiddenForm(button, 'repayment')
+  );
 
-  addRepaymentHiddenFormBtnClose.forEach(button => {
+  addRepaymentHiddenFormBtnClose.forEach((button) => {
     button.addEventListener('click', function (event) {
       event.preventDefault();
       closeAddRepaymentHiddenForm();
@@ -2023,7 +2015,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   overlay.addEventListener('click', closeActivePopup);
 
-  btnClosePopup.forEach(button => {
+  btnClosePopup.forEach((button) => {
     button.addEventListener('click', closeActivePopup);
   });
 
