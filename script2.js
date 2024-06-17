@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let today;
   let todayString;
+  let minTransactionDate;
+  let minTransactionDateString;
 
   const users = new Map([
     [
@@ -792,6 +794,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateAddExpenseDateInput() {
     addExpenseDateInput.setAttribute('max', todayString);
+    addExpenseDateInput.setAttribute('min', minTransactionDateString);
     if (addExpenseFormModel.date === null || addExpenseFormModel.date === '') {
       addExpenseDateInput.value = todayString;
     }
@@ -1547,6 +1550,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function updateAddRepaymentDateInput() {
     addRepaymentDateInput.setAttribute('max', todayString);
+    addRepaymentDateInput.setAttribute('min', minTransactionDateString);
 
     if (
       addRepaymentFormModel.date === null ||
@@ -1828,7 +1832,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function resetDate() {
     const now = new Date();
     today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    minTransactionDate = new Date(today);
+    minTransactionDate.setFullYear(today.getFullYear() - 5);
+
     todayString = formatDate(today);
+    minTransactionDateString = formatDate(minTransactionDate);
 
     updateTransactionDateInputs();
     const millisecondsUntilNextDay = getMillisecondsUntilNextDay(now);
