@@ -1042,9 +1042,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function getAmountByPayerId(payerId) {
-    const rowEntry = Array.from(payerTableModel.rows.entries()).find(
-      ([_, row]) => row.userId === payerId
-    );
+    const rowEntry = payerTableModel.rows
+      .entries()
+      .find(([_, row]) => row.userId === payerId);
 
     return rowEntry ? rowEntry[1].amount : DEFAULT_AMOUNT;
   }
@@ -1212,10 +1212,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function calculateSplittParts() {
-    const total = Array.from(splittPartsModel.splittAmounts.values()).reduce(
-      (acc, currentValue) => acc + currentValue,
-      0
-    );
+    const total = splittPartsModel.splittAmounts
+      .values()
+      .reduce((acc, currentValue) => acc + currentValue, 0);
 
     splittPartsModel.total = total;
     splittPartsModel.remainder =
@@ -1336,13 +1335,13 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function calculateSplittShares() {
-    const totalAmount = Array.from(
-      splittSharesModel.splittAmounts.values()
-    ).reduce((acc, currentValue) => acc + currentValue, 0);
+    const totalAmount = splittSharesModel.splittAmounts
+      .values()
+      .reduce((acc, currentValue) => acc + currentValue, 0);
 
-    const totalShare = Array.from(
-      splittSharesModel.splittShares.values()
-    ).reduce((acc, currentValue) => acc + currentValue, 0);
+    const totalShare = splittSharesModel.splittShares
+      .values()
+      .reduce((acc, currentValue) => acc + currentValue, 0);
 
     splittSharesModel.totalAmount = totalAmount;
     splittSharesModel.totalShare = totalShare;
