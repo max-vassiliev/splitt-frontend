@@ -754,9 +754,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const inputDate = new Date(event.target.value);
     const rightNow = new Date();
 
-    // TODO1 удалить, если не нужно
-    // [inputDate, rightNow].forEach(date => date.setHours(0, 0, 0, 0));
-
     if (inputDate > rightNow) {
       event.target.value = todayString;
     }
@@ -1523,7 +1520,7 @@ document.addEventListener('DOMContentLoaded', function () {
         addRepaymentFormModel.optionsTo.get(previousUserId);
       optionToActivate.removeAttribute(DISABLED_ATTRIBUTE);
     }
-    // TODO1 добавить вызов функции активации кнопки
+    updateAddRepaymentSubmitButton();
   }
 
   function handleAddRepaymentToChange(event) {
@@ -1540,7 +1537,6 @@ document.addEventListener('DOMContentLoaded', function () {
         addRepaymentFormModel.optionsFrom.get(previousUserId);
       optionToActivate.removeAttribute(DISABLED_ATTRIBUTE);
     }
-    // TODO1
     updateAddRepaymentSubmitButton();
   }
 
@@ -1548,9 +1544,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const cursorPosition = this.selectionStart;
     const inputAmount = event.target.value;
     const processedAmount = processInputAmount(inputAmount);
+    addRepaymentFormModel.amount = processedAmount;
     const outputAmount = formatAmountForOutput(processedAmount);
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
+    updateAddExpenseSubmitButton();
   }
 
   function updateAddRepaymentDateInput() {
@@ -1580,10 +1578,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function renderAddRepaymentSubmitButton() {
-    // TODO1 удалить тест
-    console.log('renderAddRepaymentSubmitButton');
-    console.log(addRepaymentFormModel);
-
     if (addRepaymentFormModel.isValid) {
       addRepaymentSubmitButton.removeAttribute(DISABLED_ATTRIBUTE);
       addRepaymentSubmitButton.classList.add(ACTIVE_CLASS);
@@ -2062,7 +2056,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // TODO1: to delete: enable Repayment Form
-  openAddRepayment();
+  // openAddRepayment();
   // openAddExpense();
 
   // TODO1: to delete: enable Payer Form
