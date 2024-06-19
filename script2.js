@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-equally-checkbox'
   );
 
-  splittEquallyTableRows.forEach((row) => {
+  splittEquallyTableRows.forEach(row => {
     const userId = row.dataset.userId;
     const splittField = row.querySelector('.splitt-equally-column__amount');
     splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
     '.splitt-parts-amount-input'
   );
   const splittPartsRowsArray = [...splittPartsRows];
-  splittPartsRowsArray.forEach((row) => {
+  splittPartsRowsArray.forEach(row => {
     const userId = row.dataset.userId;
     const amountField = row.querySelector('.splitt-parts-amount-input');
     splittPartsModel.splittAmounts.set(userId, 0);
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const splittSharesInputs = document.querySelectorAll('.splitt-share__input');
   const splittSharesRowsArray = [...splittSharesRows];
-  splittSharesRowsArray.forEach((row) => {
+  splittSharesRowsArray.forEach(row => {
     const userId = row.dataset.userId;
     const amountField = row.querySelector('.splitt-shares-column__amount');
     const shareField = row.querySelector('.splitt-share__input');
@@ -429,6 +429,9 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const addRepaymentEmojiRemoveBtn = document.querySelector(
     '.btn__emoji-remove.add-repayment'
+  );
+  const addRepaymentSubmitButton = document.querySelector(
+    '.add-repayment__btn--submit'
   );
 
   // e: Add Repayment: Note Form
@@ -751,6 +754,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const inputDate = new Date(event.target.value);
     const rightNow = new Date();
 
+    // TODO1 удалить, если не нужно
     // [inputDate, rightNow].forEach(date => date.setHours(0, 0, 0, 0));
 
     if (inputDate > rightNow) {
@@ -952,7 +956,7 @@ document.addEventListener('DOMContentLoaded', function () {
   ) {
     const switchOptionsToUpdate = getPayerSwitchOptionsToUpdate(selectedRowId);
 
-    switchOptionsToUpdate.forEach((option) => {
+    switchOptionsToUpdate.forEach(option => {
       if (previousPayerId && option.value === previousPayerId) {
         option.removeAttribute(DISABLED_ATTRIBUTE);
       }
@@ -966,7 +970,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const payerSwitchOptionsToUpdate =
       getPayerSwitchOptionsToUpdate(removedRowId);
 
-    payerSwitchOptionsToUpdate.forEach((option) => {
+    payerSwitchOptionsToUpdate.forEach(option => {
       option.value === removedPayerId &&
         option.removeAttribute(DISABLED_ATTRIBUTE);
     });
@@ -978,11 +982,9 @@ document.addEventListener('DOMContentLoaded', function () {
       .filter(([rowId]) => rowId !== rowIdToRemove)
       .map(([_, row]) => row.payerSwitch);
 
-    const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(
-      (payerSwitch) => {
-        return Array.from(payerSwitch.querySelectorAll('option'));
-      }
-    );
+    const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(payerSwitch => {
+      return Array.from(payerSwitch.querySelectorAll('option'));
+    });
 
     return switchOptionsToUpdate;
   }
@@ -1176,7 +1178,7 @@ document.addEventListener('DOMContentLoaded', function () {
       remainder
     );
 
-    splittEquallyModel.checkedRows.forEach((userId) => {
+    splittEquallyModel.checkedRows.forEach(userId => {
       let splittAmount = baseAmount;
       if (usersWithHigherAmounts.has(userId)) {
         splittAmount += 1;
@@ -1244,7 +1246,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const expenseAmountLength = referenceAmount.toString().length;
     const adjustedWidth =
       splittPartsModel.amountWidthOptions.get(expenseAmountLength) || '14rem';
-    splittPartsModel.splittFields.forEach((field) => {
+    splittPartsModel.splittFields.forEach(field => {
       field.style.width = adjustedWidth;
     });
   }
@@ -1417,7 +1419,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function removeAdditionalClasses(element, additionalClasses) {
-    additionalClasses.forEach((additionalClass) => {
+    additionalClasses.forEach(additionalClass => {
       element.classList.remove(additionalClass);
     });
   }
@@ -1521,6 +1523,7 @@ document.addEventListener('DOMContentLoaded', function () {
         addRepaymentFormModel.optionsTo.get(previousUserId);
       optionToActivate.removeAttribute(DISABLED_ATTRIBUTE);
     }
+    // TODO1 добавить вызов функции активации кнопки
   }
 
   function handleAddRepaymentToChange(event) {
@@ -1537,6 +1540,8 @@ document.addEventListener('DOMContentLoaded', function () {
         addRepaymentFormModel.optionsFrom.get(previousUserId);
       optionToActivate.removeAttribute(DISABLED_ATTRIBUTE);
     }
+    // TODO1
+    updateAddRepaymentSubmitButton();
   }
 
   function handleAddRepaymentAmountInput(event) {
@@ -1557,6 +1562,37 @@ document.addEventListener('DOMContentLoaded', function () {
       addRepaymentFormModel.date === ''
     ) {
       addRepaymentDateInput.value = todayString;
+    }
+  }
+
+  function updateAddRepaymentSubmitButton() {
+    validateAddRepaymentSubmitButton();
+    renderAddRepaymentSubmitButton();
+  }
+
+  function validateAddRepaymentSubmitButton() {
+    const isValid =
+      addRepaymentFormModel.amount > 0 &&
+      addRepaymentFormModel.userFrom !== null &&
+      addRepaymentFormModel.userTo !== null;
+
+    addRepaymentFormModel.isValid = isValid;
+  }
+
+  function renderAddRepaymentSubmitButton() {
+    // TODO1 удалить тест
+    console.log('renderAddRepaymentSubmitButton');
+    console.log(addRepaymentFormModel);
+
+    if (addRepaymentFormModel.isValid) {
+      addRepaymentSubmitButton.removeAttribute(DISABLED_ATTRIBUTE);
+      addRepaymentSubmitButton.classList.add(ACTIVE_CLASS);
+    } else {
+      addRepaymentSubmitButton.setAttribute(
+        DISABLED_ATTRIBUTE,
+        DISABLED_ATTRIBUTE
+      );
+      addRepaymentSubmitButton.classList.remove(ACTIVE_CLASS);
     }
   }
 
@@ -1601,7 +1637,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let payerOptionsHTML = '';
 
     const payersToDisable = new Set();
-    payerTableModel.rows.forEach((row) => {
+    payerTableModel.rows.forEach(row => {
       payersToDisable.add(row.userId);
     });
 
@@ -1689,7 +1725,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const referenceAmountLength = referenceAmount.toString().length;
     const adjustedWidth =
       payerTableModel.amountWidthOptions.get(referenceAmountLength) || '14rem';
-    payerAmountInputs.forEach((inputElement) => {
+    payerAmountInputs.forEach(inputElement => {
       inputElement.style.width = adjustedWidth;
     });
   }
@@ -1764,11 +1800,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const optionsFrom = addRepaymentSwitchFrom.options;
     const optionsTo = addRepaymentSwitchTo.options;
 
-    [...optionsFrom].forEach((option) => {
+    [...optionsFrom].forEach(option => {
       addRepaymentFormModel.optionsFrom.set(option.value, option);
     });
 
-    [...optionsTo].forEach((option) => {
+    [...optionsTo].forEach(option => {
       if (option.value === '') return;
       addRepaymentFormModel.optionsTo.set(option.value, option);
     });
@@ -1919,9 +1955,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   addExpenseBtn.addEventListener('click', openAddExpense);
 
-  addExpenseBtnEdit.forEach((button) => toggleHiddenForm(button, 'expense'));
+  addExpenseBtnEdit.forEach(button => toggleHiddenForm(button, 'expense'));
 
-  addExpenseHiddenFormBtnClose.forEach((button) => {
+  addExpenseHiddenFormBtnClose.forEach(button => {
     button.addEventListener('click', function (event) {
       event.preventDefault();
       closeAddExpenseHiddenForm();
@@ -1936,15 +1972,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // el: Add Expense: Payer Form
 
-  payerAvatarColumns.forEach((column) => {
+  payerAvatarColumns.forEach(column => {
     column.addEventListener('click', handlePayerAvatarClick);
   });
 
-  payerSwitches.forEach((payerSwitch) => {
+  payerSwitches.forEach(payerSwitch => {
     payerSwitch.addEventListener('change', handlePayerSwitch);
   });
 
-  payerAmountInputs.forEach((payerAmount) =>
+  payerAmountInputs.forEach(payerAmount =>
     payerAmount.addEventListener('input', handlePayerAmountInput)
   );
 
@@ -1952,31 +1988,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // el: Add Expense: Splitt Form
 
-  splittOptionButtons.forEach((splittOptionButton) => {
+  splittOptionButtons.forEach(splittOptionButton => {
     splittOptionButton.addEventListener('change', handleSplittOptionChange);
   });
 
-  splittEquallyCheckboxes.forEach((checkbox) =>
+  splittEquallyCheckboxes.forEach(checkbox =>
     checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
   );
 
-  splittEquallyTableRows.forEach((row) =>
+  splittEquallyTableRows.forEach(row =>
     row.addEventListener('click', handleSplittEquallyRowClick)
   );
 
-  splittPartsAmountInputs.forEach((inputAmount) =>
+  splittPartsAmountInputs.forEach(inputAmount =>
     inputAmount.addEventListener('input', handleSplittPartsAmountInput)
   );
 
-  splittPartsRows.forEach((row) =>
+  splittPartsRows.forEach(row =>
     row.addEventListener('click', handleSplittPartsRowClick)
   );
 
-  splittSharesInputs.forEach((inputShare) =>
+  splittSharesInputs.forEach(inputShare =>
     inputShare.addEventListener('input', handleSplittSharesInput)
   );
 
-  splittSharesRows.forEach((row) =>
+  splittSharesRows.forEach(row =>
     row.addEventListener('click', handleSplittSharesRowClick)
   );
 
@@ -1990,11 +2026,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   addRepaymentBtn.addEventListener('click', openAddRepayment);
 
-  addRepaymentBtnEdit.forEach((button) =>
-    toggleHiddenForm(button, 'repayment')
-  );
+  addRepaymentBtnEdit.forEach(button => toggleHiddenForm(button, 'repayment'));
 
-  addRepaymentHiddenFormBtnClose.forEach((button) => {
+  addRepaymentHiddenFormBtnClose.forEach(button => {
     button.addEventListener('click', function (event) {
       event.preventDefault();
       closeAddRepaymentHiddenForm();
@@ -2023,13 +2057,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   overlay.addEventListener('click', closeActivePopup);
 
-  btnClosePopup.forEach((button) => {
+  btnClosePopup.forEach(button => {
     button.addEventListener('click', closeActivePopup);
   });
 
   // TODO1: to delete: enable Repayment Form
-  // openAddRepayment();
-  openAddExpense();
+  openAddRepayment();
+  // openAddExpense();
 
   // TODO1: to delete: enable Payer Form
   // const addExpenseHiddenFormPayer = document.querySelector(

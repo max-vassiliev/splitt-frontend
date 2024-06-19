@@ -1202,6 +1202,15 @@ header {
   display: block;
 }
 
+.add-expense__btn--submit.active,
+.add-repayment__btn--submit.active {
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
 /*  ADD EXPENSE  */
 
 .add-expense__form,
@@ -1249,11 +1258,6 @@ header {
 
 .add-expense__btn--submit.active {
   background-color: #f97e4b;
-  color: #fff;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.4s ease;
 }
 
 .add-expense__btn--submit.active:hover {
@@ -1315,6 +1319,23 @@ header {
 .add-repayment__form_note__btn--save.active:active {
   background-color: #719560;
   box-shadow: 0 0px 1rem rgba(92, 145, 68, 0.2);
+}
+
+.add-repayment__btn--submit.active {
+  background-color: #8cbf74;
+}
+
+.add-repayment__btn--submit.active:hover {
+  background-color: #75ae5b;
+}
+
+.add-repayment__btn--submit.active:active {
+  background-color: #497d31;
+}
+
+.add-expense__btn--submit.active:hover,
+.add-expense__btn--submit.active:active {
+  box-shadow: 0 0px 1.2rem #c5debd;
 }
 
 /* ~ ~ ~ ~ */
