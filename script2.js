@@ -272,6 +272,11 @@ document.addEventListener('DOMContentLoaded', function () {
     '.add-expense__btn--submit'
   );
 
+  // e: Add Expense: Hidden Forms
+  const addExpenseHiddenForms = document.querySelectorAll(
+    'add-expense__form-hidden'
+  );
+
   // e: Add Expense: Payer Form
   const payerTable = document.querySelector('.payer-table');
   const payerSwitches = document.querySelectorAll('.payer__switch');
@@ -710,6 +715,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function openAddExpense() {
     addOverlay();
     addExpenseForm.classList.add(ACTIVE_CLASS);
+    // TODO1 добавить расчет отступа
+    alignTransactionForms(addExpenseForm, addExpenseHiddenForms);
     activePopup = addExpenseForm;
   }
 
@@ -799,6 +806,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (addExpenseFormModel.date === null || addExpenseFormModel.date === '') {
       addExpenseDateInput.value = todayString;
     }
+  }
+
+  function alignTransactionForms(mainForm, hiddenForms) {
+    calculateTransactionFormTopMargin(mainForm);
+  }
+
+  function calculateTransactionFormTopMargin(form) {
+    const viewportHeight = window.innerHeight;
+    console.log(viewportHeight);
   }
 
   function closeAddExpenseHiddenForm() {
@@ -1480,6 +1496,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function openAddRepayment() {
     addOverlay();
     addRepaymentForm.classList.add(ACTIVE_CLASS);
+    // TODO1 добавить расчет отступа
     activePopup = addRepaymentForm;
   }
 
