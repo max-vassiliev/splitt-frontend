@@ -242,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // e: Add Expense: Main Form
   const addExpenseBtn = document.querySelector('.add-expense__btn');
   const addExpenseForm = document.querySelector('.add-expense__form');
+  const addExpenseMainForm = document.querySelector('.add-expense__form_main');
   const addExpenseBtnEdit = document.querySelectorAll('.add-expense__btn-edit');
   const addExpenseTitleInput = document.querySelector('.add-expense-title');
   const addExpenseAmountInput = document.querySelector('.add-expense-amount');
@@ -274,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // e: Add Expense: Hidden Forms
   const addExpenseHiddenForms = document.querySelectorAll(
-    'add-expense__form-hidden'
+    '.add-expense__form-hidden'
   );
 
   // e: Add Expense: Payer Form
@@ -716,7 +717,10 @@ document.addEventListener('DOMContentLoaded', function () {
     addOverlay();
     addExpenseForm.classList.add(ACTIVE_CLASS);
     // TODO1 добавить расчет отступа
-    alignTransactionForms(addExpenseForm, addExpenseHiddenForms);
+    // alignTransactionForms(addExpenseForm, addExpenseHiddenForms);
+    alignTransactionForms(addExpenseMainForm, addExpenseHiddenForms);
+    // const newAddExpenseForm = document.querySelector('.add-expense__form_main');
+    // alignTransactionForms(newAddExpenseForm, addExpenseHiddenForms);
     activePopup = addExpenseForm;
   }
 
@@ -806,15 +810,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (addExpenseFormModel.date === null || addExpenseFormModel.date === '') {
       addExpenseDateInput.value = todayString;
     }
-  }
-
-  function alignTransactionForms(mainForm, hiddenForms) {
-    calculateTransactionFormTopMargin(mainForm);
-  }
-
-  function calculateTransactionFormTopMargin(form) {
-    const viewportHeight = window.innerHeight;
-    console.log(viewportHeight);
   }
 
   function closeAddExpenseHiddenForm() {
@@ -1742,6 +1737,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // v: Add Expense: Splitt
 
+  // TODO1 удалить пока
   // function
   function createSplittFormTables() {
     let splittEquallyTableRows = '';
@@ -1765,6 +1761,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </table>`;
   }
 
+  // TODO1 удалить, если не нужно
   function generateSplittEquallyRowHTML(userId) {
     if (!users.contains(userId)) return;
 
@@ -1792,6 +1789,52 @@ document.addEventListener('DOMContentLoaded', function () {
       </tr>`;
 
     return splittEquallyRowHTML;
+  }
+
+  function alignTransactionForms(mainForm, hiddenForms) {
+    const topMargin = calculateTransactionFormTopMargin(mainForm);
+    const mainFormRightMargin = calculateTransactionFormHorizontalMargin();
+    const hiddenFormLeftMargin = calculateTransactionHiddenFormLeftMargin();
+
+    mainForm.style.top = topMargin;
+    mainForm.style.right = mainFormRightMargin;
+
+    hiddenForms.forEach(hiddenForm => {
+      hiddenForm.style.top = topMargin;
+      hiddenForm.style.left = hiddenFormLeftMargin;
+    });
+  }
+
+  function calculateTransactionFormTopMargin(form) {
+    const viewportHeight = window.innerHeight;
+    let heightRatio =
+      calculateTransactionFormTopMarginHeightRatio(viewportHeight);
+    const formHeight = form.offsetHeight;
+    const topMargin = Math.round((viewportHeight - formHeight) / heightRatio);
+
+    return `${topMargin}px`;
+  }
+
+  function calculateTransactionFormHorizontalMargin() {
+    const viewportWidth = window.innerWidth;
+    const rightMargin = Math.round(viewportWidth * (11 / 20));
+
+    return `${rightMargin}px`;
+  }
+
+  function calculateTransactionHiddenFormLeftMargin() {
+    const leftMargin = window.innerWidth / 2;
+    return `${leftMargin}px`;
+  }
+
+  function calculateTransactionFormTopMarginHeightRatio(viewportHeight) {
+    if (viewportHeight < 1050) {
+      return 2;
+    }
+    if (viewportHeight < 1500) {
+      return 3;
+    }
+    return 4;
   }
 
   // v: Add Repayment: Main Form

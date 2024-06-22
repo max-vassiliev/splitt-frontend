@@ -502,9 +502,10 @@ header {
 
 .add-transaction__form_main,
 .add-transaction__form_hidden {
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
   align-items: center;
-  top: 5rem;
+  /* top: 5rem; */
   background: #fff;
   z-index: 2;
   overflow-y: auto;
@@ -513,13 +514,13 @@ header {
 }
 
 .add-transaction__form_main {
-  left: 4rem;
+  /* left: 4rem; */
   width: 457px;
 }
 
 .add-transaction__form_hidden {
   min-width: 457px;
-  left: calc(4rem + 457px + 4rem);
+  /* left: calc(4rem + 457px + 4rem); */
   z-index: 3;
 }
 
