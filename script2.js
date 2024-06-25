@@ -289,7 +289,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const payerAvatarColumns = document.querySelectorAll(
     '.payer-table-column__avatar'
   );
-  const payerAmountInputs = document.querySelectorAll('.payer-amount__input');
   const addPayerRow = document.querySelector('.payer-table-row__add-payer');
   const addPayerButton = document.querySelector('.add-payer-button');
   const payerTotalElement = document.querySelector(
@@ -575,6 +574,7 @@ document.addEventListener('DOMContentLoaded', function () {
         addRepaymentHiddenForms,
         addRepaymentFormModel
       );
+      return;
     }
   }
 
@@ -914,6 +914,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const newPayerRow = addPayerRow.previousElementSibling;
     addEventListenersToPayerRow(newPayerRow);
     addPayerRowToModel(newPayerRow);
+    adjustPayerAmountInputWidth();
 
     if (payerTableModel.rows.size === users.size) {
       hideElement(addPayerButton);
@@ -1761,18 +1762,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const referenceAmountLength = referenceAmount.toString().length;
     const adjustedWidth =
       payerTableModel.amountWidthOptions.get(referenceAmountLength) || '14rem';
-    payerAmountInputs.forEach(inputElement => {
+
+    const payerAmountInputElements = Array.from(
+      payerTableModel.rows.values()
+    ).map(row => row.amountElement);
+
+    payerAmountInputElements.forEach(inputElement => {
       inputElement.style.width = adjustedWidth;
     });
   }
 
   // v: Add Expense: Splitt
-
-  function generateSplittEquallyTableHTML(rows) {
-    return `<table class="splitt-form__equally">
-      ${rows}
-    </table>`;
-  }
 
   function alignTransactionForms(mainForm, hiddenForms, model) {
     const topMargin = calculateTransactionFormTopMargin(mainForm);
@@ -2029,10 +2029,6 @@ document.addEventListener('DOMContentLoaded', function () {
   payerSwitches.forEach(payerSwitch => {
     payerSwitch.addEventListener('change', handlePayerSwitch);
   });
-
-  payerAmountInputs.forEach(payerAmount =>
-    payerAmount.addEventListener('input', handlePayerAmountInput)
-  );
 
   addPayerButton.addEventListener('click', handleAddPayerClick);
 
