@@ -1192,10 +1192,8 @@ header {
 
 .emoji-picker-container {
   display: none;
-  position: absolute;
-  position: absolute;
+  position: fixed;
   margin-left: 30rem;
-  margin-top: 23.8rem;
   z-index: 4;
 }
 

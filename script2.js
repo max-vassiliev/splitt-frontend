@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
     isPaidByValid: true,
     isSplittValid: true,
     comment: null,
+    emojiRow: null,
     balanceOptions: [POSITIVE_CLASS, NEGATIVE_CLASS, HIDDEN_CLASS],
     splittBtnOptions: new Map([
       ['equally', 'поровну'],
@@ -166,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
     date: null,
     userFrom: currentUserId,
     userTo: null,
+    emojiRow: null,
     optionsFrom: new Map(),
     optionsTo: new Map(),
     note: null,
@@ -247,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseTitleInput = document.querySelector('.add-expense-title');
   const addExpenseAmountInput = document.querySelector('.add-expense-amount');
   const addExpenseDateInput = document.querySelector('.add-expense-date');
+  const addExpenseEmojiRow = document.querySelector('.add-expense-emoji-row');
   const addExpenseEmojiInputField = document.querySelector(
     '.emoji-input.add-expense'
   );
@@ -272,6 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseSubmitButton = document.querySelector(
     '.add-expense__btn--submit'
   );
+  addExpenseFormModel.emojiRow = addExpenseEmojiRow;
 
   // e: Add Expense: Hidden Forms
   const addExpenseHiddenForms = document.querySelectorAll(
@@ -413,10 +417,12 @@ document.addEventListener('DOMContentLoaded', function () {
   // e: Add Repayment: Main Form
   const addRepaymentBtn = document.querySelector('.add-repayment__btn');
   const addRepaymentForm = document.querySelector('.add-repayment__form');
+  const addRepaymentMainForm = document.querySelector(
+    '.add-repayment__form_main'
+  );
   const addRepaymentBtnEdit = document.querySelectorAll(
     '.add-repayment__btn-edit'
   );
-
   const addRepaymentAmountInput = document.querySelector(
     '.add-repayment-amount'
   );
@@ -426,6 +432,9 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const addRepaymentSwitchTo = document.getElementById(
     'add-repayment__switch-to'
+  );
+  const addRepaymentEmojiRow = document.querySelector(
+    '.add-repayment-emoji-row'
   );
   const addRepaymentEmojiInputField = document.querySelector(
     '.emoji-input.add-repayment'
@@ -438,6 +447,13 @@ document.addEventListener('DOMContentLoaded', function () {
   );
   const addRepaymentSubmitButton = document.querySelector(
     '.add-repayment__btn--submit'
+  );
+  addRepaymentFormModel.emojiRow = addRepaymentEmojiRow;
+
+  // e: Add Repayment: Hidden Forms
+
+  const addRepaymentHiddenForms = document.querySelectorAll(
+    '.add-repayment__form-hidden'
   );
 
   // e: Add Repayment: Note Form
@@ -539,6 +555,8 @@ document.addEventListener('DOMContentLoaded', function () {
     return `${value}\u202F%`;
   }
 
+  // TODO1 удалить, если не нужно
+
   function calculateDayDifference(date, dateToCompareWith) {
     const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const dayToCompareWith = new Date(
@@ -549,6 +567,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const dayDifference = (day - dayToCompareWith) / MILLISECONDS_PER_DAY;
     return Math.round(dayDifference) || 0;
+  }
+
+  // f: Window
+
+  function handleWindowResize() {
+    if (activePopup === null) {
+      return;
+    }
+    if (activePopup === addExpenseForm) {
+      alignTransactionForms(
+        addExpenseMainForm,
+        addExpenseHiddenForms,
+        addExpenseFormModel
+      );
+      return;
+    }
+    if (activePopup === addRepaymentForm) {
+      alignTransactionForms(
+        addRepaymentMainForm,
+        addRepaymentHiddenForms,
+        addRepaymentFormModel
+      );
+    }
   }
 
   // f: Menu
@@ -716,11 +757,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function openAddExpense() {
     addOverlay();
     addExpenseForm.classList.add(ACTIVE_CLASS);
-    // TODO1 добавить расчет отступа
-    // alignTransactionForms(addExpenseForm, addExpenseHiddenForms);
-    alignTransactionForms(addExpenseMainForm, addExpenseHiddenForms);
-    // const newAddExpenseForm = document.querySelector('.add-expense__form_main');
-    // alignTransactionForms(newAddExpenseForm, addExpenseHiddenForms);
+    alignTransactionForms(
+      addExpenseMainForm,
+      addExpenseHiddenForms,
+      addExpenseFormModel
+    );
     activePopup = addExpenseForm;
   }
 
@@ -1491,7 +1532,12 @@ document.addEventListener('DOMContentLoaded', function () {
   function openAddRepayment() {
     addOverlay();
     addRepaymentForm.classList.add(ACTIVE_CLASS);
-    // TODO1 добавить расчет отступа
+    // TODO1 тест
+    alignTransactionForms(
+      addRepaymentMainForm,
+      addRepaymentHiddenForms,
+      addRepaymentFormModel
+    );
     activePopup = addRepaymentForm;
   }
 
@@ -1791,7 +1837,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return splittEquallyRowHTML;
   }
 
-  function alignTransactionForms(mainForm, hiddenForms) {
+  function alignTransactionForms(mainForm, hiddenForms, model) {
     const topMargin = calculateTransactionFormTopMargin(mainForm);
     const mainFormRightMargin = calculateTransactionFormHorizontalMargin();
     const hiddenFormLeftMargin = calculateTransactionHiddenFormLeftMargin();
@@ -1803,6 +1849,19 @@ document.addEventListener('DOMContentLoaded', function () {
       hiddenForm.style.top = topMargin;
       hiddenForm.style.left = hiddenFormLeftMargin;
     });
+
+    adjustTransactionEmojiMenu(model);
+  }
+
+  function adjustTransactionEmojiMenu(formModel) {
+    const emojiRowRect = formModel.emojiRow.getBoundingClientRect();
+    const emojiRowHeight = formModel.emojiRow.offsetHeight;
+
+    const emojiContainerTopMargin = Math.round(
+      emojiRowRect.top - emojiRowHeight * 1.8
+    );
+
+    emojiPickerContainer.style.top = `${emojiContainerTopMargin}px`;
   }
 
   function calculateTransactionFormTopMargin(form) {
@@ -1951,6 +2010,10 @@ document.addEventListener('DOMContentLoaded', function () {
         : toggleAddRepaymentHiddenForm(hiddenForm, this);
     });
   }
+
+  // el: Window
+
+  window.addEventListener('resize', handleWindowResize);
 
   // el: Menu
 
