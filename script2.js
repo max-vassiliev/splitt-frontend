@@ -555,20 +555,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return `${value}\u202F%`;
   }
 
-  // TODO1 удалить, если не нужно
-
-  function calculateDayDifference(date, dateToCompareWith) {
-    const day = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    const dayToCompareWith = new Date(
-      dateToCompareWith.getFullYear(),
-      dateToCompareWith.getMonth(),
-      dateToCompareWith.getDate()
-    );
-
-    const dayDifference = (day - dayToCompareWith) / MILLISECONDS_PER_DAY;
-    return Math.round(dayDifference) || 0;
-  }
-
   // f: Window
 
   function handleWindowResize() {
@@ -1532,7 +1518,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function openAddRepayment() {
     addOverlay();
     addRepaymentForm.classList.add(ACTIVE_CLASS);
-    // TODO1 тест
     alignTransactionForms(
       addRepaymentMainForm,
       addRepaymentHiddenForms,
@@ -1783,58 +1768,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // v: Add Expense: Splitt
 
-  // TODO1 удалить пока
-  // function
-  function createSplittFormTables() {
-    let splittEquallyTableRows = '';
-
-    // итерация по users, составление splittEquallyTableRows
-
-    const splittEquallyTableHTML = generateSplittEquallyTableHTML(
-      splittEquallyTableRows
-    );
-
-    splittEquallyTable.insertAdjacentHTML('beforeend', splittEquallyTableHTML);
-
-    // доработать при рефакторинге
-  }
-
-  // createSplittFormTables();
-
   function generateSplittEquallyTableHTML(rows) {
     return `<table class="splitt-form__equally">
       ${rows}
     </table>`;
-  }
-
-  // TODO1 удалить, если не нужно
-  function generateSplittEquallyRowHTML(userId) {
-    if (!users.contains(userId)) return;
-
-    const userName = users.get(userId).name;
-    const avatar = users.get(userId).avatar ?? DEFAULT_AVATAR;
-
-    const splittEquallyRowHTML = `
-      <tr class="splitt-equally__row" data-user-id=${userId}>
-        <td class="splitt-equally-column__checkbox">
-          <input
-            type="checkbox"
-            class="splitt-equally-checkbox"
-            checked
-          />
-        </td>
-        <td class="splitt-equally-column__avatar">
-          <img
-            class="account__avatar"
-            src="${avatar}"
-            alt="${userName}"
-          />
-        </td>
-        <td class="splitt-equally-column__username">${userName}</td>
-        <td class="splitt-equally-column__amount">0,00&nbsp;${CURRENCY_SYMBOL}</td>
-      </tr>`;
-
-    return splittEquallyRowHTML;
   }
 
   function alignTransactionForms(mainForm, hiddenForms, model) {
@@ -1953,9 +1890,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // load: Add Expense: Payer Form
   createFirstPayerRow();
-
-  // load: Add Expense: Splitt
-  // TODO1 вызвать функцию
 
   // load: Add Repayment: Main Form
   createRepaymentOptions();
