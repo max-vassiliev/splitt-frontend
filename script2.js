@@ -1591,7 +1591,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputAmount = formatAmountForOutput(processedAmount);
     this.value = outputAmount;
     setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
-    updateAddExpenseSubmitButton();
+    updateAddRepaymentSubmitButton();
   }
 
   function updateAddRepaymentDateInput() {
