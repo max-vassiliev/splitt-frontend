@@ -1456,7 +1456,7 @@ header {
 
 /* OPERATION (generic) */
 
-.operation {
+.summary {
   grid-column: 2;
   padding: 1.8rem 2rem;
   color: #333;
@@ -1465,7 +1465,7 @@ header {
   /* border-radius: 1rem; */
 }
 
-.operation h2 {
+.summary h2 {
   text-transform: uppercase;
   font-size: 1.6rem;
   font-family: 'Raleway', Helvetica, Arial, sans-serif;
@@ -1473,30 +1473,30 @@ header {
   color: #444;
 }
 
-.operation p {
+.summary p {
   font-size: 1.6rem;
   margin-bottom: 1.4rem;
   color: #555;
 }
 
-.operation__table--row {
+.summary__table--row {
   display: flex;
   align-items: center;
   font-size: 1.6rem;
   margin: 0.6rem auto;
 }
 
-.operation__table--row .account__avatar {
+.summary__table--row .account__avatar {
   margin-right: 0.8rem;
 }
 
-.operation__table--avatar {
+.summary__table--avatar {
   font-size: 2.3rem;
   margin-left: 0.3rem;
   margin-right: 0.8rem;
 }
 
-.operation__table--user {
+.summary__table--user {
   width: 18rem;
   font-weight: 500;
   white-space: nowrap;
@@ -1504,7 +1504,7 @@ header {
   text-overflow: ellipsis;
 }
 
-.operation__table--amount {
+.summary__table--amount {
   font-weight: 300;
   margin-left: auto;
 }
@@ -1680,35 +1680,7 @@ h2 {
   color: #bbb;
 }
 
-/* SUMMARY (Jonas) FIXME: */
-.summary {
-  /* grid-row: 5 / 6; */
-  display: flex;
-  align-items: baseline;
-  padding: 0 0.3rem;
-  margin-top: 1rem;
-}
-
-.summary__label {
-  font-size: 1.2rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  margin-right: 0.8rem;
-}
-
-.summary__value {
-  font-size: 2.2rem;
-  margin-right: 2.5rem;
-}
-
-.summary__value--in,
-.summary__value--interest {
-  color: #66c873;
-}
-
-.summary__value--out {
-  color: #f5465d;
-}
+/* TODO1: удалить, если не нужно */
 
 .btn--sort {
   margin-left: auto;
