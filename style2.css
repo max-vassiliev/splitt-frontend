@@ -1513,12 +1513,13 @@ header {
 
 .status {
   grid-row: 3;
-  background-color: #fff6f2;
-  border-left: 4px solid #f5682e;
+  background-color: #f4f4f4;
+  border-left: 4px solid #747474;
 }
 
 .status.positive {
-  background-color: #eefbe9;
+  background-color: #f2faef;
+  /* background-color: #eefbe9; */
   border-left: 4px solid #6aa84f;
 }
 
