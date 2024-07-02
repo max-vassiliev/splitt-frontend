@@ -1517,6 +1517,16 @@ header {
   border-left: 4px solid #f5682e;
 }
 
+.status.positive {
+  background-color: #eefbe9;
+  border-left: 4px solid #6aa84f;
+}
+
+.status.negative {
+  background-color: #fff6f2;
+  border-left: 4px solid #f5682e;
+}
+
 /* SUMMARY: GROUP STATS */
 
 .group-stats {
