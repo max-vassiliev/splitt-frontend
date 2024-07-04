@@ -236,20 +236,23 @@ header {
 /*   APP   */
 /* ~ ~ ~ ~ */
 
+/* TODO1 удалить ненужное */
 .app {
   position: relative;
-  max-width: 110rem;
-  margin: 7rem auto 4rem;
+  width: 1140px;
   display: grid;
-  /* grid-template-columns: 7fr 4fr; */
   grid-template-columns: 2fr 1fr;
-  /* grid-template-rows: auto repeat(3, 15rem) auto; */
   grid-template-rows: auto auto auto auto auto;
   gap: 2rem;
+  margin-top: 7rem;
+  margin-bottom: 4rem;
+  margin-left: calc((100% - 1140px) / 2 - 21px);
+  margin-right: calc((100% - 1140px) / 2 + 21px);
 
+  /* TODO1 удалить, если не нужно */
   /* NOTE This creates the fade in/out anumation */
   /* opacity: 0; */
-  transition: all 1s;
+  /* transition: all 1s; */
 }
 
 /* GROUP */
@@ -260,6 +263,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-left: 4rem;
   margin-bottom: 2rem;
 }
 
@@ -295,7 +299,7 @@ header {
   display: none;
   position: absolute;
   top: -2.5rem;
-  left: -3rem;
+  left: 1rem;
   padding: 2.5rem 3rem;
   min-width: 500px;
   background: #fff;
@@ -1332,8 +1336,8 @@ header {
   background-color: #497d31;
 }
 
-.add-expense__btn--submit.active:hover,
-.add-expense__btn--submit.active:active {
+.add-repayment__btn--submit.active:hover,
+.add-repayment__btn--submit.active:active {
   box-shadow: 0 0px 1.2rem #c5debd;
 }
 
@@ -1361,6 +1365,11 @@ header {
   /* grid-gap: 2rem; */
 }
 
+.movements__annotations.hidden,
+.movements__pages.hidden {
+  visibility: hidden;
+}
+
 .movements__annotations--share {
   margin-left: 2.5rem;
   width: 10.5rem;
@@ -1377,29 +1386,19 @@ header {
   font-size: 1.5rem;
   grid-row: 3 / span 2;
   overflow: scroll;
-  /* grid-row: span 3; */
-  /* background-color: #fff; */
-  /* border-radius: 0.5rem; */
 }
 
-.movements__frame {
-  border-radius: 1rem;
-  overflow: hidden;
+.movements__container {
+  height: 100%;
 }
 
-.movements__row {
-  padding: 1.5rem 1rem;
+.movements__row-container {
   display: flex;
   align-items: center;
-  background-color: #fff;
-  border-top: 1px solid #f6f6f6;
-  /* border-bottom: 1px solid #fafafa; */
+  cursor: pointer;
 }
 
-.movements--repayment {
-  background-color: #f3fcef;
-}
-
+/* TODO1 удалить */
 .repayment__marker {
   position: absolute;
   left: -2.2rem;
@@ -1409,23 +1408,70 @@ header {
   background-color: #8ad646;
 }
 
+.movements__remove-btn {
+  position: absolute;
+  text-align: center;
+  width: 4rem;
+  color: #999;
+  font-weight: 400;
+  font-size: 2.1rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+
+.movements__row-container:hover .movements__remove-btn {
+  visibility: visible;
+  opacity: 1;
+}
+
+.movements__remove-btn:hover {
+  color: red;
+}
+
+.movements__row {
+  margin-left: 4rem;
+  flex-grow: 1;
+  padding: 1.5rem 1rem;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-top: 1px solid #f6f6f6;
+  border-bottom: 1px solid #f6f6f6;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+
+.movements--repayment {
+  background-color: #f3fcef;
+}
+
+.movements__row-container:hover .movements__row {
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.movements__row:active {
+  transform: translateY(0.1rem);
+}
+
 .movements__date {
   margin: 0 0.2rem;
   padding-top: 0.1rem;
   font-size: 1.3rem;
   font-weight: 500;
   color: #666;
-  /* text-transform: uppercase; */
 }
 
 .movements__icon {
   font-size: 1.6rem;
+  width: 1.5rem;
   margin-left: 1.6rem;
 }
 
 .movements__title {
   font-size: 1.7rem;
-  margin-left: 2rem;
+  margin-left: 0.9rem;
   font-weight: 700;
   color: #333;
 }
@@ -1450,6 +1496,65 @@ header {
   text-overflow: ellipsis;
 }
 
+.movements__empty {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 4rem;
+}
+
+.movements__empty h1 {
+  color: #555;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1.8rem;
+}
+
+.movements__empty p {
+  color: #999;
+  font-size: 1.6rem;
+  text-align: center;
+  padding-bottom: 4rem;
+  line-height: 2.5rem;
+}
+
+.movements__empty span {
+  text-decoration: underline;
+  text-underline-offset: 0.4rem;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+}
+
+.movements__empty span:hover {
+  text-decoration: none;
+}
+
+.movements__empty .add-expense-link {
+  color: #ea7746;
+}
+
+.movements__empty .add-expense-link:hover {
+  color: #f97e4b;
+}
+
+.movements__empty .add-expense-link:active {
+  color: #fb976c;
+}
+
+.movements__empty .add-repayment-link {
+  color: #75ae5b;
+}
+
+.movements__empty .add-repayment-link:hover {
+  color: #82b968;
+}
+
+.movements__empty .add-repayment-link:active {
+  color: #8fc974;
+}
+
 /* ~ ~ ~ ~ */
 /*  ASIDE  */
 /* ~ ~ ~ ~ */
@@ -1458,6 +1563,7 @@ header {
 
 .summary {
   grid-column: 2;
+  grid-row: 3;
   padding: 1.8rem 2rem;
   color: #333;
   /* grid-row: 3 / span 2; */
@@ -1512,7 +1618,6 @@ header {
 /* SUMMARY: STATUS */
 
 .status {
-  grid-row: 3;
   background-color: #f6f6f6;
   border-left: 4px solid #747474;
 }
@@ -1628,6 +1733,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-left: 4rem;
   /* margin-top: 1rem; */
 }
 

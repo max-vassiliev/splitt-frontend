@@ -109,7 +109,7 @@
               <a href="#">Личный&nbsp;кабинет</a>
             </div>
             <div class="menu__popup_item link__group--settings">
-              <a href="#">Настройки&nbsp;группы</a>
+              <a href="#">Меню&nbsp;группы</a>
             </div>
             <div class="menu__popup_item"><a href="#">О&nbsp;сервисе</a></div>
             <div class="menu__popup_item"><a href="#">Выйти</a></div>
@@ -148,9 +148,9 @@
         <div class="group__popup_main">
           <a class="group__popup_item link">
             <span class="material-symbols-outlined group__popup_icon"
-              >edit</span
+              >settings</span
             >
-            <p>Редактировать группу</p>
+            <p>Настройки группы</p>
           </a>
           <a class="group__popup_item link">
             <span class="material-symbols-outlined group__popup_icon"
@@ -898,48 +898,72 @@
 
       <!-- MOVEMENTS -->
       <div class="movements">
-        <div class="movements__frame">
-          <div class="movements__row movements--repayment">
-            <!-- <div class="repayment__marker"></div> -->
-            <div class="movements__date">26.09.2023</div>
-            <div class="movements__title">
-              ✅&nbsp;&nbsp;Возврат:
-              <span class="movements__repayment--destination">
-                Саня &rarr; Петя</span
+        <div class="movements__container">
+          <div class="movements__row-container repayment">
+            <div
+              class="movements__remove-btn material-symbols-outlined"
+              title="удалить"
+            >
+              delete
+            </div>
+            <div
+              class="movements__row movements--repayment"
+              title="редактировать"
+            >
+              <div class="movements__date">26.09.2023</div>
+              <div class="movements__icon">✅</div>
+              <div class="movements__title">
+                Возврат:
+                <span class="movements__repayment--destination">
+                  Саня &rarr; Петя</span
+                >
+              </div>
+              <div class="movements__value">+&nbsp;4&nbsp;000,00&nbsp;₽</div>
+              <div
+                class="movements__value movements__share amount__color--positive"
               >
-            </div>
-            <div class="movements__value">+&nbsp;4&nbsp;000,00&nbsp;₽</div>
-            <div
-              class="movements__value movements__share amount__color--positive"
-            >
-              +&nbsp;4&nbsp;000,00&nbsp;₽
+                +&nbsp;4&nbsp;000,00&nbsp;₽
+              </div>
             </div>
           </div>
-          <div class="movements__row">
-            <!-- <div class="movements__type movements__type--withdrawal">
-              1 withdrawal
-            </div> -->
-            <div class="movements__date">16.11.2023</div>
-            <div class="movements__title">🏠&nbsp;&nbsp;Арендь</div>
-            <div class="movements__value">-&nbsp;60&nbsp;000,00&nbsp;₽</div>
+          <div class="movements__row-container">
             <div
-              class="movements__value movements__share amount__color--negative"
+              class="movements__remove-btn material-symbols-outlined"
+              title="удалить"
             >
-              -&nbsp;15&nbsp;000,00&nbsp;₽
+              delete
+            </div>
+            <div class="movements__row" title="редактировать">
+              <div class="movements__date">16.11.2023</div>
+              <div class="movements__icon">🏠</div>
+              <div class="movements__title">Арендь</div>
+              <div class="movements__value">-&nbsp;60&nbsp;000,00&nbsp;₽</div>
+              <div
+                class="movements__value movements__share amount__color--negative"
+              >
+                -&nbsp;15&nbsp;000,00&nbsp;₽
+              </div>
             </div>
           </div>
+          <!-- EMPTY LIST -->
+          <!-- <div class="movements__empty">
+            <h1>Пока нет записей</h1>
+            <p>
+              Вы можете <span class="add-expense-link">добавить трату</span>
+              <br />
+              или <span class="add-repayment-link">вернуть долг</span>
+            </p>
+          </div>
+          -->
         </div>
       </div>
 
       <!-- SUMMARY: STATUS -->
       <!-- Status: neutral (default) -->
-      <div class="summary status neutral">
+      <!-- <div class="summary status neutral">
         <h2>Дзен</h2>
-        <p>
-          Всё сходится: не нужно делать перевод или&nbsp;ожидать перевод
-          от&nbsp;других пользователей.
-        </p>
-      </div>
+        <p>Всё сходится: не нужно делать<br />или&nbsp;ожидать перевод.</p>
+      </div> -->
 
       <!-- Status: positive -->
       <!-- <div class="summary status positive">
@@ -976,7 +1000,7 @@
         </div>
       </div> -->
       <!-- Status: negative -->
-      <!-- <div class="summary status negative">
+      <div class="summary status negative">
         <h2>Сделайте перевод</h2>
         <p>
           Чтобы восстановить баланс в группе, переведите деньги пользователям:
@@ -1007,7 +1031,7 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
 
       <!-- SUMMARY: GROUP STATS -->
       <div class="summary group-stats">
@@ -1025,14 +1049,11 @@
             </div>
           </div>
           <div class="summary__table--row">
-            <!-- <div class="operation__table--avatar">🤴</div>
-             -->
             <img
               class="account__avatar"
               src="images/avatar-peter.png"
               alt="Пётр"
             />
-            <!-- <div class="operation__table--user">Пётр</div> -->
             <div class="summary__table--user">Андрей Тарковский</div>
             <div class="summary__table--amount amount__color--negative">
               -&nbsp;6&nbsp;859,49&nbsp;₽

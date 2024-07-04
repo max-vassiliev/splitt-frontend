@@ -472,6 +472,10 @@ document.addEventListener('DOMContentLoaded', function () {
     isExpense: false,
   };
 
+  // e: Transactions (Movements)
+
+  const transactionsTable = document.querySelector('.movements');
+
   // ---------------
   // Functions (f:)
   // ---------------
@@ -1633,6 +1637,56 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // f: Transactions (Movements)
+
+  function handleTransactionsTableClick(event) {
+    if (event.target.classList.contains('movements__remove-btn')) {
+      handleRemoveTransactionClick(event);
+      return;
+    }
+    const transactionRow = event.target.closest('.movements__row');
+    if (transactionRow) {
+      handleEditTransactionClick(event);
+      return;
+    }
+    const transactionsEmpty = event.target.closest('.movements__empty');
+    if (transactionsEmpty) {
+      handleEmptyTransactionsTableClick(event);
+      return;
+    }
+  }
+
+  function handleRemoveTransactionClick(event) {
+    const rowToDelete = event.target.closest('.movements__row-container');
+    if (rowToDelete.classList.contains('repayment')) {
+      console.log('delete repayment');
+    } else {
+      console.log('delete expense');
+    }
+  }
+
+  function handleEditTransactionClick(event) {
+    const transactionRow = event.target.closest('.movements__row');
+    if (!transactionRow) return;
+
+    if (transactionRow.classList.contains('movements--repayment')) {
+      console.log('edit repayment');
+    } else {
+      console.log('edit expense');
+    }
+  }
+
+  function handleEmptyTransactionsTableClick(event) {
+    if (event.target.classList.contains('add-expense-link')) {
+      openAddExpense();
+      return;
+    }
+    if (event.target.classList.contains('add-repayment-link')) {
+      openAddRepayment();
+      return;
+    }
+  }
+
   // ----------------------
   // View (v:)
   // ----------------------
@@ -2098,6 +2152,10 @@ document.addEventListener('DOMContentLoaded', function () {
   addRepaymentNoteInput.addEventListener('input', () =>
     handleTransactionNoteInput(addRepaymentNoteForm)
   );
+
+  // el: Transactions (Movements)
+
+  transactionsTable.addEventListener('click', handleTransactionsTableClick);
 
   // el: Util
 
