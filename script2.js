@@ -219,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // e: Utils
   const overlay = document.querySelector('.overlay');
+  const overlay2 = document.querySelector('.overlay2');
   const btnClosePopup = document.querySelectorAll('.btn__close_popup');
 
   // e: Emoji Picker
@@ -488,6 +489,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function hideOverlay() {
     overlay.classList.add('hidden');
+  }
+
+  function addOverlay2() {
+    overlay2.classList.remove('hidden');
+  }
+
+  function hideOverlay2() {
+    overlay2.classList.add('hidden');
   }
 
   function closeActivePopup() {
