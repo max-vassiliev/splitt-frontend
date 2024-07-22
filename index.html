@@ -888,15 +888,47 @@
       <!------------------->
 
       <!-- Delete Expense -->
-      <div class="delete-transaction delete-expense">
-        <div class="delete-transaction__header delete-expense"></div>
+      <div class="delete-transaction delete-expense__form">
+        <div class="delete-transaction__header delete-expense">Удалить</div>
         <div class="delete-transaction__body delete-expense">
-          <p></p>
-          <table></table>
+          <!-- <p>Удалить запись «Арендь квартиры за&nbsp;ноябрь»?</p> -->
+          <!-- <p>Удалить запись «Арендь квартиры в&nbsp;ноябре»?</p> -->
+          <!-- <p>Удалить запись «Арендь квартиры»?</p> -->
+          <!-- <p>Удалить запись «Арендь квартиры за&nbsp;месяц&nbsp;ноябрь»?</p> -->
+          <!-- <p>Удалить запись «Арендь квартиры за месяц ноябрь»?</p> -->
+          <p>
+            Удалить запись «Арендь квартиры за&nbsp;истекьший когда-то месяц
+            ноябрь»?
+          </p>
+          <!-- <p>Удалить запись «Арендь»?</p> -->
+          <table class="delete-transaction__table">
+            <tr>
+              <td class="delete-transaction__table-label">Сумма</td>
+              <td class="delete-transaction__table-value">60 000 ₽</td>
+            </tr>
+            <tr>
+              <td>Дата</td>
+              <td>16.11.2023</td>
+            </tr>
+            <tr>
+              <td>Значок</td>
+              <td>🏠</td>
+            </tr>
+          </table>
         </div>
-        <div class="delete-expense__footer">
-          <button></button>
-          <button></button>
+        <div class="delete-transaction__footer delete-expense">
+          <button
+            class="delete-transaction__btn-close"
+            id="delete-expense-btn-close"
+          >
+            отмена
+          </button>
+          <button
+            class="delete-transaction__btn-delete delete-expense"
+            id="delete-expense-btn-submit"
+          >
+            да, удалить
+          </button>
         </div>
       </div>
 

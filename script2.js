@@ -473,6 +473,16 @@ document.addEventListener('DOMContentLoaded', function () {
     isExpense: false,
   };
 
+  // e: Delete Transactions
+
+  const deleteExpenseForm = document.querySelector('.delete-expense__form');
+  const deleteExpenseBtnClose = document.getElementById(
+    'delete-expense-btn-close'
+  );
+  const deleteExpenseBtnSubmit = document.getElementById(
+    'delete-expense-btn-submit'
+  );
+
   // e: Transactions (Movements)
 
   const transactionsTable = document.querySelector('.movements');
@@ -1646,6 +1656,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // f: Delete Transactions: Expense
+
+  function openDeleteExpense() {
+    addOverlay();
+    deleteExpenseForm.classList.add(ACTIVE_CLASS);
+    activePopup = deleteExpenseForm;
+  }
+
+  // f: Delete Transactions
+
+  function handleDeleteExpenseCloseButtonClick() {
+    closeActivePopup();
+  }
+
+  function handleDeleteExpenseSubmitButtonClick() {
+    console.log('expense deleted');
+  }
+
   // f: Transactions (Movements)
 
   function handleTransactionsTableClick(event) {
@@ -1670,7 +1698,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (rowToDelete.classList.contains('repayment')) {
       console.log('delete repayment');
     } else {
-      console.log('delete expense');
+      openDeleteExpense();
     }
   }
 
@@ -2162,6 +2190,18 @@ document.addEventListener('DOMContentLoaded', function () {
     handleTransactionNoteInput(addRepaymentNoteForm)
   );
 
+  // el: Delete Transactions
+
+  deleteExpenseBtnClose.addEventListener(
+    'click',
+    handleDeleteExpenseCloseButtonClick
+  );
+
+  deleteExpenseBtnSubmit.addEventListener(
+    'click',
+    handleDeleteExpenseSubmitButtonClick
+  );
+
   // el: Transactions (Movements)
 
   transactionsTable.addEventListener('click', handleTransactionsTableClick);
@@ -2174,9 +2214,8 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', closeActivePopup);
   });
 
-  // TODO1: to delete: enable Repayment Form
-  // openAddRepayment();
-  // openAddExpense();
+  // TODO1 удалить после теста
+  // openDeleteExpense();
 
   // TODO1: to delete: enable Payer Form
   // const addExpenseHiddenFormPayer = document.querySelector(
