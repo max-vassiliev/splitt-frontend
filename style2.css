@@ -1349,19 +1349,9 @@ header {
   box-shadow: 0 0px 1.2rem #c5debd;
 }
 
-/* ~ ~ ~ ~ ~ */
-/*  DELETE   */
-/* ~ ~ ~ ~ ~ */
-
-/* .delete-transaction {
-  position: fixed;
-  align-items: center;
-  background-color: #fff;
-  overflow-y: auto;
-  z-index: 2;
-  border-radius: 1.5rem;
-  box-shadow: 0 0px 1rem rgba(100, 100, 100, 0.3);
-} */
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*  DELETE TRANSACTIONS  */
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
 .delete-transaction {
   position: fixed;
@@ -1373,6 +1363,16 @@ header {
   overflow-y: auto;
   border-radius: 1.5rem;
   box-shadow: 0 0px 1rem rgba(100, 100, 100, 0.3);
+}
+
+.delete-expense__form,
+.delete-repayment__form {
+  visibility: hidden;
+}
+
+.delete-expense__form.active,
+.delete-repayment__form.active {
+  visibility: visible;
 }
 
 .delete-transaction__header {
@@ -1398,10 +1398,8 @@ header {
 }
 
 .delete-transaction__table {
-  /* margin-top: 3rem; */
   margin: 3rem auto 0 auto;
   width: 100%;
-  /* width: 90%; */
   border-spacing: 0;
   border-collapse: collapse;
 }
@@ -1411,6 +1409,15 @@ header {
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 10px;
+  white-space: nowrap;
+}
+
+.delete-transaction__table-label {
+  padding-right: 20px;
+}
+
+.delete-transaction__table-value {
+  padding-right: 25px;
 }
 
 .delete-transaction__footer {
@@ -1457,14 +1464,6 @@ header {
 
 /* Delete Expense */
 
-.delete-expense__form {
-  visibility: hidden;
-}
-
-.delete-expense__form.active {
-  visibility: visible;
-}
-
 .delete-transaction__header.delete-expense {
   background-color: #f97e4b;
 }
@@ -1487,6 +1486,36 @@ header {
 .delete-transaction__btn-delete.delete-expense:hover,
 .delete-transaction__btn-delete.delete-expense:active {
   box-shadow: 0 0px 1.2rem #ecc9bb;
+}
+
+/* Delete Repayment */
+
+.delete-transaction__body.delete-repayment {
+  max-width: 520px;
+}
+
+.delete-transaction__header.delete-repayment {
+  background-color: #8cbf74;
+}
+
+.delete-transaction__btn-delete.delete-repayment {
+  background-color: #8cbf74;
+  border: 1px solid #8cbf74;
+}
+
+.delete-transaction__btn-delete.delete-repayment:hover {
+  background-color: #75ae5b;
+  border: 1px solid #75ae5b;
+}
+
+.delete-transaction__btn-delete.delete-repayment:active {
+  background-color: #497d31;
+  border: 1px solid #497d31;
+}
+
+.delete-transaction__btn-delete.delete-repayment:hover,
+.delete-transaction__btn-delete.delete-repayment:active {
+  box-shadow: 0 0px 1.2rem #c5debd;
 }
 
 /* ~ ~ ~ ~ */

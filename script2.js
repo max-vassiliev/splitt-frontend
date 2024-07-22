@@ -483,6 +483,14 @@ document.addEventListener('DOMContentLoaded', function () {
     'delete-expense-btn-submit'
   );
 
+  const deleteRepaymentForm = document.querySelector('.delete-repayment__form');
+  const deleteRepaymentBtnClose = document.getElementById(
+    'delete-repayment-btn-close'
+  );
+  const deleteRepaymentBtnSubmit = document.getElementById(
+    'delete-repayment-btn-submit'
+  );
+
   // e: Transactions (Movements)
 
   const transactionsTable = document.querySelector('.movements');
@@ -1664,15 +1672,31 @@ document.addEventListener('DOMContentLoaded', function () {
     activePopup = deleteExpenseForm;
   }
 
-  // f: Delete Transactions
-
   function handleDeleteExpenseCloseButtonClick() {
     closeActivePopup();
   }
 
   function handleDeleteExpenseSubmitButtonClick() {
-    console.log('expense deleted');
+    console.log('DELETE: Expense');
   }
+
+  // f: Delete Transactions: Repayment
+
+  function openDeleteRepayment() {
+    addOverlay();
+    deleteRepaymentForm.classList.add(ACTIVE_CLASS);
+    activePopup = deleteRepaymentForm;
+  }
+
+  function handleDeleteRepaymentCloseButtonClick() {
+    closeActivePopup();
+  }
+
+  function handleDeleteRepaymentSubmitButtonClick() {
+    console.log('DELETE: Repayment');
+  }
+
+  // f: Delete Transactions
 
   // f: Transactions (Movements)
 
@@ -1696,7 +1720,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleRemoveTransactionClick(event) {
     const rowToDelete = event.target.closest('.movements__row-container');
     if (rowToDelete.classList.contains('repayment')) {
-      console.log('delete repayment');
+      openDeleteRepayment();
     } else {
       openDeleteExpense();
     }
@@ -2202,6 +2226,16 @@ document.addEventListener('DOMContentLoaded', function () {
     handleDeleteExpenseSubmitButtonClick
   );
 
+  deleteRepaymentBtnClose.addEventListener(
+    'click',
+    handleDeleteRepaymentCloseButtonClick
+  );
+
+  deleteRepaymentBtnSubmit.addEventListener(
+    'click',
+    handleDeleteRepaymentSubmitButtonClick
+  );
+
   // el: Transactions (Movements)
 
   transactionsTable.addEventListener('click', handleTransactionsTableClick);
@@ -2216,6 +2250,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // TODO1 удалить после теста
   // openDeleteExpense();
+  // openDeleteRepayment();
 
   // TODO1: to delete: enable Payer Form
   // const addExpenseHiddenFormPayer = document.querySelector(

@@ -907,12 +907,12 @@
               <td class="delete-transaction__table-value">60 000 ₽</td>
             </tr>
             <tr>
-              <td>Дата</td>
-              <td>16.11.2023</td>
+              <td class="delete-transaction__table-label">Дата</td>
+              <td class="delete-transaction__table-value">16.11.2023</td>
             </tr>
             <tr>
-              <td>Значок</td>
-              <td>🏠</td>
+              <td class="delete-transaction__table-label">Значок</td>
+              <td class="delete-transaction__table-value">🏠</td>
             </tr>
           </table>
         </div>
@@ -926,6 +926,58 @@
           <button
             class="delete-transaction__btn-delete delete-expense"
             id="delete-expense-btn-submit"
+          >
+            да, удалить
+          </button>
+        </div>
+      </div>
+
+      <!-- Delete Repayment -->
+      <div class="delete-transaction delete-repayment__form">
+        <div class="delete-transaction__header delete-repayment">Удалить</div>
+        <div class="delete-transaction__body delete-repayment">
+          <p>Удалить возврат?</p>
+          <table class="delete-transaction__table">
+            <tr>
+              <td class="delete-transaction__table-label">От кого</td>
+              <td class="delete-transaction__table-value">От вас</td>
+            </tr>
+            <tr>
+              <td class="delete-transaction__table-label">Кому</td>
+              <!-- <td class="delete-transaction__table-value">Пётр</td> -->
+              <td class="delete-transaction__table-value">
+                Арсений Тарковский
+              </td>
+              <!-- <td class="delete-transaction__table-value">
+                Константин Константинопольский
+              </td> -->
+            </tr>
+            <tr>
+              <td class="delete-transaction__table-label">Сумма</td>
+              <td class="delete-transaction__table-value">
+                1&nbsp;235,00&nbsp;₽
+              </td>
+            </tr>
+            <tr>
+              <td class="delete-transaction__table-label">Дата</td>
+              <td class="delete-transaction__table-value">26.09.2023</td>
+            </tr>
+            <tr>
+              <td class="delete-transaction__table-label">Значок</td>
+              <td class="delete-transaction__table-value">✅</td>
+            </tr>
+          </table>
+        </div>
+        <div class="delete-transaction__footer delete-repayment">
+          <button
+            class="delete-transaction__btn-close"
+            id="delete-repayment-btn-close"
+          >
+            отмена
+          </button>
+          <button
+            class="delete-transaction__btn-delete delete-repayment"
+            id="delete-repayment-btn-submit"
           >
             да, удалить
           </button>
