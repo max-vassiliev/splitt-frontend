@@ -64,7 +64,7 @@
   </head>
   <body>
     <div class="overlay hidden"></div>
-    <div class="overlay2 hidden"></div>
+    <div class="overlay-error hidden"></div>
     <!-- TOP NAVIGATION -->
     <header>
       <div class="logo">
@@ -882,13 +882,12 @@
           </form>
         </div>
       </div>
-
       <!------------------->
       <!--    DELETE     -->
       <!------------------->
 
       <!-- Delete Expense -->
-      <div class="delete-transaction delete-expense__form">
+      <div class="delete-transaction delete-expense__modal">
         <div class="delete-transaction__header delete-expense">Удалить</div>
         <div class="delete-transaction__body delete-expense">
           <!-- <p>Удалить запись «Арендь квартиры за&nbsp;ноябрь»?</p> -->
@@ -933,7 +932,7 @@
       </div>
 
       <!-- Delete Repayment -->
-      <div class="delete-transaction delete-repayment__form">
+      <div class="delete-transaction delete-repayment__modal">
         <div class="delete-transaction__header delete-repayment">Удалить</div>
         <div class="delete-transaction__body delete-repayment">
           <p>Удалить возврат?</p>
@@ -1185,6 +1184,41 @@
               -&nbsp;29&nbsp;208,00&nbsp;₽
             </div>
           </div>
+        </div>
+      </div>
+
+      <!----------- 
+          ERROR
+      ------------->
+      <div class="error-modal error-modal-wide">
+        <!-- <div class="error-modal"> -->
+        <div class="error-modal__header">Ошибка</div>
+        <div class="error-modal__body">
+          <!-- <p class="error-message">Произошла ошибка.</p> -->
+          <!-- <p class="error-message">
+            Название транзакции не должно превышать 120&nbsp;знаков.
+          </p> -->
+          <p class="error-message">
+            Название транзакции не должно превышать 120&nbsp;знаков. Пожалуйста,
+            сформулируйте короче.
+          </p>
+          <!-- <p class="error-message">
+            Название транзакции не должно превышать 120&nbsp;знаков. Название
+            транзакции не должно превышать 120&nbsp;знаков. Название транзакции
+            не должно превышать 120&nbsp;знаков. Название транзакции не должно
+            превышать 120&nbsp;знаков. Название транзакции не должно превышать
+            120&nbsp;знаков. Название транзакции не должно превышать
+            120&nbsp;знаков. Название транзакции не должно превышать
+            120&nbsp;знаков. Название транзакции не должно превышать
+            120&nbsp;знаков. Название транзакции не должно превышать
+            120&nbsp;знаков. Название транзакции не должно превышать
+            120&nbsp;знаков. Название транзакции не должно превышать
+            120&nbsp;знаков. Название транзакции не должно превышать
+            120&nbsp;знаков.
+          </p> -->
+        </div>
+        <div class="error-modal__footer">
+          <button class="error-modal__btn-close">закрыть</button>
         </div>
       </div>
 

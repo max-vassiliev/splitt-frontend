@@ -23,7 +23,7 @@ body {
 }
 
 .overlay,
-.overlay2 {
+.overlay-error {
   position: fixed;
   top: 0;
   left: 0;
@@ -38,8 +38,8 @@ body {
   z-index: 1;
 }
 
-.overlay2 {
-  z-index: 10;
+.overlay-error {
+  z-index: 100;
 }
 
 .hidden {
@@ -1365,13 +1365,13 @@ header {
   box-shadow: 0 0px 1rem rgba(100, 100, 100, 0.3);
 }
 
-.delete-expense__form,
-.delete-repayment__form {
+.delete-expense__modal,
+.delete-repayment__modal {
   visibility: hidden;
 }
 
-.delete-expense__form.active,
-.delete-repayment__form.active {
+.delete-expense__modal.active,
+.delete-repayment__modal.active {
   visibility: visible;
 }
 
@@ -1815,6 +1815,86 @@ header {
   grid-row: 4;
   background-color: #fffdf8;
   border-left: 4px solid #f7bf33;
+}
+
+/* ~ ~ ~ ~ */
+/*  ERROR  */
+/* ~ ~ ~ ~ */
+
+.error-modal {
+  visibility: hidden;
+  position: fixed;
+  margin-top: 13rem;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow-y: auto;
+  border-radius: 1.5rem;
+  align-items: center;
+  width: 420px;
+  background: #fff;
+  box-shadow: 0 0px 1rem rgba(100, 100, 100, 0.3);
+  z-index: 102;
+}
+
+.error-modal-wide {
+  width: 500px;
+}
+
+.error-modal.active {
+  visibility: visible;
+}
+
+.error-modal__header {
+  width: 100%;
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  background-color: #e53935;
+  padding: 2rem 0;
+}
+
+.error-modal__body {
+  margin: 3rem 3.5rem 3rem 6rem;
+  max-height: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.error-message {
+  color: #555;
+  text-align: left;
+  line-height: 1.5;
+  font-size: 1.8rem;
+}
+
+.error-modal__footer {
+  display: flex;
+  margin-top: 4rem;
+  margin-bottom: 3.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-modal__btn-close {
+  margin: auto 1rem;
+  padding: 0.6rem 1.5rem;
+  border-radius: 1.3rem;
+  border: 1px solid #777;
+  background-color: #f3f3f3;
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  color: #555;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.1s ease-in, box-shadow 0.1s ease-in;
+}
+
+.error-modal__btn-close:hover {
+  background-color: #eaeaea;
+  box-shadow: 0 0px 1.8rem rgba(200, 200, 200, 0.3);
 }
 
 /* OPERATIONS FIXME: to delete */

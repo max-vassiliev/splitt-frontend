@@ -219,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // e: Utils
   const overlay = document.querySelector('.overlay');
-  const overlay2 = document.querySelector('.overlay2');
   const btnClosePopup = document.querySelectorAll('.btn__close_popup');
 
   // e: Emoji Picker
@@ -475,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // e: Delete Transactions
 
-  const deleteExpenseForm = document.querySelector('.delete-expense__form');
+  const deleteExpenseModal = document.querySelector('.delete-expense__modal');
   const deleteExpenseBtnClose = document.getElementById(
     'delete-expense-btn-close'
   );
@@ -483,7 +482,9 @@ document.addEventListener('DOMContentLoaded', function () {
     'delete-expense-btn-submit'
   );
 
-  const deleteRepaymentForm = document.querySelector('.delete-repayment__form');
+  const deleteRepaymentModal = document.querySelector(
+    '.delete-repayment__modal'
+  );
   const deleteRepaymentBtnClose = document.getElementById(
     'delete-repayment-btn-close'
   );
@@ -494,6 +495,12 @@ document.addEventListener('DOMContentLoaded', function () {
   // e: Transactions (Movements)
 
   const transactionsTable = document.querySelector('.movements');
+
+  // e: Error
+
+  const errorModal = document.querySelector('.error-modal');
+  const errorOverlay = document.querySelector('.overlay-error');
+  const errorModalBtnClose = document.querySelector('.error-modal__btn-close');
 
   // ---------------
   // Functions (f:)
@@ -509,12 +516,12 @@ document.addEventListener('DOMContentLoaded', function () {
     overlay.classList.add('hidden');
   }
 
-  function addOverlay2() {
-    overlay2.classList.remove('hidden');
+  function addErrorOverlay() {
+    errorOverlay.classList.remove('hidden');
   }
 
-  function hideOverlay2() {
-    overlay2.classList.add('hidden');
+  function hideErrorOverlay() {
+    errorOverlay.classList.add('hidden');
   }
 
   function closeActivePopup() {
@@ -1668,8 +1675,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openDeleteExpense() {
     addOverlay();
-    deleteExpenseForm.classList.add(ACTIVE_CLASS);
-    activePopup = deleteExpenseForm;
+    deleteExpenseModal.classList.add(ACTIVE_CLASS);
+    activePopup = deleteExpenseModal;
   }
 
   function handleDeleteExpenseCloseButtonClick() {
@@ -1684,8 +1691,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function openDeleteRepayment() {
     addOverlay();
-    deleteRepaymentForm.classList.add(ACTIVE_CLASS);
-    activePopup = deleteRepaymentForm;
+    deleteRepaymentModal.classList.add(ACTIVE_CLASS);
+    activePopup = deleteRepaymentModal;
   }
 
   function handleDeleteRepaymentCloseButtonClick() {
@@ -1695,8 +1702,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleDeleteRepaymentSubmitButtonClick() {
     console.log('DELETE: Repayment');
   }
-
-  // f: Delete Transactions
 
   // f: Transactions (Movements)
 
@@ -1746,6 +1751,18 @@ document.addEventListener('DOMContentLoaded', function () {
       openAddRepayment();
       return;
     }
+  }
+
+  // f: Error
+
+  function openErrorModal() {
+    addErrorOverlay();
+    errorModal.classList.add(ACTIVE_CLASS);
+  }
+
+  function closeErrorModal() {
+    hideErrorOverlay();
+    errorModal.classList.remove(ACTIVE_CLASS);
   }
 
   // ----------------------
@@ -2240,6 +2257,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   transactionsTable.addEventListener('click', handleTransactionsTableClick);
 
+  // el: Error
+
+  errorOverlay.addEventListener('click', closeErrorModal);
+
+  errorModalBtnClose.addEventListener('click', closeErrorModal);
+
   // el: Util
 
   overlay.addEventListener('click', closeActivePopup);
@@ -2247,10 +2270,6 @@ document.addEventListener('DOMContentLoaded', function () {
   btnClosePopup.forEach(button => {
     button.addEventListener('click', closeActivePopup);
   });
-
-  // TODO1 удалить после теста
-  // openDeleteExpense();
-  // openDeleteRepayment();
 
   // TODO1: to delete: enable Payer Form
   // const addExpenseHiddenFormPayer = document.querySelector(
