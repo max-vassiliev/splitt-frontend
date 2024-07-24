@@ -1738,14 +1738,14 @@ header {
 
 /* OPERATION (generic) */
 
-.summary {
+.status-container {
   grid-column: 2;
   grid-row: 3;
+}
+
+.summary {
   padding: 1.8rem 2rem;
   color: #333;
-  /* grid-row: 3 / span 2; */
-  /* grid-column: 2 / 3; */
-  /* border-radius: 1rem; */
 }
 
 .summary h2 {
@@ -1773,12 +1773,6 @@ header {
   margin-right: 0.8rem;
 }
 
-.summary__table--avatar {
-  font-size: 2.3rem;
-  margin-left: 0.3rem;
-  margin-right: 0.8rem;
-}
-
 .summary__table--user {
   width: 18rem;
   font-weight: 500;
@@ -1792,6 +1786,32 @@ header {
   margin-left: auto;
 }
 
+.status .summary__table--row:hover {
+  cursor: pointer;
+}
+
+.status .summary__table--row:hover .account__avatar {
+  filter: brightness(96%);
+}
+
+.status .summary__table--row:hover .summary__table--user {
+  color: #666;
+}
+
+.status .summary__table--row:active .account__avatar,
+.status .summary__table--row:active .summary__table--user,
+.status .summary__table--row:active .summary__table--amount {
+  transform: translateY(1px);
+}
+
+.status .summary__table--row:hover .amount__color--negative {
+  color: #e9967a;
+}
+
+.status .summary__table--row:hover .amount__color--positive {
+  color: #8fbc8f;
+}
+
 /* SUMMARY: STATUS */
 
 .status {
@@ -1799,20 +1819,24 @@ header {
   border-left: 4px solid #747474;
 }
 
-.status.positive {
-  background-color: #f2faef;
+.status-positive {
+  background-color: #f9fcf3;
   border-left: 4px solid #6aa84f;
 }
 
-.status.negative {
+.status-negative {
   background-color: #fff6f2;
   border-left: 4px solid #f5682e;
 }
 
 /* SUMMARY: GROUP STATS */
 
-.group-stats {
+.group-stats-container {
+  grid-column: 2;
   grid-row: 4;
+}
+
+.group-stats {
   background-color: #fffdf8;
   border-left: 4px solid #f7bf33;
 }
@@ -1931,7 +1955,7 @@ h2 {
 
 /* Exceptions for interest */
 
-.form.form--transfer {
+/* .form.form--transfer {
   grid-row: 3 / span 1;
 }
 .form.form--loan {
@@ -1940,11 +1964,11 @@ h2 {
 }
 .form__label--loan {
   grid-row: 4;
-}
+} */
 
 /* End exceptions */
 
-.form__input {
+/* .form__input {
   width: 100%;
   border: none;
   background-color: rgba(255, 255, 255, 0.4);
@@ -1979,7 +2003,7 @@ h2 {
 .form__btn:focus {
   outline: none;
   background-color: rgba(255, 255, 255, 0.8);
-}
+} */
 
 /* ~ ~ ~ ~ ~ */
 /*  BOTTOM   */
@@ -2065,7 +2089,7 @@ h2 {
 }
 
 .logout-timer {
-  grid-row: 5;
+  /* grid-row: 5; */
   padding: 0 0.3rem;
   margin-top: 1.9rem;
   text-align: right;
@@ -2077,11 +2101,11 @@ h2 {
 }
 
 .amount__color--negative {
-  color: red;
+  color: #ed123d;
 }
 
 .amount__color--positive {
-  color: green;
+  color: #2e8b57;
 }
 
 .amount__color--neutral {
