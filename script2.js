@@ -177,7 +177,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const statusClickHandlers = new Map([
     ['positive', handleStatusPositiveClick],
     ['negative', handleStatusNegativeClick],
-    ['neutral', handleStatusNeutralClick],
   ]);
 
   function isActive(element) {
@@ -880,6 +879,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateAddExpenseDateInput() {
+    if (!addExpenseDateInput) return;
     addExpenseDateInput.setAttribute('max', todayString);
     addExpenseDateInput.setAttribute('min', minTransactionDateString);
     if (addExpenseFormModel.date === null || addExpenseFormModel.date === '') {
@@ -1643,6 +1643,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateAddRepaymentDateInput() {
+    if (!addRepaymentDateInput) return;
+
     addRepaymentDateInput.setAttribute('max', todayString);
     addRepaymentDateInput.setAttribute('min', minTransactionDateString);
 
@@ -1793,10 +1795,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!selectedRow) return;
 
     console.log('STATUS: Negative');
-  }
-
-  function handleStatusNeutralClick(event) {
-    return;
   }
 
   // f: Error
@@ -2192,11 +2190,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
+  // addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
 
-  addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
+  // addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
 
-  addExpenseDateInput.addEventListener('input', handleAddExpenseDateInput);
+  // addExpenseDateInput.addEventListener('input', handleAddExpenseDateInput);
 
   // el: Add Expense: Payer Form
 
