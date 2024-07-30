@@ -1760,9 +1760,10 @@ header {
   text-overflow: ellipsis;
 }
 
-/* Movements: Empty */
+/* Movements: Empty, Error */
 
-.movements__empty {
+.movements__empty,
+.movements__error {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -1821,6 +1822,14 @@ header {
   color: #8fc974;
 }
 
+/* Movements: Error */
+
+.movements__error h2 {
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: #777;
+}
+
 /* Movements: Loading */
 
 .movements__loading {
@@ -1841,36 +1850,13 @@ header {
 /*  ASIDE  */
 /* ~ ~ ~ ~ */
 
-/* SUMMARY (generic) */
+/* SUMMARY: Generic */
 
 .summary {
   padding: 1.8rem 2rem;
   color: #333;
   background-color: #f6f6f6;
   border-left: 4px solid #eee;
-}
-
-.summary.loading {
-  height: 110px;
-}
-
-.summary.loading {
-  border-left: 4px solid #ddd;
-  background: linear-gradient(300deg, #fafafa, #f6f6f6, #fafafa);
-  background-size: 400% 400%;
-  animation: wave 2.7s ease-in-out infinite;
-}
-
-@keyframes wave {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
 }
 
 .summary h2 {
@@ -1909,6 +1895,32 @@ header {
 .summary__table--amount {
   font-weight: 300;
   margin-left: auto;
+}
+
+/* SUMMARY: Loading, Error */
+
+.summary.loading,
+.summary.error {
+  height: 110px;
+}
+
+.summary.loading {
+  border-left: 4px solid #ddd;
+  background: linear-gradient(300deg, #fafafa, #f6f6f6, #fafafa);
+  background-size: 400% 400%;
+  animation: wave 2.7s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* SUMMARY: STATUS */
