@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // e: Transactions (Movements)
 
-  const transactionsTable = document.querySelector('.movements');
+  const transactionsTable = document.querySelector('.transactions');
 
   // e: Status
 
@@ -1215,7 +1215,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const isChecked = checkbox.checked;
     checkbox.checked = !isChecked;
 
-    if (!checkbox.checked) {
+    if (checkbox.checked === false) {
       splittEquallyModel.checkedRows.delete(userId);
       splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
       this.classList.add(INACTIVE_CLASS);
@@ -1249,13 +1249,23 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function calculateSplittsEqually(checkedRowsCount) {
-    let baseAmount = 0;
-    let remainder = 0;
+    if (checkedRowsCount === 0) return;
 
-    if (checkedRowsCount > 1) {
-      baseAmount = Math.floor(addExpenseFormModel.amount / checkedRowsCount);
-      remainder = addExpenseFormModel.amount % checkedRowsCount;
+    if (checkedRowsCount === 1) {
+      const checkedUserId = splittEquallyModel.checkedRows
+        .values()
+        .next().value;
+      splittEquallyModel.splittAmounts.set(
+        checkedUserId,
+        addExpenseFormModel.amount
+      );
+      return;
     }
+
+    const baseAmount = Math.floor(
+      addExpenseFormModel.amount / checkedRowsCount
+    );
+    const remainder = addExpenseFormModel.amount % checkedRowsCount;
 
     const usersWithHigherAmounts = selectUsersWithHigherAmounts(
       splittEquallyModel.checkedRows,
@@ -1718,16 +1728,16 @@ document.addEventListener('DOMContentLoaded', function () {
   // f: Transactions (Movements)
 
   function handleTransactionsTableClick(event) {
-    if (event.target.classList.contains('movements__remove-btn')) {
+    if (event.target.classList.contains('transactions-table__delete-btn')) {
       handleRemoveTransactionClick(event);
       return;
     }
-    const transactionRow = event.target.closest('.movements__row');
+    const transactionRow = event.target.closest('.transactions-table__row');
     if (transactionRow) {
-      handleEditTransactionClick(event);
+      handleEditTransactionClick(transactionRow, event);
       return;
     }
-    const transactionsEmpty = event.target.closest('.movements__empty');
+    const transactionsEmpty = event.target.closest('.transactions__empty');
     if (transactionsEmpty) {
       handleEmptyTransactionsTableClick(event);
       return;
@@ -1735,7 +1745,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function handleRemoveTransactionClick(event) {
-    const rowToDelete = event.target.closest('.movements__row-container');
+    console.log('handleRemoveTransactionClick');
+    const rowToDelete = event.target.closest('.transactions-table__row');
     if (rowToDelete.classList.contains('repayment')) {
       openDeleteRepayment();
     } else {
@@ -1743,11 +1754,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function handleEditTransactionClick(event) {
-    const transactionRow = event.target.closest('.movements__row');
+  function handleEditTransactionClick(transactionRow, event) {
     if (!transactionRow) return;
 
-    if (transactionRow.classList.contains('movements--repayment')) {
+    if (transactionRow.classList.contains('.repayment')) {
       console.log('edit repayment');
     } else {
       console.log('edit expense');
@@ -2190,11 +2200,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
+  addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
 
-  // addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
+  addExpenseAmountInput.addEventListener('input', handleAddExpenseAmountInput);
 
-  // addExpenseDateInput.addEventListener('input', handleAddExpenseDateInput);
+  addExpenseDateInput.addEventListener('input', handleAddExpenseDateInput);
 
   // el: Add Expense: Payer Form
 
