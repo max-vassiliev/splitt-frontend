@@ -604,25 +604,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // f: Window
 
   function handleWindowResize() {
-    if (activePopup === null) {
-      return;
-    }
-    if (activePopup === addExpenseForm) {
-      alignTransactionForms(
-        addExpenseMainForm,
-        addExpenseHiddenForms,
-        addExpenseFormModel
-      );
-      return;
-    }
-    if (activePopup === addRepaymentForm) {
-      alignTransactionForms(
-        addRepaymentMainForm,
-        addRepaymentHiddenForms,
-        addRepaymentFormModel
-      );
-      return;
-    }
+    alignAddTransactionForms();
   }
 
   // f: Menu
@@ -756,6 +738,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // f: Add Transaction
 
+  function alignAddTransactionForms() {
+    const isAddExpenseActive = addExpenseForm.classList.contains(ACTIVE_CLASS);
+    const isAddRepaymentActive =
+      addRepaymentForm.classList.contains(ACTIVE_CLASS);
+
+    if (!isAddExpenseActive) {
+      addExpenseForm.classList.add(ACTIVE_CLASS);
+    }
+
+    if (!isAddRepaymentActive) {
+      addRepaymentForm.classList.add(ACTIVE_CLASS);
+    }
+
+    alignTransactionForms(
+      addExpenseMainForm,
+      addExpenseHiddenForms,
+      addExpenseFormModel
+    );
+
+    alignTransactionForms(
+      addRepaymentMainForm,
+      addRepaymentHiddenForms,
+      addRepaymentFormModel
+    );
+
+    if (!isAddExpenseActive) {
+      addExpenseForm.classList.remove(ACTIVE_CLASS);
+    }
+
+    if (!isAddRepaymentActive) {
+      addRepaymentForm.classList.remove(ACTIVE_CLASS);
+    }
+  }
+
   function countNoteLength(counter, inputText) {
     counter.textContent = inputText.length;
   }
@@ -790,11 +806,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function openAddExpense() {
     addOverlay();
     addExpenseForm.classList.add(ACTIVE_CLASS);
-    alignTransactionForms(
-      addExpenseMainForm,
-      addExpenseHiddenForms,
-      addExpenseFormModel
-    );
     activePopup = addExpenseForm;
   }
 
@@ -1577,11 +1588,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function openAddRepayment() {
     addOverlay();
     addRepaymentForm.classList.add(ACTIVE_CLASS);
-    alignTransactionForms(
-      addRepaymentMainForm,
-      addRepaymentHiddenForms,
-      addRepaymentFormModel
-    );
     activePopup = addRepaymentForm;
   }
 
@@ -1745,7 +1751,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function handleRemoveTransactionClick(event) {
-    console.log('handleRemoveTransactionClick');
     const rowToDelete = event.target.closest('.transactions-table__row');
     if (rowToDelete.classList.contains('repayment')) {
       openDeleteRepayment();
@@ -2073,6 +2078,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // ----------------------
   // Load Content (load:)
   // ----------------------
+
+  // load: Add Expense / Add Repayment: Vertical Align
+  alignAddTransactionForms();
 
   // load: Add Expense: Payer Form
   createFirstPayerRow();
