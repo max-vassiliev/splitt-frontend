@@ -1403,6 +1403,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const userId = row.dataset.userId;
 
     const splittShare = parsePercentInputString(inputValue);
+
+    if (splittShare > 100) {
+      const previousValue = splittSharesModel.splittShares.get(userId) || 0;
+      const outputValue = formatPercentForOutput(previousValue);
+      this.value = outputValue;
+      setAmountCursorPosition(inputValue, outputValue, cursorPosition, this);
+      return;
+    }
+
     const splittAmount = calculateSplittShareAmount(
       splittShare,
       addExpenseFormModel.amount
