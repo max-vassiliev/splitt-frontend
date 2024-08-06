@@ -1363,6 +1363,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const processedAmount = processInputAmount(inputAmount);
     splittPartsModel.splittAmounts.set(userId, processedAmount);
+    applySplittPartsRowActiveStyle(processedAmount, row);
     calculateSplittParts();
     updateSplittBalanceNote();
     updateAddExpenseSubmitButton();
@@ -1379,6 +1380,14 @@ document.addEventListener('DOMContentLoaded', function () {
       '.splitt-parts-amount-input'
     );
     amountInput.focus();
+  }
+
+  function applySplittPartsRowActiveStyle(splittAmount, splittRow) {
+    if (splittAmount === 0) {
+      splittRow.classList.add(INACTIVE_CLASS);
+    } else {
+      splittRow.classList.remove(INACTIVE_CLASS);
+    }
   }
 
   // f: Add Expense: Splitt Form - Shares
@@ -1406,6 +1415,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (splittShare > 100) {
       const previousValue = splittSharesModel.splittShares.get(userId) || 0;
+      applySplittSharesRowActiveStyle(previousValue, row);
       const outputValue = formatPercentForOutput(previousValue);
       this.value = outputValue;
       setAmountCursorPosition(inputValue, outputValue, cursorPosition, this);
@@ -1419,6 +1429,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     splittSharesModel.splittShares.set(userId, splittShare);
     splittSharesModel.splittAmounts.set(userId, splittAmount);
+
+    applySplittSharesRowActiveStyle(splittShare, row);
     calculateSplittShares();
     renderSplittShares();
     updateSplittBalanceNote();
@@ -1501,6 +1513,14 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
     adjustSplittSharesColumnWidth();
+  }
+
+  function applySplittSharesRowActiveStyle(splittShare, splittRow) {
+    if (splittShare === 0) {
+      splittRow.classList.add(INACTIVE_CLASS);
+    } else {
+      splittRow.classList.remove(INACTIVE_CLASS);
+    }
   }
 
   function adjustSplittSharesColumnWidth() {

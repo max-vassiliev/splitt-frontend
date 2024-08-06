@@ -941,6 +941,20 @@ header {
   color: #777;
 }
 
+.splitt-equally__row.inactive td,
+.splitt-parts__row.inactive td,
+.splitt-shares__row.inactive td,
+.splitt-parts__row.inactive input,
+.splitt-shares__row.inactive input {
+  color: #ccc;
+}
+
+.splitt-equally__row.inactive img,
+.splitt-parts__row.inactive img,
+.splitt-shares__row.inactive img {
+  opacity: 0.4;
+}
+
 .splitt-parts__row-total,
 .splitt-shares__row-total,
 .payer-table-row__total {
