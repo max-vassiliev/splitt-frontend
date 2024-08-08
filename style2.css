@@ -11,16 +11,8 @@ html {
 
 body {
   font-family: 'Nunito Sans', Helvetica, Arial, sans-serif;
-  /* font-family: 'Inter', sans-serif; */
-  /* font-family: 'Noto Sans', sans-serif; */
-  /* font-family: 'Rubik', sans-serif; */
-  /* font-family: 'Raleway', sans-serif; */
-  /* font-family: 'Poppins', sans-serif; */
   color: #444;
-  /* background-color: #f3f3f3; */
-  /* background-color: #f8f8f8; */
   background-color: #fafafa;
-  /* height: 100vh; */
 }
 
 .overlay,
@@ -31,8 +23,6 @@ body {
   width: 100%;
   height: 100%;
   background: rgba(230, 230, 230, 0.3);
-  /* background: rgba(230, 230, 230, 0.4); */
-  /* background: rgba(100, 100, 100, 0.4); */
 }
 
 .overlay {
@@ -88,11 +78,6 @@ header {
   align-items: center;
   padding: 2.5rem;
 }
-
-/* .welcome {
-    font-size: 1.9rem;
-    font-weight: 500;
-  } */
 
 /* LOGO */
 
@@ -174,7 +159,7 @@ header {
   height: 2.5rem;
   line-height: 2.5rem;
   padding-top: 0.3rem;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
   font-weight: 600;
   font-size: 1rem;
   color: #bbb;
@@ -266,16 +251,13 @@ header {
 }
 
 .menu__popup_item a:hover {
-  /* color: #999; */
-  /* color: #64a22d; */
   color: #6eb034;
 }
 
-/* ~ ~ ~ ~ */
+/* ------- */
 /*   APP   */
-/* ~ ~ ~ ~ */
+/* ------- */
 
-/* TODO1 удалить ненужное */
 .app {
   position: relative;
   width: 1140px;
@@ -287,11 +269,6 @@ header {
   margin-bottom: 4rem;
   margin-left: calc((100% - 1140px) / 2 - 21px);
   margin-right: calc((100% - 1140px) / 2 + 21px);
-
-  /* TODO1 удалить, если не нужно */
-  /* NOTE This creates the fade in/out anumation */
-  /* opacity: 0; */
-  /* transition: all 1s; */
 }
 
 /* GROUP */
@@ -427,11 +404,6 @@ header {
 }
 
 .custom-arrow::after {
-  /* triangle */
-  /* content: '\25BC'; */
-  /* caret */
-  /* content: '\2304'; */
-  /* content: 'expand_more'; */
   content: 'arrow_drop_down';
   cursor: pointer;
   position: absolute;
@@ -439,7 +411,6 @@ header {
   top: 50%;
   margin-left: -30px;
   z-index: 3;
-  /* right: 10px; */
   font-family: 'Material Symbols Outlined';
   font-size: 2rem;
   pointer-events: none;
@@ -542,16 +513,13 @@ header {
   box-shadow: 0 0 2.5rem #c5debd;
 }
 
-/*  ADD TRANSACTION: Expense and Repayment */
+/*  ADD TRANSACTION: Expense + Repayment */
 
 .add-transaction__form_main,
 .add-transaction__form_hidden {
-  /* position: absolute; */
   position: fixed;
   align-items: center;
-  /* top: 5rem; */
   background: #fff;
-  /* z-index: 2; */
   z-index: 3;
   overflow-y: auto;
   border-radius: 1.5rem;
@@ -559,15 +527,12 @@ header {
 }
 
 .add-transaction__form_main {
-  /* left: 4rem; */
   width: 457px;
   z-index: 3;
 }
 
 .add-transaction__form_hidden {
   min-width: 457px;
-  /* left: calc(4rem + 457px + 4rem); */
-  /* z-index: 3; */
   z-index: 4;
 }
 
@@ -591,7 +556,6 @@ header {
 
 .add-transaction__form_field {
   margin-bottom: 2rem;
-  /* display: block; */
   display: flex;
   align-items: center;
   height: 3.2rem;
@@ -599,7 +563,6 @@ header {
 
 .add-transaction__form_label {
   display: inline-block;
-  /* display: inline-flex; */
   align-content: center;
   align-items: center;
   position: relative;
@@ -628,7 +591,6 @@ header {
   box-sizing: border-box;
 }
 
-/* TODO1: delete if not used */
 .add-transaction__form_input-text::placeholder {
   color: #aaa;
 }
@@ -804,7 +766,7 @@ header {
   width: 11.5rem;
 }
 
-/* ADD TRANSACTION: Splitt Form */
+/* ADD EXPENSE: Splitt Form */
 
 .add-transaction__form_splitt-container {
   display: flex;
@@ -1037,10 +999,9 @@ header {
   width: 7rem;
 }
 
-/* ADD TRANSACTION: Payer Form */
+/* ADD EXPENSE: Payer Form */
 
 .payer-table {
-  /* width: 100%; */
   margin-left: -1.5rem;
   border-collapse: collapse;
   border-spacing: 0;
@@ -1049,14 +1010,6 @@ header {
 .payer-table-row {
   cursor: pointer;
 }
-
-/* .payer-table-row td:first-child {
-  visibility: hidden;
-}
-
-.payer-table-row:hover td:first-child {
-  visibility: visible;
-} */
 
 .payer-table-row td:nth-child(n + 2) {
   border: 1px solid #e9e9e9;
@@ -1148,7 +1101,6 @@ header {
 }
 
 .payer-table-column__add-payer {
-  /* height: 50px; */
   padding-top: 15px;
   padding-bottom: 50px;
 }
@@ -1177,7 +1129,6 @@ header {
 }
 
 .add-payer-caption {
-  /* font-weight: 500; */
   margin-left: 0.4rem;
   font-size: 1.4rem;
   padding-bottom: 3px;
@@ -1241,7 +1192,7 @@ header {
 
 .emoji-input {
   display: none;
-  width: 3.9rem;
+  width: 44px;
   font-size: 2.4rem;
   cursor: default;
   outline: none;
@@ -1251,9 +1202,16 @@ header {
   display: inline-flex;
 }
 
+.emoji-default {
+  padding-left: 8px;
+  padding-right: 8px;
+  width: 44px;
+  font-size: 2.4rem;
+  cursor: pointer;
+}
+
 .btn__emoji-picker--switch,
 .btn__emoji-remove {
-  min-width: 8rem;
   font-size: 2.2rem;
   cursor: pointer;
   transition: transform 0.05s ease-in;
@@ -1261,15 +1219,26 @@ header {
 
 .btn__emoji-picker--switch {
   color: #777;
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   font-weight: 300;
   margin-left: 0.9rem;
+  width: 37px;
+}
+
+.btn__emoji-restore-default {
+  color: #ccc;
+  font-size: 1.8rem;
+  height: 100%;
+  font-weight: 300;
+  min-width: 3rem;
+  cursor: pointer;
 }
 
 .btn__emoji-remove {
   display: none;
   font-weight: 300;
   color: #bbb;
+  min-width: 8rem;
 }
 
 .btn__emoji-remove.active {
@@ -1285,7 +1254,13 @@ header {
   transform: translateY(-0.06rem);
 }
 
-.btn__emoji-picker--switch:active {
+.btn__emoji-restore-default:hover {
+  color: #80bf64;
+  font-weight: 400;
+}
+
+.btn__emoji-picker--switch:active,
+.btn__emoji-restore-default:active {
   color: #497d31;
   transform: translateY(0rem);
 }
@@ -1447,9 +1422,7 @@ header {
   box-shadow: 0 0px 1.2rem #c5debd;
 }
 
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
-/*  SUBMIT TRANSACTIONS  */
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/*  ADD TRANSACTIONS: SUBMIT  */
 
 .submit-transaction__success-icon-container {
   height: 20rem;
@@ -1490,9 +1463,9 @@ header {
   }
 }
 
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
-/*  DELETE TRANSACTIONS  */
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/* ---------------------- */
+/*   DELETE TRANSACTION   */
+/* ---------------------- */
 
 .delete-transaction {
   position: fixed;
@@ -1615,7 +1588,7 @@ header {
   width: 100%;
 }
 
-/* Delete Expense */
+/* Delete Transaction: Expense */
 
 .delete-transaction__header.delete-expense {
   background-color: #f97e4b;
@@ -1641,7 +1614,7 @@ header {
   box-shadow: 0 0px 1.2rem #ecc9bb;
 }
 
-/* Delete Repayment */
+/* Delete Transaction: Repayment */
 
 .delete-transaction__body.delete-repayment {
   max-width: 520px;
@@ -1671,11 +1644,9 @@ header {
   box-shadow: 0 0px 1.2rem #c5debd;
 }
 
-/* ~ ~ ~ ~ */
-/*  MAIN   */
-/* ~ ~ ~ ~ */
-
-/* TRANSACTIONS */
+/* ---------------- */
+/*   TRANSACTIONS   */
+/* ---------------- */
 
 .transactions {
   font-size: 1.5rem;
@@ -1684,131 +1655,9 @@ header {
   overflow: scroll;
 }
 
-.transactions__container,
-.movements__table {
+.transactions__container {
   height: 100%;
 }
-
-.movements__row-container {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-/* TODO1 удалить */
-.repayment__marker {
-  position: absolute;
-  left: -2.2rem;
-  border-radius: 50%;
-  width: 1.2rem;
-  height: 1.2rem;
-  background-color: #8ad646;
-}
-
-.repayment__marker2 {
-  margin-top: -0.2rem;
-  border-radius: 50%;
-  width: 1.2rem;
-  height: 1.2rem;
-  background-color: #8ad646;
-}
-
-.movements__remove-btn {
-  position: absolute;
-  text-align: center;
-  width: 4rem;
-  color: #999;
-  font-weight: 400;
-  font-size: 2.1rem;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease-in;
-}
-
-.movements__row-container:hover .movements__remove-btn {
-  visibility: visible;
-  opacity: 1;
-}
-
-.movements__remove-btn:hover {
-  color: red;
-}
-
-.movements__row {
-  margin-left: 4rem;
-  flex-grow: 1;
-  padding: 1.5rem 1rem;
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  border-top: 1px solid #f6f6f6;
-  border-bottom: 1px solid #f6f6f6;
-  cursor: pointer;
-  transition: all 0.2s ease-in;
-}
-
-.movements--repayment {
-  background-color: #f3fcef;
-}
-
-.movements__row-container:hover .movements__row {
-  border-top: 1px solid #e0e0e0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.movements__row:active {
-  transform: translateY(0.1rem);
-}
-
-.movements__date {
-  margin: 0 0.2rem;
-  padding-top: 0.1rem;
-  font-size: 1.3rem;
-  font-weight: 500;
-  color: #666;
-}
-
-.movements__icon {
-  font-size: 1.6rem;
-  width: 1.5rem;
-  margin-left: 1.6rem;
-}
-
-.movements__title {
-  font-size: 1.7rem;
-  margin-left: 0.9rem;
-  font-weight: 700;
-  color: #333;
-  white-space: normal;
-  word-break: break-word;
-}
-
-/* TODO1 удалить, если не используется */
-
-.movements__repayment--destination {
-  /* font-weight: 400; */
-  font-weight: 600;
-  color: #555;
-  /* font-weight: 500; */
-}
-
-.movements__value {
-  font-size: 1.5rem;
-  font-weight: 400;
-  margin-left: auto;
-  color: #555;
-}
-
-.movements__share {
-  margin-left: 2.5rem;
-  width: 10.5rem;
-  text-align: right;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Transactions: NEW */
 
 .transactions-table {
   width: 100%;
@@ -1830,7 +1679,6 @@ header {
 }
 
 .transactions-table__row {
-  /* height: 62px; */
   height: 58px;
 }
 
@@ -1849,9 +1697,6 @@ header {
 }
 
 .transactions-table__row:hover td:nth-child(n + 2) {
-  /* border-top: 1px solid #a0a0a0;
-  border-bottom: 1px solid #a0a0a0; */
-  /*  */
   border-top: 1px solid #c0c0c0;
   border-bottom: 1px solid #c0c0c0;
 }
@@ -1861,8 +1706,6 @@ header {
 }
 
 .transactions-table__row.repayment td:nth-child(n + 2) {
-  /* TODO1 выбрать */
-  /* background-color: #f3fcef; */
   background-color: #f7fcf4;
 }
 
@@ -1878,8 +1721,6 @@ header {
   width: 4rem;
   height: 100%;
   text-align: center;
-  /* TODO1 opacity, visibility ? */
-  /* TODO1 тест */
   padding: 0;
   margin: 0;
   position: relative;
@@ -1905,13 +1746,11 @@ header {
 }
 
 .transactions-table__date {
-  /* width: 82px; */
   width: 86px;
   text-align: center;
   font-size: 1.3rem;
   font-weight: 500;
   color: #666;
-  /* background-color: lemonchiffon !important; */
 }
 
 .transactions-table__icon {
@@ -1924,14 +1763,10 @@ header {
 .transactions-table__title {
   width: auto;
   font-size: 1.7rem;
-  /* margin-left: 0.9rem; */
-  /* padding-left: 0.6rem; */
-  /* padding-left: 0.8rem; */
   padding-left: 0.3rem;
   padding-right: 1rem;
   line-height: 1.1;
   font-weight: 600;
-  /* font-weight: 400; */
   color: #555;
   white-space: normal;
   word-break: break-word;
@@ -1951,7 +1786,7 @@ header {
   color: #666;
 }
 
-/* Movements: Empty, Error */
+/* TRANSACTIONS: Empty, Error */
 
 .transactions__empty,
 .transactions__error {
@@ -2014,15 +1849,7 @@ header {
   color: #8fc974;
 }
 
-/* Movements: Error */
-
-.movements__error h2 {
-  font-size: 1.9rem;
-  font-weight: 400;
-  color: #777;
-}
-
-/* Movements: Loading */
+/* TRANSACTIONS: Loading */
 
 .transactions__loading {
   display: flex;
@@ -2038,17 +1865,22 @@ header {
   color: #555;
 }
 
-/* ~ ~ ~ ~ */
-/*  ASIDE  */
-/* ~ ~ ~ ~ */
-
-/* SUMMARY: Generic */
+/* ----------- */
+/*   SUMMARY   */
+/* ----------- */
 
 .summary {
   padding: 2rem;
   color: #333;
   background-color: #f6f6f6;
   border-left: 4px solid #eee;
+}
+
+.summary-container {
+  grid-column: 2;
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 2rem;
 }
 
 .summary h2 {
@@ -2066,7 +1898,7 @@ header {
   color: #555;
 }
 
-/* Summary Table */
+/* SUMMARY: Table */
 
 .summary__table {
   margin-top: 1.4rem;
@@ -2133,15 +1965,6 @@ header {
   }
 }
 
-/* SUMMARY */
-
-.summary-container {
-  grid-column: 2;
-  display: grid;
-  grid-template-rows: auto auto;
-  gap: 2rem;
-}
-
 /* SUMMARY: STATUS */
 
 .status-container {
@@ -2204,9 +2027,9 @@ header {
   margin-top: 1.2rem;
 }
 
-/* ~ ~ ~ ~ */
-/*  ERROR  */
-/* ~ ~ ~ ~ */
+/* --------- */
+/*   ERROR   */
+/* --------- */
 
 .error-modal {
   visibility: hidden;
@@ -2284,11 +2107,11 @@ header {
   box-shadow: 0 0px 1.8rem rgba(200, 200, 200, 0.3);
 }
 
-/* ~ ~ ~ ~ ~ */
-/*  BOTTOM   */
-/* ~ ~ ~ ~ ~ */
+/* ---------- */
+/*   BOTTOM   */
+/* ---------- */
 
-/* TRANSACTIONS: PAGES */
+/* TRANSACTIONS PAGES */
 
 .transactions__pages {
   grid-row: 4;
@@ -2326,7 +2149,7 @@ header {
   border-radius: 50%;
   width: 3rem;
   height: 3rem;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Raleway', Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 1.4rem;
   color: #777;
@@ -2361,6 +2184,10 @@ header {
 .current__transactions:active {
   color: #bbb;
 }
+
+/* -------- */
+/*   UTIL   */
+/* -------- */
 
 /* COLORS */
 

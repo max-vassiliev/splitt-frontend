@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const ACTIVE_CLASS = 'active';
   const INACTIVE_CLASS = 'inactive';
   const HIDDEN_CLASS = 'hidden';
+  const DEFAULT_CLASS = 'default';
   const DISABLED_ATTRIBUTE = 'disabled';
   const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
   const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
@@ -18,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
   const DEFAULT_AVATAR = 'images/avatar-empty.png';
+  const DEFAULT_EMOJI_EXPENSE = '🗒️';
+  const DEFAULT_EMOJI_REPAYMENT = '✅';
 
   let currentGroupId = 1;
   let currentUserId = '4';
@@ -255,11 +258,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const addExpenseAmountInput = document.querySelector('.add-expense-amount');
   const addExpenseDateInput = document.querySelector('.add-expense-date');
   const addExpenseEmojiRow = document.querySelector('.add-expense-emoji-row');
+  const addExpenseEmojiContainer = document.querySelector(
+    '.add-expense-emoji-container'
+  );
+  const addExpenseEmojiDefault = document.querySelector(
+    '.add-expense-emoji-default'
+  );
   const addExpenseEmojiInputField = document.querySelector(
     '.emoji-input.add-expense'
   );
   const addExpenseEmojiPickerSwitchBtn = document.querySelector(
     '.btn__emoji-picker--switch.add-expense'
+  );
+  const addExpenseEmojiDefaultBtn = document.querySelector(
+    '.btn__emoji-restore-default.add-expense'
   );
   const addExpenseEmojiRemoveBtn = document.querySelector(
     '.btn__emoji-remove.add-expense'
@@ -440,11 +452,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const addRepaymentEmojiRow = document.querySelector(
     '.add-repayment-emoji-row'
   );
+  const addRepaymentEmojiContainer = document.querySelector(
+    '.add-repayment-emoji-container'
+  );
+  const addRepaymentEmojiDefault = document.querySelector(
+    '.add-repayment-emoji-default'
+  );
   const addRepaymentEmojiInputField = document.querySelector(
     '.emoji-input.add-repayment'
   );
   const addRepaymentEmojiPickerSwitchBtn = document.querySelector(
     '.btn__emoji-picker--switch.add-repayment'
+  );
+  const addRepaymentEmojiDefaultBtn = document.querySelector(
+    '.btn__emoji-restore-default.add-repayment'
   );
   const addRepaymentEmojiRemoveBtn = document.querySelector(
     '.btn__emoji-remove.add-repayment'
@@ -666,11 +687,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const emojiField = {
     constructor: function (
+      emojiContainer,
       emojiInputField,
+      emojiDefaultField,
+      emojiDefaultBtn,
       emojiPickerSwitchBtn,
       emojiRemoveBtn
     ) {
+      this.emojiContainer = emojiContainer;
       this.emojiInputField = emojiInputField;
+      this.emojiDefaultField = emojiDefaultField;
+      this.emojiDefaultBtn = emojiDefaultBtn;
       this.emojiPickerSwitchBtn = emojiPickerSwitchBtn;
       this.emojiRemoveBtn = emojiRemoveBtn;
     },
@@ -680,13 +707,19 @@ document.addEventListener('DOMContentLoaded', function () {
   const addRepaymentEmojiField = Object.create(emojiField);
 
   addExpenseEmojiField.constructor(
+    addExpenseEmojiContainer,
     addExpenseEmojiInputField,
+    addExpenseEmojiDefault,
+    addExpenseEmojiDefaultBtn,
     addExpenseEmojiPickerSwitchBtn,
     addExpenseEmojiRemoveBtn
   );
 
   addRepaymentEmojiField.constructor(
+    addRepaymentEmojiContainer,
     addRepaymentEmojiInputField,
+    addRepaymentEmojiDefault,
+    addRepaymentEmojiDefaultBtn,
     addRepaymentEmojiPickerSwitchBtn,
     addRepaymentEmojiRemoveBtn
   );
@@ -695,16 +728,37 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isActive(activeEmojiField.emojiInputField)) {
       return;
     }
+    if (!activeEmojiField.emojiDefaultField.classList.contains(HIDDEN_CLASS)) {
+      activeEmojiField.emojiDefaultField.classList.add(HIDDEN_CLASS);
+    }
+    if (activeEmojiField.emojiContainer.classList.contains(DEFAULT_CLASS)) {
+      activeEmojiField.emojiContainer.classList.remove(DEFAULT_CLASS);
+    }
     activeEmojiField.emojiPickerSwitchBtn.classList.add(HIDDEN_CLASS);
+    activeEmojiField.emojiDefaultBtn.classList.add(HIDDEN_CLASS);
     activeEmojiField.emojiInputField.classList.add(ACTIVE_CLASS);
     activeEmojiField.emojiRemoveBtn.classList.add(ACTIVE_CLASS);
   }
 
+  function restoreDefaultEmoji() {
+    activeEmojiField.emojiDefaultField.classList.remove(HIDDEN_CLASS);
+    activeEmojiField.emojiDefaultBtn.classList.add(HIDDEN_CLASS);
+    activeEmojiField.emojiPickerSwitchBtn.classList.add(HIDDEN_CLASS);
+    activeEmojiField.emojiRemoveBtn.classList.add(ACTIVE_CLASS);
+    activeEmojiField.emojiContainer.classList.add(DEFAULT_CLASS);
+  }
+
   function removeEmoji() {
-    activeEmojiField.emojiInputField.value = '';
-    activeEmojiField.emojiInputField.classList.remove(ACTIVE_CLASS);
+    if (activeEmojiField.emojiContainer.classList.contains(DEFAULT_CLASS)) {
+      activeEmojiField.emojiDefaultField.classList.add(HIDDEN_CLASS);
+      activeEmojiField.emojiContainer.classList.remove(DEFAULT_CLASS);
+    } else {
+      activeEmojiField.emojiInputField.value = '';
+      activeEmojiField.emojiInputField.classList.remove(ACTIVE_CLASS);
+    }
     activeEmojiField.emojiRemoveBtn.classList.remove(ACTIVE_CLASS);
     activeEmojiField.emojiPickerSwitchBtn.classList.remove(HIDDEN_CLASS);
+    activeEmojiField.emojiDefaultBtn.classList.remove(HIDDEN_CLASS);
     activeEmojiField = null;
   }
 
@@ -2111,6 +2165,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // load: Add Expense / Add Repayment: Vertical Align
   alignAddTransactionForms();
 
+  // load: Add Expense / Add Repayment: Set Default Emojis
+  addExpenseEmojiDefault.textContent = DEFAULT_EMOJI_EXPENSE;
+  addRepaymentEmojiDefault.textContent = DEFAULT_EMOJI_REPAYMENT;
+
   // load: Add Expense: Payer Form
   createFirstPayerRow();
 
@@ -2204,6 +2262,16 @@ document.addEventListener('DOMContentLoaded', function () {
     toggleEmojiPicker(event);
   });
 
+  addExpenseEmojiDefault.addEventListener('click', function (event) {
+    activeEmojiField = addExpenseEmojiField;
+    toggleEmojiPicker(event);
+  });
+
+  addExpenseEmojiDefaultBtn.addEventListener('click', function () {
+    activeEmojiField = addExpenseEmojiField;
+    restoreDefaultEmoji();
+  });
+
   addExpenseEmojiRemoveBtn.addEventListener('click', function () {
     activeEmojiField = addExpenseEmojiField;
     removeEmoji();
@@ -2217,6 +2285,16 @@ document.addEventListener('DOMContentLoaded', function () {
   addRepaymentEmojiInputField.addEventListener('click', function (event) {
     activeEmojiField = addRepaymentEmojiField;
     toggleEmojiPicker(event);
+  });
+
+  addRepaymentEmojiDefault.addEventListener('click', function (event) {
+    activeEmojiField = addRepaymentEmojiField;
+    toggleEmojiPicker(event);
+  });
+
+  addRepaymentEmojiDefaultBtn.addEventListener('click', function () {
+    activeEmojiField = addRepaymentEmojiField;
+    restoreDefaultEmoji();
   });
 
   addRepaymentEmojiRemoveBtn.addEventListener('click', function () {
@@ -2365,20 +2443,4 @@ document.addEventListener('DOMContentLoaded', function () {
   btnClosePopup.forEach(button => {
     button.addEventListener('click', closeActivePopup);
   });
-
-  // TODO1: to delete: enable Payer Form
-  // const addExpenseHiddenFormPayer = document.querySelector(
-  //   '.add-expense__form_payer'
-  // );
-  // openAddExpense();
-  // activate(addExpenseHiddenFormPayer);
-  // activeAddExpenseHiddenForm = addExpenseHiddenFormPayer;
-
-  // TODO1: to delete: enable Splitt Form
-  // const addExpenseHiddenFormSplitt = document.querySelector(
-  //   '.add-transaction__form_hidden.add-expense__form_splitt'
-  // );
-  // openAddExpense();
-  // addExpenseHiddenFormSplitt.classList.add(ACTIVE_CLASS);
-  // activeAddExpenseHiddenForm = addExpenseHiddenFormSplitt;
 });

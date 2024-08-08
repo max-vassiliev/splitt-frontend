@@ -6,30 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="icon" type="image/png" href="/icon.png" />
 
-    <!-- TODO1: remove unused fonts -->
-
-    <link
-      href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
-      href="https://fonts.googleapis.com/css?family=Rubik:400,500,600,700,800,900&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
-      href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700,800,900&display=swap"
-      rel="stylesheet"
-    />
-
     <link
       href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
-      href="https://fonts.googleapis.com/css?family=Noto Sans:400,500,600,700,800,900&display=swap"
       rel="stylesheet"
     />
 
@@ -43,24 +21,11 @@
       rel="stylesheet"
     />
 
-    <!-- TODO1 Fonts END -->
-
-    <!-- TODO1: Remove unused icons -->
-
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     />
 
-    <!-- TODO1: Icons END -->
-
-    <!-- TODO1 тест -->
-    <!-- Bootstrap -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -84,16 +49,10 @@
         <div class="menu__account">
           <img
             src="images/avatar-sanya.png"
-            alt="Avatar"
+            alt="Арсений Тарковский"
             class="account__avatar"
           />
-          <!-- <div class="account__username">Константин Константинопольский</div> -->
           <div class="account__username">Арсений Тарковский</div>
-          <!-- <div class="account__username">Аркадий Райкин</div> -->
-          <!-- <div class="account__username">Максим Васильев</div> -->
-          <!-- <div class="account__username">Анна Воронова</div> -->
-          <!-- <div class="account__username">Катерина</div> -->
-          <!-- <div class="account__username">Саня</div> -->
         </div>
         <button class="menu__btn--open">&#x25BC;</button>
         <div class="menu__popup">
@@ -102,15 +61,9 @@
               <img
                 class="account__avatar"
                 src="images/sanya-avatar-2.png"
-                alt="Аватар"
+                alt="Арсений Тарковский"
               />
-              <!-- <div class="account__username">Константин Константинопольский</div> -->
               <div class="account__username">Арсений Тарковский</div>
-              <!-- <div class="account__username">Аркадий Райкин</div> -->
-              <!-- <div class="account__username">Максим Васильев</div> -->
-              <!-- <div class="account__username">Анна Воронова</div> -->
-              <!-- <div class="account__username">Катерина</div> -->
-              <!-- <div class="account__username">Саня</div> -->
             </div>
             <button class="menu__btn--close">&times;</button>
           </div>
@@ -132,7 +85,6 @@
       <!----------->
       <!-- GROUP -->
       <!----------->
-
       <div class="group__header">
         <div class="group__info">
           <img
@@ -190,7 +142,6 @@
       <!---------------------->
       <!-- ADD TRANSACTIONS -->
       <!---------------------->
-
       <div class="emoji-picker-container">
         <div id="emoji-picker"></div>
       </div>
@@ -203,6 +154,7 @@
       <!----------------->
       <!-- ADD EXPENSE -->
       <!----------------->
+
       <div class="add-expense__form">
         <!-- ADD EXPENSE: Main -->
         <div class="add-transaction__form_main add-expense__form_main">
@@ -245,7 +197,13 @@
             </div>
             <div class="add-transaction__form_field add-expense-emoji-row">
               <label class="add-transaction__form_label">Значок</label>
-              <div class="add-transaction__form_input-container">
+              <div
+                class="add-transaction__form_input-container add-expense-emoji-container default"
+              >
+                <div
+                  class="emoji-default add-expense-emoji-default"
+                  title="выбрать"
+                ></div>
                 <input
                   class="add-transaction__form_input-text emoji-input add-expense"
                   type="text"
@@ -254,12 +212,19 @@
                   readonly
                 />
                 <div
-                  class="material-symbols-outlined btn__emoji-picker--switch add-expense"
+                  class="material-symbols-outlined btn__emoji-picker--switch add-expense hidden"
+                  title="выбрать значок"
                 >
                   add_reaction
                 </div>
                 <div
-                  class="material-symbols-outlined btn__emoji-remove add-expense"
+                  class="material-symbols-outlined btn__emoji-restore-default add-expense hidden"
+                  title="вернуть значок по умолчанию"
+                >
+                  settings_backup_restore
+                </div>
+                <div
+                  class="material-symbols-outlined btn__emoji-remove add-expense active"
                   title="очистить"
                 >
                   close_small
@@ -821,7 +786,13 @@
             </div>
             <div class="add-transaction__form_field add-repayment-emoji-row">
               <label class="add-transaction__form_label">Значок</label>
-              <div class="add-transaction__form_input-container">
+              <div
+                class="add-transaction__form_input-container add-repayment-emoji-container default"
+              >
+                <div
+                  class="emoji-default add-repayment-emoji-default"
+                  title="выбрать"
+                ></div>
                 <input
                   class="add-transaction__form_input-text emoji-input add-repayment"
                   type="text"
@@ -830,12 +801,19 @@
                   readonly
                 />
                 <div
-                  class="material-symbols-outlined btn__emoji-picker--switch add-repayment"
+                  class="material-symbols-outlined btn__emoji-picker--switch add-repayment hidden"
+                  title="выбрать значок"
                 >
                   add_reaction
                 </div>
                 <div
-                  class="material-symbols-outlined btn__emoji-remove add-repayment"
+                  class="material-symbols-outlined btn__emoji-restore-default add-repayment hidden"
+                  title="вернуть значок по умолчанию"
+                >
+                  settings_backup_restore
+                </div>
+                <div
+                  class="material-symbols-outlined btn__emoji-remove add-repayment active"
                   title="очистить"
                 >
                   close_small
@@ -964,9 +942,9 @@
         </div>
       </div>
 
-      <!------------------->
-      <!--    DELETE     -->
-      <!------------------->
+      <!-------------->
+      <!--  DELETE  -->
+      <!-------------->
 
       <!-- Delete Expense -->
       <div class="delete-transaction delete-expense__modal">
@@ -1121,105 +1099,21 @@
         <!-- Delete Repayment: options end -->
       </div>
 
-      <!------------------
-          TRANSACTIONS 
-        ------------------>
+      <!-------------------->
+      <!--  TRANSACTIONS  -->
+      <!-------------------->
 
-      <!-- MOVEMENTS (annotations) -->
-      <!-- <div class="movements__annotations">
-        <div class="movements__annotations--total">
-          <p>общая сумма</p>
-        </div>
-        <div class="movements__annotations--share">
-          <p>ваш баланс</p>
-        </div>
-      </div> -->
-
-      <!-- TRANSACTIONS -->
       <div class="transactions">
         <div class="transactions__container">
-          <!-- MOVEMENTS: TABLE (OLD) -->
-          <!-- <div class="movements__table">
-            <div class="movements__row-container repayment">
-              <div
-                class="movements__remove-btn material-symbols-outlined"
-                title="удалить"
-              >
-                delete
-              </div>
-              <div
-                class="movements__row movements--repayment"
-                title="редактировать"
-              >
-                <div class="movements__date">26.09.2023</div>
-                <div class="movements__icon">✅</div>
-                <div class="movements__title">
-                  Возврат:
-                  <span class="movements__repayment--destination">
-                    Саня &rarr; Петя</span
-                  >
-                </div>
-                <div class="movements__value">+&nbsp;4&nbsp;000,00&nbsp;₽</div>
-                <div
-                  class="movements__value movements__share amount__color--positive"
-                >
-                  +&nbsp;4&nbsp;000,00&nbsp;₽
-                </div>
-              </div>
-            </div>
-            <div class="movements__row-container">
-              <div
-                class="movements__remove-btn material-symbols-outlined"
-                title="удалить"
-              >
-                delete
-              </div>
-              <div class="movements__row" title="редактировать">
-                <div class="movements__date">16.11.2023</div>
-                <div class="movements__icon">🏠</div>
-                <div class="movements__title">Аренда</div>
-                <div class="movements__value">-&nbsp;60&nbsp;000,00&nbsp;₽</div>
-                <div
-                  class="movements__value movements__share amount__color--negative"
-                >
-                  -&nbsp;15&nbsp;000,00&nbsp;₽
-                </div>
-              </div>
-            </div>
-            <div class="movements__row-container">
-              <div
-                class="movements__remove-btn material-symbols-outlined"
-                title="удалить"
-              >
-                delete
-              </div>
-              <div class="movements__row" title="редактировать">
-                <div class="movements__date">16.11.2023</div>
-                <div class="movements__icon">🏠</div>
-                <div class="movements__title">
-                  Какаятооченьбольшаятратаоченьоооооченьбольшаятрата
-                </div>
-                <div class="movements__value">
-                  -&nbsp;100&nbsp;000&nbsp;000,00&nbsp;₽
-                </div>
-                <div
-                  class="movements__value movements__share amount__color--negative"
-                >
-                  -&nbsp;100&nbsp;000&nbsp;000,00&nbsp;₽
-                </div>
-              </div>
-            </div>
-          </div> -->
-
-          <!-- TRANSACTIONS TABLE (NEW) -->
+          <!-- TRANSACTIONS: TABLE -->
           <table class="transactions-table">
-            <!-- Transactions Table: Annotations -->
+            <!-- TRANSACTIONS: TABLE (Annotations) -->
             <tr class="transactions-table__annotation-row">
               <td colspan="4"></td>
               <td class="transactions-table__annotation">общая сумма</td>
               <td class="transactions-table__annotation">ваш баланс</td>
             </tr>
-            <!-- Transactions Table: starts -->
+            <!-- TRANSACTIONS: TABLE (Starts) -->
             <!-- ✅ Возврат: Саня → вам -->
             <tr class="transactions-table__row repayment" title="редактировать">
               <td class="transactions-table__delete" title="удалить">
@@ -1380,7 +1274,7 @@
                 -&nbsp;250,00&nbsp;₽
               </td>
             </tr>
-            <!-- ✅ Возврат: вы → Андрей Тарковский -->
+            <!-- ✅ Возврат: Константин Константинопольский → вам -->
             <tr class="transactions-table__row repayment" title="редактировать">
               <td class="transactions-table__delete" title="удалить">
                 <div
@@ -1477,6 +1371,10 @@
           <!-- TRANSACTIONS: options end -->
         </div>
       </div>
+
+      <!--------------->
+      <!--  SUMMARY  -->
+      <!--------------->
 
       <!-- SUMMARY: STATUS -->
       <div class="summary-container">
@@ -1631,9 +1529,9 @@
         </div>
       </div>
 
-      <!----------- 
-          ERROR
-      ------------->
+      <!------------->
+      <!--  ERROR  -->
+      <!------------->
 
       <div class="error-modal error-modal-wide">
         <div class="error-modal__header">Ошибка</div>
@@ -1647,6 +1545,10 @@
           <button class="error-modal__btn-close">закрыть</button>
         </div>
       </div>
+
+      <!-------------->
+      <!--  BOTTOM  -->
+      <!-------------->
 
       <!-- TRANSACTIONS: PAGES -->
       <div class="transactions__pages">
