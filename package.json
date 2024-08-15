@@ -4,7 +4,8 @@
   "description": "Cost sharing application",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "copy-images": "cp -R src/images dist/images"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.9.3",
