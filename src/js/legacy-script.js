@@ -1,6 +1,6 @@
 'use strict';
 
-import { IMAGES_PATH } from './config.js';
+import { IMAGES_PATH } from './util/config.js';
 
 export function initializeLegacyScript() {
   document.addEventListener('DOMContentLoaded', function () {
@@ -351,7 +351,7 @@ export function initializeLegacyScript() {
       '.splitt-equally-checkbox'
     );
 
-    splittEquallyTableRows.forEach((row) => {
+    splittEquallyTableRows.forEach(row => {
       const userId = row.dataset.userId;
       const splittField = row.querySelector('.splitt-equally-column__amount');
       splittEquallyModel.splittAmounts.set(userId, DEFAULT_AMOUNT);
@@ -379,7 +379,7 @@ export function initializeLegacyScript() {
       '.splitt-parts-amount-input'
     );
     const splittPartsRowsArray = [...splittPartsRows];
-    splittPartsRowsArray.forEach((row) => {
+    splittPartsRowsArray.forEach(row => {
       const userId = row.dataset.userId;
       const amountField = row.querySelector('.splitt-parts-amount-input');
       splittPartsModel.splittAmounts.set(userId, 0);
@@ -411,7 +411,7 @@ export function initializeLegacyScript() {
       '.splitt-share__input'
     );
     const splittSharesRowsArray = [...splittSharesRows];
-    splittSharesRowsArray.forEach((row) => {
+    splittSharesRowsArray.forEach(row => {
       const userId = row.dataset.userId;
       const amountField = row.querySelector('.splitt-shares-column__amount');
       const shareField = row.querySelector('.splitt-share__input');
@@ -1129,7 +1129,7 @@ export function initializeLegacyScript() {
       const switchOptionsToUpdate =
         getPayerSwitchOptionsToUpdate(selectedRowId);
 
-      switchOptionsToUpdate.forEach((option) => {
+      switchOptionsToUpdate.forEach(option => {
         if (previousPayerId && option.value === previousPayerId) {
           option.removeAttribute(DISABLED_ATTRIBUTE);
         }
@@ -1143,7 +1143,7 @@ export function initializeLegacyScript() {
       const payerSwitchOptionsToUpdate =
         getPayerSwitchOptionsToUpdate(removedRowId);
 
-      payerSwitchOptionsToUpdate.forEach((option) => {
+      payerSwitchOptionsToUpdate.forEach(option => {
         option.value === removedPayerId &&
           option.removeAttribute(DISABLED_ATTRIBUTE);
       });
@@ -1156,7 +1156,7 @@ export function initializeLegacyScript() {
         .map(([_, row]) => row.payerSwitch);
 
       const switchOptionsToUpdate = payerSwitchesToUpdate.flatMap(
-        (payerSwitch) => {
+        payerSwitch => {
           return Array.from(payerSwitch.querySelectorAll('option'));
         }
       );
@@ -1366,7 +1366,7 @@ export function initializeLegacyScript() {
         remainder
       );
 
-      splittEquallyModel.checkedRows.forEach((userId) => {
+      splittEquallyModel.checkedRows.forEach(userId => {
         let splittAmount = baseAmount;
         if (usersWithHigherAmounts.has(userId)) {
           splittAmount += 1;
@@ -1436,7 +1436,7 @@ export function initializeLegacyScript() {
       const expenseAmountLength = referenceAmount.toString().length;
       const adjustedWidth =
         splittPartsModel.amountWidthOptions.get(expenseAmountLength) || '14rem';
-      splittPartsModel.splittFields.forEach((field) => {
+      splittPartsModel.splittFields.forEach(field => {
         field.style.width = adjustedWidth;
       });
     }
@@ -1637,7 +1637,7 @@ export function initializeLegacyScript() {
     }
 
     function removeAdditionalClasses(element, additionalClasses) {
-      additionalClasses.forEach((additionalClass) => {
+      additionalClasses.forEach(additionalClass => {
         element.classList.remove(additionalClass);
       });
     }
@@ -1902,7 +1902,7 @@ export function initializeLegacyScript() {
       if (!statusSection) return;
 
       const statusTypeClass = Array.from(statusSection.classList).find(
-        (statusClass) => statusClass.startsWith('status-')
+        statusClass => statusClass.startsWith('status-')
       );
       if (!statusTypeClass) return;
 
@@ -1980,7 +1980,7 @@ export function initializeLegacyScript() {
       let payerOptionsHTML = '';
 
       const payersToDisable = new Set();
-      payerTableModel.rows.forEach((row) => {
+      payerTableModel.rows.forEach(row => {
         payersToDisable.add(row.userId);
       });
 
@@ -2075,9 +2075,9 @@ export function initializeLegacyScript() {
 
       const payerAmountInputElements = Array.from(
         payerTableModel.rows.values()
-      ).map((row) => row.amountElement);
+      ).map(row => row.amountElement);
 
-      payerAmountInputElements.forEach((inputElement) => {
+      payerAmountInputElements.forEach(inputElement => {
         inputElement.style.width = adjustedWidth;
       });
     }
@@ -2092,7 +2092,7 @@ export function initializeLegacyScript() {
       mainForm.style.top = topMargin;
       mainForm.style.right = mainFormRightMargin;
 
-      hiddenForms.forEach((hiddenForm) => {
+      hiddenForms.forEach(hiddenForm => {
         hiddenForm.style.top = topMargin;
         hiddenForm.style.left = hiddenFormLeftMargin;
       });
@@ -2160,11 +2160,11 @@ export function initializeLegacyScript() {
       const optionsFrom = addRepaymentSwitchFrom.options;
       const optionsTo = addRepaymentSwitchTo.options;
 
-      [...optionsFrom].forEach((option) => {
+      [...optionsFrom].forEach(option => {
         addRepaymentFormModel.optionsFrom.set(option.value, option);
       });
 
-      [...optionsTo].forEach((option) => {
+      [...optionsTo].forEach(option => {
         if (option.value === '') return;
         addRepaymentFormModel.optionsTo.set(option.value, option);
       });
@@ -2346,9 +2346,9 @@ export function initializeLegacyScript() {
 
     addExpenseBtn.addEventListener('click', openAddExpense);
 
-    addExpenseBtnEdit.forEach((button) => toggleHiddenForm(button, 'expense'));
+    addExpenseBtnEdit.forEach(button => toggleHiddenForm(button, 'expense'));
 
-    addExpenseHiddenFormBtnClose.forEach((button) => {
+    addExpenseHiddenFormBtnClose.forEach(button => {
       button.addEventListener('click', function (event) {
         event.preventDefault();
         closeAddExpenseHiddenForm();
@@ -2366,11 +2366,11 @@ export function initializeLegacyScript() {
 
     // el: Add Expense: Payer Form
 
-    payerAvatarColumns.forEach((column) => {
+    payerAvatarColumns.forEach(column => {
       column.addEventListener('click', handlePayerAvatarClick);
     });
 
-    payerSwitches.forEach((payerSwitch) => {
+    payerSwitches.forEach(payerSwitch => {
       payerSwitch.addEventListener('change', handlePayerSwitch);
     });
 
@@ -2378,31 +2378,31 @@ export function initializeLegacyScript() {
 
     // el: Add Expense: Splitt Form
 
-    splittOptionButtons.forEach((splittOptionButton) => {
+    splittOptionButtons.forEach(splittOptionButton => {
       splittOptionButton.addEventListener('change', handleSplittOptionChange);
     });
 
-    splittEquallyCheckboxes.forEach((checkbox) =>
+    splittEquallyCheckboxes.forEach(checkbox =>
       checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
     );
 
-    splittEquallyTableRows.forEach((row) =>
+    splittEquallyTableRows.forEach(row =>
       row.addEventListener('click', handleSplittEquallyRowClick)
     );
 
-    splittPartsAmountInputs.forEach((inputAmount) =>
+    splittPartsAmountInputs.forEach(inputAmount =>
       inputAmount.addEventListener('input', handleSplittPartsAmountInput)
     );
 
-    splittPartsRows.forEach((row) =>
+    splittPartsRows.forEach(row =>
       row.addEventListener('click', handleSplittPartsRowClick)
     );
 
-    splittSharesInputs.forEach((inputShare) =>
+    splittSharesInputs.forEach(inputShare =>
       inputShare.addEventListener('input', handleSplittSharesInput)
     );
 
-    splittSharesRows.forEach((row) =>
+    splittSharesRows.forEach(row =>
       row.addEventListener('click', handleSplittSharesRowClick)
     );
 
@@ -2416,11 +2416,11 @@ export function initializeLegacyScript() {
 
     addRepaymentBtn.addEventListener('click', openAddRepayment);
 
-    addRepaymentBtnEdit.forEach((button) =>
+    addRepaymentBtnEdit.forEach(button =>
       toggleHiddenForm(button, 'repayment')
     );
 
-    addRepaymentHiddenFormBtnClose.forEach((button) => {
+    addRepaymentHiddenFormBtnClose.forEach(button => {
       button.addEventListener('click', function (event) {
         event.preventDefault();
         closeAddRepaymentHiddenForm();
@@ -2485,7 +2485,7 @@ export function initializeLegacyScript() {
 
     overlay.addEventListener('click', closeActivePopup);
 
-    btnClosePopup.forEach((button) => {
+    btnClosePopup.forEach(button => {
       button.addEventListener('click', closeActivePopup);
     });
   });
