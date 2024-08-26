@@ -1,4 +1,4 @@
-class API {
+class AJAX {
   // TODO1 удалить (старый код)
   // const timeout = function (s) {
   //   return new Promise(function (_, reject) {
@@ -45,6 +45,17 @@ class API {
   // static delete(url) {
   //   return this.request('DELETE', url);
   // }
+
+  static async getTestData(filePath) {
+    try {
+      const response = await fetch(filePath);
+      if (!response.ok) throw new Error('Failed to fetch data');
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw err;
+    }
+  }
 }
 
-export default new API();
+export default new AJAX();
