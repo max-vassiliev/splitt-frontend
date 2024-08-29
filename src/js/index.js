@@ -5,6 +5,10 @@ import mainController from './controller/MainController.js';
 
 async function init() {
   try {
+    if (module.hot) {
+      module.hot.accept();
+    }
+
     initializeLegacyScript();
     await mainController.init();
   } catch (error) {

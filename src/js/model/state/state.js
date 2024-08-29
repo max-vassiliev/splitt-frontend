@@ -1,3 +1,5 @@
+import Group from '../group/Group';
+
 class State {
   #currentUserId = null;
   #group = {};
@@ -10,6 +12,9 @@ class State {
   }
 
   set currentUserId(value) {
+    if (!value || typeof value !== 'number' || value <= 0) {
+      throw Error('Current user ID required. Should be a positive number.');
+    }
     this.#currentUserId = value;
   }
 
@@ -18,6 +23,11 @@ class State {
   }
 
   set group(value) {
+    if (!value || !(value instanceof Group)) {
+      throw Error(
+        'Invalid group. The value must be a non-null instance of Group'
+      );
+    }
     this.#group = value;
   }
 

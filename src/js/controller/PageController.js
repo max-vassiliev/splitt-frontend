@@ -3,9 +3,7 @@ import pageModel from '../model/page/PageModel.js';
 class PageController {
   async controlLoadPage() {
     try {
-      const data = await pageModel.loadPage();
-      console.log(data);
-      // TODO!
+      await pageModel.loadPage();
     } catch (error) {
       throw error;
     }
