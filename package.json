@@ -5,7 +5,8 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",
-    "copy-images": "cp -R src/images dist/images"
+    "copy-images": "cp -R src/images dist/images",
+    "copy-json": "cp -R src/json dist/json"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.9.3",

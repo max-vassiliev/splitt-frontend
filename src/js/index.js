@@ -1,10 +1,15 @@
 'use strict';
 
 import { initializeLegacyScript } from './legacy-script.js';
+import mainController from './controller/MainController.js';
 
-function init() {
-  console.log('Initializing refactored app...');
-
-  initializeLegacyScript();
+async function init() {
+  try {
+    initializeLegacyScript();
+    await mainController.init();
+  } catch (error) {
+    console.error('💥💥💥💥💥');
+    throw error;
+  }
 }
 init();
