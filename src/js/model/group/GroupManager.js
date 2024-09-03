@@ -1,11 +1,15 @@
 import Group from './Group.js';
-import state from '../state/State.js';
 
 class GroupManager {
-  createGroupOnLoad(groupData) {
-    if (!groupData) {
-      throw Error('Unable to load the page with missing group data.');
+  #requiredFields = ['id', 'title'];
+
+  initializeGroupOnLoad(groupData) {
+    if (!groupData || typeof groupData !== 'object') {
+      throw Error(
+        `Invalid group data. Expected to recieve an object. Received: ${groupData} (type: ${typeof groupData})`
+      );
     }
+    this.#validateGroupFields(groupData);
 
     const groupProperties = {
       id: groupData.id,
@@ -14,6 +18,14 @@ class GroupManager {
     };
 
     return new Group(groupProperties);
+  }
+
+  #validateGroupFields(input) {
+    this.#requiredFields.forEach(field => {
+      if (!(field in input)) {
+        throw new Error(`Missing required field "${field}" for Group.`);
+      }
+    });
   }
 }
 

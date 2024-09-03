@@ -1,18 +1,17 @@
 import {
-  isPositiveNumber,
   isNonEmptyString,
   isNonEmptyStringOrNull,
+  isPositiveNumber,
 } from '../../util/SplittValidator.js';
 
-class Group {
+class User {
   #id;
-  #title;
+  #name;
+  #email;
   #avatar;
 
-  constructor({ id, title, avatar }) {
-    this.#id = id;
-    this.#title = title;
-    this.#avatar = avatar;
+  get id() {
+    return this.#id;
   }
 
   /**
@@ -20,29 +19,43 @@ class Group {
    */
   set id(value) {
     if (!isPositiveNumber(value)) {
-      throw new Error('Invalid ID: expected a positive number');
+      throw new Error(
+        `Invalid ID: expected a positive number. Received: ${value} (type: ${typeof value})`
+      );
     }
     this.#id = value;
-  }
-
-  get id() {
-    return this.#id;
   }
 
   /**
    * @param {string} value — Must be a non-empty string.
    */
-  set title(value) {
+  set name(value) {
     if (!isNonEmptyString(value)) {
       throw new Error(
-        `Invalid value for title: expected a non-empty string. Received: ${value} (type: ${typeof value})`
+        `Invalid value for name: expected a non-empty string. Received: ${value} (type: ${typeof value})`
       );
     }
-    this.#title = value;
+    this.#name = value;
   }
 
-  get title() {
-    return this.#title;
+  get name() {
+    return this.#name;
+  }
+
+  /**
+   * @param {string} value — Must be a non-empty string or null.
+   */
+  set email(value) {
+    if (!isNonEmptyStringOrNull(value)) {
+      throw new Error(
+        `Invalid value for email: expected a non-empty string or null. Received: ${value} (type: ${typeof value})`
+      );
+    }
+    this.#email = value;
+  }
+
+  get email() {
+    return this.#email;
   }
 
   /**
@@ -62,4 +75,4 @@ class Group {
   }
 }
 
-export default Group;
+export default User;

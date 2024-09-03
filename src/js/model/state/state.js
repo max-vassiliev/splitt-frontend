@@ -1,58 +1,116 @@
 import Group from '../group/Group';
+import Expense from '../transaction/Expense.js';
+import Repayment from '../transaction/Repayment.js';
+import { isPositiveNumber } from '../../util/SplittValidator.js';
 
 class State {
   #currentUserId = null;
   #group = {};
-  #members = [];
-  #balances = [];
+  #members = new Map();
+  #balances = new Map();
   #transactions = [];
+
+  /**
+   * @param {number} value — Must be a positive number.
+   */
+  set currentUserId(value) {
+    if (!isPositiveNumber(value)) {
+      throw Error(
+        `Invalid ID: expected a positive number. Received: ${value} (type: ${typeof value})`
+      );
+    }
+    this.#currentUserId = value;
+  }
 
   get currentUserId() {
     return this.#currentUserId;
   }
 
-  set currentUserId(value) {
-    if (!value || typeof value !== 'number' || value <= 0) {
-      throw Error('Current user ID required. Should be a positive number.');
+  /**
+   * @param {Group} value — Must be an instance of Group.
+   */
+  set group(value) {
+    if (!value || !(value instanceof Group)) {
+      throw Error(
+        `Invalid group. The value must be a non-null instance of Group. Received: ${value} (type: ${typeof value})`
+      );
     }
-    this.#currentUserId = value;
+    this.#group = value;
   }
 
   get group() {
     return this.#group;
   }
 
-  set group(value) {
-    if (!value || !(value instanceof Group)) {
-      throw Error(
-        'Invalid group. The value must be a non-null instance of Group'
+  /**
+   * @param {Map} value — Must be an instance of Map.
+   */
+  set members(value) {
+    if (!value || !(value instanceof Map)) {
+      throw new Error(
+        `Invalid members data: expected a Map. Received: ${value} (type: ${typeof value})`
       );
     }
-    this.#group = value;
+    this.#members = value;
   }
 
   get members() {
     return this.#members;
   }
 
-  set members(value) {
-    this.#members = value;
+  /**
+   * @param {Map} value — Must be an instance of Map.
+   */
+  set balances(value) {
+    if (!value || !(value instanceof Map)) {
+      throw new Error(
+        `Invalid balances data: expected a Map. Received: ${value} (type: ${typeof value})`
+      );
+    }
+    this.#balances = value;
   }
 
   get balances() {
     return this.#balances;
   }
 
-  set balances(value) {
-    this.#balances = value;
+  /**
+   * @param {Array} value — Must be an instance of Array.
+   */
+  set transactions(value) {
+    this.#validateTransactions(value);
+    this.#transactions = value;
   }
 
   get transactions() {
     return this.#transactions;
   }
 
-  set transactions(value) {
-    this.#transactions = value;
+  /**
+   * Validates the transactions array.
+   *
+   * @param {Array} transactions — Must be an array of Repayment or Expense instances or an emtpy array.
+   * @throws {Error} If the transactions array is not valid.
+   */
+  #validateTransactions(transactions) {
+    if (!Array.isArray(transactions)) {
+      throw new Error(
+        `Invalid transactions data: expected an Array. Received: ${transactions} (type: ${typeof transactions})`
+      );
+    }
+
+    if (transactions.length === 0) return;
+
+    for (const transaction of transactions) {
+      if (
+        !(transaction instanceof Expense) &&
+        !(transaction instanceof Repayment)
+      ) {
+        throw new Error(
+          `Invalid transaction item: expected instances of Expense or Repayment. Received: ${transaction} (type: ${typeof transaction})`
+        );
+      }
+    }
   }
 }
 

@@ -6,7 +6,8 @@
     "start": "parcel index.html",
     "build": "parcel build index.html",
     "copy-images": "cp -R src/images dist/images",
-    "copy-json": "cp -R src/json dist/json"
+    "copy-json": "cp -R src/json dist/json",
+    "start-test": "npm run copy-json && npm run start"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.9.3",
