@@ -314,7 +314,7 @@ header {
 .group__popup {
   display: none;
   position: absolute;
-  top: -2.2rem;
+  top: -2.3rem;
   left: 1rem;
   padding: 2.5rem 3rem;
   min-width: 500px;
@@ -2105,6 +2105,33 @@ header {
 .error-modal__btn-close:hover {
   background-color: #eaeaea;
   box-shadow: 0 0px 1.8rem rgba(200, 200, 200, 0.3);
+}
+
+/* ----------- */
+/*   SPINNER   */
+/* ----------- */
+
+.spinner-modal {
+  visibility: hidden;
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fafafa;
+  z-index: 99;
+}
+
+.spinner-modal.active {
+  visibility: visible;
+}
+
+.spinner-modal .spinner-border {
+  margin: 5rem;
+  width: 9rem;
+  height: 9rem;
+  border-width: 0.3rem;
+  animation: spinner-border 1.2s linear infinite;
+  border-color: #eee #eee #eee transparent;
 }
 
 /* ---------- */
