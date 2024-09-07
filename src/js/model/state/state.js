@@ -9,6 +9,9 @@ class State {
   #members = new Map();
   #balances = new Map();
   #transactions = [];
+  #activeModal = null;
+  #locale = 'ru-RU';
+  #currencySymbol = '₽';
 
   /**
    * @param {number} value — Must be a positive number.

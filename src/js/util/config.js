@@ -1,6 +1,27 @@
-export const TRANSACTION_TYPES = new Set(['expense', 'repayment']);
-
-// Temporary
-export const IMAGES_PATH = '../../images/';
+// Paths (Temporary)
 export const DATA_PATH = '../../json/json/';
 export const PAGE_LOAD_DATA = DATA_PATH + 'page-load-data.json';
+// export const PAGE_LOAD_DATA = DATA_PATH + 'page-load-data-test.json';
+
+// Global Constants
+export const ACTIVE_CLASS = 'active';
+export const INACTIVE_CLASS = 'inactive';
+export const HIDDEN_CLASS = 'hidden';
+export const DEFAULT_CLASS = 'default';
+export const DISABLED_ATTRIBUTE = 'disabled';
+export const HIDDEN_ATTRIBUTE = 'hidden';
+export const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
+export const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
+export const POSITIVE_CLASS = 'positive';
+export const NEGATIVE_CLASS = 'negative';
+export const CURRENCY_SYMBOL = '₽';
+export const CURRENT_LOCALE = 'ru-RU';
+
+// Images
+export const IMAGES_PATH = '../../images/';
+export const DEFAULT_AVATAR = `avatar-empty.png`;
+export const DEFAULT_EMOJI_EXPENSE = '🗒️';
+export const DEFAULT_EMOJI_REPAYMENT = '✅';
+
+// Transactions
+export const TRANSACTION_TYPES = new Set(['expense', 'repayment']);

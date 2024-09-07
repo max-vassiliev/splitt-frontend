@@ -20,6 +20,17 @@ class StateManager {
     return state.group;
   }
 
+  getCurrentUser() {
+    const currentUserId = state.currentUserId;
+    const currentUser = state.members.get(currentUserId);
+
+    if (!currentUser) {
+      throw new Error('Current user not found in the state.');
+    }
+
+    return currentUser;
+  }
+
   loadState(data) {
     this.#validateDataOnPageLoad(data);
 

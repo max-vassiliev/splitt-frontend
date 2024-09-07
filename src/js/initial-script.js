@@ -1,42 +1,44 @@
 'use strict';
 
-import { IMAGES_PATH } from './util/config.js';
+import { IMAGES_PATH } from './util/Config.js';
 
 export function initializeLegacyScript() {
   document.addEventListener('DOMContentLoaded', function () {
-    const ACTIVE_CLASS = 'active';
-    const INACTIVE_CLASS = 'inactive';
-    const HIDDEN_CLASS = 'hidden';
-    const DEFAULT_CLASS = 'default';
-    const DISABLED_ATTRIBUTE = 'disabled';
-    const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
-    const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
-    const POSITIVE_CLASS = 'positive';
-    const NEGATIVE_CLASS = 'negative';
-    const CURRENCY_SYMBOL = '₽';
-    const CURRENT_LOCALE = 'ru-RU';
+    const ACTIVE_CLASS = 'active'; //                               ☑️ (Config)
+    const INACTIVE_CLASS = 'inactive'; //                           ☑️ (Config)
+    const HIDDEN_CLASS = 'hidden'; //                               ☑️ (Config)
+    const DEFAULT_CLASS = 'default'; //                             ☑️ (Config)
+    const DISABLED_ATTRIBUTE = 'disabled'; //                       ☑️ (Config)
+    const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount'; //   ☑️ (Config)
+    const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount'; //   ☑️ (Config)
+    const POSITIVE_CLASS = 'positive'; //                           ☑️ (Config)
+    const NEGATIVE_CLASS = 'negative'; //                           ☑️ (Config)
 
-    const MAX_AMOUNT = 10000000000;
-    const DEFAULT_AMOUNT = 0;
-    const ONE_HUNDRED_PERCENT = 100;
-    const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+    const CURRENCY_SYMBOL = '₽'; //                                 ☑️ (State)
+    const CURRENT_LOCALE = 'ru-RU'; //                              ☑️ (State)
 
-    const DEFAULT_AVATAR = `avatar-empty.png`;
-    const DEFAULT_EMOJI_EXPENSE = '🗒️';
-    const DEFAULT_EMOJI_REPAYMENT = '✅';
+    const MAX_AMOUNT = 10000000000; //                      TODO! move to Config.js
+    const DEFAULT_AMOUNT = 0; //                            TODO! move to Config.js
+    const ONE_HUNDRED_PERCENT = 100; //                     TODO! move to Config.js
+    const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24; //    TODO! move to Config.js
 
-    let currentGroupId = 1;
-    let currentUserId = '4';
-    let activePopup = null;
-    let activeAddExpenseHiddenForm = null;
-    let activeAddRepaymentHiddenForm = null;
-    let activeEmojiField = null;
+    const DEFAULT_AVATAR = `avatar-empty.png`; //           ☑️ (Config)
+    const DEFAULT_EMOJI_EXPENSE = '🗒️'; //                  ☑️ (Config)
+    const DEFAULT_EMOJI_REPAYMENT = '✅'; //                ☑️ (Config)
 
-    let today;
-    let todayString;
-    let minTransactionDate;
-    let minTransactionDateString;
+    let currentGroupId = 1; //                    ☑️ (State.group.id)
+    let currentUserId = '4'; //                   ☑️ (State)
+    let activeModal = null; //                    ☑️ (State)
+    let activeAddExpenseHiddenForm = null; //     TODO! move to State
+    let activeAddRepaymentHiddenForm = null; //   TODO! move to State
+    let activeEmojiField = null; //               TODO! move to State
 
+    let today; //                                 TODO! move
+    let todayString; //                           TODO! move
+    let minTransactionDate; //                    TODO! move
+    let minTransactionDateString; //              TODO! move
+
+    // ☑️ (State)
     const users = new Map([
       [
         '1',
@@ -221,12 +223,6 @@ export function initializeLegacyScript() {
     // --------------
     // Elements (e:)
     // --------------
-
-    // e: Menu
-    const openMenuPopupBtn = document.querySelector('.menu__btn--open');
-    const closeMenuPopupBtn = document.querySelector('.menu__btn--close');
-    const menuAccount = document.querySelector('.menu__account');
-    const menuPopup = document.querySelector('.menu__popup');
 
     // e: Utils
     const overlay = document.querySelector('.overlay');
@@ -567,11 +563,11 @@ export function initializeLegacyScript() {
       errorOverlay.classList.add('hidden');
     }
 
-    function closeActivePopup() {
-      if (!activePopup) return;
+    function closeActiveModal() {
+      if (!activeModal) return;
       hideOverlay();
-      activePopup.classList.remove(ACTIVE_CLASS);
-      activePopup = null;
+      activeModal.classList.remove(ACTIVE_CLASS);
+      activeModal = null;
     }
 
     function parseInputAmount(value) {
@@ -641,38 +637,12 @@ export function initializeLegacyScript() {
       alignAddTransactionForms();
     }
 
-    // f: Menu
-
-    function handleClickOutsideMenuPopup(event) {
-      const isClickInsideMenuPopup = menuPopup.contains(event.target);
-      const isClickOnOpenButton = openMenuPopupBtn.contains(event.target);
-      const isClickOnMenuAccount = menuAccount.contains(event.target);
-
-      if (
-        !isClickInsideMenuPopup &&
-        !isClickOnOpenButton &&
-        !isClickOnMenuAccount
-      ) {
-        closeMenuPopup();
-      }
-    }
-
-    function openMenuPopup() {
-      menuPopup.classList.add(ACTIVE_CLASS);
-      document.addEventListener('click', handleClickOutsideMenuPopup);
-    }
-
-    function closeMenuPopup() {
-      menuPopup.classList.remove(ACTIVE_CLASS);
-      document.removeEventListener('click', handleClickOutsideMenuPopup);
-    }
-
     // f: Group
 
     function openGroupPopup() {
       addOverlay();
       groupPopup.classList.add(ACTIVE_CLASS);
-      activePopup = groupPopup;
+      activeModal = groupPopup;
     }
 
     function handleGroupSwitchChange() {
@@ -878,7 +848,7 @@ export function initializeLegacyScript() {
     function openAddExpense() {
       addOverlay();
       addExpenseForm.classList.add(ACTIVE_CLASS);
-      activePopup = addExpenseForm;
+      activeModal = addExpenseForm;
     }
 
     function toggleAddExpenseHiddenForm(form, button) {
@@ -1702,7 +1672,7 @@ export function initializeLegacyScript() {
     function openAddRepayment() {
       addOverlay();
       addRepaymentForm.classList.add(ACTIVE_CLASS);
-      activePopup = addRepaymentForm;
+      activeModal = addRepaymentForm;
     }
 
     function toggleAddRepaymentHiddenForm(form, button) {
@@ -1819,11 +1789,11 @@ export function initializeLegacyScript() {
     function openDeleteExpense() {
       addOverlay();
       deleteExpenseModal.classList.add(ACTIVE_CLASS);
-      activePopup = deleteExpenseModal;
+      activeModal = deleteExpenseModal;
     }
 
     function handleDeleteExpenseCloseButtonClick() {
-      closeActivePopup();
+      closeActiveModal();
     }
 
     function handleDeleteExpenseSubmitButtonClick() {
@@ -1835,11 +1805,11 @@ export function initializeLegacyScript() {
     function openDeleteRepayment() {
       addOverlay();
       deleteRepaymentModal.classList.add(ACTIVE_CLASS);
-      activePopup = deleteRepaymentModal;
+      activeModal = deleteRepaymentModal;
     }
 
     function handleDeleteRepaymentCloseButtonClick() {
-      closeActivePopup();
+      closeActiveModal();
     }
 
     function handleDeleteRepaymentSubmitButtonClick() {
@@ -2267,14 +2237,6 @@ export function initializeLegacyScript() {
 
     window.addEventListener('resize', handleWindowResize);
 
-    // el: Menu
-
-    openMenuPopupBtn.addEventListener('click', openMenuPopup);
-
-    menuAccount.addEventListener('click', openMenuPopup);
-
-    closeMenuPopupBtn.addEventListener('click', closeMenuPopup);
-
     // el: Group
 
     groupHeader.addEventListener('click', openGroupPopup);
@@ -2483,10 +2445,10 @@ export function initializeLegacyScript() {
 
     // el: Util
 
-    overlay.addEventListener('click', closeActivePopup);
+    overlay.addEventListener('click', closeActiveModal);
 
     btnClosePopup.forEach(button => {
-      button.addEventListener('click', closeActivePopup);
+      button.addEventListener('click', closeActiveModal);
     });
   });
 }

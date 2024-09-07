@@ -1,6 +1,6 @@
 'use strict';
 
-import { initializeLegacyScript } from './legacy-script.js';
+import { initializeLegacyScript } from './initial-script.js';
 import mainController from './controller/MainController.js';
 
 async function init() {
@@ -13,7 +13,7 @@ async function init() {
     await mainController.init();
   } catch (error) {
     console.error('💥💥💥💥💥');
-    throw error;
+    console.error(error);
   }
 }
 init();
