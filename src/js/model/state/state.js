@@ -18,7 +18,7 @@ class State {
    */
   set currentUserId(value) {
     if (!isPositiveNumber(value)) {
-      throw Error(
+      throw new Error(
         `Invalid ID: expected a positive number. Received: ${value} (type: ${typeof value})`
       );
     }
@@ -114,6 +114,31 @@ class State {
         );
       }
     }
+  }
+
+  /**
+   * @param {HTMLElement | null} value — The modal element to set as active. Must not be an HTMLElement or null.
+   * @throws {Error} Throws an error if the provided value is neither HTMLElement nor null.
+   */
+  set activeModal(value) {
+    if (value !== null && !(value instanceof HTMLElement)) {
+      throw new Error(
+        `Invalid active modal element: must an HTMLElement or null. Received: ${value} (type: ${typeof value})`
+      );
+    }
+    this.#activeModal = value;
+  }
+
+  get activeModal() {
+    return this.#activeModal;
+  }
+
+  get locale() {
+    return this.#locale;
+  }
+
+  get currencySymbol() {
+    return this.#currencySymbol;
   }
 }
 

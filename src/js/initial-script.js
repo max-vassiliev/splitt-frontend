@@ -1,6 +1,8 @@
 'use strict';
 
 import { IMAGES_PATH } from './util/Config.js';
+import stateManager from './model/state/StateManager.js';
+import modalService from './services/ModalService.js';
 
 export function initializeLegacyScript() {
   document.addEventListener('DOMContentLoaded', function () {
@@ -28,7 +30,6 @@ export function initializeLegacyScript() {
 
     let currentGroupId = 1; //                    ☑️ (State.group.id)
     let currentUserId = '4'; //                   ☑️ (State)
-    let activeModal = null; //                    ☑️ (State)
     let activeAddExpenseHiddenForm = null; //     TODO! move to State
     let activeAddRepaymentHiddenForm = null; //   TODO! move to State
     let activeEmojiField = null; //               TODO! move to State
@@ -225,7 +226,7 @@ export function initializeLegacyScript() {
     // --------------
 
     // e: Utils
-    const overlay = document.querySelector('.overlay');
+
     const btnClosePopup = document.querySelectorAll('.btn__close_popup');
 
     // e: Emoji Picker
@@ -547,14 +548,6 @@ export function initializeLegacyScript() {
 
     // f: Util
 
-    function addOverlay() {
-      overlay.classList.remove('hidden');
-    }
-
-    function hideOverlay() {
-      overlay.classList.add('hidden');
-    }
-
     function addErrorOverlay() {
       errorOverlay.classList.remove('hidden');
     }
@@ -564,10 +557,7 @@ export function initializeLegacyScript() {
     }
 
     function closeActiveModal() {
-      if (!activeModal) return;
-      hideOverlay();
-      activeModal.classList.remove(ACTIVE_CLASS);
-      activeModal = null;
+      modalService.closeActiveModal();
     }
 
     function parseInputAmount(value) {
@@ -640,9 +630,7 @@ export function initializeLegacyScript() {
     // f: Group
 
     function openGroupPopup() {
-      addOverlay();
-      groupPopup.classList.add(ACTIVE_CLASS);
-      activeModal = groupPopup;
+      modalService.openModal(groupPopup);
     }
 
     function handleGroupSwitchChange() {
@@ -846,9 +834,7 @@ export function initializeLegacyScript() {
     // f: Add Expense
 
     function openAddExpense() {
-      addOverlay();
-      addExpenseForm.classList.add(ACTIVE_CLASS);
-      activeModal = addExpenseForm;
+      modalService.openModal(addExpenseForm);
     }
 
     function toggleAddExpenseHiddenForm(form, button) {
@@ -1670,9 +1656,7 @@ export function initializeLegacyScript() {
     // f: Add Repayment
 
     function openAddRepayment() {
-      addOverlay();
-      addRepaymentForm.classList.add(ACTIVE_CLASS);
-      activeModal = addRepaymentForm;
+      modalService.openModal(addRepaymentForm);
     }
 
     function toggleAddRepaymentHiddenForm(form, button) {
@@ -1787,13 +1771,11 @@ export function initializeLegacyScript() {
     // f: Delete Transactions: Expense
 
     function openDeleteExpense() {
-      addOverlay();
-      deleteExpenseModal.classList.add(ACTIVE_CLASS);
-      activeModal = deleteExpenseModal;
+      modalService.openModal(deleteExpenseModal);
     }
 
     function handleDeleteExpenseCloseButtonClick() {
-      closeActiveModal();
+      modalService.closeActiveModal();
     }
 
     function handleDeleteExpenseSubmitButtonClick() {
@@ -1803,13 +1785,11 @@ export function initializeLegacyScript() {
     // f: Delete Transactions: Repayment
 
     function openDeleteRepayment() {
-      addOverlay();
-      deleteRepaymentModal.classList.add(ACTIVE_CLASS);
-      activeModal = deleteRepaymentModal;
+      modalService.openModal(deleteRepaymentModal);
     }
 
     function handleDeleteRepaymentCloseButtonClick() {
-      closeActiveModal();
+      modalService.closeActiveModal();
     }
 
     function handleDeleteRepaymentSubmitButtonClick() {
@@ -2444,8 +2424,6 @@ export function initializeLegacyScript() {
     errorModalBtnClose.addEventListener('click', closeErrorModal);
 
     // el: Util
-
-    overlay.addEventListener('click', closeActiveModal);
 
     btnClosePopup.forEach(button => {
       button.addEventListener('click', closeActiveModal);

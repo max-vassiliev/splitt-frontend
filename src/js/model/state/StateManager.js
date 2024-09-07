@@ -31,6 +31,14 @@ class StateManager {
     return currentUser;
   }
 
+  setActiveModal(value) {
+    state.activeModal = value;
+  }
+
+  getActiveModal() {
+    return state.activeModal;
+  }
+
   loadState(data) {
     this.#validateDataOnPageLoad(data);
 
