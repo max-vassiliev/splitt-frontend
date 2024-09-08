@@ -1,15 +1,11 @@
-import {
-  ACTIVE_CLASS,
-  IMAGES_PATH,
-  DEFAULT_AVATAR,
-  HIDDEN_ATTRIBUTE,
-} from '../util/Config.js';
+import { ACTIVE_CLASS, HIDDEN_ATTRIBUTE } from '../util/Config.js';
 
 class HeaderView {
   #header;
   #menuAccount;
   #openMenuPopupBtn;
   #closeMenuPopupBtn;
+  #groupSettingsLink;
   #menuPopup;
 
   constructor() {
@@ -20,12 +16,14 @@ class HeaderView {
     this.#openMenuPopupBtn = document.querySelector('.menu__btn--open');
     this.#closeMenuPopupBtn = document.querySelector('.menu__btn--close');
     this.#menuPopup = document.querySelector('.menu__popup');
+    this.#groupSettingsLink = document.querySelector('.link__group--settings');
 
     if (
       !this.#menuAccount ||
       !this.#openMenuPopupBtn ||
       !this.#closeMenuPopupBtn ||
-      !this.#menuPopup
+      !this.#menuPopup ||
+      !this.#groupSettingsLink
     ) {
       throw new Error('Some required elements were not found in the header');
     }
@@ -56,6 +54,10 @@ class HeaderView {
     document.addEventListener('click', handler);
   }
 
+  addHandlerClickGroupSettings(handler) {
+    this.#groupSettingsLink.addEventListener('click', handler);
+  }
+
   removeHandlerClickOutsideMenuPopup(handler) {
     document.removeEventListener('click', handler);
   }
@@ -69,15 +71,10 @@ class HeaderView {
   }
 
   renderHeader({ username, avatar }) {
-    const avatarUrl = avatar
-      ? `${IMAGES_PATH}${avatar}`
-      : `${IMAGES_PATH}${DEFAULT_AVATAR}`;
-
     this.#header
       .querySelectorAll('.account__avatar')
       ?.forEach(avatarElement => {
-        avatarElement.src = avatarUrl;
-        avatarElement.alt = username;
+        avatarElement.src = avatar;
       });
 
     this.#header

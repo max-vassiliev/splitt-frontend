@@ -210,7 +210,6 @@ header {
 .menu__btn--close {
   cursor: pointer;
   margin-left: auto;
-  /* border: none; */
   border: 1px solid #eee;
   padding-bottom: 10px;
   border-radius: 50%;
@@ -273,7 +272,7 @@ header {
 
 /* GROUP */
 
-.group__header {
+.group__header-container {
   grid-row: 1;
   grid-column: 1;
   display: flex;
@@ -283,7 +282,7 @@ header {
   margin-bottom: 2rem;
 }
 
-.group__header .group__info {
+.group__header-container .group__header {
   cursor: pointer;
 }
 
@@ -305,13 +304,14 @@ header {
   font-size: 3.7rem;
   font-weight: 800;
   margin-left: 0.8rem;
+  margin-right: 3.5rem;
 }
 
-.group__header .group__title:hover {
+.group__header-container .group__title:hover {
   color: #666;
 }
 
-.group__popup {
+.group__modal {
   display: none;
   position: absolute;
   top: -2.3rem;
@@ -325,54 +325,55 @@ header {
   box-shadow: 0 0px 1rem rgba(100, 100, 100, 0.3);
 }
 
-.group__popup.active {
+.group__modal.active {
   display: block;
 }
 
-.group__popup_top {
+.group__modal_top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 }
 
-.group__popup_main {
+.group__modal_main {
   margin-top: 2.6rem;
   margin-bottom: 1rem;
 }
 
-.group__popup_item {
+.group__modal_item {
   display: block;
   padding: 1rem;
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.4rem;
   border-radius: 1.2rem;
   color: #666;
   text-decoration: none;
 }
 
-.group__popup_item:hover {
+.group__modal_item:hover {
   background-color: #f8f8f8;
 }
 
-.group__popup_item.link:hover {
+.group__modal_item.link:hover {
   cursor: pointer;
   color: #6eb034;
 }
 
-.group__popup_item span,
-.group__popup_item p {
+.group__modal_item span,
+.group__modal_item p {
   display: inline-block;
   vertical-align: middle;
 }
 
-.group__popup_item span {
+.group__modal_item span {
   font-weight: 300;
   font-size: 2.7rem;
 }
 
-.group__popup_item p {
+.group__modal_item p {
   font-size: 1.7rem;
   margin-left: 1.5rem;
+  margin-bottom: 0;
 }
 
 .group__switch--container {

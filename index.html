@@ -86,43 +86,35 @@
       <!----------->
       <!-- GROUP -->
       <!----------->
-      <div class="group__header">
-        <div class="group__info">
-          <img
-            class="group__img"
-            src="src/images/sw-avatar-teal1-house-50px.png"
-            alt="Иконка группы"
-          />
-          <p class="group__title">Хорошая квартира</p>
+      <div class="group__header-container">
+        <div class="group__header" title="Настройки группы">
+          <img class="group__img" src="src/images/avatar-empty.png" />
+          <p class="group__title"></p>
         </div>
       </div>
-      <div class="group__popup">
-        <div class="group__popup_top">
-          <div class="group__info">
-            <img
-              class="group__img"
-              src="src/images/sw-avatar-teal1-house-50px.png"
-              alt="Иконка группы"
-            />
-            <p class="group__title">Домофонд</p>
+      <div class="group__modal">
+        <div class="group__modal_top">
+          <div class="group__header">
+            <img class="group__img" src="src/images/avatar-empty.png" />
+            <p class="group__title"></p>
           </div>
-          <button class="menu__btn--close btn__close_popup">&times;</button>
+          <button class="menu__btn--close group__btn-close">&times;</button>
         </div>
-        <div class="group__popup_main">
-          <a class="group__popup_item link">
-            <span class="material-symbols-outlined group__popup_icon"
+        <div class="group__modal_main">
+          <a class="group__modal_item link">
+            <span class="material-symbols-outlined group__modal_icon"
               >settings</span
             >
             <p>Настройки группы</p>
           </a>
-          <a class="group__popup_item link">
-            <span class="material-symbols-outlined group__popup_icon"
+          <a class="group__modal_item link">
+            <span class="material-symbols-outlined group__modal_icon"
               >list_alt_add</span
             >
             <p>Создать группу</p>
           </a>
-          <div class="group__popup_item">
-            <span class="material-symbols-outlined group__popup_icon"
+          <div class="group__modal_item">
+            <span class="material-symbols-outlined group__modal_icon"
               >swap_horiz</span
             >
             <p>Перейти в другую группу:</p>

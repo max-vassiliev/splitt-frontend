@@ -3,6 +3,7 @@
 import { IMAGES_PATH } from './util/Config.js';
 import stateManager from './model/state/StateManager.js';
 import modalService from './services/ModalService.js';
+import headerController from './controller/HeaderController.js';
 
 export function initializeLegacyScript() {
   document.addEventListener('DOMContentLoaded', function () {
@@ -28,7 +29,6 @@ export function initializeLegacyScript() {
     const DEFAULT_EMOJI_EXPENSE = '🗒️'; //                  ☑️ (Config)
     const DEFAULT_EMOJI_REPAYMENT = '✅'; //                ☑️ (Config)
 
-    let currentGroupId = 1; //                    ☑️ (State.group.id)
     let currentUserId = '4'; //                   ☑️ (State)
     let activeAddExpenseHiddenForm = null; //     TODO! move to State
     let activeAddRepaymentHiddenForm = null; //   TODO! move to State
@@ -241,13 +241,6 @@ export function initializeLegacyScript() {
     };
     const emojiPicker = new EmojiMart.Picker(emojiPickerOptions);
     document.getElementById('emoji-picker')?.appendChild(emojiPicker);
-
-    // e: Group
-    const groupHeader = document.querySelector('.group__info');
-    const groupSettingsLink = document.querySelector('.link__group--settings');
-    const groupPopup = document.querySelector('.group__popup');
-    const groupSwitch = document.querySelector('.group__switch');
-    const groupSwitchBtn = document.querySelector('.group__switch_btn');
 
     // e: Add Expense: Main Form
     const addExpenseBtn = document.querySelector('.add-expense__btn');
@@ -625,33 +618,6 @@ export function initializeLegacyScript() {
 
     function handleWindowResize() {
       alignAddTransactionForms();
-    }
-
-    // f: Group
-
-    function openGroupPopup() {
-      modalService.openModal(groupPopup);
-    }
-
-    function handleGroupSwitchChange() {
-      if (this.value === null || this.value === undefined) return;
-
-      const selectedGroupId = parseInt(this.value, 10);
-
-      selectedGroupId === currentGroupId
-        ? deactivateGroupSwitchBtn()
-        : activateGroupSwitchBtn();
-    }
-
-    function deactivateGroupSwitchBtn() {
-      if (!groupSwitchBtn.classList.contains(ACTIVE_CLASS)) return;
-      groupSwitchBtn.classList.remove(ACTIVE_CLASS);
-      groupSwitchBtn.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
-    }
-
-    function activateGroupSwitchBtn() {
-      groupSwitchBtn.classList.add(ACTIVE_CLASS);
-      groupSwitchBtn.removeAttribute(DISABLED_ATTRIBUTE);
     }
 
     // f: Emoji Picker
@@ -2216,18 +2182,6 @@ export function initializeLegacyScript() {
     // el: Window
 
     window.addEventListener('resize', handleWindowResize);
-
-    // el: Group
-
-    groupHeader.addEventListener('click', openGroupPopup);
-
-    groupSettingsLink.addEventListener('click', function (event) {
-      event.preventDefault();
-      closeMenuPopup();
-      openGroupPopup();
-    });
-
-    groupSwitch.addEventListener('change', handleGroupSwitchChange);
 
     // el: Emoji Picker
 

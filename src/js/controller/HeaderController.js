@@ -1,12 +1,30 @@
 import userModel from '../model/user/UserModel.js';
 import headerView from '../view/HeaderView.js';
+import { EventEmitter } from 'events';
 
-class HeaderController {
+class HeaderController extends EventEmitter {
   constructor() {
+    super();
     this.handleClickOutsideMenuPopup =
       this.handleClickOutsideMenuPopup.bind(this);
     this.openMenuPopup = this.openMenuPopup.bind(this);
     this.closeMenuPopup = this.closeMenuPopup.bind(this);
+    this.handleGroupSettingsLinkClick =
+      this.handleGroupSettingsLinkClick.bind(this);
+  }
+
+  openMenuPopup() {
+    headerView.openMenuPopup();
+    headerView.addHandlerClickOutsideMenuPopup(
+      this.handleClickOutsideMenuPopup
+    );
+  }
+
+  closeMenuPopup() {
+    headerView.closeMenuPopup();
+    headerView.removeHandlerClickOutsideMenuPopup(
+      this.handleClickOutsideMenuPopup
+    );
   }
 
   handleClickOutsideMenuPopup(event) {
@@ -25,18 +43,10 @@ class HeaderController {
     }
   }
 
-  openMenuPopup() {
-    headerView.openMenuPopup();
-    headerView.addHandlerClickOutsideMenuPopup(
-      this.handleClickOutsideMenuPopup
-    );
-  }
-
-  closeMenuPopup() {
-    headerView.closeMenuPopup();
-    headerView.removeHandlerClickOutsideMenuPopup(
-      this.handleClickOutsideMenuPopup
-    );
+  handleGroupSettingsLinkClick(event) {
+    event.preventDefault();
+    this.closeMenuPopup();
+    this.emit('groupSettingsLinkClick');
   }
 
   init() {
@@ -45,6 +55,7 @@ class HeaderController {
 
     headerView.addHandlerOpenMenuPopup(this.openMenuPopup);
     headerView.addHandlerCloseMenuPopup(this.closeMenuPopup);
+    headerView.addHandlerClickGroupSettings(this.handleGroupSettingsLinkClick);
   }
 }
 
