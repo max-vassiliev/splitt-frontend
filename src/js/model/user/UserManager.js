@@ -1,8 +1,30 @@
 import User from './User.js';
+import { isPositiveNumber } from '../../util/SplittValidator.js';
 
 class UserManager {
   #requiredFields = ['id', 'name'];
 
+  /**
+   * Initializes the current user ID, ensuring it is a positive number.
+   * @param {number|BigInt} value - The value to be used as the user ID.
+   * @returns {BigInt} - Returns the user ID as a BigInt.
+   * @throws {Error} - Throws an error if the value is not a positive number.
+   */
+  initializeCurrentUserIdOnLoad(value) {
+    if (!isPositiveNumber(value)) {
+      throw new Error(
+        `Invalid ID: expected a positive number or BigInt. Received: ${value} (type: ${typeof value})`
+      );
+    }
+    return BigInt(value);
+  }
+
+  /**
+   * Initializes the members on load by processing the given data.
+   * @param {Array<Object>} membersData - Array of user data objects.
+   * @returns {Map<BigInt, User>} - Returns a Map of users keyed by their ID.
+   * @throws {Error} - Throws an error if the data is not a non-empty array.
+   */
   initializeMembersOnLoad(membersData) {
     if (!Array.isArray(membersData) || membersData.length === 0) {
       throw new Error(
@@ -19,6 +41,12 @@ class UserManager {
     return members;
   }
 
+  /**
+   * Initializes a User object from the provided data.
+   * @param {Object} inputData - Data object containing user information.
+   * @returns {User} - Returns an initialized User object.
+   * @throws {Error} - Throws an error if the input data is invalid.
+   */
   #initializeUser(inputData) {
     this.#validateUser(inputData);
 
@@ -31,6 +59,11 @@ class UserManager {
     return user;
   }
 
+  /**
+   * Validates the provided user data to ensure it meets the required fields.
+   * @param {Object} inputData - Data object to be validated.
+   * @throws {Error} - Throws an error if the data is invalid or required fields are missing.
+   */
   #validateUser(inputData) {
     if (!inputData || typeof inputData !== 'object') {
       throw new Error(

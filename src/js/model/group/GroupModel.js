@@ -1,19 +1,22 @@
 import stateManager from '../state/StateManager.js';
-import { IMAGES_PATH, DEFAULT_AVATAR } from '../../util/Config.js';
 
 class GroupModel {
+  /**
+   * Gets the current group's ID.
+   * @returns {BigInt} The groups ID.
+   */
   getCurrentGroupId() {
     const { id } = stateManager.getGroup();
     return id;
   }
 
+  /**
+   * Gets the current group's title and avatar URL.
+   * @returns {Object} An object with the fields: title (string) and avatar (string).
+   */
   getCurrentGroupTitleAndAvatar() {
     const { title, avatar } = stateManager.getGroup();
-    const avatarUrl = avatar
-      ? `${IMAGES_PATH}${avatar}`
-      : `${IMAGES_PATH}${DEFAULT_AVATAR}`;
-
-    return { title, avatar: avatarUrl };
+    return { title, avatar };
   }
 }
 

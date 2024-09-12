@@ -1,4 +1,5 @@
 import { ACTIVE_CLASS, DISABLED_ATTRIBUTE } from '../util/Config.js';
+import { getAvatarUrl } from './util/RenderHelper.js';
 
 class GroupModalView {
   #groupModal;
@@ -37,7 +38,7 @@ class GroupModalView {
   }
 
   renderHeader({ title, avatar }) {
-    this.#groupModal.querySelector('.group__img').src = avatar;
+    this.#groupModal.querySelector('.group__img').src = getAvatarUrl(avatar);
     this.#groupModal.querySelector('.group__title').textContent = title;
   }
 }

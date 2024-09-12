@@ -4,6 +4,7 @@ import {
   isNonEmptyStringOrNull,
   isNonEmptyString,
 } from '../../util/SplittValidator.js';
+import { AppUtils } from '../../util/AppUtils.js';
 
 class Expense {
   #id;
@@ -14,22 +15,23 @@ class Expense {
   #title;
 
   /**
-   * @param {number} value — Must be a positive number.
+   * Sets the expense ID as a BigInt.
+   * @param {number|BigInt} value — Must be a positive number or BigInt.
    */
   set id(value) {
-    if (!isPositiveNumber(value)) {
-      throw new Error(
-        `Invalid ID: expected a positive number. Received: ${value} (type: ${typeof value})`
-      );
-    }
-    this.#id = value;
+    this.#id = AppUtils.parseId(value);
   }
 
+  /**
+   * Gets the expense ID.
+   * @returns {BigInt} - Returns the expense ID as a BigInt.
+   */
   get id() {
     return this.#id;
   }
 
   /**
+   * Sets the title of the expense.
    * @param {string} value — Must be a non-empty string.
    */
   set title(value) {
@@ -41,12 +43,18 @@ class Expense {
     this.#title = value;
   }
 
+  /**
+   * Gets the title of the expense.
+   * @returns {string} The title of the expense.
+   */
   get title() {
     return this.#title;
   }
 
   /**
-   * @param {number} value — Must be a whole positive number.
+   * Sets the title of the expense.
+   * @param {string} value — Must be a non-empty string.
+   * @throws {Error} If the value is not a non-empty string.
    */
   set amount(value) {
     if (!isPositiveNumber(value)) {
@@ -57,12 +65,18 @@ class Expense {
     this.#amount = value;
   }
 
+  /**
+   * Gets the amount for the expense.
+   * @returns {number} The amount for the expense.
+   */
   get amount() {
     return this.#amount;
   }
 
   /**
-   * @param {number} value — Must be a whole number or null.
+   * Sets the current user's balance for the expense.
+   * @param {number|null} value — Must be a whole number or null.
+   * @throws {Error} If the value is not a whole number or null.
    */
   set currentUserBalance(value) {
     if (!isIntegerOrNull(value)) {
@@ -73,12 +87,18 @@ class Expense {
     this.#currentUserBalance = value;
   }
 
+  /**
+   * Gets the current user's balance.
+   * @returns {number|null} The current user's balance.
+   */
   get currentUserBalance() {
     return this.#currentUserBalance;
   }
 
   /**
-   * @param {Date} value — Must be a date.
+   * Sets the date for the expense.
+   * @param {Date} value — Must be a Date object.
+   * @throws {Error} If the value is not a Date object.
    */
   set date(value) {
     if (!(value instanceof Date)) {
@@ -89,12 +109,18 @@ class Expense {
     this.#date = value;
   }
 
+  /**
+   * Gets the date for the expense.
+   * @returns {Date} The date for the expense.
+   */
   get date() {
     return this.#date;
   }
 
   /**
-   * @param {string} value — Must be a non-empty string or null.
+   * Sets the emoji for the expense.
+   * @param {string|null} value — Must be a non-empty string or null.
+   * @throws {Error} If the value is not a non-empty string or null.
    */
   set emoji(value) {
     if (!isNonEmptyStringOrNull(value)) {
@@ -105,6 +131,10 @@ class Expense {
     this.#emoji = value;
   }
 
+  /**
+   * Gets the emoji for the expense.
+   * @returns {string|null} The emoji for the expense.
+   */
   get emoji() {
     return this.#emoji;
   }

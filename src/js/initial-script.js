@@ -2,7 +2,7 @@
 
 import { IMAGES_PATH } from './util/Config.js';
 import stateManager from './model/state/StateManager.js';
-import modalService from './services/ModalService.js';
+import modalService from './controller/util/ModalService.js';
 import headerController from './controller/HeaderController.js';
 
 export function initializeLegacyScript() {

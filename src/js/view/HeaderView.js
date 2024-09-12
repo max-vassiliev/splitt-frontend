@@ -1,4 +1,5 @@
 import { ACTIVE_CLASS, HIDDEN_ATTRIBUTE } from '../util/Config.js';
+import { getAvatarUrl } from './util/RenderHelper.js';
 
 class HeaderView {
   #header;
@@ -74,7 +75,7 @@ class HeaderView {
     this.#header
       .querySelectorAll('.account__avatar')
       ?.forEach(avatarElement => {
-        avatarElement.src = avatar;
+        avatarElement.src = getAvatarUrl(avatar);
       });
 
     this.#header

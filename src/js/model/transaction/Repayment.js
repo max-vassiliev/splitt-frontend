@@ -3,6 +3,7 @@ import {
   isPositiveNumber,
   isNonEmptyStringOrNull,
 } from '../../util/SplittValidator.js';
+import { AppUtils } from '../../util/AppUtils.js';
 
 class Repayment {
   #id;
@@ -14,23 +15,25 @@ class Repayment {
   #recipientId;
 
   /**
-   * @param {number} value — Must be a positive number.
+   * Sets the repayment ID as a BigInt.
+   * @param {number|BigInt} value — Must be a positive number or BigInt.
    */
   set id(value) {
-    if (!isPositiveNumber(value)) {
-      throw new Error(
-        `Invalid ID: expected a positive number. Received: ${value} (type: ${typeof value})`
-      );
-    }
-    this.#id = value;
+    this.#id = AppUtils.parseId(value);
   }
 
+  /**
+   * Gets the repayment ID.
+   * @returns {BigInt} The repayment ID.
+   */
   get id() {
     return this.#id;
   }
 
   /**
+   * Sets the amount for the repayment.
    * @param {number} value — Must be a whole positive number.
+   * @throws {Error} - Throws an error if the value is not a positive number.
    */
   set amount(value) {
     if (!isPositiveNumber(value)) {
@@ -41,11 +44,16 @@ class Repayment {
     this.#amount = value;
   }
 
+  /**
+   * Gets the amount for the repayment.
+   * @returns {number} The amount for the repayment.
+   */
   get amount() {
     return this.#amount;
   }
 
   /**
+   * Sets the current user's balance for the repayment.
    * @param {number} value — Must be a whole number or null.
    */
   set currentUserBalance(value) {
@@ -57,12 +65,17 @@ class Repayment {
     this.#currentUserBalance = value;
   }
 
+  /**
+   * Gets the current user's balance for the repayment.
+   * @returns {number|null} The current user's balance.
+   */
   get currentUserBalance() {
     return this.#currentUserBalance;
   }
 
   /**
-   * @param {Date} value — Must be a date.
+   * Sets the date for the repayment.
+   * @param {Date} value — Must be a Date object.
    */
   set date(value) {
     if (!(value instanceof Date)) {
@@ -73,12 +86,18 @@ class Repayment {
     this.#date = value;
   }
 
+  /**
+   * Gets the date for the repayment.
+   * @returns {Date} - Returns a Date object with the repayment date.
+   */
   get date() {
     return this.#date;
   }
 
   /**
+   * Sets the emoji for the repayment.
    * @param {string} value — Must be a non-empty string or null.
+   * @throws {Error} - Throws an error if the value is not a non empty string or null
    */
   set emoji(value) {
     if (!isNonEmptyStringOrNull(value)) {
@@ -89,38 +108,42 @@ class Repayment {
     this.#emoji = value;
   }
 
+  /**
+   * Gets the emoji for the repayment.
+   * @returns {string|null} - Returns a string with the emoji or null.
+   */
   get emoji() {
     return this.#emoji;
   }
 
   /**
-   * @param {number} value — Must be a positive number.
+   * Sets the payer's ID as a BigInt.
+   * @param {number|BigInt} value — Must be a positive number or BigInt.
    */
   set payerId(value) {
-    if (!isPositiveNumber(value)) {
-      throw new Error(
-        `Invalid Payer ID: expected a positive number. Received: ${value} (type: ${typeof value})`
-      );
-    }
-    this.#payerId = value;
+    this.#payerId = AppUtils.parseId(value);
   }
 
+  /**
+   * Gets the payer's ID.
+   * @returns {BigInt} - Returns the payer's ID as a BigInt.
+   */
   get payerId() {
     return this.#payerId;
   }
 
   /**
-   * @param {number} value — Must be a positive number.
+   * Sets the recipient's ID as a BigInt.
+   * @param {number|BigInt} value — Must be a positive number or BigInt.
    */
   set recipientId(value) {
-    if (!isPositiveNumber(value)) {
-      throw new Error(
-        `Invalid Recipient ID: expected a positive number. Received: ${value} (type: ${typeof value})`
-      );
-    }
-    this.#recipientId = value;
+    this.#recipientId = AppUtils.parseId(value);
   }
 
+  /**
+   * Gets the recipient's ID.
+   * @returns {BigInt} - Returns the recipient's ID as a BigInt.
+   */
   get recipientId() {
     return this.#recipientId;
   }

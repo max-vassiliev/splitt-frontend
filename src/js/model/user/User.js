@@ -1,8 +1,8 @@
 import {
   isNonEmptyString,
   isNonEmptyStringOrNull,
-  isPositiveNumber,
 } from '../../util/SplittValidator.js';
+import { AppUtils } from '../../util/AppUtils.js';
 
 class User {
   #id;
@@ -10,23 +10,24 @@ class User {
   #email;
   #avatar;
 
+  /**
+   * Sets the user's ID as a BigInt.
+   * @param {number | BigInt} value — Must be a positive number or BigInt value.
+   */
+  set id(value) {
+    this.#id = AppUtils.parseId(value);
+  }
+
+  /**
+   * Gets the user's ID.
+   * @returns {BigInt} - Returns the user's ID as a BigInt value.
+   */
   get id() {
     return this.#id;
   }
 
   /**
-   * @param {number} value — Must be a positive number.
-   */
-  set id(value) {
-    if (!isPositiveNumber(value)) {
-      throw new Error(
-        `Invalid ID: expected a positive number. Received: ${value} (type: ${typeof value})`
-      );
-    }
-    this.#id = value;
-  }
-
-  /**
+   * Sets the user's name.
    * @param {string} value — Must be a non-empty string.
    */
   set name(value) {
@@ -38,12 +39,17 @@ class User {
     this.#name = value;
   }
 
+  /**
+   * Gets the user's name.
+   * @returns {string} - Returns a string with the user's name.
+   */
   get name() {
     return this.#name;
   }
 
   /**
-   * @param {string} value — Must be a non-empty string or null.
+   * Sets the user's email.
+   * @param {string | null} value — Must be a non-empty string or null.
    */
   set email(value) {
     if (!isNonEmptyStringOrNull(value)) {
@@ -54,12 +60,17 @@ class User {
     this.#email = value;
   }
 
+  /**
+   * Gets the user's email.
+   * @returns {string|null} - Returns a string with the email or null.
+   */
   get email() {
     return this.#email;
   }
 
   /**
-   * @param {string} value — Must be a non-empty string or null.
+   * Sets the user's avatar URL.
+   * @param {string|null} value — Must be a non-empty string or null.
    */
   set avatar(value) {
     if (!isNonEmptyStringOrNull(value)) {
@@ -70,6 +81,10 @@ class User {
     this.#avatar = value;
   }
 
+  /**
+   * Gets the user's avatar URL without the full path.
+   * @returns {string|null} - Returns a string with the avatar URL or null.
+   */
   get avatar() {
     return this.#avatar;
   }

@@ -1,7 +1,8 @@
 import Group from '../group/Group';
 import Expense from '../transaction/Expense.js';
 import Repayment from '../transaction/Repayment.js';
-import { isPositiveNumber } from '../../util/SplittValidator.js';
+import { AppUtils } from '../../util/AppUtils.js';
+import UserBalance from '../balance/UserBalance.js';
 
 class State {
   #currentUserId = null;
@@ -14,23 +15,25 @@ class State {
   #currencySymbol = '₽';
 
   /**
-   * @param {number} value — Must be a positive number.
+   * Sets the current user's ID as a BigInt value.
+   * @param {number|BigInt} value — Must be a positive number or a BigInt value.
    */
   set currentUserId(value) {
-    if (!isPositiveNumber(value)) {
-      throw new Error(
-        `Invalid ID: expected a positive number. Received: ${value} (type: ${typeof value})`
-      );
-    }
-    this.#currentUserId = value;
+    this.#currentUserId = AppUtils.parseId(value);
   }
 
+  /**
+   * Gets the current user ID.
+   * @returns {BigInt} - Returns the current user's ID as a BigInt value.
+   */
   get currentUserId() {
     return this.#currentUserId;
   }
 
   /**
+   * Sets the current group.
    * @param {Group} value — Must be an instance of Group.
+   * @throws {Error} - Throws an error if the provided value is not an instance of Group.
    */
   set group(value) {
     if (!value || !(value instanceof Group)) {
@@ -41,12 +44,18 @@ class State {
     this.#group = value;
   }
 
+  /**
+   * Gets the current group.
+   * @returns {Group} — An instance of Group with current group data.
+   */
   get group() {
     return this.#group;
   }
 
   /**
-   * @param {Map} value — Must be an instance of Map.
+   * Sets the "members" map.
+   * @param {Map<BigInt, User>} value — Must be an instance of Map with userId as key and a User instance as value.
+   * @throws {Error} If the provided value is not a Map.
    */
   set members(value) {
     if (!value || !(value instanceof Map)) {
@@ -57,12 +66,18 @@ class State {
     this.#members = value;
   }
 
+  /**
+   * Gets the "members" map.
+   * @returns {Map<BigInt, User>} - The members map with userId (BigInt) as key and User as value.
+   */
   get members() {
     return this.#members;
   }
 
   /**
-   * @param {Map} value — Must be an instance of Map.
+   * Sets the "balances" map.
+   * @param {Map<BigInt, UserBalance>} value Must be an instance of Map with userId as key and UserBalance as value.
+   * @throws {Error} If the provided value is not a Map.
    */
   set balances(value) {
     if (!value || !(value instanceof Map)) {
@@ -73,25 +88,33 @@ class State {
     this.#balances = value;
   }
 
+  /**
+   * Gets the "balances" map.
+   * @returns {Map<BigInt, UserBalance>} - The balances map with userId (BigInt) as key and UserBalance as value.
+   */
   get balances() {
     return this.#balances;
   }
 
   /**
-   * @param {Array} value — Must be an instance of Array.
+   * Sets the "transactions" array.
+   * @param {Array} value — Must be an array with Expense or Repayment instances or an empty array.
    */
   set transactions(value) {
     this.#validateTransactions(value);
     this.#transactions = value;
   }
 
+  /**
+   * Gets the "transactions" array.
+   * @returns {Array} - An array with Expense or Repayment instances or an empty array.
+   */
   get transactions() {
     return this.#transactions;
   }
 
   /**
    * Validates the transactions array.
-   *
    * @param {Array} transactions — Must be an array of Repayment or Expense instances or an emtpy array.
    * @throws {Error} If the transactions array is not valid.
    */
@@ -117,7 +140,8 @@ class State {
   }
 
   /**
-   * @param {HTMLElement | null} value — The modal element to set as active. Must not be an HTMLElement or null.
+   * Sets the active modal.
+   * @param {HTMLElement|null} value — The modal element to set as active. Must not be an HTMLElement or null.
    * @throws {Error} Throws an error if the provided value is neither HTMLElement nor null.
    */
   set activeModal(value) {
@@ -129,14 +153,26 @@ class State {
     this.#activeModal = value;
   }
 
+  /**
+   * Gets the active modal.
+   * @returns {HTMLElement|null} - An HTMLElement of the active modal or null.
+   */
   get activeModal() {
     return this.#activeModal;
   }
 
+  /**
+   * Gets the locale.
+   * @returns {string} - A string with the current locale.
+   */
   get locale() {
     return this.#locale;
   }
 
+  /**
+   * Gets the currency symbol.
+   * @returns {string} - A string with the currency symbol.
+   */
   get currencySymbol() {
     return this.#currencySymbol;
   }

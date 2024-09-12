@@ -1,3 +1,5 @@
+import { getAvatarUrl } from './util/RenderHelper';
+
 class GroupHeaderView {
   #groupHeader;
 
@@ -10,7 +12,7 @@ class GroupHeaderView {
   }
 
   render({ title, avatar }) {
-    this.#groupHeader.querySelector('.group__img').src = avatar;
+    this.#groupHeader.querySelector('.group__img').src = getAvatarUrl(avatar);
     this.#groupHeader.querySelector('.group__title').textContent = title;
   }
 }

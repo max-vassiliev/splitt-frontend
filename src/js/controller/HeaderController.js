@@ -49,13 +49,20 @@ class HeaderController extends EventEmitter {
     this.emit('groupSettingsLinkClick');
   }
 
-  init() {
+  #loadData() {
     const userData = userModel.getCurrentUserNameAndAvatar();
     headerView.renderHeader(userData);
+  }
 
+  #setupHandlers() {
     headerView.addHandlerOpenMenuPopup(this.openMenuPopup);
     headerView.addHandlerCloseMenuPopup(this.closeMenuPopup);
     headerView.addHandlerClickGroupSettings(this.handleGroupSettingsLinkClick);
+  }
+
+  init() {
+    this.#loadData();
+    this.#setupHandlers();
   }
 }
 

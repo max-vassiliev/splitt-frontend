@@ -1,6 +1,6 @@
-import stateManager from '../model/state/StateManager.js';
-import overlayView from '../view/OverlayView.js';
-import { ACTIVE_CLASS } from '../util/Config.js';
+import stateManager from '../../model/state/StateManager.js';
+import overlayView from '../../view/OverlayView.js';
+import { ACTIVE_CLASS } from '../../util/Config.js';
 
 class ModalService {
   constructor() {
@@ -9,9 +9,7 @@ class ModalService {
 
   /**
    * Opens the modal element passed as an argument, adds overlay and updates the state.
-   *
    * @param {HTMLElement} modalElement — Accepts an instance of HTMLElement.
-   *
    * @throws {Error} Throws an error if the provided value is not an HTMLElement.
    */
   openModal(modalElement) {

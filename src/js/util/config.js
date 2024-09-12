@@ -14,14 +14,19 @@ export const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
 export const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
 export const POSITIVE_CLASS = 'positive';
 export const NEGATIVE_CLASS = 'negative';
-export const CURRENCY_SYMBOL = '₽';
-export const CURRENT_LOCALE = 'ru-RU';
+export const DEFAULT_CURRENCY_SYMBOL = '₽';
+export const DEFAULT_LOCALE = 'ru-RU';
 
 // Images
 export const IMAGES_PATH = '../../images/';
 export const DEFAULT_AVATAR = `avatar-empty.png`;
 export const DEFAULT_EMOJI_EXPENSE = '🗒️';
 export const DEFAULT_EMOJI_REPAYMENT = '✅';
+
+// Styles
+export const AMOUNT_COLOR_POSITIVE = 'amount__color--positive';
+export const AMOUNT_COLOR_NEGATIVE = 'amount__color--negative';
+export const AMOUNT_COLOR_NEUTRAL = 'amount__color--neutral';
 
 // Transactions
 export const TRANSACTION_TYPES = new Set(['expense', 'repayment']);

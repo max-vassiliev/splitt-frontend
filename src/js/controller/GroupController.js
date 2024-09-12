@@ -1,7 +1,7 @@
 import groupModel from '../model/group/GroupModel.js';
 import groupHeaderView from '../view/GroupHeaderView.js';
 import groupModalView from '../view/GroupModalView.js';
-import modalService from '../services/ModalService.js';
+import modalService from './util/ModalService.js';
 
 class GroupController {
   constructor() {
@@ -32,13 +32,21 @@ class GroupController {
       : groupModalView.activateGroupSwitchBtn();
   }
 
-  init() {
+  #loadData() {
     const groupData = groupModel.getCurrentGroupTitleAndAvatar();
     groupHeaderView.render(groupData);
     groupModalView.renderHeader(groupData);
+  }
+
+  #setupHandlers() {
     groupHeaderView.addHandlerClick(this.openGroupModal);
     groupModalView.addHandlerGroupModalCloseBtnClick(this.closeGroupModal);
     groupModalView.addHandlerGroupSwitchChange(this.selectGroup);
+  }
+
+  init() {
+    this.#loadData();
+    this.#setupHandlers();
   }
 }
 

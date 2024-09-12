@@ -1,4 +1,4 @@
-import { isPositiveNumber } from '../../util/SplittValidator.js';
+import { AppUtils } from '../../util/AppUtils.js';
 
 class UserBalance {
   #userId;
@@ -6,29 +6,31 @@ class UserBalance {
   #details;
 
   constructor(userId, balance, details = []) {
-    this.#userId = userId;
-    this.#balance = balance;
-    this.#details = details;
+    this.userId = userId;
+    this.balance = balance;
+    this.details = details;
   }
 
   /**
-   * @param {number} value — Must be a positive number.
+   * Sets the user ID.
+   * @param {number | BigInt} value — Must be a positive number or BigInt value.
    */
   set userId(value) {
-    if (!isPositiveNumber(value)) {
-      throw new Error(
-        `Invalid ID: expected a positive number. Received: ${value} (type: ${typeof value})`
-      );
-    }
-    this.#userId = value;
+    this.#userId = AppUtils.parseId(value);
   }
 
+  /**
+   * Gets the user ID.
+   * @returns {BigInt} The user ID.
+   */
   get userId() {
     return this.#userId;
   }
 
   /**
+   * Sets the balance for the user.
    * @param {number} value — Must be an integer.
+   * @throws {Error} If the value is not an integer.
    */
   set balance(value) {
     if (!Number.isInteger(value)) {
@@ -39,12 +41,18 @@ class UserBalance {
     this.#balance = value;
   }
 
+  /**
+   * Gets the balance for the user.
+   * @returns {number} The balance for the user.
+   */
   get balance() {
     return this.#balance;
   }
 
   /**
-   * @param {Array} transactions — Must be an array.
+   * Sets the details for the user balance.
+   * @param {Array} value — Must be an array of UserBalanceDetail objects or an empty array.
+   * @throws {Error} If the value is not an array.
    */
   set details(value) {
     if (!Array.isArray(value)) {
@@ -55,6 +63,10 @@ class UserBalance {
     this.#details = value;
   }
 
+  /**
+   * Gets the details for the user balance.
+   * @returns {Array} The details for the user balance: an array of UserBalanceDetail objects or an empty array.
+   */
   get details() {
     return this.#details;
   }
