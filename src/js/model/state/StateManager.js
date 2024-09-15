@@ -5,6 +5,12 @@ import userManager from '../user/UserManager.js';
 import TransactionManager from '../transaction/TransactionManager.js';
 import User from '../user/User.js';
 import Group from '../group/Group.js';
+import UserBalance from '../balance/UserBalance.js';
+import {
+  STATUS_NEUTRAL,
+  STATUS_NEGATIVE,
+  STATUS_POSITIVE,
+} from '../../util/Config.js';
 
 class StateManager {
   #requiredFieldsOnPageLoad = [
@@ -36,22 +42,10 @@ class StateManager {
    * @returns {User} A User instance with current user data.
    */
   getCurrentUser() {
-    const currentUserId = state.currentUserId;
-    const currentUser = state.members.get(currentUserId);
-
-    if (!currentUser) {
-      throw new Error('Current user not found in the state.');
-    }
+    const userId = state.userId;
+    const currentUser = state.members.get(userId);
 
     return currentUser;
-  }
-
-  /**
-   * Gets the group balances map.
-   * @returns {Map<BigInt, UserBalance>} The group balances map with userId (BigInt) as key and UserBalance as value.
-   */
-  getGroupBalances() {
-    return state.balances;
   }
 
   /**
@@ -60,6 +54,58 @@ class StateManager {
    */
   getMembers() {
     return state.members;
+  }
+
+  /**
+   * Retrieves a map of members filtered by the given array of IDs.
+   * @param {Array} ids - An array of member IDs to filter from the state.members map.
+   * @returns {Map} A new map containing only the members whose IDs are present in the given array.
+   * @throws {TypeError} If the ids parameter is not a non-empty array.
+   */
+  getMembersByIds(ids) {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      throw new TypeError(
+        `Invalid data for "ids". Expected a non-empty array. Received: ${ids} (${typeof ids})`
+      );
+    }
+
+    const filteredMembers = new Map();
+    const members = state.members;
+    ids.forEach(id => {
+      if (members.has(id)) {
+        filteredMembers.set(id, members.get(id));
+      }
+    });
+
+    return filteredMembers;
+  }
+
+  /**
+   * Gets the current user's status
+   * @returns {string} The user's status.
+   */
+  getUserStatus() {
+    return state.userStatus;
+  }
+
+  /**
+   * Gets the current user's full balance with details.
+   * @returns {UserBalance} - An instance of UserBalance containing the user's ID, balance, and details.
+   *                          The details property is either an empty array or an array of UserBalanceDetails instances.
+   */
+  getCurrentUserBalance() {
+    const currentUserId = state.userId;
+    const currentUserBalance = state.balances.get(currentUserId);
+
+    return currentUserBalance;
+  }
+
+  /**
+   * Gets the group balances map.
+   * @returns {Map<BigInt, UserBalance>} The group balances map with userId (BigInt) as key and UserBalance as value.
+   */
+  getGroupBalances() {
+    return state.balances;
   }
 
   /**
@@ -96,23 +142,38 @@ class StateManager {
    * of the application state, including the current user, group information,
    * members, balances and transactions.
    *
-   * @param {Object} data - The data object containing the initial state information.
-   * @param {BigInt|string|number} data.currentUserId - The ID of the current user, which can be a BigInt, string, or number.
-   * @param {Object} data.group - The group data to initialize.
-   * @param {Array} data.members - The array of member data to initialize.
-   * @param {Array} data.balances - The array of balance data to initialize.
-   * @param {Array} data.transactions - The array of transaction data to initialize.
+   * @param {Object} data The data object containing the initial state information.
+   * @param {BigInt|string|number} data.currentUserId The ID of the current user, which can be a BigInt, string, or number.
+   * @param {Object} data.group The group data to initialize.
+   * @param {Array} data.members The array of member data to initialize.
+   * @param {Array} data.balances The array of balance data to initialize.
+   * @param {Array} data.transactions The array of transaction data to initialize.
    */
   loadState(data) {
     this.#validateDataOnPageLoad(data);
 
-    state.currentUserId = data.currentUserId;
+    state.userId = data.currentUserId;
     state.group = groupManager.initializeGroupOnLoad(data.group);
     state.members = userManager.initializeMembersOnLoad(data.members);
     state.balances = balanceManager.initializeUserBalancesOnLoad(data.balances);
     state.transactions = TransactionManager.initializeTransactionsOnLoad(
       data.transactions
     );
+    state.userStatus = this.#determineUserStatus();
+  }
+
+  /**
+   * Determines the current user status based on their balance.
+   * @returns {string} The user's status.
+   */
+  #determineUserStatus() {
+    const userId = state.userId;
+    const { balance } = state.balances.get(userId);
+
+    if (!balance) {
+      return STATUS_NEUTRAL;
+    }
+    return balance < 0 ? STATUS_NEGATIVE : STATUS_POSITIVE;
   }
 
   /**

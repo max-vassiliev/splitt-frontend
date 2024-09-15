@@ -3,9 +3,11 @@ import Expense from '../transaction/Expense.js';
 import Repayment from '../transaction/Repayment.js';
 import { AppUtils } from '../../util/AppUtils.js';
 import UserBalance from '../balance/UserBalance.js';
+import { STATUS_NEUTRAL, STATUS_OPTIONS } from '../../util/Config.js';
 
 class State {
-  #currentUserId = null;
+  #userId = null;
+  #userStatus = STATUS_NEUTRAL;
   #group = {};
   #members = new Map();
   #balances = new Map();
@@ -18,16 +20,42 @@ class State {
    * Sets the current user's ID as a BigInt value.
    * @param {number|BigInt} value — Must be a positive number or a BigInt value.
    */
-  set currentUserId(value) {
-    this.#currentUserId = AppUtils.parseId(value);
+  set userId(value) {
+    this.#userId = AppUtils.parseId(value);
   }
 
   /**
    * Gets the current user ID.
    * @returns {BigInt} - Returns the current user's ID as a BigInt value.
    */
-  get currentUserId() {
-    return this.#currentUserId;
+  get userId() {
+    return this.#userId;
+  }
+
+  /**
+   * Sets the user's balance status.
+   * @param {string} value - Accepts one of the predefined string values.
+   * @see STATUS_OPTIONS The available status options.
+   * @throws {Error} If the value is not a valid status option.
+   */
+  set userStatus(value) {
+    if (!value || !STATUS_OPTIONS.has(value)) {
+      throw new Error(
+        `Invalid value for "userStatus": "${value}" (${typeof value}). Expected one of: ${Array.from(
+          STATUS_OPTIONS
+        ).join(', ')}.`
+      );
+    }
+    this.#userStatus = value;
+  }
+
+  /**
+   * Gets the user's balance status.
+   * @returns {string} One of the predefined string values.
+   * @see STATUS_OPTIONS The available status options.
+   */
+  get userStatus() {
+    return this.#userStatus;
   }
 
   /**

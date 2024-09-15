@@ -25,15 +25,9 @@ class UserBalanceManager {
   }
 
   #initializeUserBalanceDetailsOnLoad(userBalance) {
-    if (!Array.isArray(userBalance.details)) {
-      throw new Error(
-        `Invalid user balance details data. Expected an array. Received: ${
-          userBalance.details
-        } (type: ${typeof userBalance.details})`
-      );
-    }
+    this.#validateUserBalanceDetails(userBalance);
 
-    if (userBalance.details.details === 0) return [];
+    if (userBalance.details.length === 0) return [];
 
     return userBalance.details.map(entry =>
       this.#initializeUserBalanceDetailOnLoad(entry)
@@ -48,6 +42,21 @@ class UserBalanceManager {
   #initializeUserBalanceDetailOnLoad(input) {
     this.#validateDetailsFields(input);
     return new UserBalanceDetail(input.userId, input.amount);
+  }
+
+  #validateUserBalanceDetails(userBalance) {
+    if (!Array.isArray(userBalance.details)) {
+      throw new Error(
+        `Invalid user balance details data. Expected an array. Received: ${
+          userBalance.details
+        } (type: ${typeof userBalance.details})`
+      );
+    }
+    if (userBalance.balance !== 0 && userBalance.details.length === 0) {
+      throw new Error(
+        'Invalid user balance details data. Expected a non-empty array when the balance is not 0.'
+      );
+    }
   }
 
   #validateUserBalanceFields(input) {

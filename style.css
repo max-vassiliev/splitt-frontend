@@ -1967,14 +1967,14 @@ header {
   }
 }
 
-/* SUMMARY: STATUS */
+/* SUMMARY: USER */
 
-.status-container {
+.user-summary-container {
   grid-row: 1;
   margin-top: 30px;
 }
 
-.status.neutral {
+.status-neutral {
   border-left: 4px solid #747474;
 }
 
@@ -1988,44 +1988,44 @@ header {
   border-left: 4px solid #f5682e;
 }
 
-.status .summary__table--row:hover {
+.user-summary .summary__table--row:hover {
   cursor: pointer;
 }
 
-.status .summary__table--row:hover .account__avatar {
+.user-summary .summary__table--row:hover .account__avatar {
   filter: brightness(96%);
 }
 
-.status .summary__table--row:hover .summary__table--user {
+.user-summary .summary__table--row:hover .summary__table--user {
   color: #666;
 }
 
-.status .summary__table--row:active .account__avatar,
-.status .summary__table--row:active .summary__table--user,
-.status .summary__table--row:active .summary__table--amount {
+.user-summary .summary__table--row:active .account__avatar,
+.user-summary .summary__table--row:active .summary__table--user,
+.user-summary .summary__table--row:active .summary__table--amount {
   transform: translateY(1px);
 }
 
-.status .summary__table--row:hover .amount__color--negative {
+.user-summary .summary__table--row:hover .amount__color--negative {
   color: #e9967a;
 }
 
-.status .summary__table--row:hover .amount__color--positive {
+.user-summary .summary__table--row:hover .amount__color--positive {
   color: #8fbc8f;
 }
 
-/* SUMMARY: GROUP STATS */
+/* SUMMARY: GROUP */
 
-.group-stats-container {
+.group-summary-container {
   grid-row: 2;
 }
 
-.group-stats {
+.group-summary {
   background-color: #fffdf8;
   border-left: 4px solid #f7bf33;
 }
 
-.group-stats .summary__table {
+.group-summary .summary__table {
   margin-top: 1.2rem;
 }
 

@@ -1,30 +1,33 @@
 import balanceModel from '../model/balance/UserBalanceModel';
-import groupStatsView from '../view/GroupStatsView.js';
+import userSummaryView from '../view/UserSummaryView.js';
+import groupSummaryView from '../view/GroupSummaryView.js';
+import userSummaryHandler from './handler/UserSummaryHandler.js';
 
 class SummaryController {
-  #loadUserSummaryData() {
-    //
-    return;
-  }
-
-  #loadGroupStatsData() {
-    const data = balanceModel.getGroupStatsData();
-    groupStatsView.renderGroupStats(data);
+  init() {
+    this.#loadData();
+    this.#setupHandlers();
   }
 
   #loadData() {
     this.#loadUserSummaryData();
-    this.#loadGroupStatsData();
+    this.#loadGroupSummaryData();
+  }
+
+  #loadUserSummaryData() {
+    const data = balanceModel.getUserSummaryData();
+    userSummaryView.render(data);
+  }
+
+  #loadGroupSummaryData() {
+    const data = balanceModel.getGroupSummaryData();
+    groupSummaryView.render(data);
   }
 
   #setupHandlers() {
-    // TODO! нужно для UserStatus
-    return;
-  }
-
-  init() {
-    this.#loadData();
-    this.#setupHandlers();
+    userSummaryView.addHandlerContainerClick(
+      userSummaryHandler.handleContainerClick
+    );
   }
 }
 

@@ -183,11 +183,6 @@ export function initializeLegacyScript() {
       isValid: false,
     };
 
-    const statusClickHandlers = new Map([
-      ['positive', handleStatusPositiveClick],
-      ['negative', handleStatusNegativeClick],
-    ]);
-
     function isActive(element) {
       return element.classList.contains(ACTIVE_CLASS);
     }
@@ -522,10 +517,6 @@ export function initializeLegacyScript() {
     // e: Transactions (Movements)
 
     const transactionsTable = document.querySelector('.transactions');
-
-    // e: Status
-
-    const statusContainer = document.querySelector('.status-container');
 
     // e: Error
 
@@ -1811,38 +1802,6 @@ export function initializeLegacyScript() {
       }
     }
 
-    // f: Status
-
-    function handleStatusContainerClick(event) {
-      const statusSection = event.target.closest('.status');
-      if (!statusSection) return;
-
-      const statusTypeClass = Array.from(statusSection.classList).find(
-        statusClass => statusClass.startsWith('status-')
-      );
-      if (!statusTypeClass) return;
-
-      const statusType = statusTypeClass.split('-')[1];
-      const handleStatusClick = statusClickHandlers.get(statusType);
-      if (!handleStatusClick) return;
-
-      handleStatusClick(event);
-    }
-
-    function handleStatusPositiveClick(event) {
-      const selectedRow = event.target.closest('.summary__table--row');
-      if (!selectedRow) return;
-
-      console.log('STATUS: Positive');
-    }
-
-    function handleStatusNegativeClick(event) {
-      const selectedRow = event.target.closest('.summary__table--row');
-      if (!selectedRow) return;
-
-      console.log('STATUS: Negative');
-    }
-
     // f: Error
 
     function openErrorModal() {
@@ -2366,10 +2325,6 @@ export function initializeLegacyScript() {
     // el: Transactions (Movements)
 
     transactionsTable.addEventListener('click', handleTransactionsTableClick);
-
-    // el: Status
-
-    statusContainer.addEventListener('click', handleStatusContainerClick);
 
     // el: Error
 

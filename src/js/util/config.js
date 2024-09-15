@@ -23,6 +23,16 @@ export const DEFAULT_AVATAR = `avatar-empty.png`;
 export const DEFAULT_EMOJI_EXPENSE = '🗒️';
 export const DEFAULT_EMOJI_REPAYMENT = '✅';
 
+// Status
+export const STATUS_POSITIVE = 'positive';
+export const STATUS_NEGATIVE = 'negative';
+export const STATUS_NEUTRAL = 'neutral';
+export const STATUS_OPTIONS = new Set([
+  STATUS_POSITIVE,
+  STATUS_NEGATIVE,
+  STATUS_NEUTRAL,
+]);
+
 // Styles
 export const AMOUNT_COLOR_POSITIVE = 'amount__color--positive';
 export const AMOUNT_COLOR_NEGATIVE = 'amount__color--negative';

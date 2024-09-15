@@ -4,35 +4,33 @@ import {
   formatAmountForOutput,
 } from './util/RenderHelper.js';
 
-class GroupStatsView {
-  #groupStatsContainer;
+class GroupSummaryView {
+  #container;
 
   constructor() {
-    this.#groupStatsContainer = document.querySelector(
-      '.group-stats-container'
-    );
+    this.#container = document.querySelector('.group-summary-container');
   }
 
-  renderGroupStats(data) {
+  render(data) {
     if (!data || !Array.isArray(data.balances)) {
-      console.error('Invalid data format for group stats rendering');
+      console.error('Invalid data format for group summary rendering');
       return;
     }
 
     const tableHTML = this.#generateTableHTML(data);
-    this.#clear;
-    this.#groupStatsContainer.insertAdjacentHTML('afterbegin', tableHTML);
+    this.#clear();
+    this.#container.insertAdjacentHTML('afterbegin', tableHTML);
   }
 
   #clear() {
-    this.#groupStatsContainer.innerHTML = '';
+    this.#container.innerHTML = '';
   }
 
   #generateTableHTML(data) {
     const { balances, locale, currencySymbol } = data;
 
     let tableHTML = `
-      <div class="summary group-stats">
+      <div class="summary group-summary">
         <h2>Статистика группы</h2>
         <div class="summary__table">
     `;
@@ -51,8 +49,8 @@ class GroupStatsView {
     return tableHTML;
   }
 
-  #generateNewRowHTML({ userBalance, locale, currencySymbol }) {
-    const { userId, username, avatar, balance } = userBalance;
+  #generateNewRowHTML(data) {
+    const { userId, username, avatar, balance, locale, currencySymbol } = data;
     const avatarUrl = getAvatarUrl(avatar);
     const formattedBalance = balance
       ? formatAmountForOutput(balance, {
@@ -80,4 +78,4 @@ class GroupStatsView {
   }
 }
 
-export default new GroupStatsView();
+export default new GroupSummaryView();
