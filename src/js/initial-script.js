@@ -4,6 +4,7 @@ import { IMAGES_PATH } from './util/Config.js';
 import stateManager from './model/state/StateManager.js';
 import modalService from './controller/util/ModalService.js';
 import headerController from './controller/HeaderController.js';
+import { AppUtils } from './util/AppUtils.js';
 
 export function initializeLegacyScript() {
   document.addEventListener('DOMContentLoaded', function () {
@@ -513,10 +514,6 @@ export function initializeLegacyScript() {
     const deleteRepaymentBtnSubmit = document.getElementById(
       'delete-repayment-btn-submit'
     );
-
-    // e: Transactions (Movements)
-
-    const transactionsTable = document.querySelector('.transactions');
 
     // e: Error
 
@@ -1753,55 +1750,6 @@ export function initializeLegacyScript() {
       console.log('DELETE: Repayment');
     }
 
-    // f: Transactions (Movements)
-
-    function handleTransactionsTableClick(event) {
-      if (event.target.classList.contains('transactions-table__delete-btn')) {
-        handleRemoveTransactionClick(event);
-        return;
-      }
-      const transactionRow = event.target.closest('.transactions-table__row');
-      if (transactionRow) {
-        handleEditTransactionClick(transactionRow, event);
-        return;
-      }
-      const transactionsEmpty = event.target.closest('.transactions__empty');
-      if (transactionsEmpty) {
-        handleEmptyTransactionsTableClick(event);
-        return;
-      }
-    }
-
-    function handleRemoveTransactionClick(event) {
-      const rowToDelete = event.target.closest('.transactions-table__row');
-      if (rowToDelete.classList.contains('repayment')) {
-        openDeleteRepayment();
-      } else {
-        openDeleteExpense();
-      }
-    }
-
-    function handleEditTransactionClick(transactionRow, event) {
-      if (!transactionRow) return;
-
-      if (transactionRow.classList.contains('.repayment')) {
-        console.log('edit repayment');
-      } else {
-        console.log('edit expense');
-      }
-    }
-
-    function handleEmptyTransactionsTableClick(event) {
-      if (event.target.classList.contains('add-expense-link')) {
-        openAddExpense();
-        return;
-      }
-      if (event.target.classList.contains('add-repayment-link')) {
-        openAddRepayment();
-        return;
-      }
-    }
-
     // f: Error
 
     function openErrorModal() {
@@ -2321,10 +2269,6 @@ export function initializeLegacyScript() {
       'click',
       handleDeleteRepaymentSubmitButtonClick
     );
-
-    // el: Transactions (Movements)
-
-    transactionsTable.addEventListener('click', handleTransactionsTableClick);
 
     // el: Error
 

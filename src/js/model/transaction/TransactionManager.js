@@ -1,8 +1,11 @@
 import Expense from './Expense.js';
 import Repayment from './Repayment.js';
 import { AppUtils } from '../../util/AppUtils.js';
+import RepaymentParty from './RepaymentParty.js';
 
 class TransactionManager {
+  #users;
+  #currentUserId;
   #transactionTypes = new Set(['expense', 'repayment']);
   #requiredFieldsExpense = [
     'id',
@@ -22,13 +25,18 @@ class TransactionManager {
     'recipientId',
   ];
 
-  initializeTransactionsOnLoad(transactionsData) {
+  initializeTransactionsOnLoad(data) {
+    const { transactionsData, users, currentUserId } = data;
     if (!Array.isArray(transactionsData)) {
       throw new Error(
         `Invalid transactions data: expected an array. Received: ${transactionsData} (type: ${typeof transactionsData})`
       );
     }
     if (transactionsData.length === 0) return [];
+
+    this.#users = users;
+    this.#currentUserId = currentUserId;
+
     return transactionsData.map(entry => this.#initializeTransaction(entry));
   }
 
@@ -62,10 +70,20 @@ class TransactionManager {
     repayment.currentUserBalance = input.currentUserBalance;
     repayment.date = AppUtils.parseDate(input.date);
     repayment.emoji = input.emoji;
-    repayment.payerId = input.payerId;
-    repayment.recipientId = input.recipientId;
+    repayment.payer = this.#initializeRepaymentParty(input.payerId);
+    repayment.recipient = this.#initializeRepaymentParty(input.recipientId);
 
     return repayment;
+  }
+
+  #initializeRepaymentParty(userId) {
+    const partyId = AppUtils.parseId(userId);
+    const isCurrentUser = partyId === this.#currentUserId ? true : false;
+    const name = this.#users.get(partyId)?.name || null;
+    if (!name) {
+      throw new Error(`User not found for ID: ${partyId} (${typeof partyId})`);
+    }
+    return new RepaymentParty(partyId, name, isCurrentUser);
   }
 
   #validateTransactionInput(input) {

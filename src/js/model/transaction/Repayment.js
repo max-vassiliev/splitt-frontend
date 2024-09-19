@@ -11,8 +11,8 @@ class Repayment {
   #currentUserBalance;
   #date;
   #emoji;
-  #payerId;
-  #recipientId;
+  #payer;
+  #recipient;
 
   /**
    * Sets the repayment ID as a BigInt.
@@ -117,35 +117,45 @@ class Repayment {
   }
 
   /**
-   * Sets the payer's ID as a BigInt.
-   * @param {number|BigInt} value — Must be a positive number or BigInt.
+   * Sets the payer of the repayment.
+   * @param {RepaymentParty} value
    */
-  set payerId(value) {
-    this.#payerId = AppUtils.parseId(value);
+  set payer(value) {
+    if (!(value instanceof RepaymentParty)) {
+      throw new Error(
+        `Invalid value for payer: expected an instance of RepaymentParty. Received: ${value} (type: ${typeof value})`
+      );
+    }
+    this.#payer = value;
   }
 
   /**
-   * Gets the payer's ID.
-   * @returns {BigInt} - Returns the payer's ID as a BigInt.
+   * Gets the payer of the repayment.
+   * @returns {RepaymentParty}
    */
-  get payerId() {
-    return this.#payerId;
+  get payer() {
+    return this.#payer;
   }
 
   /**
-   * Sets the recipient's ID as a BigInt.
-   * @param {number|BigInt} value — Must be a positive number or BigInt.
+   * Sets the recipient of the repayment.
+   * @param {RepaymentParty} value
    */
-  set recipientId(value) {
-    this.#recipientId = AppUtils.parseId(value);
+  set recipient(value) {
+    if (!(value instanceof RepaymentParty)) {
+      throw new Error(
+        `Invalid value for recipient: expected an instance of RepaymentParty. Received: ${value} (type: ${typeof value})`
+      );
+    }
+    this.#recipient = value;
   }
 
   /**
-   * Gets the recipient's ID.
-   * @returns {BigInt} - Returns the recipient's ID as a BigInt.
+   * Gets the recipient of the repayment.
+   * @returns {RepaymentParty}
    */
-  get recipientId() {
-    return this.#recipientId;
+  get recipient() {
+    return this.#recipient;
   }
 }
 

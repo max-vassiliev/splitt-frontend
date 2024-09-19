@@ -2,10 +2,11 @@ import {
   getAvatarUrl,
   getAmountColor,
   formatAmountForOutput,
-} from './util/RenderHelper.js';
+} from '../util/RenderHelper.js';
 
 class GroupSummaryView {
   #container;
+  #emptyBalance = '—';
 
   constructor() {
     this.#container = document.querySelector('.group-summary-container');
@@ -58,7 +59,7 @@ class GroupSummaryView {
           currencySymbol: currencySymbol,
           showSign: true,
         })
-      : '—';
+      : this.#emptyBalance;
     const balanceColor = getAmountColor(balance);
 
     const rowHTML = `

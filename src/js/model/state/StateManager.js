@@ -21,6 +21,35 @@ class StateManager {
   ];
 
   /**
+   * Loads the initial application state from the provided data object.
+   *
+   * This method validates the provided data and then initializes various parts
+   * of the application state, including the current user, group information,
+   * members, balances and transactions.
+   *
+   * @param {Object} data The data object containing the initial state information.
+   * @param {BigInt|string|number} data.currentUserId The ID of the current user, which can be a BigInt, string, or number.
+   * @param {Object} data.group The group data to initialize.
+   * @param {Array} data.members The array of member data to initialize.
+   * @param {Array} data.balances The array of balance data to initialize.
+   * @param {Array} data.transactions The array of transaction data to initialize.
+   */
+  loadState(data) {
+    this.#validateDataOnPageLoad(data);
+
+    state.userId = data.currentUserId;
+    state.group = groupManager.initializeGroupOnLoad(data.group);
+    state.members = userManager.initializeMembersOnLoad(data.members);
+    state.balances = balanceManager.initializeUserBalancesOnLoad(data.balances);
+    state.transactions = TransactionManager.initializeTransactionsOnLoad({
+      transactionsData: data.transactions,
+      users: state.members,
+      currentUserId: state.userId,
+    });
+    state.userStatus = this.#determineUserStatus();
+  }
+
+  /**
    * Gets the entire state.
    * NOTE: Try to avoid using this method.
    * @returns {Object} The entire state object.
@@ -120,6 +149,14 @@ class StateManager {
   }
 
   /**
+   * Gets the transactions.
+   * @returns {Array} The transactions array.
+   */
+  getTransactions() {
+    return state.transactions;
+  }
+
+  /**
    * Sets the currently active modal.
    * @param {HTMLElement|null} value - The modal element to set as active, or `null` if no modal is active.
    */
@@ -133,33 +170,6 @@ class StateManager {
    */
   getActiveModal() {
     return state.activeModal;
-  }
-
-  /**
-   * Loads the initial application state from the provided data object.
-   *
-   * This method validates the provided data and then initializes various parts
-   * of the application state, including the current user, group information,
-   * members, balances and transactions.
-   *
-   * @param {Object} data The data object containing the initial state information.
-   * @param {BigInt|string|number} data.currentUserId The ID of the current user, which can be a BigInt, string, or number.
-   * @param {Object} data.group The group data to initialize.
-   * @param {Array} data.members The array of member data to initialize.
-   * @param {Array} data.balances The array of balance data to initialize.
-   * @param {Array} data.transactions The array of transaction data to initialize.
-   */
-  loadState(data) {
-    this.#validateDataOnPageLoad(data);
-
-    state.userId = data.currentUserId;
-    state.group = groupManager.initializeGroupOnLoad(data.group);
-    state.members = userManager.initializeMembersOnLoad(data.members);
-    state.balances = balanceManager.initializeUserBalancesOnLoad(data.balances);
-    state.transactions = TransactionManager.initializeTransactionsOnLoad(
-      data.transactions
-    );
-    state.userStatus = this.#determineUserStatus();
   }
 
   /**

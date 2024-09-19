@@ -1,4 +1,4 @@
-import { HIDDEN_CLASS } from '../util/Config';
+import { HIDDEN_CLASS } from '../../util/Config';
 
 class OverlayView {
   #overlay;

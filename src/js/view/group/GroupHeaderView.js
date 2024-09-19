@@ -1,4 +1,4 @@
-import { getAvatarUrl } from './util/RenderHelper';
+import { getAvatarUrl } from '../util/RenderHelper';
 
 class GroupHeaderView {
   #groupHeader;

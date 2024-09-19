@@ -1,5 +1,5 @@
-import { ACTIVE_CLASS, DISABLED_ATTRIBUTE } from '../util/Config.js';
-import { getAvatarUrl } from './util/RenderHelper.js';
+import { ACTIVE_CLASS, DISABLED_ATTRIBUTE } from '../../util/Config.js';
+import { getAvatarUrl } from '../util/RenderHelper.js';
 
 class GroupModalView {
   #groupModal;

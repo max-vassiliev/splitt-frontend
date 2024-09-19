@@ -1,12 +1,13 @@
 import {
   AMOUNT_COLOR_POSITIVE,
   AMOUNT_COLOR_NEGATIVE,
-} from '../util/Config.js';
-import { getAvatarUrl, formatAmountForOutput } from './util/RenderHelper.js';
+} from '../../util/Config.js';
+import { getAvatarUrl, formatAmountForOutput } from '../util/RenderHelper.js';
 
 class UserSummaryView {
   #container;
   #renderers;
+  #data;
 
   constructor() {
     this.#container = document.querySelector('.user-summary-container');
@@ -27,14 +28,16 @@ class UserSummaryView {
 
   render(data) {
     this.#validateRenderData(data);
-    const generateHTML = this.#renderers.get(data.status);
+    this.#data = data;
+    const generateHTML = this.#renderers.get(this.#data.status);
     if (!generateHTML) {
       throw new Error(
-        `Invalid status. Received: ${data.status} (${typeof data.status})`
+        `Invalid status. Received: ${this.#data.status} (${typeof this.#data
+          .status})`
       );
     }
 
-    const summaryHTML = generateHTML(data);
+    const summaryHTML = generateHTML();
     this.#clear();
     this.#container.insertAdjacentHTML('afterbegin', summaryHTML);
   }
@@ -52,7 +55,7 @@ class UserSummaryView {
     }
   }
 
-  #generateNeutralHTML(data) {
+  #generateNeutralHTML() {
     return `
       <div class="summary user-summary status-neutral">
         <h2>Дзен</h2>
@@ -61,8 +64,8 @@ class UserSummaryView {
     `;
   }
 
-  #generateNegativeHTML(data) {
-    const { details, locale, currencySymbol } = data;
+  #generateNegativeHTML() {
+    const { details, locale, currencySymbol } = this.#data;
 
     let summaryHTML = `
         <div class="summary user-summary status-negative">
@@ -90,8 +93,8 @@ class UserSummaryView {
     return summaryHTML;
   }
 
-  #generatePositiveHTML(data) {
-    const { details, locale, currencySymbol } = data;
+  #generatePositiveHTML() {
+    const { details, locale, currencySymbol } = this.#data;
 
     let summaryHTML = `
         <div class="summary user-summary status-positive">
@@ -119,7 +122,7 @@ class UserSummaryView {
     return summaryHTML;
   }
 
-  #generateRowHTML(data) {
+  #generateRowHTML(rowData) {
     const {
       userId,
       username,
@@ -128,7 +131,7 @@ class UserSummaryView {
       amountColor,
       locale,
       currencySymbol,
-    } = data;
+    } = rowData;
 
     const avatarUrl = getAvatarUrl(avatar);
     const formattedAmount = formatAmountForOutput(amount, {

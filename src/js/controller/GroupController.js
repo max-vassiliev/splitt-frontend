@@ -10,6 +10,23 @@ class GroupController {
     this.selectGroup = this.selectGroup.bind(this);
   }
 
+  init() {
+    this.#loadData();
+    this.#bindEventHandlers();
+  }
+
+  #loadData() {
+    const groupData = groupModel.getCurrentGroupTitleAndAvatar();
+    groupHeaderView.render(groupData);
+    groupModalView.renderHeader(groupData);
+  }
+
+  #bindEventHandlers() {
+    groupHeaderView.addHandlerClick(this.openGroupModal);
+    groupModalView.addHandlerGroupModalCloseBtnClick(this.closeGroupModal);
+    groupModalView.addHandlerGroupSwitchChange(this.selectGroup);
+  }
+
   openGroupModal() {
     const groupModalElement = groupModalView.getGroupModal();
     modalService.openModal(groupModalElement);
@@ -30,23 +47,6 @@ class GroupController {
     selectedGroupId === currentGroupId
       ? groupModalView.deactivateGroupSwitchBtn()
       : groupModalView.activateGroupSwitchBtn();
-  }
-
-  #loadData() {
-    const groupData = groupModel.getCurrentGroupTitleAndAvatar();
-    groupHeaderView.render(groupData);
-    groupModalView.renderHeader(groupData);
-  }
-
-  #setupHandlers() {
-    groupHeaderView.addHandlerClick(this.openGroupModal);
-    groupModalView.addHandlerGroupModalCloseBtnClick(this.closeGroupModal);
-    groupModalView.addHandlerGroupSwitchChange(this.selectGroup);
-  }
-
-  init() {
-    this.#loadData();
-    this.#setupHandlers();
   }
 }
 

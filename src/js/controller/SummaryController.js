@@ -1,12 +1,12 @@
 import balanceModel from '../model/balance/UserBalanceModel';
-import userSummaryView from '../view/UserSummaryView.js';
-import groupSummaryView from '../view/GroupSummaryView.js';
+import userSummaryView from '../view/summary/UserSummaryView.js';
+import groupSummaryView from '../view/summary/GroupSummaryView.js';
 import userSummaryHandler from './handler/UserSummaryHandler.js';
 
 class SummaryController {
   init() {
     this.#loadData();
-    this.#setupHandlers();
+    this.#bindEventHandlers();
   }
 
   #loadData() {
@@ -24,7 +24,7 @@ class SummaryController {
     groupSummaryView.render(data);
   }
 
-  #setupHandlers() {
+  #bindEventHandlers() {
     userSummaryView.addHandlerContainerClick(
       userSummaryHandler.handleContainerClick
     );

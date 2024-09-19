@@ -13,6 +13,22 @@ class HeaderController extends EventEmitter {
       this.handleGroupSettingsLinkClick.bind(this);
   }
 
+  init() {
+    this.#loadData();
+    this.#bindEventHandlers();
+  }
+
+  #loadData() {
+    const userData = userModel.getCurrentUserNameAndAvatar();
+    headerView.renderHeader(userData);
+  }
+
+  #bindEventHandlers() {
+    headerView.addHandlerOpenMenuPopup(this.openMenuPopup);
+    headerView.addHandlerCloseMenuPopup(this.closeMenuPopup);
+    headerView.addHandlerClickGroupSettings(this.handleGroupSettingsLinkClick);
+  }
+
   openMenuPopup() {
     headerView.openMenuPopup();
     headerView.addHandlerClickOutsideMenuPopup(
@@ -47,22 +63,6 @@ class HeaderController extends EventEmitter {
     event.preventDefault();
     this.closeMenuPopup();
     this.emit('groupSettingsLinkClick');
-  }
-
-  #loadData() {
-    const userData = userModel.getCurrentUserNameAndAvatar();
-    headerView.renderHeader(userData);
-  }
-
-  #setupHandlers() {
-    headerView.addHandlerOpenMenuPopup(this.openMenuPopup);
-    headerView.addHandlerCloseMenuPopup(this.closeMenuPopup);
-    headerView.addHandlerClickGroupSettings(this.handleGroupSettingsLinkClick);
-  }
-
-  init() {
-    this.#loadData();
-    this.#setupHandlers();
   }
 }
 
