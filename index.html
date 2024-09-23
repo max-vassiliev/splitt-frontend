@@ -1175,10 +1175,20 @@
 
       <!-- TRANSACTIONS: PAGES -->
       <div class="transactions__pages">
-        <div class="current__transactions">&uarr; Текущие транзакции</div>
-        <button class="btn__previous--page">&larr;</button>
-        <div class="transaction__history">история транзакций</div>
-        <button class="btn__next--page">&rarr;</button>
+        <div class="current__transactions-container disabled">
+          <span class="current__transactions-icon material-symbols-outlined"
+            >arrow_upward
+          </span>
+          <div class="current__transactions">Текущие транзакции</div>
+        </div>
+        <div class="page-turn-container">
+          <button class="btn__previous--page" title="предыдущая страница">
+            <span class="material-symbols-outlined"> chevron_left </span>
+          </button>
+          <button class="btn__next--page" title="следующая страница">
+            <span class="material-symbols-outlined"> chevron_right </span>
+          </button>
+        </div>
       </div>
     </main>
 

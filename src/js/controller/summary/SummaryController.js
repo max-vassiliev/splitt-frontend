@@ -1,6 +1,6 @@
-import balanceModel from '../model/balance/UserBalanceModel';
-import userSummaryView from '../view/summary/UserSummaryView.js';
-import groupSummaryView from '../view/summary/GroupSummaryView.js';
+import balanceModel from '../../model/balance/UserBalanceModel.js';
+import userSummaryView from '../../view/summary/UserSummaryView.js';
+import groupSummaryView from '../../view/summary/GroupSummaryView.js';
 import userSummaryHandler from './handler/UserSummaryHandler.js';
 
 class SummaryController {

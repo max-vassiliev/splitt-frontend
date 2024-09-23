@@ -37,6 +37,14 @@ body {
   display: none;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
 /* Spinner */
 
 .spinner-border {
@@ -2148,70 +2156,90 @@ header {
   align-items: center;
   justify-content: space-between;
   margin-left: 4rem;
-  margin-top: 4rem;
 }
 
-.transactions__pages.hidden {
-  visibility: hidden;
+.current__transactions-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.current__transactions-icon {
+  color: #888;
+  font-weight: 400;
+  font-size: 2rem;
 }
 
 .current__transactions {
   margin-right: auto;
-  text-decoration: underline;
+  padding: 1rem 4rem 1rem 0.5rem;
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: #888;
+  text-align: center;
   transition: transform 0.3s ease-in;
 }
 
-.current__transactions:hover {
-  text-decoration: none;
+.current__transactions-container.disabled .current__transactions,
+.current__transactions-container.disabled .current__transactions-icon {
+  color: #bbb;
 }
 
-.btn__previous--page,
-.transaction__history,
-.btn__next--page {
-  margin-left: 0.8rem;
+.current__transactions-container:hover .current__transactions,
+.current__transactions-container:hover .current__transactions-icon {
+  color: #bbb;
+}
+
+.current__transactions-container:active {
+  transform: translateY(0.15rem);
+}
+
+.page-turn-container {
+  display: flex;
 }
 
 .btn__previous--page,
 .btn__next--page {
   cursor: pointer;
   border: none;
+  margin-left: 0.9rem;
   border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
-  font-family: 'Raleway', Helvetica, Arial, sans-serif;
+  width: 4.2rem;
+  height: 4.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-weight: 400;
   font-size: 1.4rem;
   color: #777;
-  transition: transform 0.3s ease-in, box-shadow 0.3s ease-in;
+  background-color: #efefef;
+  transition: transform 0.2s ease-in;
+}
+
+.btn__next--page span {
+  font-size: 25px;
+}
+
+.btn__previous--page.disabled,
+.btn__next--page.disabled {
+  color: #bbb;
+  background-color: #f6f6f6;
 }
 
 .btn__previous--page:hover,
 .btn__next--page:hover {
-  background-color: #ddd;
+  background-color: #ededed;
+  color: #999;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .btn__previous--page:active,
 .btn__next--page:active {
   transform: translateY(0.1rem);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-  background-color: #bbb;
-}
-
-.current__transactions,
-.transaction__history {
-  padding: 0 0.5rem;
-  font-weight: 300;
-  font-size: 1.4rem;
-  color: #888;
-  text-align: center;
-}
-
-.current__transactions {
-  cursor: pointer;
-}
-
-.current__transactions:active {
-  color: #bbb;
+  color: #999;
+  background-color: #e6e6e6;
 }
 
 /* -------- */

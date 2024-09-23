@@ -1,5 +1,5 @@
-import transactionModel from '../model/transaction/TransactionModel.js';
-import transactionsView from '../view/transactions/TransactionsView.js';
+import transactionModel from '../../model/transaction/TransactionModel.js';
+import transactionsView from '../../view/transactions/TransactionsView.js';
 import transactionsHandler from './handler/TransactionsHandler.js';
 
 class TransactionsController {

@@ -7,6 +7,7 @@ export const PAGE_LOAD_DATA = DATA_PATH + 'page-load-data.json';
 export const ACTIVE_CLASS = 'active';
 export const INACTIVE_CLASS = 'inactive';
 export const HIDDEN_CLASS = 'hidden';
+export const INVISIBLE_CLASS = 'invisible';
 export const DEFAULT_CLASS = 'default';
 export const DISABLED_ATTRIBUTE = 'disabled';
 export const HIDDEN_ATTRIBUTE = 'hidden';

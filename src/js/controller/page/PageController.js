@@ -1,4 +1,4 @@
-import pageModel from '../model/page/PageModel.js';
+import pageModel from '../../model/page/PageModel.js';
 
 class PageController {
   async init() {

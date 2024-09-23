@@ -1,4 +1,4 @@
-import userModel from '../model/user/UserModel.js';
+import userModel from '../../model/user/UserModel.js';
 import headerView from '../view/HeaderView.js';
 import { EventEmitter } from 'events';
 

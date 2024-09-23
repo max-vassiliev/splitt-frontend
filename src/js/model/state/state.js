@@ -1,9 +1,10 @@
 import Group from '../group/Group';
 import Expense from '../transaction/Expense.js';
 import Repayment from '../transaction/Repayment.js';
-import { AppUtils } from '../../util/AppUtils.js';
 import UserBalance from '../balance/UserBalance.js';
+import { AppUtils } from '../../util/AppUtils.js';
 import { STATUS_NEUTRAL, STATUS_OPTIONS } from '../../util/Config.js';
+import { isPositiveInteger } from '../../util/SplittValidator.js';
 
 class State {
   #userId = null;
@@ -13,8 +14,18 @@ class State {
   #balances = new Map();
   #transactions = [];
   #activeModal = null;
+  #page = 1;
+  #transactionsPerPage = 10;
   #locale = 'ru-RU';
   #currencySymbol = '₽';
+
+  /**
+   * Gets the current user ID.
+   * @returns {BigInt} - Returns the current user's ID as a BigInt value.
+   */
+  get userId() {
+    return this.#userId;
+  }
 
   /**
    * Sets the current user's ID as a BigInt value.
@@ -25,11 +36,12 @@ class State {
   }
 
   /**
-   * Gets the current user ID.
-   * @returns {BigInt} - Returns the current user's ID as a BigInt value.
+   * Gets the user's balance status.
+   * @returns {string} One of the predefined string values.
+   * @see STATUS_OPTIONS The available status options.
    */
-  get userId() {
-    return this.#userId;
+  get userStatus() {
+    return this.#userStatus;
   }
 
   /**
@@ -50,12 +62,11 @@ class State {
   }
 
   /**
-   * Gets the user's balance status.
-   * @returns {string} One of the predefined string values.
-   * @see STATUS_OPTIONS The available status options.
+   * Gets the current group.
+   * @returns {Group} — An instance of Group with current group data.
    */
-  get userStatus() {
-    return this.#userStatus;
+  get group() {
+    return this.#group;
   }
 
   /**
@@ -73,11 +84,11 @@ class State {
   }
 
   /**
-   * Gets the current group.
-   * @returns {Group} — An instance of Group with current group data.
+   * Gets the "members" map.
+   * @returns {Map<BigInt, User>} - The members map with userId (BigInt) as key and User as value.
    */
-  get group() {
-    return this.#group;
+  get members() {
+    return this.#members;
   }
 
   /**
@@ -95,11 +106,11 @@ class State {
   }
 
   /**
-   * Gets the "members" map.
-   * @returns {Map<BigInt, User>} - The members map with userId (BigInt) as key and User as value.
+   * Gets the "balances" map.
+   * @returns {Map<BigInt, UserBalance>} - The balances map with userId (BigInt) as key and UserBalance as value.
    */
-  get members() {
-    return this.#members;
+  get balances() {
+    return this.#balances;
   }
 
   /**
@@ -117,11 +128,11 @@ class State {
   }
 
   /**
-   * Gets the "balances" map.
-   * @returns {Map<BigInt, UserBalance>} - The balances map with userId (BigInt) as key and UserBalance as value.
+   * Gets the "transactions" array.
+   * @returns {Array} - An array with Expense or Repayment instances or an empty array.
    */
-  get balances() {
-    return this.#balances;
+  get transactions() {
+    return this.#transactions;
   }
 
   /**
@@ -131,14 +142,6 @@ class State {
   set transactions(value) {
     this.#validateTransactions(value);
     this.#transactions = value;
-  }
-
-  /**
-   * Gets the "transactions" array.
-   * @returns {Array} - An array with Expense or Repayment instances or an empty array.
-   */
-  get transactions() {
-    return this.#transactions;
   }
 
   /**
@@ -168,6 +171,14 @@ class State {
   }
 
   /**
+   * Gets the active modal.
+   * @returns {HTMLElement|null} An HTMLElement of the active modal or null.
+   */
+  get activeModal() {
+    return this.#activeModal;
+  }
+
+  /**
    * Sets the active modal.
    * @param {HTMLElement|null} value — The modal element to set as active. Must not be an HTMLElement or null.
    * @throws {Error} Throws an error if the provided value is neither HTMLElement nor null.
@@ -182,11 +193,47 @@ class State {
   }
 
   /**
-   * Gets the active modal.
-   * @returns {HTMLElement|null} - An HTMLElement of the active modal or null.
+   * Gets the current page.
+   * @returns {number} The page number.
    */
-  get activeModal() {
-    return this.#activeModal;
+  get page() {
+    return this.#page;
+  }
+
+  /**
+   * Sets the current page.
+   * @param {number} value A positive integer.
+   * @throws {Error} Throws an error if the value is not a positive integer.
+   */
+  set page(value) {
+    if (!isPositiveInteger(value)) {
+      throw new Error(
+        `Invalid page value. Expected a positive integer. Received: ${value} (${typeof value})`
+      );
+    }
+    this.#page = value;
+  }
+
+  /**
+   * Gets the limit for transactions per page.
+   * @returns {number} The number of transactions per page.
+   */
+  get transactionsPerPage() {
+    return this.#transactionsPerPage;
+  }
+
+  /**
+   * Sets the number of transactions per page.
+   * @param {number} value A positive integer.
+   * @throws {Error} Throws an error if the value is not a positive integer.
+   */
+  set transactionsPerPage(value) {
+    if (!isPositiveInteger(value)) {
+      throw new Error(
+        `Invalid transactionsPerPage value. Expected a positive integer. Received: ${value} (${typeof value})`
+      );
+    }
+    this.#transactionsPerPage = value;
   }
 
   /**

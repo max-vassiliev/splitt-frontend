@@ -51,7 +51,7 @@ class StateManager {
 
   /**
    * Gets the entire state.
-   * NOTE: Try to avoid using this method.
+   * NOTE: This is a utility method for development purposes. Try to avoid using it.
    * @returns {Object} The entire state object.
    */
   getState() {
@@ -171,6 +171,25 @@ class StateManager {
   getActiveModal() {
     return state.activeModal;
   }
+
+  /**
+   * Gets required pagination data.
+   * @returns {Object} A page data object containing the fields:
+   *                     - page (number): the current page number
+   *                     - transactionsCount (number): the number of transactions on the current page
+   *                     - transactionsPerPage (number): the maximum number of transactions per page
+   */
+  getPageData() {
+    return {
+      page: state.page,
+      transactionsCount: state.transactions.length,
+      transactionsPerPage: state.transactionsPerPage,
+    };
+  }
+
+  /**
+   * Auxiliary Methods and Validation
+   */
 
   /**
    * Determines the current user status based on their balance.
