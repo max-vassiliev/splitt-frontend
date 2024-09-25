@@ -1,8 +1,8 @@
-import pageController from './PageController.js';
-import headerController from './HeaderController.js';
-import groupController from './GroupController.js';
-import summaryController from './SummaryController.js';
-import transactionsController from './TransactionsController.js';
+import pageController from './page/PageController.js';
+import headerController from './header/HeaderController.js';
+import groupController from './group/GroupController.js';
+import summaryController from './summary/SummaryController.js';
+import transactionsController from './transactions/TransactionsController.js';
 import paginationController from './pagination/PaginationController.js';
 
 class MainController {

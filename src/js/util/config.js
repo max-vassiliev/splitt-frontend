@@ -1,7 +1,5 @@
-// Paths (Temporary)
-export const DATA_PATH = '../../json/json/';
-export const PAGE_LOAD_DATA = DATA_PATH + 'page-load-data.json';
-// export const PAGE_LOAD_DATA = DATA_PATH + 'page-load-data-test.json';
+// App Config
+export const USE_MOCKS = true;
 
 // Global Constants
 export const ACTIVE_CLASS = 'active';

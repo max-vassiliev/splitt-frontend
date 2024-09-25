@@ -1,5 +1,5 @@
 import stateManager from '../../model/state/StateManager.js';
-import overlayView from '../../view/OverlayView.js';
+import overlayView from '../../view/page/OverlayView.js';
 import { ACTIVE_CLASS } from '../../util/Config.js';
 
 class ModalService {

@@ -78,6 +78,16 @@ class StateManager {
   }
 
   /**
+   * Gets the IDs of current user and group.
+   * @returns {{userId: BigInt, groupId: BigInt}} An object containing userId and groupId.
+   */
+  getUserIdAndGroupId() {
+    const userId = state.userId;
+    const groupId = state.group.id;
+    return { userId, groupId };
+  }
+
+  /**
    * Gets the group members map.
    * @returns {Map<BigInt, User>} The members map with userId (BigInt) as key and User as value.
    */

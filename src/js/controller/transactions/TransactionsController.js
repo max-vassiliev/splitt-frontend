@@ -1,6 +1,6 @@
 import transactionModel from '../../model/transaction/TransactionModel.js';
 import transactionsView from '../../view/transactions/TransactionsView.js';
-import transactionsHandler from './handler/TransactionsHandler.js';
+import transactionsHandler from './TransactionsHandler.js';
 
 class TransactionsController {
   init() {

@@ -1,6 +1,6 @@
 import groupModel from '../../model/group/GroupModel.js';
-import groupHeaderView from '../view/GroupHeaderView.js';
-import groupModalView from '../view/GroupModalView.js';
+import groupHeaderView from '../../view/group/GroupHeaderView.js';
+import groupModalView from '../../view/group/GroupModalView.js';
 import modalService from '../util/ModalService.js';
 
 class GroupController {

@@ -4,6 +4,7 @@ import {
   isNonEmptyStringOrNull,
 } from '../../util/SplittValidator.js';
 import { AppUtils } from '../../util/AppUtils.js';
+import RepaymentParty from './RepaymentParty.js';
 
 class Repayment {
   #id;

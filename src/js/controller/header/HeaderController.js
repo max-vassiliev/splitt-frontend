@@ -1,5 +1,5 @@
 import userModel from '../../model/user/UserModel.js';
-import headerView from '../view/HeaderView.js';
+import headerView from '../../view/header/HeaderView.js';
 import { EventEmitter } from 'events';
 
 class HeaderController extends EventEmitter {

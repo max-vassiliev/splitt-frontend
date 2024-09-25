@@ -1,11 +1,11 @@
-import AJAX from '../../util/Ajax.js';
-import { PAGE_LOAD_DATA } from '../../util/Config.js';
 import stateManager from '../state/StateManager.js';
+import pageAPI from './PageAPI.js';
 
 class PageModel {
   async loadPage() {
     try {
-      const data = await AJAX.getTestData(PAGE_LOAD_DATA);
+      const data = await pageAPI.getFullPageData(4n, 1n);
+
       stateManager.loadState(data);
 
       const stateToPrint = stateManager.getState();
