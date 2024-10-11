@@ -14,6 +14,19 @@ class GroupModalView {
     this.#groupModalCloseBtn = document.querySelector('.group__btn-close');
   }
 
+  render({ id, title, avatar }) {
+    this.#groupModal.querySelector('.group__img').src = getAvatarUrl(avatar);
+    this.#groupModal.querySelector('.group__title').textContent = title;
+    const switchOptionHTML = this.#generateSwitchOptionHTML({ id, title });
+    this.#groupSwitch.insertAdjacentHTML('afterbegin', switchOptionHTML);
+  }
+
+  renderSwitchOptions(options) {
+    this.#validateSwitchOptions(options);
+    const optionsHTML = this.#generateOptionsHTML(options);
+    this.#groupSwitch.insertAdjacentHTML('beforeend', optionsHTML);
+  }
+
   getGroupModal() {
     return this.#groupModal;
   }
@@ -29,6 +42,10 @@ class GroupModalView {
     this.#groupSwitchBtn.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
   }
 
+  /**
+   * Add Handlers
+   */
+
   addHandlerGroupModalCloseBtnClick(handler) {
     this.#groupModalCloseBtn.addEventListener('click', handler);
   }
@@ -37,9 +54,40 @@ class GroupModalView {
     this.#groupSwitch.addEventListener('change', handler);
   }
 
-  renderHeader({ title, avatar }) {
-    this.#groupModal.querySelector('.group__img').src = getAvatarUrl(avatar);
-    this.#groupModal.querySelector('.group__title').textContent = title;
+  /**
+   * Generate HTML
+   */
+
+  #generateSwitchOptionHTML({ id, title }) {
+    return `<option value="${id.toString()}">${title}</option>`;
+  }
+
+  #generateOptionsHTML(options) {
+    let optionsHTML = '';
+
+    options.forEach(option => {
+      const newHTML = this.#generateSwitchOptionHTML({
+        id: option.id,
+        title: option.title,
+      });
+      optionsHTML += newHTML;
+    });
+
+    return optionsHTML;
+  }
+
+  /**
+   * Validation
+   */
+
+  #validateSwitchOptions(options) {
+    if (!Array.isArray(options) || options.length === 0) {
+      throw new Error(
+        `Invalid group options. Expected an non-empty array. Received: ${JSON.stringify(
+          options
+        )} (${typeof options})`
+      );
+    }
   }
 }
 

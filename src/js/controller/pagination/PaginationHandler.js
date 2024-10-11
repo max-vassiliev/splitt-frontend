@@ -1,4 +1,4 @@
-import { DISABLED_ATTRIBUTE } from '../../util/Config';
+import { DISABLED_ATTRIBUTE } from '../../util/Config.js';
 
 class PaginationHandler {
   constructor() {

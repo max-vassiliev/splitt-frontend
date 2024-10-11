@@ -54,9 +54,9 @@ class TransactionsView {
     }
     if (!data.transactions || !Array.isArray(data.transactions)) {
       throw new Error(
-        `Invalid transactions field. Expected an array. Received: ${
+        `Invalid transactions field. Expected an array. Received: ${JSON.stringify(
           data.transactions
-        } (${typeof data.transactions}).`
+        )} (${typeof data.transactions}).`
       );
     }
   }

@@ -5,6 +5,7 @@ import userManager from '../user/UserManager.js';
 import TransactionManager from '../transaction/TransactionManager.js';
 import User from '../user/User.js';
 import Group from '../group/Group.js';
+import GroupOption from '../group/GroupOption.js';
 import UserBalance from '../balance/UserBalance.js';
 import {
   STATUS_NEUTRAL,
@@ -19,6 +20,10 @@ class StateManager {
     'currentUserId',
     'group',
   ];
+
+  /**
+   * LOAD
+   */
 
   /**
    * Loads the initial application state from the provided data object.
@@ -50,20 +55,42 @@ class StateManager {
   }
 
   /**
+   * Loads the group options from the provided JSON data.
+   * @param {Array<Object>} data An array of objects parsed from JSON.
+   */
+  loadGroupOptions(data) {
+    const currentGroupId = state.group.id;
+    const groupOptions = groupManager.initializeGroupOptions(
+      data,
+      currentGroupId
+    );
+    state.groupOptions = groupOptions;
+    state.isGroupOptionsLoaded = true;
+  }
+
+  /**
+   * SET
+   */
+
+  /**
+   * Sets the currently active modal.
+   * @param {HTMLElement|null} value - The modal element to set as active, or `null` if no modal is active.
+   */
+  setActiveModal(value) {
+    state.activeModal = value;
+  }
+
+  /**
+   * GET
+   */
+
+  /**
    * Gets the entire state.
    * NOTE: This is a utility method for development purposes. Try to avoid using it.
    * @returns {Object} The entire state object.
    */
   getState() {
     return state;
-  }
-
-  /**
-   * Gets the current group.
-   * @returns {Group} A Group instance with current group data.
-   */
-  getGroup() {
-    return state.group;
   }
 
   /**
@@ -78,6 +105,14 @@ class StateManager {
   }
 
   /**
+   * Gets the current user's ID.
+   * @returns {BigInt} userId — The current user's ID.
+   */
+  getUserId() {
+    return state.userId;
+  }
+
+  /**
    * Gets the IDs of current user and group.
    * @returns {{userId: BigInt, groupId: BigInt}} An object containing userId and groupId.
    */
@@ -85,6 +120,37 @@ class StateManager {
     const userId = state.userId;
     const groupId = state.group.id;
     return { userId, groupId };
+  }
+
+  /**
+   * Gets the current group.
+   * @returns {Group} A Group instance with current group data.
+   */
+  getGroup() {
+    return state.group;
+  }
+
+  /**
+   * Checks if the user's group options have been loaded.
+   * @returns {boolean} — True if the group options have been loaded, otherwise false.
+   */
+  isGroupOptionsLoaded() {
+    return state.isGroupOptionsLoaded;
+  }
+
+  /**
+   * Gets the current user's group options.
+   * @returns {Array<GroupOption>|null} The sorted group options array or null if empty.
+   */
+  getGroupOptions() {
+    const groupOptionsMap = state.groupOptions;
+    if (groupOptionsMap.size === 0) return null;
+
+    const groupOptions = Array.from(groupOptionsMap.values()).sort(
+      (a, b) => a.order - b.order
+    );
+
+    return groupOptions;
   }
 
   /**
@@ -164,14 +230,6 @@ class StateManager {
    */
   getTransactions() {
     return state.transactions;
-  }
-
-  /**
-   * Sets the currently active modal.
-   * @param {HTMLElement|null} value - The modal element to set as active, or `null` if no modal is active.
-   */
-  setActiveModal(value) {
-    state.activeModal = value;
   }
 
   /**

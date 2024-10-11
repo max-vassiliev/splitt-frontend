@@ -1,5 +1,6 @@
 // App Config
 export const USE_MOCKS = true;
+// export const USE_MOCKS = false;
 
 // Global Constants
 export const ACTIVE_CLASS = 'active';

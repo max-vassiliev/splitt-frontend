@@ -1,6 +1,6 @@
 import {
   isIntegerOrNull,
-  isPositiveNumber,
+  isPositiveInteger,
   isNonEmptyStringOrNull,
   isNonEmptyString,
 } from '../../util/SplittValidator.js';
@@ -52,12 +52,12 @@ class Expense {
   }
 
   /**
-   * Sets the title of the expense.
-   * @param {string} value — Must be a non-empty string.
-   * @throws {Error} If the value is not a non-empty string.
+   * Sets the expense amount.
+   * @param {Number} value — Must be a positive integer.
+   * @throws {Error} If the value is not a positive integer.
    */
   set amount(value) {
-    if (!isPositiveNumber(value)) {
+    if (!isPositiveInteger(value)) {
       throw new Error(
         `Invalid amount: expected a whole positive number. Received: ${value} (type: ${typeof value})`
       );

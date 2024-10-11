@@ -1,15 +1,18 @@
-import Group from '../group/Group';
+import { AppUtils } from '../../util/AppUtils.js';
+import { isPositiveInteger } from '../../util/SplittValidator.js';
+import { STATUS_NEUTRAL, STATUS_OPTIONS } from '../../util/Config.js';
+import UserBalance from '../balance/UserBalance.js';
+import Group from '../group/Group.js';
+import GroupOption from '../group/GroupOption.js';
 import Expense from '../transaction/Expense.js';
 import Repayment from '../transaction/Repayment.js';
-import UserBalance from '../balance/UserBalance.js';
-import { AppUtils } from '../../util/AppUtils.js';
-import { STATUS_NEUTRAL, STATUS_OPTIONS } from '../../util/Config.js';
-import { isPositiveInteger } from '../../util/SplittValidator.js';
 
 class State {
   #userId = null;
   #userStatus = STATUS_NEUTRAL;
   #group = {};
+  #groupOptions = new Map();
+  #isGroupOptionsLoaded = false;
   #members = new Map();
   #balances = new Map();
   #transactions = [];
@@ -81,6 +84,75 @@ class State {
       );
     }
     this.#group = value;
+  }
+
+  /**
+   * Gets the 'isGroupOptionsLoaded' field.
+   * @returns {boolean} — True if the group options have been loaded, otherwise false.
+   */
+  get isGroupOptionsLoaded() {
+    return this.#isGroupOptionsLoaded;
+  }
+
+  /**1
+   * Sets the 'isGroupOptionsLoaded' field.
+   * Should be set to 'true' after loading the group options from the API.
+   * @param {boolean} value — The new value for 'isGroupOptionsLoaded'.
+   * @throws {Error} — If the value is not a boolean.
+   */
+  set isGroupOptionsLoaded(value) {
+    if (typeof value !== 'boolean') {
+      throw new Error(
+        `Invalid value for 'isGroupOptionsLoaded'. Expected a boolean. Received: ${value} (${typeof value})`
+      );
+    }
+    this.#isGroupOptionsLoaded = value;
+  }
+
+  /**
+   * Gets the user's group options.
+   * @returns {Map<bigint, GroupOption>} — The "groupOptions" map.
+   */
+  get groupOptions() {
+    return this.#groupOptions;
+  }
+
+  /**
+   * Sets the user's group options.
+   * @param {Map<bigint, GroupOption>} value — The map with group options.
+   */
+  set groupOptions(value) {
+    this.#validateGroupOptions(value);
+    this.#groupOptions = value;
+  }
+
+  /**
+   * Validates the user's group options before saving.
+   * @param {Map|Map<bigint, GroupOption>} groupOptions — The map to validate. Can be an empty map.
+   * @throws {Error} — Throws error in the following conditions:
+   *                   1) The input is not a Map.
+   *                   2) Any key is not a BigInt.
+   *                   3) Any value is not an instance of GroupOption.
+   */
+  #validateGroupOptions(groupOptions) {
+    if (!(groupOptions instanceof Map)) {
+      throw new Error(
+        `Invalid "groupOptions" data. Expected a Map. Received: ${groupOptions} (${typeof groupOptions}).`
+      );
+    }
+
+    groupOptions.forEach((groupOption, id) => {
+      if (typeof id !== 'bigint') {
+        throw new Error(
+          `Invalid group option ID. Expected a BigInt. Received: ${id} (${typeof id}).`
+        );
+      }
+      if (!(groupOption instanceof GroupOption)) {
+        throw new Error(
+          `Invalid group option. Expected an instance of GroupOption. Received: ${groupOption} (${typeof groupOption}).`
+        );
+      }
+    });
   }
 
   /**
