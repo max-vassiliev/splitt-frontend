@@ -1,0 +1,179 @@
+{
+  "balances": [
+    {
+      "userId": 3,
+      "balance": -1192680,
+      "details": [
+        {
+          "userId": 1,
+          "amount": -1192680
+        }
+      ]
+    },
+    {
+      "userId": 4,
+      "balance": -4696060,
+      "details": [
+        {
+          "userId": 1,
+          "amount": -946470
+        },
+        {
+          "userId": 2,
+          "amount": -3749590
+        }
+      ]
+    },
+    {
+      "userId": 1,
+      "balance": 2139150,
+      "details": [
+        {
+          "userId": 3,
+          "amount": 1192680
+        },
+        {
+          "userId": 4,
+          "amount": 946470
+        }
+      ]
+    },
+    {
+      "userId": 2,
+      "balance": 3749590,
+      "details": [
+        {
+          "userId": 4,
+          "amount": 3749590
+        }
+      ]
+    }
+  ],
+  "transactions": [
+    {
+      "id": 10,
+      "type": "repayment",
+      "amount": 6000000,
+      "currentUserBalance": -6000000,
+      "date": "2024-07-20",
+      "emoji": "✅",
+      "payerId": 4,
+      "recipientId": 1
+    },
+    {
+      "id": 8,
+      "type": "expense",
+      "amount": 10000000,
+      "currentUserBalance": -10000000,
+      "date": "2024-07-19",
+      "emoji": "💰",
+      "title": "Какая-то большая трата, очень-оочень большая трата"
+    },
+    {
+      "id": 7,
+      "type": "repayment",
+      "amount": 400000,
+      "currentUserBalance": null,
+      "date": "2024-07-18",
+      "emoji": "✅",
+      "payerId": 3,
+      "recipientId": 2
+    },
+    {
+      "id": 6,
+      "type": "expense",
+      "amount": 463400,
+      "currentUserBalance": 278040,
+      "date": "2024-07-17",
+      "emoji": "🍱",
+      "title": "Доставка японская"
+    },
+    {
+      "id": 5,
+      "type": "expense",
+      "amount": 1000000,
+      "currentUserBalance": 750000,
+      "date": "2024-07-16",
+      "emoji": "🧻",
+      "title": "Всякий быт"
+    },
+    {
+      "id": 4,
+      "type": "expense",
+      "amount": 100000,
+      "currentUserBalance": -25000,
+      "date": "2024-07-14",
+      "emoji": "🌐",
+      "title": "Интернет"
+    },
+    {
+      "id": 9,
+      "type": "expense",
+      "amount": 6000000,
+      "currentUserBalance": -1500000,
+      "date": "2024-07-14",
+      "emoji": "🏠",
+      "title": "Аренда"
+    },
+    {
+      "id": 3,
+      "type": "repayment",
+      "amount": 400000,
+      "currentUserBalance": 400000,
+      "date": "2024-07-12",
+      "emoji": "✅",
+      "payerId": 3,
+      "recipientId": 4
+    },
+    {
+      "id": 1,
+      "type": "expense",
+      "amount": 100000,
+      "currentUserBalance": -25000,
+      "date": "2024-07-11",
+      "emoji": "🚕",
+      "title": "Такси"
+    },
+    {
+      "id": 2,
+      "type": "expense",
+      "amount": 365900,
+      "currentUserBalance": 225900,
+      "date": "2024-07-11",
+      "emoji": "🍕",
+      "title": "Доставка итальянская"
+    }
+  ],
+  "currentUserId": 4,
+  "group": {
+    "id": 1,
+    "title": "Хорошая квартира",
+    "avatar": "sw-avatar-teal1-house-50px.png"
+  },
+  "members": [
+    {
+      "id": 1,
+      "name": "Пётр",
+      "email": "peter@example.com",
+      "avatar": "avatar-peter.png"
+    },
+    {
+      "id": 2,
+      "name": "Катерина",
+      "email": "kate@example.com",
+      "avatar": "avatar-kate.png"
+    },
+    {
+      "id": 3,
+      "name": "Константин Константинопольский",
+      "email": "paul@example.com",
+      "avatar": "avatar-paul.png"
+    },
+    {
+      "id": 4,
+      "name": "Арсений Тарковский",
+      "email": "alex@example.com",
+      "avatar": "avatar-sanya.png"
+    }
+  ]
+}

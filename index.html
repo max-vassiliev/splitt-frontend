@@ -33,14 +33,15 @@
       crossorigin="anonymous"
     />
 
-    <link rel="stylesheet" href="style2.css" />
+    <link rel="stylesheet" href="style.css" />
+
     <title>Splitt</title>
   </head>
   <body>
     <div class="overlay hidden"></div>
     <div class="overlay-error hidden"></div>
     <!-- TOP NAVIGATION -->
-    <header>
+    <header hidden>
       <div class="logo">
         <img src="logo.png" alt="Logo" class="logo_img" />
         <h1 class="logo_text">Splitt</h1>
@@ -48,11 +49,11 @@
       <div class="menu">
         <div class="menu__account">
           <img
-            src="images/avatar-sanya.png"
-            alt="Арсений Тарковский"
+            src="src/images/avatar-empty.png"
+            alt="Username"
             class="account__avatar"
           />
-          <div class="account__username">Арсений Тарковский</div>
+          <div class="account__username">Username</div>
         </div>
         <button class="menu__btn--open">&#x25BC;</button>
         <div class="menu__popup">
@@ -60,10 +61,10 @@
             <div class="menu__popup_account">
               <img
                 class="account__avatar"
-                src="images/sanya-avatar-2.png"
-                alt="Арсений Тарковский"
+                src="src/images/avatar-empty.png"
+                alt="Username"
               />
-              <div class="account__username">Арсений Тарковский</div>
+              <div class="account__username">Username</div>
             </div>
             <button class="menu__btn--close">&times;</button>
           </div>
@@ -85,53 +86,40 @@
       <!----------->
       <!-- GROUP -->
       <!----------->
-      <div class="group__header">
-        <div class="group__info">
-          <img
-            class="group__img"
-            src="images/sw-avatar-teal1-house-50px.png"
-            alt="Иконка группы"
-          />
-          <p class="group__title">Домофонд</p>
+      <div class="group__header-container">
+        <div class="group__header" title="Настройки группы">
+          <img class="group__img" src="src/images/avatar-empty.png" />
+          <p class="group__title"></p>
         </div>
       </div>
-      <div class="group__popup">
-        <div class="group__popup_top">
-          <div class="group__info">
-            <img
-              class="group__img"
-              src="images/sw-avatar-teal1-house-50px.png"
-              alt="Иконка группы"
-            />
-            <p class="group__title">Домофонд</p>
+      <div class="group__modal">
+        <div class="group__modal_top">
+          <div class="group__header">
+            <img class="group__img" src="src/images/avatar-empty.png" />
+            <p class="group__title"></p>
           </div>
-          <button class="menu__btn--close btn__close_popup">&times;</button>
+          <button class="menu__btn--close group__btn-close">&times;</button>
         </div>
-        <div class="group__popup_main">
-          <a class="group__popup_item link">
-            <span class="material-symbols-outlined group__popup_icon"
+        <div class="group__modal_main">
+          <a class="group__modal_item link">
+            <span class="material-symbols-outlined group__modal_icon"
               >settings</span
             >
             <p>Настройки группы</p>
           </a>
-          <a class="group__popup_item link">
-            <span class="material-symbols-outlined group__popup_icon"
+          <a class="group__modal_item link">
+            <span class="material-symbols-outlined group__modal_icon"
               >list_alt_add</span
             >
             <p>Создать группу</p>
           </a>
-          <div class="group__popup_item">
-            <span class="material-symbols-outlined group__popup_icon"
+          <div class="group__modal_item">
+            <span class="material-symbols-outlined group__modal_icon"
               >swap_horiz</span
             >
             <p>Перейти в другую группу:</p>
             <div class="group__switch--container">
-              <select class="group__switch">
-                <option value="1">Домофонд</option>
-                <option value="2">В Царском Селе</option>
-                <option value="3">Бал у Голицыных</option>
-                <option value="4">Прием у французов</option>
-              </select>
+              <select class="group__switch"></select>
               <div class="custom-arrow"></div>
               <button class="group__switch_btn" disabled>выбрать</button>
             </div>
@@ -426,7 +414,7 @@
                     <td class="splitt-equally-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-peter.png"
+                        src="src/images/avatar-peter.png"
                         alt="Пётр"
                       />
                     </td>
@@ -444,7 +432,7 @@
                     <td class="splitt-equally-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-kate.png"
+                        src="src/images/avatar-kate.png"
                         alt="Катерина"
                       />
                     </td>
@@ -462,7 +450,7 @@
                     <td class="splitt-equally-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-paul.png"
+                        src="src/images/avatar-paul.png"
                         alt="Павлентий Петрович"
                       />
                     </td>
@@ -482,7 +470,7 @@
                     <td class="splitt-equally-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-sanya.png"
+                        src="src/images/avatar-sanya.png"
                         alt="Арсений Тарковский"
                       />
                     </td>
@@ -500,7 +488,7 @@
                     <td class="splitt-parts-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-peter.png"
+                        src="src/images/avatar-peter.png"
                         alt="Пётр"
                       />
                     </td>
@@ -518,7 +506,7 @@
                     <td class="splitt-parts-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-kate.png"
+                        src="src/images/avatar-kate.png"
                         alt="Катерина"
                       />
                     </td>
@@ -536,7 +524,7 @@
                     <td class="splitt-parts-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-paul.png"
+                        src="src/images/avatar-paul.png"
                         alt="Константин Константинопольский"
                       />
                     </td>
@@ -556,7 +544,7 @@
                     <td class="splitt-parts-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-sanya.png"
+                        src="src/images/avatar-sanya.png"
                         alt="Арсений Тарковский"
                       />
                     </td>
@@ -601,7 +589,7 @@
                     <td class="splitt-shares-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-peter.png"
+                        src="src/images/avatar-peter.png"
                         alt="Пётр"
                       />
                     </td>
@@ -620,7 +608,7 @@
                     <td class="splitt-shares-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-kate.png"
+                        src="src/images/avatar-kate.png"
                         alt="Катерина"
                       />
                     </td>
@@ -639,7 +627,7 @@
                     <td class="splitt-shares-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-paul.png"
+                        src="src/images/avatar-paul.png"
                         alt="Павлентий Петрович"
                       />
                     </td>
@@ -660,7 +648,7 @@
                     <td class="splitt-shares-column__avatar">
                       <img
                         class="account__avatar"
-                        src="images/avatar-sanya.png"
+                        src="src/images/avatar-sanya.png"
                         alt="Арсений Тарковский"
                       />
                     </td>
@@ -1105,263 +1093,12 @@
 
       <div class="transactions">
         <div class="transactions__container">
-          <!-- TRANSACTIONS: TABLE -->
-          <table class="transactions-table">
-            <!-- TRANSACTIONS: TABLE (Annotations) -->
-            <tr class="transactions-table__annotation-row">
-              <td colspan="4"></td>
-              <td class="transactions-table__annotation">общая сумма</td>
-              <td class="transactions-table__annotation">ваш баланс</td>
-            </tr>
-            <!-- TRANSACTIONS: TABLE (Starts) -->
-            <!-- ✅ Возврат: Саня → вам -->
-            <tr class="transactions-table__row repayment" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">26.09.2023</td>
-              <td class="transactions-table__icon">✅</td>
-              <td class="transactions-table__title">
-                Возврат:
-                <span class="movements__repayment--destination">
-                  Саня &rarr; вам</span
-                >
-              </td>
-              <td class="transactions-table__amount-total">
-                4&nbsp;000,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--positive"
-              >
-                +&nbsp;4&nbsp;000,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- 🏠 Аренда -->
-            <tr class="transactions-table__row" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">16.11.2023</td>
-              <td class="transactions-table__icon">🏠</td>
-              <td class="transactions-table__title">Аренда</td>
-              <td class="transactions-table__amount-total">
-                60&nbsp;000,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--negative"
-              >
-                -&nbsp;15&nbsp;000,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- 💰 Какая-то очень большая трата -->
-            <tr class="transactions-table__row" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">09.09.2039</td>
-              <td class="transactions-table__icon">💰</td>
-              <td class="transactions-table__title">
-                Какая-то очень большая трата, очень-очень большая трата
-              </td>
-              <td class="transactions-table__amount-total">
-                100&nbsp;000,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--negative"
-              >
-                -&nbsp;100&nbsp;000,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- ✅ Возврат: вы → Андрей Тарковский -->
-            <tr class="transactions-table__row repayment" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">26.09.2023</td>
-              <td class="transactions-table__icon">✅</td>
-              <td class="transactions-table__title">
-                Возврат:
-                <span class="movements__repayment--destination">
-                  вы &rarr; Андрей Тарковский
-                </span>
-              </td>
-              <td class="transactions-table__amount-total">
-                4&nbsp;000,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--negative"
-              >
-                -&nbsp;4&nbsp;000,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- 🍱 Доставка японская -->
-            <tr class="transactions-table__row" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                  title="удалить"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">09.09.2039</td>
-              <td class="transactions-table__icon">🍱</td>
-              <td class="transactions-table__title">Доставка японская</td>
-              <td class="transactions-table__amount-total">
-                4&nbsp;634,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--negative"
-              >
-                -&nbsp;2&nbsp;056,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- 🧻	Всякий быт -->
-            <tr class="transactions-table__row" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">16.11.2023</td>
-              <td class="transactions-table__icon">🧻</td>
-              <td class="transactions-table__title">Всякий быт</td>
-              <td class="transactions-table__amount-total">
-                10&nbsp;000,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--positive"
-              >
-                +&nbsp;2&nbsp;500,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- 🌐	Интернет -->
-            <tr class="transactions-table__row" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">16.11.2023</td>
-              <td class="transactions-table__icon">🌐</td>
-              <td class="transactions-table__title">Интернет</td>
-              <td class="transactions-table__amount-total">
-                1&nbsp;000,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--negative"
-              >
-                -&nbsp;250,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- ✅ Возврат: Константин Константинопольский → вам -->
-            <tr class="transactions-table__row repayment" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">26.09.2023</td>
-              <td class="transactions-table__icon">✅</td>
-              <td class="transactions-table__title">
-                Возврат:
-                <span class="movements__repayment--destination">
-                  Константин Константинопольский &rarr; вам
-                </span>
-              </td>
-              <td class="transactions-table__amount-total">
-                4&nbsp;000,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--neutral"
-              >
-                —&nbsp;
-              </td>
-            </tr>
-            <!-- 🍕 Доставка итальянская -->
-            <tr class="transactions-table__row" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">09.09.2039</td>
-              <td class="transactions-table__icon">🍕</td>
-              <td class="transactions-table__title">Доставка итальянская</td>
-              <td class="transactions-table__amount-total">
-                3&nbsp;659,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--positive"
-              >
-                +&nbsp;2&nbsp;173,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- 🚕	Такси -->
-            <tr class="transactions-table__row" title="редактировать">
-              <td class="transactions-table__delete" title="удалить">
-                <div
-                  class="transactions-table__delete-btn material-symbols-outlined"
-                >
-                  delete
-                </div>
-              </td>
-              <td class="transactions-table__date">10.11.2023</td>
-              <td class="transactions-table__icon">🚕</td>
-              <td class="transactions-table__title">Такси</td>
-              <td class="transactions-table__amount-total">
-                1&nbsp;000,00&nbsp;₽
-              </td>
-              <td
-                class="transactions-table__amount-share amount__color--negative"
-              >
-                -&nbsp;250,00&nbsp;₽
-              </td>
-            </tr>
-            <!-- Transactions Table: ends -->
-          </table>
-
-          <!-- TRANSACTIONS: EMPTY -->
-          <!-- <div class="transactions__empty">
-            <h1>Пока нет записей</h1>
-            <p>
-              Вы можете <span class="add-expense-link">добавить трату</span>
-              <br />
-              или <span class="add-repayment-link">вернуть долг</span>
-            </p>
-          </div> -->
-
-          <!-- TRANSACTIONS: LOADING -->
-          <!-- <div class="transactions__loading">
+          <div class="transactions__loading">
             <div class="spinner-border" role="status">
               <span class="sr-only">Получаем данные...</span>
             </div>
             <div class="spinner-caption">Получаем данные...</div>
-          </div> -->
+          </div>
 
           <!-- TRANSACTIONS: ERROR -->
           <!-- <div class="transactions__error">
@@ -1376,151 +1113,22 @@
       <!--  SUMMARY  -->
       <!--------------->
 
-      <!-- SUMMARY: STATUS -->
       <div class="summary-container">
-        <div class="status-container">
-          <!-- Status: neutral (default) -->
-          <!-- <div class="summary status neutral">
-            <h2>Дзен</h2>
-            <p>Всё сходится: не нужно делать<br />или&nbsp;ожидать перевод.</p>
-          </div> -->
+        <!-- SUMMARY: USER -->
+        <div class="user-summary-container">
+          <!-- User Summary: loading -->
+          <div class="summary loading"></div>
 
-          <!-- Status: positive -->
-          <!-- <div class="summary status status-positive">
-            <h2>Ожидайте перевод</h2>
-            <p>
-              Чтобы в группе восстановился баланс, ожидайте перевод от
-              пользователей:
-            </p>
-            <div class="summary__table">
-              <div class="summary__table--row" title="рассчитаться">
-                <img
-                  class="account__avatar"
-                  src="images/avatar-kate.png"
-                  alt="Катерина"
-                />
-                <div class="summary__table--user">Катерина</div>
-                <div class="summary__table--amount amount__color--positive">
-                  34&nbsp;056,83&nbsp;₽
-                </div>
-              </div>
-              <div class="summary__table--row" title="рассчитаться">
-                <img
-                  class="account__avatar"
-                  src="images/avatar-paul.png"
-                  alt="Константин Константинопольский"
-                />
-                <div class="summary__table--user">
-                  Константин Константинопольский
-                </div>
-                <div class="summary__table--amount amount__color--positive">
-                  2&nbsp;011,00&nbsp;₽
-                </div>
-              </div>
-            </div>
-          </div> -->
-
-          <!-- Status: negative -->
-          <div class="summary status status-negative">
-            <h2>Сделайте перевод</h2>
-            <p>
-              Чтобы восстановить баланс в группе, переведите деньги
-              пользователям:
-            </p>
-            <div class="summary__table">
-              <div class="summary__table--row" title="рассчитаться">
-                <img
-                  class="account__avatar"
-                  src="images/avatar-kate.png"
-                  alt="Катерина"
-                />
-                <div class="summary__table--user">Катерина</div>
-                <div class="summary__table--amount amount__color--negative">
-                  34&nbsp;056,83&nbsp;₽
-                </div>
-              </div>
-              <div class="summary__table--row" title="рассчитаться">
-                <img
-                  class="account__avatar"
-                  src="images/avatar-paul.png"
-                  alt="Константин Константинопольский"
-                />
-                <div class="summary__table--user">
-                  Константин Константинопольский
-                </div>
-                <div class="summary__table--amount amount__color--negative">
-                  2&nbsp;011,00&nbsp;₽
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Status: loading -->
-          <!-- <div class="summary loading"></div> -->
-
-          <!-- Status: error -->
+          <!-- User Summary: error -->
           <!-- <div class="summary error"></div> -->
 
-          <!-- Status: options end -->
+          <!-- User Summary: options end -->
         </div>
 
-        <!-- SUMMARY: GROUP STATS -->
-        <div class="group-stats-container">
-          <!-- Group Stats: default -->
-          <div class="summary group-stats">
-            <h2>Статистика группы</h2>
-            <div class="summary__table">
-              <div class="summary__table--row">
-                <img
-                  class="account__avatar"
-                  src="images/avatar-kate.png"
-                  alt="Катерина"
-                />
-                <div class="summary__table--user">Катерина</div>
-                <div class="summary__table--amount amount__color--positive">
-                  +&nbsp;34&nbsp;056,83&nbsp;₽
-                </div>
-              </div>
-              <div class="summary__table--row">
-                <img
-                  class="account__avatar"
-                  src="images/avatar-peter.png"
-                  alt="Пётр"
-                />
-                <div class="summary__table--user">Пётр</div>
-                <div class="summary__table--amount amount__color--negative">
-                  -&nbsp;6&nbsp;859,49&nbsp;₽
-                </div>
-              </div>
-              <div class="summary__table--row">
-                <img
-                  class="account__avatar"
-                  src="images/avatar-paul.png"
-                  alt="Константин Константинопольский"
-                />
-                <div class="summary__table--user">
-                  Константин Константинопольский
-                </div>
-                <div class="summary__table--amount amount__color--positive">
-                  +&nbsp;2&nbsp;011,00&nbsp;₽
-                </div>
-              </div>
-              <div class="summary__table--row">
-                <img
-                  class="account__avatar"
-                  src="images/avatar-sanya.png"
-                  alt="Арсений Тарковский"
-                />
-                <div class="summary__table--user">Арсений Тарковский</div>
-                <div class="summary__table--amount amount__color--negative">
-                  -&nbsp;29&nbsp;208,00&nbsp;₽
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <!-- SUMMARY: GROUP -->
+        <div class="group-summary-container">
           <!-- Group Stats: loading -->
-          <!-- <div class="summary loading"></div> -->
+          <div class="summary loading"></div>
 
           <!-- Group Stats: error -->
           <!-- <div class="summary error"></div> -->
@@ -1547,20 +1155,39 @@
       </div>
 
       <!-------------->
+      <!--  SPINNER -->
+      <!-------------->
+
+      <!-- <div class="spinner-modal">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Загрузка</span>
+        </div>
+      </div> -->
+
+      <!-------------->
       <!--  BOTTOM  -->
       <!-------------->
 
       <!-- TRANSACTIONS: PAGES -->
       <div class="transactions__pages">
-        <div class="current__transactions">&uarr; Текущие транзакции</div>
-        <button class="btn__previous--page">&larr;</button>
-        <div class="transaction__history">история транзакций</div>
-        <button class="btn__next--page">&rarr;</button>
+        <div class="current__transactions-container disabled">
+          <span class="current__transactions-icon material-symbols-outlined"
+            >arrow_upward
+          </span>
+          <div class="current__transactions">Текущие транзакции</div>
+        </div>
+        <div class="page-turn-container">
+          <button class="btn__previous--page" title="предыдущая страница">
+            <span class="material-symbols-outlined"> chevron_left </span>
+          </button>
+          <button class="btn__next--page" title="следующая страница">
+            <span class="material-symbols-outlined"> chevron_right </span>
+          </button>
+        </div>
       </div>
     </main>
 
-    <!-- <script src="script.js"></script> -->
-    <script src="script2.js"></script>
+    <script type="module" src="src/js/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
   </body>
 </html>
