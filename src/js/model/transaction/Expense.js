@@ -4,7 +4,7 @@ import {
   isNonEmptyStringOrNull,
   isNonEmptyString,
 } from '../../util/SplittValidator.js';
-import { AppUtils } from '../../util/AppUtils.js';
+import TypeParser from '../util/TypeParser.js';
 
 class Expense {
   #id;
@@ -19,7 +19,7 @@ class Expense {
    * @param {number|BigInt} value — Must be a positive number or BigInt.
    */
   set id(value) {
-    this.#id = AppUtils.parseId(value);
+    this.#id = TypeParser.parseId(value);
   }
 
   /**
@@ -53,13 +53,13 @@ class Expense {
 
   /**
    * Sets the expense amount.
-   * @param {Number} value — Must be a positive integer.
+   * @param {number} value Must be a positive integer.
    * @throws {Error} If the value is not a positive integer.
    */
   set amount(value) {
     if (!isPositiveInteger(value)) {
       throw new Error(
-        `Invalid amount: expected a whole positive number. Received: ${value} (type: ${typeof value})`
+        `Invalid amount: expected a whole positive number. Received: ${value} (type: ${typeof value}).`
       );
     }
     this.#amount = value;

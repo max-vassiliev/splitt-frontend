@@ -73,11 +73,11 @@ class StateManager {
    */
 
   /**
-   * Sets the currently active modal.
-   * @param {HTMLElement|null} value - The modal element to set as active, or `null` if no modal is active.
+   * Sets the currently active modal ID.
+   * @param {number|null} modalId — The modal ID to set as active.
    */
-  setActiveModal(value) {
-    state.activeModal = value;
+  setActiveModalId(modalId) {
+    state.activeModalId = modalId;
   }
 
   /**
@@ -233,12 +233,22 @@ class StateManager {
   }
 
   /**
-   * Gets the currently active modal.
-   * @returns {HTMLElement|null} The active modal element, or `null` if no modal is active.
+   * Gets the active modal ID.
+   * @returns {number|null} An the active modal ID or null.
    */
-  getActiveModal() {
-    return state.activeModal;
+  getActiveModalId() {
+    return state.activeModalId;
   }
+
+  /**
+   * Retrieves the custom close event for the currently active modal.
+   *
+   * @returns {string|undefined} The close event name associated with the active modal ID,
+   * or `undefined` if no close event is registered for the active modal.
+   */
+  getActiveModalCloseEvent = () => {
+    return state.modalCloseEvents.get(state.activeModalId);
+  };
 
   /**
    * Gets required pagination data.

@@ -5,6 +5,7 @@ import {
 import { getAvatarUrl, formatAmountForOutput } from '../util/RenderHelper.js';
 
 class UserSummaryView {
+  #rowClassName = '.summary__table--row';
   #container;
   #renderers;
   #data;
@@ -18,13 +19,17 @@ class UserSummaryView {
     ]);
   }
 
+  #clear() {
+    this.#container.innerHTML = '';
+  }
+
+  // Handlers
+
   addHandlerContainerClick(handler) {
     this.#container.addEventListener('click', handler);
   }
 
-  #clear() {
-    this.#container.innerHTML = '';
-  }
+  // Render
 
   render(data) {
     this.#validateRenderData(data);
@@ -42,18 +47,21 @@ class UserSummaryView {
     this.#container.insertAdjacentHTML('afterbegin', summaryHTML);
   }
 
-  #validateRenderData(data) {
-    if (
-      !data ||
-      !data.status ||
-      !data.details ||
-      !Array.isArray(data.details)
-    ) {
-      throw new Error(
-        `Invalid data for user status rendering. Expected an object object with the fields "status" (String) and "details" (Array). Received: ${data} (${typeof data})`
-      );
-    }
-  }
+  // Get
+
+  /**
+   * Retrieves the user ID from the closest row element.
+   *
+   * @param {Element} targetElement - The element that was clicked.
+   * @returns {string|null} The user ID if found, otherwise null.
+   */
+  getSelectedUserId = targetElement => {
+    const rowElement = targetElement.closest(this.#rowClassName);
+    const selectedUserId = rowElement?.dataset.userId;
+    return selectedUserId || null;
+  };
+
+  // Generate HTML
 
   #generateNeutralHTML() {
     return `
@@ -153,6 +161,21 @@ class UserSummaryView {
         </div>`;
 
     return rowHTML;
+  }
+
+  // Validation
+
+  #validateRenderData(data) {
+    if (
+      !data ||
+      !data.status ||
+      !data.details ||
+      !Array.isArray(data.details)
+    ) {
+      throw new Error(
+        `Invalid data for user status rendering. Expected an object object with the fields "status" (String) and "details" (Array). Received: ${data} (${typeof data})`
+      );
+    }
   }
 }
 

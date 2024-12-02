@@ -2,9 +2,7 @@
 
 import { IMAGES_PATH } from './util/Config.js';
 import stateManager from './model/state/StateManager.js';
-import modalService from './controller/util/ModalService.js';
 import headerController from './controller/header/HeaderController.js';
-import { AppUtils } from './util/AppUtils.js';
 
 export function initializeLegacyScript() {
   document.addEventListener('DOMContentLoaded', function () {
@@ -21,24 +19,20 @@ export function initializeLegacyScript() {
     const CURRENCY_SYMBOL = '₽'; //                                 ☑️ (State)
     const CURRENT_LOCALE = 'ru-RU'; //                              ☑️ (State)
 
-    const MAX_AMOUNT = 10000000000; //                      TODO! move to Config.js
-    const DEFAULT_AMOUNT = 0; //                            TODO! move to Config.js
-    const ONE_HUNDRED_PERCENT = 100; //                     TODO! move to Config.js
-    const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24; //    TODO! move to Config.js
+    const MAX_AMOUNT = 10000000000; //                      ☑️ (Config)
+    const DEFAULT_AMOUNT = 0; //                            ☑️ (Config)
+    const ONE_HUNDRED_PERCENT = 100; //                     ☑️ (Config)
 
     const DEFAULT_AVATAR = `avatar-empty.png`; //           ☑️ (Config)
     const DEFAULT_EMOJI_EXPENSE = '🗒️'; //                  ☑️ (Config)
-    const DEFAULT_EMOJI_REPAYMENT = '✅'; //                ☑️ (Config)
 
     let currentUserId = '4'; //                   ☑️ (State)
     let activeAddExpenseHiddenForm = null; //     TODO! move to State
-    let activeAddRepaymentHiddenForm = null; //   TODO! move to State
-    let activeEmojiField = null; //               TODO! move to State
 
-    let today; //                                 TODO! move
-    let todayString; //                           TODO! move
-    let minTransactionDate; //                    TODO! move
-    let minTransactionDateString; //              TODO! move
+    let today; //                                 ☑️ (State)
+    let todayString; //                           ☑️ (State)
+    let minTransactionDate; //                    ☑️ (State)
+    let minTransactionDateString; //              ☑️ (State)
 
     // ☑️ (State)
     const users = new Map([
@@ -172,18 +166,6 @@ export function initializeLegacyScript() {
       ]),
     };
 
-    let addRepaymentFormModel = {
-      amount: 0,
-      date: null,
-      userFrom: currentUserId,
-      userTo: null,
-      emojiRow: null,
-      optionsFrom: new Map(),
-      optionsTo: new Map(),
-      note: null,
-      isValid: false,
-    };
-
     function isActive(element) {
       return element.classList.contains(ACTIVE_CLASS);
     }
@@ -224,19 +206,6 @@ export function initializeLegacyScript() {
     // e: Utils
 
     const btnClosePopup = document.querySelectorAll('.btn__close_popup');
-
-    // e: Emoji Picker
-    const emojiPickerContainer = document.querySelector(
-      '.emoji-picker-container'
-    );
-    const emojiPickerOptions = {
-      onEmojiSelect: handleEmojiSelect,
-      searchPosition: 'static',
-      previewPosition: 'none',
-      locale: 'ru',
-    };
-    const emojiPicker = new EmojiMart.Picker(emojiPickerOptions);
-    document.getElementById('emoji-picker')?.appendChild(emojiPicker);
 
     // e: Add Expense: Main Form
     const addExpenseBtn = document.querySelector('.add-expense__btn');
@@ -427,74 +396,6 @@ export function initializeLegacyScript() {
       isExpense: true,
     };
 
-    // e: Add Repayment: Main Form
-    const addRepaymentBtn = document.querySelector('.add-repayment__btn');
-    const addRepaymentForm = document.querySelector('.add-repayment__form');
-    const addRepaymentMainForm = document.querySelector(
-      '.add-repayment__form_main'
-    );
-    const addRepaymentBtnEdit = document.querySelectorAll(
-      '.add-repayment__btn-edit'
-    );
-    const addRepaymentAmountInput = document.querySelector(
-      '.add-repayment-amount'
-    );
-    const addRepaymentDateInput = document.querySelector('.add-repayment-date');
-    const addRepaymentSwitchFrom = document.getElementById(
-      'add-repayment__switch-from'
-    );
-    const addRepaymentSwitchTo = document.getElementById(
-      'add-repayment__switch-to'
-    );
-    const addRepaymentEmojiRow = document.querySelector(
-      '.add-repayment-emoji-row'
-    );
-    const addRepaymentEmojiContainer = document.querySelector(
-      '.add-repayment-emoji-container'
-    );
-    const addRepaymentEmojiDefault = document.querySelector(
-      '.add-repayment-emoji-default'
-    );
-    const addRepaymentEmojiInputField = document.querySelector(
-      '.emoji-input.add-repayment'
-    );
-    const addRepaymentEmojiPickerSwitchBtn = document.querySelector(
-      '.btn__emoji-picker--switch.add-repayment'
-    );
-    const addRepaymentEmojiDefaultBtn = document.querySelector(
-      '.btn__emoji-restore-default.add-repayment'
-    );
-    const addRepaymentEmojiRemoveBtn = document.querySelector(
-      '.btn__emoji-remove.add-repayment'
-    );
-    const addRepaymentSubmitButton = document.querySelector(
-      '.add-repayment__btn--submit'
-    );
-    addRepaymentFormModel.emojiRow = addRepaymentEmojiRow;
-
-    // e: Add Repayment: Hidden Forms
-
-    const addRepaymentHiddenForms = document.querySelectorAll(
-      '.add-repayment__form-hidden'
-    );
-
-    // e: Add Repayment: Note Form
-    const addRepaymentNoteInput = document.querySelector(
-      '.add-transaction__form_input-note#repayment-note'
-    );
-    const addRepaymentNoteCounter = document.querySelector(
-      '.character-count.repayment-note'
-    );
-    const addRepaymentHiddenFormBtnClose = document.querySelectorAll(
-      '.add-repayment__form_btn-close'
-    );
-
-    const addRepaymentNoteForm = {
-      noteInput: addRepaymentNoteInput,
-      counter: addRepaymentNoteCounter,
-      isExpense: false,
-    };
-
     // e: Delete Transactions
 
     const deleteExpenseModal = document.querySelector('.delete-expense__modal');
@@ -538,7 +439,7 @@ export function initializeLegacyScript() {
     }
 
     function closeActiveModal() {
-      modalService.closeActiveModal();
+      // modalService.closeActiveModal();
     }
 
     function parseInputAmount(value) {
@@ -602,12 +503,6 @@ export function initializeLegacyScript() {
       return `${value}\u202F%`;
     }
 
-    // f: Window
-
-    function handleWindowResize() {
-      alignAddTransactionForms();
-    }
-
     // f: Emoji Picker
 
     const emojiField = {
@@ -629,7 +524,6 @@ export function initializeLegacyScript() {
     };
 
     const addExpenseEmojiField = Object.create(emojiField);
-    const addRepaymentEmojiField = Object.create(emojiField);
 
     addExpenseEmojiField.constructor(
       addExpenseEmojiContainer,
@@ -640,119 +534,7 @@ export function initializeLegacyScript() {
       addExpenseEmojiRemoveBtn
     );
 
-    addRepaymentEmojiField.constructor(
-      addRepaymentEmojiContainer,
-      addRepaymentEmojiInputField,
-      addRepaymentEmojiDefault,
-      addRepaymentEmojiDefaultBtn,
-      addRepaymentEmojiPickerSwitchBtn,
-      addRepaymentEmojiRemoveBtn
-    );
-
-    function openEmojiInput() {
-      if (isActive(activeEmojiField.emojiInputField)) {
-        return;
-      }
-      if (
-        !activeEmojiField.emojiDefaultField.classList.contains(HIDDEN_CLASS)
-      ) {
-        activeEmojiField.emojiDefaultField.classList.add(HIDDEN_CLASS);
-      }
-      if (activeEmojiField.emojiContainer.classList.contains(DEFAULT_CLASS)) {
-        activeEmojiField.emojiContainer.classList.remove(DEFAULT_CLASS);
-      }
-      activeEmojiField.emojiPickerSwitchBtn.classList.add(HIDDEN_CLASS);
-      activeEmojiField.emojiDefaultBtn.classList.add(HIDDEN_CLASS);
-      activeEmojiField.emojiInputField.classList.add(ACTIVE_CLASS);
-      activeEmojiField.emojiRemoveBtn.classList.add(ACTIVE_CLASS);
-    }
-
-    function restoreDefaultEmoji() {
-      activeEmojiField.emojiDefaultField.classList.remove(HIDDEN_CLASS);
-      activeEmojiField.emojiDefaultBtn.classList.add(HIDDEN_CLASS);
-      activeEmojiField.emojiPickerSwitchBtn.classList.add(HIDDEN_CLASS);
-      activeEmojiField.emojiRemoveBtn.classList.add(ACTIVE_CLASS);
-      activeEmojiField.emojiContainer.classList.add(DEFAULT_CLASS);
-    }
-
-    function removeEmoji() {
-      if (activeEmojiField.emojiContainer.classList.contains(DEFAULT_CLASS)) {
-        activeEmojiField.emojiDefaultField.classList.add(HIDDEN_CLASS);
-        activeEmojiField.emojiContainer.classList.remove(DEFAULT_CLASS);
-      } else {
-        activeEmojiField.emojiInputField.value = '';
-        activeEmojiField.emojiInputField.classList.remove(ACTIVE_CLASS);
-      }
-      activeEmojiField.emojiRemoveBtn.classList.remove(ACTIVE_CLASS);
-      activeEmojiField.emojiPickerSwitchBtn.classList.remove(HIDDEN_CLASS);
-      activeEmojiField.emojiDefaultBtn.classList.remove(HIDDEN_CLASS);
-      activeEmojiField = null;
-    }
-
-    function openEmojiPicker() {
-      if (isActive(emojiPickerContainer)) return;
-      emojiPickerContainer.classList.add(ACTIVE_CLASS);
-      document.addEventListener('click', clickOutsideEmojiPicker);
-    }
-
-    function closeEmojiPicker() {
-      if (!isActive(emojiPickerContainer)) return;
-      emojiPickerContainer.classList.remove(ACTIVE_CLASS);
-      document.removeEventListener('click', clickOutsideEmojiPicker);
-    }
-
-    function toggleEmojiPicker(event) {
-      !isActive(emojiPickerContainer) ? openEmojiPicker() : closeEmojiPicker();
-      event.stopPropagation();
-    }
-
-    function clickOutsideEmojiPicker(event) {
-      if (emojiPickerContainer.contains(event.target)) return;
-      closeEmojiPicker();
-    }
-
-    function handleEmojiSelect(emoji) {
-      openEmojiInput();
-      activeEmojiField.emojiInputField.value = emoji.native;
-      closeEmojiPicker();
-    }
-
     // f: Add Transaction
-
-    function alignAddTransactionForms() {
-      const isAddExpenseActive =
-        addExpenseForm.classList.contains(ACTIVE_CLASS);
-      const isAddRepaymentActive =
-        addRepaymentForm.classList.contains(ACTIVE_CLASS);
-
-      if (!isAddExpenseActive) {
-        addExpenseForm.classList.add(ACTIVE_CLASS);
-      }
-
-      if (!isAddRepaymentActive) {
-        addRepaymentForm.classList.add(ACTIVE_CLASS);
-      }
-
-      alignTransactionForms(
-        addExpenseMainForm,
-        addExpenseHiddenForms,
-        addExpenseFormModel
-      );
-
-      alignTransactionForms(
-        addRepaymentMainForm,
-        addRepaymentHiddenForms,
-        addRepaymentFormModel
-      );
-
-      if (!isAddExpenseActive) {
-        addExpenseForm.classList.remove(ACTIVE_CLASS);
-      }
-
-      if (!isAddRepaymentActive) {
-        addRepaymentForm.classList.remove(ACTIVE_CLASS);
-      }
-    }
 
     function countNoteLength(counter, inputText) {
       counter.textContent = inputText.length;
@@ -770,42 +552,16 @@ export function initializeLegacyScript() {
         : 'написать';
     }
 
-    function closeHiddenForm(isExpense) {
-      isExpense ? closeAddExpenseHiddenForm() : closeAddRepaymentHiddenForm();
-    }
-
     function handleTransactionNoteInput(noteForm) {
       removeWhiteSpace(noteForm.noteInput);
       countNoteLength(noteForm.counter, noteForm.noteInput.value);
       changeMainFormNoteButtonText(noteForm);
     }
 
-    function updateTransactionDateInputs() {
-      updateAddExpenseDateInput();
-      updateAddRepaymentDateInput();
-    }
-
     // f: Add Expense
 
     function openAddExpense() {
-      modalService.openModal(addExpenseForm);
-    }
-
-    function toggleAddExpenseHiddenForm(form, button) {
-      button.classList.contains(ACTIVE_CLASS)
-        ? closeAddExpenseHiddenForm()
-        : openAddExpenseHiddenForm(form, button);
-    }
-
-    function openAddExpenseHiddenForm(form, button) {
-      if (activeAddExpenseHiddenForm) {
-        closeAddExpenseHiddenForm();
-      }
-
-      form.classList.add(ACTIVE_CLASS);
-      button.classList.add(ACTIVE_CLASS);
-
-      activeAddExpenseHiddenForm = { form, button };
+      // modalService.openModal(addExpenseForm);
     }
 
     function handleAddExpenseTitleInput(event) {
@@ -869,18 +625,6 @@ export function initializeLegacyScript() {
       addExpenseFormModel.amount = amount;
       updatePaidByOnExpenseChange();
       updateSplitts();
-    }
-
-    function updateAddExpenseDateInput() {
-      if (!addExpenseDateInput) return;
-      addExpenseDateInput.setAttribute('max', todayString);
-      addExpenseDateInput.setAttribute('min', minTransactionDateString);
-      if (
-        addExpenseFormModel.date === null ||
-        addExpenseFormModel.date === ''
-      ) {
-        addExpenseDateInput.value = todayString;
-      }
     }
 
     function closeAddExpenseHiddenForm() {
@@ -1607,129 +1351,14 @@ export function initializeLegacyScript() {
       addExpenseSplittBalanceNoteAmount.classList.add(POSITIVE_CLASS);
     }
 
-    // f: Add Repayment
-
-    function openAddRepayment() {
-      modalService.openModal(addRepaymentForm);
-    }
-
-    function toggleAddRepaymentHiddenForm(form, button) {
-      button.classList.contains(ACTIVE_CLASS)
-        ? closeAddRepaymentHiddenForm()
-        : openAddRepaymentHiddenForm(form, button);
-    }
-
-    function openAddRepaymentHiddenForm(form, button) {
-      if (activeAddRepaymentHiddenForm) {
-        closeAddRepaymentHiddenForm();
-      }
-
-      form.classList.add(ACTIVE_CLASS);
-      button.classList.add(ACTIVE_CLASS);
-
-      activeAddRepaymentHiddenForm = { form, button };
-    }
-
-    function closeAddRepaymentHiddenForm() {
-      activeAddRepaymentHiddenForm.form.classList.remove(ACTIVE_CLASS);
-      activeAddRepaymentHiddenForm.button.classList.remove(ACTIVE_CLASS);
-      activeAddRepaymentHiddenForm = null;
-    }
-
-    function handleAddRepaymentFromChange(event) {
-      const selectedUserId = event.target.value;
-      const previousUserId = addRepaymentFormModel.userFrom;
-
-      addRepaymentFormModel.userFrom = selectedUserId;
-
-      const optionToDisable =
-        addRepaymentFormModel.optionsTo.get(selectedUserId);
-      optionToDisable.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
-      if (previousUserId !== null) {
-        const optionToActivate =
-          addRepaymentFormModel.optionsTo.get(previousUserId);
-        optionToActivate.removeAttribute(DISABLED_ATTRIBUTE);
-      }
-      updateAddRepaymentSubmitButton();
-    }
-
-    function handleAddRepaymentToChange(event) {
-      const selectedUserId = event.target.value;
-      const previousUserId = addRepaymentFormModel.userTo;
-
-      addRepaymentFormModel.userTo = selectedUserId;
-
-      const optionToDisable =
-        addRepaymentFormModel.optionsFrom.get(selectedUserId);
-      optionToDisable.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
-      if (previousUserId !== null) {
-        const optionToActivate =
-          addRepaymentFormModel.optionsFrom.get(previousUserId);
-        optionToActivate.removeAttribute(DISABLED_ATTRIBUTE);
-      }
-      updateAddRepaymentSubmitButton();
-    }
-
-    function handleAddRepaymentAmountInput(event) {
-      const cursorPosition = this.selectionStart;
-      const inputAmount = event.target.value;
-      const processedAmount = processInputAmount(inputAmount);
-      addRepaymentFormModel.amount = processedAmount;
-      const outputAmount = formatAmountForOutput(processedAmount);
-      this.value = outputAmount;
-      setAmountCursorPosition(inputAmount, outputAmount, cursorPosition, this);
-      updateAddRepaymentSubmitButton();
-    }
-
-    function updateAddRepaymentDateInput() {
-      if (!addRepaymentDateInput) return;
-
-      addRepaymentDateInput.setAttribute('max', todayString);
-      addRepaymentDateInput.setAttribute('min', minTransactionDateString);
-
-      if (
-        addRepaymentFormModel.date === null ||
-        addRepaymentFormModel.date === ''
-      ) {
-        addRepaymentDateInput.value = todayString;
-      }
-    }
-
-    function updateAddRepaymentSubmitButton() {
-      validateAddRepaymentSubmitButton();
-      renderAddRepaymentSubmitButton();
-    }
-
-    function validateAddRepaymentSubmitButton() {
-      const isValid =
-        addRepaymentFormModel.amount > 0 &&
-        addRepaymentFormModel.userFrom !== null &&
-        addRepaymentFormModel.userTo !== null;
-
-      addRepaymentFormModel.isValid = isValid;
-    }
-
-    function renderAddRepaymentSubmitButton() {
-      if (addRepaymentFormModel.isValid) {
-        addRepaymentSubmitButton.removeAttribute(DISABLED_ATTRIBUTE);
-        addRepaymentSubmitButton.classList.add(ACTIVE_CLASS);
-      } else {
-        addRepaymentSubmitButton.setAttribute(
-          DISABLED_ATTRIBUTE,
-          DISABLED_ATTRIBUTE
-        );
-        addRepaymentSubmitButton.classList.remove(ACTIVE_CLASS);
-      }
-    }
-
     // f: Delete Transactions: Expense
 
     function openDeleteExpense() {
-      modalService.openModal(deleteExpenseModal);
+      // modalService.openModal(deleteExpenseModal);
     }
 
     function handleDeleteExpenseCloseButtonClick() {
-      modalService.closeActiveModal();
+      // modalService.closeActiveModal();
     }
 
     function handleDeleteExpenseSubmitButtonClick() {
@@ -1743,7 +1372,7 @@ export function initializeLegacyScript() {
     }
 
     function handleDeleteRepaymentCloseButtonClick() {
-      modalService.closeActiveModal();
+      // modalService.closeActiveModal();
     }
 
     function handleDeleteRepaymentSubmitButtonClick() {
@@ -1827,7 +1456,7 @@ export function initializeLegacyScript() {
       let removeColumnAttribute = '';
 
       if (isFirstRow) {
-        avatarFile = users.get(currentUserId)?.avatar ?? DEFAULT_AVATAR;
+        const avatarFile = users.get(currentUserId)?.avatar ?? DEFAULT_AVATAR;
         avatar = IMAGES_PATH + avatarFile;
         dataUserId = currentUserId ? ` data-user-id="${currentUserId}"` : '';
         removeColumnAttribute = ' inactive';
@@ -1905,251 +1534,52 @@ export function initializeLegacyScript() {
       });
     }
 
-    // v: Add Expense: Splitt
-
-    function alignTransactionForms(mainForm, hiddenForms, model) {
-      const topMargin = calculateTransactionFormTopMargin(mainForm);
-      const mainFormRightMargin = calculateTransactionFormHorizontalMargin();
-      const hiddenFormLeftMargin = calculateTransactionHiddenFormLeftMargin();
-
-      mainForm.style.top = topMargin;
-      mainForm.style.right = mainFormRightMargin;
-
-      hiddenForms.forEach(hiddenForm => {
-        hiddenForm.style.top = topMargin;
-        hiddenForm.style.left = hiddenFormLeftMargin;
-      });
-
-      adjustTransactionEmojiMenu(model);
-    }
-
-    function adjustTransactionEmojiMenu(formModel) {
-      const emojiRowRect = formModel.emojiRow.getBoundingClientRect();
-      const emojiRowHeight = formModel.emojiRow.offsetHeight;
-
-      const emojiContainerTopMargin = Math.round(
-        emojiRowRect.top - emojiRowHeight * 1.8
-      );
-
-      emojiPickerContainer.style.top = `${emojiContainerTopMargin}px`;
-    }
-
-    function calculateTransactionFormTopMargin(form) {
-      const viewportHeight = window.innerHeight;
-      let heightRatio =
-        calculateTransactionFormTopMarginHeightRatio(viewportHeight);
-      const formHeight = form.offsetHeight;
-      const topMargin = Math.round((viewportHeight - formHeight) / heightRatio);
-
-      return `${topMargin}px`;
-    }
-
-    function calculateTransactionFormHorizontalMargin() {
-      const viewportWidth = window.innerWidth;
-      const rightMargin = Math.round(viewportWidth * (11 / 20));
-
-      return `${rightMargin}px`;
-    }
-
-    function calculateTransactionHiddenFormLeftMargin() {
-      const leftMargin = window.innerWidth / 2;
-      return `${leftMargin}px`;
-    }
-
-    function calculateTransactionFormTopMarginHeightRatio(viewportHeight) {
-      if (viewportHeight < 1050) {
-        return 2;
-      }
-      if (viewportHeight < 1500) {
-        return 3;
-      }
-      return 4;
-    }
-
-    // v: Add Repayment: Main Form
-
-    function createRepaymentOptions() {
-      const { optionsFrom, optionsTo } = generateRepaymentOptionsHTML();
-      addRepaymentSwitchFrom.innerHTML = optionsFrom;
-      addRepaymentSwitchTo.innerHTML = optionsTo;
-
-      addRepaymentOptionsToModel();
-      const optionToDisable =
-        addRepaymentFormModel.optionsTo.get(currentUserId);
-      optionToDisable.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
-    }
-
-    function addRepaymentOptionsToModel() {
-      const optionsFrom = addRepaymentSwitchFrom.options;
-      const optionsTo = addRepaymentSwitchTo.options;
-
-      [...optionsFrom].forEach(option => {
-        addRepaymentFormModel.optionsFrom.set(option.value, option);
-      });
-
-      [...optionsTo].forEach(option => {
-        if (option.value === '') return;
-        addRepaymentFormModel.optionsTo.set(option.value, option);
-      });
-    }
-
-    function generateRepaymentOptionsHTML() {
-      let optionsFrom = '';
-      let optionsTo =
-        '<option value="" selected disabled>-- выбрать --</option>\n';
-
-      users.forEach((userData, userId) => {
-        let selectedFrom = '';
-        let disabledTo = '';
-        let userNameFrom = userData.name;
-        let userNameTo = userData.name;
-
-        if (userId === currentUserId) {
-          selectedFrom = ' selected';
-          disabledTo = ' disabled';
-          userNameFrom = 'от вас';
-          userNameTo = 'вам';
-        }
-
-        optionsFrom += `<option value="${userId}"${selectedFrom}>${userNameFrom}</option>\n`;
-        optionsTo += `<option value="${userId}"${disabledTo}>${userNameTo}</option>\n`;
-      });
-
-      return { optionsFrom, optionsTo };
-    }
-
     // ----------------------
     // Load Content (load:)
     // ----------------------
 
-    // load: Add Expense / Add Repayment: Vertical Align
-    alignAddTransactionForms();
-
     // load: Add Expense / Add Repayment: Set Default Emojis
     addExpenseEmojiDefault.textContent = DEFAULT_EMOJI_EXPENSE;
-    addRepaymentEmojiDefault.textContent = DEFAULT_EMOJI_REPAYMENT;
 
     // load: Add Expense: Payer Form
     createFirstPayerRow();
-
-    // load: Add Repayment: Main Form
-    createRepaymentOptions();
-
-    // load: Auxiliary: Date
-
-    function formatDate(date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    function getMillisecondsUntilNextDay(now) {
-      const nextDay = new Date(now);
-      nextDay.setDate(nextDay.getDate() + 1);
-      nextDay.setHours(0, 0, 10, 0);
-
-      return nextDay - now;
-    }
-
-    function resetDate() {
-      const now = new Date();
-      today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      minTransactionDate = new Date(today);
-      minTransactionDate.setFullYear(today.getFullYear() - 5);
-
-      todayString = formatDate(today);
-      minTransactionDateString = formatDate(minTransactionDate);
-
-      updateTransactionDateInputs();
-      const millisecondsUntilNextDay = getMillisecondsUntilNextDay(now);
-      setTimeout(resetDate, millisecondsUntilNextDay);
-    }
-    resetDate();
 
     // ----------------------
     // Event Listeners (el:)
     // ----------------------
 
-    // el: Auxiliary
-
-    function toggleHiddenForm(button, transactionType) {
-      button.addEventListener('click', function (event) {
-        event.preventDefault();
-        const hiddenFormName = this.dataset.form;
-        const hiddenForm = document.querySelector(
-          `.add-${transactionType}__form_${hiddenFormName}`
-        );
-        transactionType === 'expense'
-          ? toggleAddExpenseHiddenForm(hiddenForm, this)
-          : toggleAddRepaymentHiddenForm(hiddenForm, this);
-      });
-    }
-
-    // el: Window
-
-    window.addEventListener('resize', handleWindowResize);
-
     // el: Emoji Picker
 
     addExpenseEmojiPickerSwitchBtn.addEventListener('click', function (event) {
-      activeEmojiField = addExpenseEmojiField;
-      toggleEmojiPicker(event);
+      // activeEmojiField = addExpenseEmojiField;
+      // toggleEmojiPicker(event);
     });
 
     addExpenseEmojiInputField.addEventListener('click', function (event) {
-      activeEmojiField = addExpenseEmojiField;
-      toggleEmojiPicker(event);
+      // activeEmojiField = addExpenseEmojiField;
+      // toggleEmojiPicker(event);
     });
 
     addExpenseEmojiDefault.addEventListener('click', function (event) {
-      activeEmojiField = addExpenseEmojiField;
-      toggleEmojiPicker(event);
+      // activeEmojiField = addExpenseEmojiField;
+      // toggleEmojiPicker(event);
     });
 
     addExpenseEmojiDefaultBtn.addEventListener('click', function () {
-      activeEmojiField = addExpenseEmojiField;
-      restoreDefaultEmoji();
+      // activeEmojiField = addExpenseEmojiField;
+      // restoreDefaultEmoji();
     });
 
     addExpenseEmojiRemoveBtn.addEventListener('click', function () {
-      activeEmojiField = addExpenseEmojiField;
-      removeEmoji();
-    });
-
-    addRepaymentEmojiPickerSwitchBtn.addEventListener(
-      'click',
-      function (event) {
-        activeEmojiField = addRepaymentEmojiField;
-        toggleEmojiPicker(event);
-      }
-    );
-
-    addRepaymentEmojiInputField.addEventListener('click', function (event) {
-      activeEmojiField = addRepaymentEmojiField;
-      toggleEmojiPicker(event);
-    });
-
-    addRepaymentEmojiDefault.addEventListener('click', function (event) {
-      activeEmojiField = addRepaymentEmojiField;
-      toggleEmojiPicker(event);
-    });
-
-    addRepaymentEmojiDefaultBtn.addEventListener('click', function () {
-      activeEmojiField = addRepaymentEmojiField;
-      restoreDefaultEmoji();
-    });
-
-    addRepaymentEmojiRemoveBtn.addEventListener('click', function () {
-      activeEmojiField = addRepaymentEmojiField;
-      removeEmoji();
+      // activeEmojiField = addExpenseEmojiField;
+      // removeEmoji();
     });
 
     // el: Add Expense: Main Form
 
     addExpenseBtn.addEventListener('click', openAddExpense);
 
-    addExpenseBtnEdit.forEach(button => toggleHiddenForm(button, 'expense'));
+    // addExpenseBtnEdit.forEach(button => toggleHiddenForm(button, 'expense'));
 
     addExpenseHiddenFormBtnClose.forEach(button => {
       button.addEventListener('click', function (event) {
@@ -2213,39 +1643,6 @@ export function initializeLegacyScript() {
 
     addExpenseNoteInput.addEventListener('input', () =>
       handleTransactionNoteInput(addExpenseNoteForm)
-    );
-
-    // el: Add Repayment: Main Form
-
-    addRepaymentBtn.addEventListener('click', openAddRepayment);
-
-    addRepaymentBtnEdit.forEach(button =>
-      toggleHiddenForm(button, 'repayment')
-    );
-
-    addRepaymentHiddenFormBtnClose.forEach(button => {
-      button.addEventListener('click', function (event) {
-        event.preventDefault();
-        closeAddRepaymentHiddenForm();
-      });
-    });
-
-    addRepaymentSwitchFrom.addEventListener(
-      'change',
-      handleAddRepaymentFromChange
-    );
-
-    addRepaymentSwitchTo.addEventListener('change', handleAddRepaymentToChange);
-
-    addRepaymentAmountInput.addEventListener(
-      'input',
-      handleAddRepaymentAmountInput
-    );
-
-    // el: Add Repayment: Note Form
-
-    addRepaymentNoteInput.addEventListener('input', () =>
-      handleTransactionNoteInput(addRepaymentNoteForm)
     );
 
     // el: Delete Transactions

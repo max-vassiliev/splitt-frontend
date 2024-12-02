@@ -1,7 +1,7 @@
 import balanceModel from '../../model/balance/UserBalanceModel.js';
 import userSummaryView from '../../view/summary/UserSummaryView.js';
 import groupSummaryView from '../../view/summary/GroupSummaryView.js';
-import userSummaryHandler from './UserSummaryHandler.js';
+import eventBus from '../../util/EventBus.js';
 
 class SummaryController {
   init() {
@@ -25,10 +25,14 @@ class SummaryController {
   }
 
   #bindEventHandlers() {
-    userSummaryView.addHandlerContainerClick(
-      userSummaryHandler.handleContainerClick
-    );
+    userSummaryView.addHandlerContainerClick(this.#handleContainerClick);
   }
+
+  #handleContainerClick = event => {
+    const selectedUserId = userSummaryView.getSelectedUserId(event.target);
+    if (!selectedUserId) return;
+    eventBus.emit('settleDebt', selectedUserId);
+  };
 }
 
 export default new SummaryController();

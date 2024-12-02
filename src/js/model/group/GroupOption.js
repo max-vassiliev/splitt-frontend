@@ -2,7 +2,7 @@ import {
   isNonEmptyString,
   isPositiveInteger,
 } from '../../util/SplittValidator';
-import { AppUtils } from '../../util/AppUtils';
+import TypeParser from '../util/TypeParser';
 
 class GroupOption {
   #id;
@@ -27,7 +27,7 @@ class GroupOption {
    * @param {number | BigInt} value — Must be a positive number or BigInt value.
    */
   set id(value) {
-    this.#id = AppUtils.parseId(value);
+    this.#id = TypeParser.parseId(value);
   }
 
   /**
