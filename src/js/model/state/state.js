@@ -1,11 +1,21 @@
-import { AppUtils } from '../../util/AppUtils.js';
-import { isPositiveInteger } from '../../util/SplittValidator.js';
-import { STATUS_NEUTRAL, STATUS_OPTIONS } from '../../util/Config.js';
+import TypeParser from '../util/TypeParser.js';
+import {
+  isPositiveInteger,
+  isPositiveNumber,
+} from '../../util/SplittValidator.js';
+import {
+  STATUS_NEUTRAL,
+  STATUS_OPTIONS,
+  TRANSACTION_TYPES,
+  MODAL_IDS,
+} from '../../util/Config.js';
 import UserBalance from '../balance/UserBalance.js';
 import Group from '../group/Group.js';
 import GroupOption from '../group/GroupOption.js';
 import Expense from '../transaction/Expense.js';
-import Repayment from '../transaction/Repayment.js';
+import Repayment from '../repayment/Repayment.js';
+import repaymentFormCollection from './repayment/RepaymentFormCollection.js';
+import dateCollection from './date/DateCollection.js';
 
 class State {
   #userId = null;
@@ -16,7 +26,12 @@ class State {
   #members = new Map();
   #balances = new Map();
   #transactions = [];
-  #activeModal = null;
+  #transactionsCache = new Map();
+  #activeModalId = null;
+  #modalCloseEvents = new Map();
+  #repaymentForms = repaymentFormCollection;
+  #activeEmojiFieldId = null;
+  #dates = dateCollection;
   #page = 1;
   #transactionsPerPage = 10;
   #locale = 'ru-RU';
@@ -35,7 +50,7 @@ class State {
    * @param {number|BigInt} value — Must be a positive number or a BigInt value.
    */
   set userId(value) {
-    this.#userId = AppUtils.parseId(value);
+    this.#userId = TypeParser.parseId(value);
   }
 
   /**
@@ -208,6 +223,23 @@ class State {
   }
 
   /**
+   * Get's a transaction by its ID.
+   * @param {bigint} id The transaction ID.
+   * @returns {Expense|Repayment|null} An instance of Expense or Repayment, or null if not found.
+   */
+  getTransactionById(id) {
+    if (!isPositiveNumber(id)) {
+      throw new Error(
+        `Invalid ID: expected a positive number or BigInt. Received: ${id} (type: ${typeof id}).`
+      );
+    }
+    const offset = (this.currentPage - 1) * this.itemsPerPage;
+    const selectTransactions = this.#transactions.slice(offset);
+
+    return selectTransactions.find(t => t.id === id) || null;
+  }
+
+  /**
    * Sets the "transactions" array.
    * @param {Array} value — Must be an array with Expense or Repayment instances or an empty array.
    */
@@ -243,25 +275,47 @@ class State {
   }
 
   /**
-   * Gets the active modal.
-   * @returns {HTMLElement|null} An HTMLElement of the active modal or null.
+   * Gets the transactions cache map.
+   * @returns {Map<bigint, (Expense|Repayment)>} The transactions cache map:
+   * - Key: The transaction's ID (bigint)
+   * - Value: The transaction, which can be either an Expense or a Repayment instance
    */
-  get activeModal() {
-    return this.#activeModal;
+  get transactionsCache() {
+    return this.#transactionsCache;
   }
 
   /**
-   * Sets the active modal.
-   * @param {HTMLElement|null} value — The modal element to set as active. Must not be an HTMLElement or null.
-   * @throws {Error} Throws an error if the provided value is neither HTMLElement nor null.
+   * Gets the active modal.
+   * @returns {number|null} An the active modal ID or null.
    */
-  set activeModal(value) {
-    if (value !== null && !(value instanceof HTMLElement)) {
+  get activeModalId() {
+    return this.#activeModalId;
+  }
+
+  /**
+   * Sets the active modal ID.
+   * @param {number|null} modalId — The modal ID to set as active. Must be null or one of {@link MODAL_IDS}.
+   * @throws {Error} Throws an error if the provided value is neither null nor a valid modal ID.
+   */
+  set activeModalId(modalId) {
+    if (modalId !== null && !MODAL_IDS.has(modalId)) {
       throw new Error(
-        `Invalid active modal element: must an HTMLElement or null. Received: ${value} (type: ${typeof value})`
+        `Invalid active modal ID. Expected null or one of: ${[
+          ...MODAL_IDS,
+        ].join(', ')}. Received: ${modalId} (type: ${typeof modalId}).`
       );
     }
-    this.#activeModal = value;
+    this.#activeModalId = modalId;
+  }
+
+  /**
+   * Gets the map with events associated with closing certain modals.
+   * @returns {Map<number, string>} The modalCloseEvents map.
+   * - Key: The modal's ID (number)
+   * - Value: The event associated with closing the modal.
+   */
+  get modalCloseEvents() {
+    return this.#modalCloseEvents;
   }
 
   /**
@@ -306,6 +360,46 @@ class State {
       );
     }
     this.#transactionsPerPage = value;
+  }
+
+  /**
+   * Gets the repayment forms collection from the 'repaymentForms' field.
+   * @returns {repaymentFormCollection} The repayment forms collection object.
+   */
+  get repaymentForms() {
+    return this.#repaymentForms;
+  }
+
+  /**
+   * Gets the active emoji field ID.
+   * @returns {string|null} One of {@link TRANSACTION_TYPES} or null, if not assigned.
+   */
+  get activeEmojiFieldId() {
+    return this.#activeEmojiFieldId;
+  }
+
+  /**
+   * Sets the active emoji field ID.
+   * @param {string|null} value One of {@link TRANSACTION_TYPES} or null, to clear the field.
+   * @throws {Error} If the value is not valid.
+   */
+  set activeEmojiFieldId(value) {
+    if (!TRANSACTION_TYPES.has(value) && value !== null) {
+      throw new Error(
+        `Invalid value for "activeEmojiFieldId": "${value}" (${typeof value}). Expected null or one of: ${Array.from(
+          TRANSACTION_TYPES
+        ).join(', ')}.`
+      );
+    }
+    this.#activeEmojiFieldId = value;
+  }
+
+  /**
+   * Get the 'dates' field.
+   * @returns {dateCollection} The date collection object.
+   */
+  get dates() {
+    return this.#dates;
   }
 
   /**

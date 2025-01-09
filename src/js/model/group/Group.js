@@ -2,7 +2,7 @@ import {
   isNonEmptyString,
   isNonEmptyStringOrNull,
 } from '../../util/SplittValidator.js';
-import { AppUtils } from '../../util/AppUtils.js';
+import TypeParser from '../util/TypeParser.js';
 
 class Group {
   #id;
@@ -20,7 +20,7 @@ class Group {
    * @param {number | BigInt} value — Must be a positive number or BigInt value.
    */
   set id(value) {
-    this.#id = AppUtils.parseId(value);
+    this.#id = TypeParser.parseId(value);
   }
 
   /**

@@ -1,6 +1,9 @@
-import Repayment from '../../model/transaction/Repayment.js';
-import { AppUtils } from '../../util/AppUtils';
-import { formatAmountForOutput, getAmountColor } from '../util/RenderHelper.js';
+import Repayment from '../../model/repayment/Repayment.js';
+import {
+  formatAmountForOutput,
+  formatDateForDisplay,
+  getAmountColor,
+} from '../util/RenderHelper.js';
 
 class RepaymentRowView {
   #data;
@@ -47,7 +50,7 @@ class RepaymentRowView {
    * @returns {Object} - The formatted data object.
    */
   #getFormattedData() {
-    const date = AppUtils.formatDateForDisplay(this.#data.repayment.date);
+    const date = formatDateForDisplay(this.#data.repayment.date);
     const payerName = this.#getPayerName();
     const recipientName = this.#getRecipientName();
     const amount = this.#getFormattedAmount();
@@ -119,7 +122,9 @@ class RepaymentRowView {
    */
   #getHTML(rowData) {
     return `
-        <tr class="transactions-table__row repayment" title="редактировать">
+        <tr class="transactions-table__row repayment" title="редактировать" data-transaction-id="${
+          this.#data.repayment.id
+        }">
           <td class="transactions-table__delete" title="удалить">
             <div
               class="transactions-table__delete-btn material-symbols-outlined"

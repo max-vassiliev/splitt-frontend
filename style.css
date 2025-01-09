@@ -553,6 +553,34 @@ header {
   text-align: center;
   color: #fff;
   padding: 2rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.add-transaction__form_header_text {
+  flex: 1;
+  text-align: center;
+}
+
+.add-transaction__form_header_icon-reset {
+  position: absolute;
+  right: 0;
+  padding-right: 2.5rem;
+  font-size: 2.2rem;
+  margin-left: auto;
+  text-align: right;
+  cursor: pointer;
+  transition: transform 0.1s ease-in;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  width: 80px;
+  margin-top: -0.5rem;
+  height: 4rem;
+}
+
+.add-transaction__form_header_icon-reset:active {
+  transform: translateY(1%);
 }
 
 .add-transaction__form_main .add-transaction__form_body {
@@ -579,7 +607,28 @@ header {
   font-size: 1.4rem;
   color: #555;
   font-weight: 600;
-  width: 13rem;
+  width: 10.2rem;
+}
+
+.add-transaction__form_field_icon-reset {
+  font-variation-settings: 'wght' 300;
+  font-size: 1.8rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  width: 2.8rem;
+  justify-content: right;
+  color: #bbb;
+  cursor: pointer;
+}
+
+.add-transaction__form_field_icon-reset:hover {
+  color: #888;
+  font-variation-settings: 'wght' 400;
+}
+
+.add-transaction__form_field_icon-reset:active {
+  color: #666;
 }
 
 .add-transaction__form_input-container {
@@ -1209,6 +1258,7 @@ header {
 
 .emoji-input.active {
   display: inline-flex;
+  cursor: pointer;
 }
 
 .emoji-default {
@@ -1391,6 +1441,18 @@ header {
 .add-repayment__form_hidden_header,
 .add-repayment__form_note__btn--save.active {
   background-color: #5c9144;
+}
+
+.add-transaction__form_header_icon-reset.repayment-form-main:hover,
+.add-transaction__form_header_icon-reset.repayment-hidden:hover {
+  color: #c9dec1;
+}
+
+.add-transaction__form_header_icon-reset.repayment-main:active {
+  color: #b2c9a8;
+}
+.add-transaction__form_header_icon-reset.repayment-hidden:active {
+  color: #8cbf74;
 }
 
 .add-repayment__btn-edit.active {

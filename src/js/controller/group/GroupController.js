@@ -1,38 +1,27 @@
 import groupModel from '../../model/group/GroupModel.js';
 import groupHeaderView from '../../view/group/GroupHeaderView.js';
 import groupModalView from '../../view/group/GroupModalView.js';
-import modalService from '../util/ModalService.js';
+import modalView from '../../view/page/ModalView.js';
+import eventBus from '../../util/EventBus.js';
+import { MODAL_ID_GROUP } from '../../util/Config.js';
 import { isNumericString } from '../../util/SplittValidator.js';
 
 class GroupController {
-  constructor() {
-    this.#openGroupModal = this.#openGroupModal.bind(this);
-    this.#closeGroupModal = this.#closeGroupModal.bind(this);
-    this.#selectGroup = this.#selectGroup.bind(this);
-    this.#loadGroupOptions = this.#loadGroupOptions.bind(this);
-  }
-
-  init() {
+  init = () => {
     this.#loadData();
     this.#bindEventHandlers();
-  }
+  };
 
   #loadData = () => {
     const groupData = groupModel.getCurrentGroupData();
     groupHeaderView.render(groupData);
     groupModalView.render(groupData);
+    this.#registerModal();
   };
 
-  #bindEventHandlers = () => {
-    groupHeaderView.addHandlerClick(this.#openGroupModal);
-    groupModalView.addHandlerGroupModalCloseBtnClick(this.#closeGroupModal);
-    groupModalView.addHandlerGroupSwitchChange(this.#selectGroup);
-  };
-
-  #openGroupModal = async () => {
-    const groupModalElement = groupModalView.getGroupModal();
-    modalService.openModal(groupModalElement);
-    await this.#loadGroupOptions();
+  #registerModal = () => {
+    const modalElement = groupModalView.getGroupModal();
+    modalView.registerModal(MODAL_ID_GROUP, modalElement);
   };
 
   #loadGroupOptions = async () => {
@@ -41,8 +30,19 @@ class GroupController {
     groupModalView.renderSwitchOptions(groupOptions);
   };
 
+  #bindEventHandlers = () => {
+    groupHeaderView.addHandlerClick(this.openGroupModal);
+    groupModalView.addHandlerGroupModalCloseBtnClick(this.#closeGroupModal);
+    groupModalView.addHandlerGroupSwitchChange(this.#selectGroup);
+  };
+
+  openGroupModal = async () => {
+    eventBus.emit('openModal', MODAL_ID_GROUP);
+    await this.#loadGroupOptions();
+  };
+
   #closeGroupModal = () => {
-    modalService.closeActiveModal();
+    eventBus.emit('closeActiveModal');
   };
 
   #selectGroup = event => {

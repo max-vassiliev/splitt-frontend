@@ -1,7 +1,7 @@
 import Expense from './Expense.js';
-import Repayment from './Repayment.js';
-import { AppUtils } from '../../util/AppUtils.js';
-import RepaymentParty from './RepaymentParty.js';
+import Repayment from '../repayment/Repayment.js';
+import TypeParser from '../util/TypeParser.js';
+import RepaymentParty from '../repayment/RepaymentParty.js';
 
 class TransactionManager {
   #users;
@@ -55,7 +55,7 @@ class TransactionManager {
     expense.id = input.id;
     expense.amount = input.amount;
     expense.currentUserBalance = input.currentUserBalance;
-    expense.date = AppUtils.parseDate(input.date);
+    expense.date = TypeParser.parseDate(input.date);
     expense.emoji = input.emoji;
     expense.title = input.title;
 
@@ -68,7 +68,7 @@ class TransactionManager {
     repayment.id = input.id;
     repayment.amount = input.amount;
     repayment.currentUserBalance = input.currentUserBalance;
-    repayment.date = AppUtils.parseDate(input.date);
+    repayment.date = TypeParser.parseDate(input.date);
     repayment.emoji = input.emoji;
     repayment.payer = this.#initializeRepaymentParty(input.payerId);
     repayment.recipient = this.#initializeRepaymentParty(input.recipientId);
@@ -77,7 +77,7 @@ class TransactionManager {
   }
 
   #initializeRepaymentParty(userId) {
-    const partyId = AppUtils.parseId(userId);
+    const partyId = TypeParser.parseId(userId);
     const isCurrentUser = partyId === this.#currentUserId ? true : false;
     const name = this.#users.get(partyId)?.name || null;
     if (!name) {

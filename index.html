@@ -170,7 +170,6 @@
                 <input
                   class="add-transaction__form_input-text input-amount add-expense-amount"
                   type="text"
-                  value="0,00&nbsp;₽"
                 />
               </div>
             </div>
@@ -748,12 +747,28 @@
         <!-- ADD REPAYMENT: Main -->
         <div class="add-transaction__form_main add-repayment__form_main">
           <div class="add-transaction__form_header add-repayment__form_header">
-            Вернуть долг
+            <div
+              class="add-transaction__form_header_text add-repayment__form_header_text"
+            >
+              Вернуть долг
+            </div>
+            <div
+              class="add-transaction__form_header_icon-reset reset-repayment repayment-form-main material-symbols-outlined invisible"
+              title="сбросить все"
+            >
+              sync
+            </div>
           </div>
           <!-- ADD REPAYMENT: Main (default)-->
           <form class="add-transaction__form_body">
             <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">Сумма</label>
+              <div
+                class="add-transaction__form_field_icon-reset reset-repayment-amount material-symbols-outlined invisible"
+                title="сбросить"
+              >
+                sync
+              </div>
               <div class="add-transaction__form_input-container">
                 <input
                   class="add-transaction__form_input-text input-amount add-repayment-amount"
@@ -765,6 +780,12 @@
             </div>
             <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">Дата</label>
+              <div
+                class="add-transaction__form_field_icon-reset reset-repayment-date material-symbols-outlined invisible"
+                title="сбросить"
+              >
+                sync
+              </div>
               <div class="add-transaction__form_input-container">
                 <input
                   class="add-transaction__form_input-text add-transaction__form_input-date add-repayment-date"
@@ -775,14 +796,16 @@
             <div class="add-transaction__form_field add-repayment-emoji-row">
               <label class="add-transaction__form_label">Значок</label>
               <div
-                class="add-transaction__form_input-container add-repayment-emoji-container default"
+                class="add-transaction__form_field_icon-reset reset-repayment-emoji material-symbols-outlined invisible"
+                title="сбросить"
               >
-                <div
-                  class="emoji-default add-repayment-emoji-default"
-                  title="выбрать"
-                ></div>
+                sync
+              </div>
+              <div
+                class="add-transaction__form_input-container add-repayment-emoji-container"
+              >
                 <input
-                  class="add-transaction__form_input-text emoji-input add-repayment"
+                  class="add-transaction__form_input-text emoji-input add-repayment active"
                   type="text"
                   name="emoji-input"
                   title="выбрать"
@@ -810,27 +833,49 @@
             </div>
             <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">От кого</label>
+              <div
+                class="add-transaction__form_field_icon-reset reset-repayment-payer material-symbols-outlined invisible"
+                title="сбросить"
+              >
+                sync
+              </div>
               <div class="add-transaction__form_input-container">
                 <select
                   class="add-transaction__form_input-switch"
                   id="add-repayment__switch-from"
-                ></select>
+                >
+                  <option value="default" disabled>-- выбрать --</option>
+                </select>
               </div>
             </div>
             <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">Кому</label>
+              <div
+                class="add-transaction__form_field_icon-reset reset-repayment-recipient material-symbols-outlined invisible"
+                title="сбросить"
+              >
+                sync
+              </div>
               <div class="add-transaction__form_input-container">
                 <select
                   class="add-transaction__form_input-switch"
                   id="add-repayment__switch-to"
-                ></select>
+                >
+                  <option value="default" disabled>-- выбрать --</option>
+                </select>
               </div>
             </div>
             <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">Комментарий</label>
+              <div
+                class="add-transaction__form_field_icon-reset reset-repayment-note material-symbols-outlined invisible"
+                title="сбросить"
+              >
+                sync
+              </div>
               <div class="add-transaction__form_input-container">
                 <button
-                  class="add-transaction__form_btn-edit add-repayment__btn-edit"
+                  class="add-transaction__form_btn-edit add-repayment__btn-edit hidden-form-btn__note"
                   data-form="note"
                 >
                   написать
@@ -839,7 +884,7 @@
             </div>
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close btn__close_popup"
+                class="add-transaction__form_btn-close btn__close_popup add-repayment__btn--close"
                 type="button"
               >
                 закрыть
@@ -900,7 +945,15 @@
           <div
             class="add-transaction__form_header add-repayment__form_hidden_header"
           >
-            Комментарий
+            <div class="add-repayment__form_hidden_header_text">
+              Комментарий
+            </div>
+            <div
+              class="add-transaction__form_header_icon-reset repayment-hidden reset-repayment-note repayment-form-note material-symbols-outlined invisible"
+              title="сбросить"
+            >
+              sync
+            </div>
           </div>
           <form class="add-transaction__form_body">
             <div class="add-transaction__form_note-container">

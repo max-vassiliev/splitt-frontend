@@ -1,3 +1,5 @@
+import eventBus from '../../util/EventBus.js';
+
 class TransactionsHandler {
   constructor() {
     this.handleContainerClick = this.handleContainerClick.bind(this);
@@ -10,7 +12,7 @@ class TransactionsHandler {
     }
     const transactionRow = event.target.closest('.transactions-table__row');
     if (transactionRow) {
-      this.#handleEditTransactionClick(transactionRow, event);
+      this.#handleEditTransactionClick(transactionRow);
       return;
     }
     const transactionsEmpty = event.target.closest('.transactions__empty');
@@ -29,11 +31,12 @@ class TransactionsHandler {
     }
   }
 
-  #handleEditTransactionClick(transactionRow, event) {
+  #handleEditTransactionClick(transactionRow) {
     if (!transactionRow) return;
 
     if (transactionRow.classList.contains('repayment')) {
-      console.log('edit repayment');
+      const repaymentId = transactionRow.dataset.transactionId;
+      eventBus.emit('openEditRepayment', repaymentId);
     } else {
       console.log('edit expense');
     }

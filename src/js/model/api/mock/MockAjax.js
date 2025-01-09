@@ -1,5 +1,14 @@
-import { MOCK_DATA_PAGE_FULL, MOCK_DATA_GROUPS } from './MockAjaxConfig.js';
-import { API_URL, API_PATH_GROUP, API_PATH_FULL_PAGE } from '../ApiConfig.js';
+import {
+  MOCK_DATA_PAGE_FULL,
+  MOCK_DATA_GROUPS,
+  MOCK_DATA_REPAYMENT_10,
+} from './MockAjaxConfig.js';
+import {
+  API_URL,
+  API_PATH_GROUP,
+  API_PATH_REPAYMENT,
+  API_PATH_FULL_PAGE,
+} from '../ApiConfig.js';
 
 class MockAjax {
   #mockDataGet;
@@ -42,9 +51,15 @@ class MockAjax {
   #setMockDataGet() {
     const fullPageEndpoint = `${API_URL}/${API_PATH_GROUP}/1/${API_PATH_FULL_PAGE}`;
     const groupsEndpoint = `${API_URL}/${API_PATH_GROUP}`;
+    const repayment10 = `${API_URL}/${API_PATH_GROUP}/1/${API_PATH_REPAYMENT}/10`;
+    const repayment7 = `${API_URL}/${API_PATH_GROUP}/1/${API_PATH_REPAYMENT}/7`;
+    const repayment3 = `${API_URL}/${API_PATH_GROUP}/1/${API_PATH_REPAYMENT}/3`;
 
     this.#mockDataGet.set(fullPageEndpoint, MOCK_DATA_PAGE_FULL);
     this.#mockDataGet.set(groupsEndpoint, MOCK_DATA_GROUPS);
+    this.#mockDataGet.set(repayment10, MOCK_DATA_REPAYMENT_10);
+    this.#mockDataGet.set(repayment7, MOCK_DATA_REPAYMENT_10);
+    this.#mockDataGet.set(repayment3, MOCK_DATA_REPAYMENT_10);
   }
 }
 

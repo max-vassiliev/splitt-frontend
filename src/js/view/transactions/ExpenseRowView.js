@@ -1,6 +1,9 @@
 import Expense from '../../model/transaction/Expense.js';
-import { AppUtils } from '../../util/AppUtils';
-import { formatAmountForOutput, getAmountColor } from '../util/RenderHelper.js';
+import {
+  formatAmountForOutput,
+  formatDateForDisplay,
+  getAmountColor,
+} from '../util/RenderHelper.js';
 
 class ExpenseRowView {
   #data;
@@ -45,7 +48,7 @@ class ExpenseRowView {
    * @returns {Object} The formatted data object.
    */
   #getFormattedData() {
-    const date = AppUtils.formatDateForDisplay(this.#data.expense.date);
+    const date = formatDateForDisplay(this.#data.expense.date);
     const amount = this.#getFormattedAmount();
     const balance = this.#getFormattedBalance();
     const balanceColor = getAmountColor(this.#data.expense.currentUserBalance);

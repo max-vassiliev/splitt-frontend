@@ -1,4 +1,4 @@
-import { AppUtils } from '../../util/AppUtils.js';
+import TypeParser from '../util/TypeParser.js';
 
 class UserBalance {
   #userId;
@@ -16,7 +16,7 @@ class UserBalance {
    * @param {number | BigInt} value — Must be a positive number or BigInt value.
    */
   set userId(value) {
-    this.#userId = AppUtils.parseId(value);
+    this.#userId = TypeParser.parseId(value);
   }
 
   /**
