@@ -5,10 +5,11 @@ import groupController from './group/GroupController.js';
 import summaryController from './summary/SummaryController.js';
 import transactionsController from './transactions/TransactionsController.js';
 import paginationController from './pagination/PaginationController.js';
-import repaymentContoller from './repayment/RepaymentController.js';
-import emojiController from './emoji/EmojiController.js';
+import expenseController from './form/expense/ExpenseController.js';
+import repaymentContoller from './form/repayment/RepaymentController.js';
+import emojiController from './form/emoji/EmojiController.js';
 import eventBus from '../util/EventBus.js';
-import { MODAL_CLOSE_REPAYMENT } from '../util/Config.js';
+import { EVENT_REPAYMENT_EMOJI_EDIT } from '../util/Config.js';
 
 class MainController {
   init = async () => {
@@ -25,6 +26,7 @@ class MainController {
       paginationController.init();
       emojiController.init();
       repaymentContoller.init();
+      expenseController.init();
 
       this.#alignTransactionForms();
     } catch (error) {
@@ -41,7 +43,6 @@ class MainController {
     this.#bindSettleDebt();
     this.#bindOpenEditRepayment();
     this.#bindRepaymentFormEmojiEdit();
-    this.#bindRepaymentFormClosed();
     this.#bindDateReset();
     this.#bindEmojiRegisterField();
     this.#bindEmojiSetTopMargin();
@@ -63,16 +64,18 @@ class MainController {
   };
 
   #bindAlignTransactionForms = () => {
-    pageController.on('alignTransactionForms', this.#alignTransactionForms);
+    // pageController.on('alignTransactionForms', this.#alignTransactionForms);
+    eventBus.on('alignTransactionForms', this.#alignTransactionForms);
   };
 
   #alignTransactionForms = () => {
+    expenseController.alignForm();
     repaymentContoller.alignForm();
     emojiController.alignContainer();
   };
 
   #bindAlignEmojiContainer = () => {
-    repaymentContoller.on('alignEmojiContainer', () => {
+    eventBus.on('alignEmojiContainer', () => {
       emojiController.alignContainer();
     });
   };
@@ -84,7 +87,7 @@ class MainController {
   };
 
   #bindGroupSettingsLinkClick = () => {
-    headerController.on('groupSettingsLinkClick', () => {
+    eventBus.on('groupSettingsLinkClick', () => {
       groupController.openGroupModal();
     });
   };
@@ -102,14 +105,8 @@ class MainController {
   };
 
   #bindRepaymentFormEmojiEdit = () => {
-    eventBus.on('repaymentFormEmojiEdited', editResponse => {
+    eventBus.on(EVENT_REPAYMENT_EMOJI_EDIT, editResponse => {
       repaymentContoller.handleEmojiEdit(editResponse);
-    });
-  };
-
-  #bindRepaymentFormClosed = () => {
-    eventBus.on(MODAL_CLOSE_REPAYMENT, () => {
-      repaymentContoller.cleanupOnFormClose();
     });
   };
 
@@ -126,19 +123,19 @@ class MainController {
   };
 
   #bindEmojiPickerToggle = () => {
-    repaymentContoller.on('emojiPickerToggle', () => {
+    eventBus.on('emojiPickerToggle', () => {
       emojiController.toggleEmojiPicker();
     });
   };
 
   #bindEmojiRestoreDefault = () => {
-    repaymentContoller.on('emojiRestoreDefault', defaultEmoji => {
+    eventBus.on('emojiRestoreDefault', defaultEmoji => {
       emojiController.restoreDefaultEmoji(defaultEmoji);
     });
   };
 
   #bindEmojiRemove = () => {
-    repaymentContoller.on('emojiRemove', () => {
+    eventBus.on('emojiRemove', () => {
       emojiController.handleEmojiRemove();
     });
   };

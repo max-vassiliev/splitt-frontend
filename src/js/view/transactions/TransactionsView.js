@@ -1,4 +1,4 @@
-import Repayment from '../../model/repayment/Repayment.js';
+import Repayment from '../../model/state/repayment/Repayment.js';
 import repaymentView from './RepaymentRowView.js';
 import expenseView from './ExpenseRowView.js';
 

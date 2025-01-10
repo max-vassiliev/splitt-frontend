@@ -1,10 +1,9 @@
 import userModel from '../../model/user/UserModel.js';
 import headerView from '../../view/header/HeaderView.js';
-import { EventEmitter } from 'events';
+import eventBus from '../../util/EventBus.js';
 
-class HeaderController extends EventEmitter {
+class HeaderController {
   constructor() {
-    super();
     this.handleClickOutsideMenuPopup =
       this.handleClickOutsideMenuPopup.bind(this);
     this.openMenuPopup = this.openMenuPopup.bind(this);
@@ -62,7 +61,7 @@ class HeaderController extends EventEmitter {
   handleGroupSettingsLinkClick(event) {
     event.preventDefault();
     this.closeMenuPopup();
-    this.emit('groupSettingsLinkClick');
+    eventBus.emit('groupSettingsLinkClick');
   }
 }
 

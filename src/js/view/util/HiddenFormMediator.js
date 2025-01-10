@@ -1,14 +1,32 @@
 import {
   ACTIVE_CLASS,
+  TYPE_EXPENSE,
+  TYPE_REPAYMENT,
+  EXPENSE_HIDDEN_FORM_TYPES,
   REPAYMENT_HIDDEN_FORM_TYPES,
 } from '../../util/Config.js';
 
 class HiddenFormMediator {
   #formButtonPairs;
+  #validHiddenFormTypes;
 
-  constructor() {
+  constructor(formType) {
     this.#formButtonPairs = new Map();
+    this.#initValidHiddenFormTypes(formType);
   }
+
+  #initValidHiddenFormTypes = formType => {
+    switch (formType) {
+      case TYPE_EXPENSE:
+        this.#validHiddenFormTypes = EXPENSE_HIDDEN_FORM_TYPES;
+        break;
+      case TYPE_REPAYMENT:
+        this.#validHiddenFormTypes = REPAYMENT_HIDDEN_FORM_TYPES;
+        break;
+      default:
+        throw new Error(`Unknown form type: ${formType}.`);
+    }
+  };
 
   /**
    * Registers a form-button pair for a specific type.
@@ -66,14 +84,14 @@ class HiddenFormMediator {
   };
 
   /**
-   * Validates if the type is one of {@link REPAYMENT_HIDDEN_FORM_TYPES}.
+   * Validates if the type is one of valid hidden form types.
    * @param {string} type - The type to validate.
    * @throws {Error} If the type is invalid.
    */
   #validateType(type) {
-    if (!REPAYMENT_HIDDEN_FORM_TYPES.has(type)) {
+    if (!this.#validHiddenFormTypes.has(type)) {
       throw new Error(
-        `Invalid form type: ${type}. Expected one of ${REPAYMENT_HIDDEN_FORM_TYPES.join(
+        `Invalid form type: ${type}. Expected one of ${this.#validHiddenFormTypes.join(
           ', '
         )}. Received: ${type} (${typeof type}).`
       );

@@ -1,4 +1,4 @@
-import TypeParser from '../util/TypeParser.js';
+import TypeParser from '../../util/TypeParser.js';
 import {
   isPositiveInteger,
   isPositiveNumber,
@@ -12,8 +12,9 @@ import {
 import UserBalance from '../balance/UserBalance.js';
 import Group from '../group/Group.js';
 import GroupOption from '../group/GroupOption.js';
-import Expense from '../transaction/Expense.js';
-import Repayment from '../repayment/Repayment.js';
+import Expense from './expense/Expense.js';
+import Repayment from './repayment/Repayment.js';
+import expenseFormCollection from './expense/ExpenseFormCollection.js';
 import repaymentFormCollection from './repayment/RepaymentFormCollection.js';
 import dateCollection from './date/DateCollection.js';
 
@@ -28,7 +29,7 @@ class State {
   #transactions = [];
   #transactionsCache = new Map();
   #activeModalId = null;
-  #modalCloseEvents = new Map();
+  #expenseForms = expenseFormCollection;
   #repaymentForms = repaymentFormCollection;
   #activeEmojiFieldId = null;
   #dates = dateCollection;
@@ -309,16 +310,6 @@ class State {
   }
 
   /**
-   * Gets the map with events associated with closing certain modals.
-   * @returns {Map<number, string>} The modalCloseEvents map.
-   * - Key: The modal's ID (number)
-   * - Value: The event associated with closing the modal.
-   */
-  get modalCloseEvents() {
-    return this.#modalCloseEvents;
-  }
-
-  /**
    * Gets the current page.
    * @returns {number} The page number.
    */
@@ -360,6 +351,14 @@ class State {
       );
     }
     this.#transactionsPerPage = value;
+  }
+
+  /**
+   * Gets the expense forms collection from the 'expenseForms' field.
+   * @returns {expenseFormCollection} The expense forms collection object.
+   */
+  get expenseForms() {
+    return this.#expenseForms;
   }
 
   /**

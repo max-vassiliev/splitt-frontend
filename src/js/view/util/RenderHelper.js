@@ -1,15 +1,20 @@
 import {
   ACTIVE_CLASS,
   HIDDEN_CLASS,
+  VISIBLE_CLASS,
   INVISIBLE_CLASS,
   IMAGES_PATH,
   DEFAULT_AVATAR,
+  DEFAULT_AMOUNT,
   AMOUNT_COLOR_POSITIVE,
   AMOUNT_COLOR_NEGATIVE,
   AMOUNT_COLOR_NEUTRAL,
-  DEFAULT_CURRENCY_SYMBOL,
-  DEFAULT_LOCALE,
+  ABOVE_EXPENSE_AMOUNT_CLASS,
+  BELOW_EXPENSE_AMOUNT_CLASS,
+  MIN_EXPENSE_AMOUNT,
 } from '../../util/Config.js';
+
+import appSettings from '../../util/AppSettings.js';
 
 /**
  * Adds the 'active' class to an HTML element.
@@ -43,35 +48,60 @@ export const deactivateHTMLElement = element => {
 };
 
 /**
- * Formats an amount in the smallest currency unit to a localized string with currency symbol.
+ * Removes a utility class from an HTML element.
  *
- * @param {number} amount - The amount in the smallest currency unit (e.g., cents for USD).
- * @param {Object} options - Formatting options.
- * @param {string} [options.locale=DEFAULT_LOCALE] - The locale for formatting.
- * @param {string} [options.currencySymbol=DEFAULT_CURRENCY_SYMBOL] - The currency symbol to use.
+ * @param {HTMLElement} element - The element from which utility class should be removed.
+ * @param {string} utilityClass - The utility class name to be removed.
+ */
+export const removeUtilityClass = (element, utilityClass) => {
+  element.classList.remove(utilityClass);
+};
+
+/**
+ * Removes utility classes from an HTML element.
+ *
+ * @param {HTMLElement} element - The element from which utility classes should be removed.
+ * @param {string[]} utilityClasses - An array of utility class names to be removed.
+ */
+export const removeUtilityClasses = (element, utilityClasses) => {
+  utilityClasses.forEach(utilityClass => {
+    removeUtilityClass(element, utilityClass);
+  });
+};
+
+/**
+ * Formats an amount in the smallest currency unit to a localized string with a currency symbol.
+ *
+ * @param {number} amount - The amount in the smallest currency unit (e.g., cents for USD). Defaults to [DEFAULT_AMOUNT]{@link DEFAULT_AMOUNT}.
+ * @param {Object} [options={}] - Formatting options.
  * @param {boolean} [options.showSign=false] - Whether to show a sign (+ or -) before the amount.
- * @returns {string|undefined} The formatted amount string or undefined if the amount is invalid.
+ * @param {string} [options.locale=appSettings.locale] - The locale for formatting.
+ * @param {string} [options.currencySymbol=appSettings.currencySymbol] - The currency symbol to use.
+ * @returns {string} The formatted amount string or the default amount string if the amount is invalid.
  */
 export const formatAmountForOutput = function (
   amount,
-  {
-    locale = DEFAULT_LOCALE,
-    currencySymbol = DEFAULT_CURRENCY_SYMBOL,
-    showSign = false,
-  } = {}
+  { showSign = false, ...options } = {}
 ) {
-  if (amount == null || !Number.isInteger(amount)) return;
+  let amountToFormat;
+  if (amount == null || !Number.isInteger(amount)) {
+    amountToFormat = DEFAULT_AMOUNT;
+  } else {
+    amountToFormat = amount;
+  }
+  const locale = options.locale ?? appSettings.locale;
+  const currencySymbol = options.currencySymbol ?? appSettings.currencySymbol;
 
-  let formattedAmount = Math.abs(amount / 100).toLocaleString(locale, {
+  let formattedAmount = Math.abs(amountToFormat / 100).toLocaleString(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 
   let sign = '';
   if (showSign) {
-    if (amount < 0) {
+    if (amountToFormat < 0) {
       sign = '-\u00A0';
-    } else if (amount > 0) {
+    } else if (amountToFormat > 0) {
       sign = '+\u00A0';
     }
   }
@@ -83,11 +113,16 @@ export const formatAmountForOutput = function (
  * Formats a percentage value as a string with a percentage symbol.
  *
  * @param {number} value - The percentage value.
- * @returns {string|undefined} The formatted percentage string or undefined if the value is invalid.
+ * @returns {string} The formatted percentage string or default percentage string if the value is invalid.
  */
 export const formatPercentForOutput = function (value) {
-  if (value == null || !Number.isInteger(value)) return;
-  return `${value}\u202F%`;
+  let percentToFormat;
+  if (value == null || !Number.isInteger(value)) {
+    percentToFormat = DEFAULT_AMOUNT;
+  } else {
+    percentToFormat = value;
+  }
+  return `${percentToFormat}\u202F%`;
 };
 
 /**
@@ -165,6 +200,72 @@ export const getAvatarUrl = function (avatar) {
 export const getAmountColor = function (amount) {
   if (!amount || amount === 0) return AMOUNT_COLOR_NEUTRAL;
   return amount < 0 ? AMOUNT_COLOR_NEGATIVE : AMOUNT_COLOR_POSITIVE;
+};
+
+/**
+ * Updates the styling of the remainder row.
+ *
+ * @param {number} remainderAmount - The remainder amount. Must be an integer.
+ * @param {number} expenseAmount - The total expense amount. Must be an integer.
+ * @param {HTMLElement} row - The remainder row element.
+ */
+export const restyleRemainderRow = function (
+  remainderAmount,
+  expenseAmount,
+  row
+) {
+  if (!Number.isInteger(remainderAmount) || !Number.isInteger(expenseAmount)) {
+    return;
+  }
+  removeUtilityClasses(row, [
+    ABOVE_EXPENSE_AMOUNT_CLASS,
+    BELOW_EXPENSE_AMOUNT_CLASS,
+  ]);
+
+  if (remainderAmount === 0 || expenseAmount < MIN_EXPENSE_AMOUNT) {
+    row.style.visibility = HIDDEN_CLASS;
+    return;
+  }
+
+  row.style.visibility = VISIBLE_CLASS;
+  const rowStyle =
+    remainderAmount < 0
+      ? ABOVE_EXPENSE_AMOUNT_CLASS
+      : BELOW_EXPENSE_AMOUNT_CLASS;
+
+  row.classList.add(rowStyle);
+};
+
+/**
+ * Adjusts the width of one or more HTML elements based on the length of the largest amount.
+ *
+ * @param {Object} params - The parameters object.
+ * @param {number} params.total - The total amount to compare.
+ * @param {number} params.expenseAmount - The expense amount to compare.
+ * @param {Map<number, string>} params.widthOptions - A map where the key is the number of digits
+ * in the amount and the value is the corresponding width.
+ * @param {string} params.defaultWidth - The default width to apply if no match is found in widthOptions.
+ * @param {HTMLElement[] | HTMLElement} params.inputElements - A single HTML element or an array of elements to be resized.
+ */
+export const adjustAmountElementsWidth = ({
+  total,
+  expenseAmount,
+  widthOptions,
+  defaultWidth,
+  amountElements,
+}) => {
+  const referenceAmount = expenseAmount > total ? expenseAmount : total;
+  const referenceAmountLength = referenceAmount.toString().length;
+  const adjustedWidth = widthOptions.get(referenceAmountLength) || defaultWidth;
+  if (Array.isArray(amountElements)) {
+    amountElements.forEach(amountElement => {
+      amountElement.style.width = adjustedWidth;
+    });
+  } else if (amountElements instanceof HTMLElement) {
+    amountElements.style.width = adjustedWidth;
+  } else {
+    console.warn('adjustAmountElementsWidth: Invalid amountElements provided.');
+  }
 };
 
 /**

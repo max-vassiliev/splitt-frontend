@@ -2,6 +2,7 @@ import RepaymentFormState from './RepaymentFormState.js';
 import RepaymentFormEditState from './RepaymentFormEditState.js';
 import {
   REPAYMENT_FORM_ADD,
+  REPAYMENT_FORM_EDIT,
   REPAYMENT_FORM_SETTLE,
   REPAYMENT_FORM_TYPES,
 } from '../../../util/Config.js';
@@ -11,13 +12,22 @@ class RepaymentFormCollection {
   #add;
   #settle;
   #edit;
+  #forms;
 
   constructor() {
     this.#activeForm = null;
     this.#add = new RepaymentFormState(REPAYMENT_FORM_ADD);
     this.#settle = new RepaymentFormState(REPAYMENT_FORM_SETTLE);
     this.#edit = RepaymentFormEditState;
+    this.#initFormsMap();
   }
+
+  #initFormsMap = () => {
+    this.#forms = new Map();
+    this.#forms.set(REPAYMENT_FORM_ADD, this.#add);
+    this.#forms.set(REPAYMENT_FORM_SETTLE, this.#settle);
+    this.#forms.set(REPAYMENT_FORM_EDIT, this.#edit);
+  };
 
   /**
    * Gets the active repayment form state.
@@ -42,7 +52,7 @@ class RepaymentFormCollection {
       throw new Error(`Invalid form type: ${formType}.`);
     }
 
-    const form = this[formType];
+    const form = this.#forms.get(formType);
     if (!form) {
       console.warn(`No form assigned to the field: ${formType}.`);
       return;

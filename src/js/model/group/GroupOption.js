@@ -2,7 +2,7 @@ import {
   isNonEmptyString,
   isPositiveInteger,
 } from '../../util/SplittValidator';
-import TypeParser from '../util/TypeParser';
+import TypeParser from '../../util/TypeParser';
 
 class GroupOption {
   #id;

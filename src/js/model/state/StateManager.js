@@ -162,6 +162,23 @@ class StateManager {
   }
 
   /**
+   * Gets the number of members in the group.
+   * @returns {number} The number of group members.
+   */
+  getMembersCount() {
+    return state.members.size;
+  }
+
+  /**
+   * Gets the user by ID.
+   * @param {bigint} id The user's ID.
+   * @returns {User} The User object with data on the group member.
+   */
+  getMemberById = id => {
+    return state.members.get(id);
+  };
+
+  /**
    * Retrieves a map of members filtered by the given array of IDs.
    * @param {Array} ids - An array of member IDs to filter from the state.members map.
    * @returns {Map} A new map containing only the members whose IDs are present in the given array.
@@ -239,16 +256,6 @@ class StateManager {
   getActiveModalId() {
     return state.activeModalId;
   }
-
-  /**
-   * Retrieves the custom close event for the currently active modal.
-   *
-   * @returns {string|undefined} The close event name associated with the active modal ID,
-   * or `undefined` if no close event is registered for the active modal.
-   */
-  getActiveModalCloseEvent = () => {
-    return state.modalCloseEvents.get(state.activeModalId);
-  };
 
   /**
    * Gets required pagination data.

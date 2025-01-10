@@ -93,6 +93,7 @@ header {
   display: flex;
   align-items: center;
   gap: 1rem;
+  height: 5rem;
 }
 
 .logo_img {
@@ -188,7 +189,7 @@ header {
 .menu__popup {
   display: none;
   position: fixed;
-  top: 1.5rem;
+  top: 2.4rem;
   right: 1.5rem;
   min-width: 200px;
   background: #fff;
@@ -715,7 +716,7 @@ header {
 
 .add-transaction__form_input-splitt-comment {
   margin-top: 0.1rem;
-  margin-left: 14.1rem;
+  margin-left: 11.9rem;
   font-size: 1.3rem;
   color: #777;
 }
@@ -988,6 +989,7 @@ header {
 .splitt-shares__row-remainder,
 .payer-table-row__remainder {
   color: #fff;
+  visibility: hidden;
   font-weight: 400;
   font-size: 1.7rem;
   white-space: nowrap;
