@@ -1,7 +1,6 @@
 import stateManager from '../state/StateManager.js';
 import dateManager from '../state/date/DateManager.js';
 import pageAPI from './PageAPI.js';
-import eventBus from '../../util/EventBus.js';
 
 class PageModel {
   loadPage = async () => {
@@ -38,18 +37,9 @@ class PageModel {
   };
 
   /**
-   * Clears the active modal ID and triggers any associated close event.
-   *
-   * If a custom close event is registered for the active modal, the event is emitted
-   * before the active modal ID is set to `null`.
-   *
-   * @fires eventBus#<string> - Emits the event name associated with the active modal.
+   * Clears the active modal ID setting it to `null`.
    */
   closeActiveModal = () => {
-    const closeEvent = stateManager.getActiveModalCloseEvent();
-    if (closeEvent) {
-      eventBus.emit(closeEvent);
-    }
     stateManager.setActiveModalId(null);
   };
 }

@@ -5,8 +5,6 @@ import {
   REPAYMENT_FORM_EDIT,
   REPAYMENT_FORM_TYPES,
   DEFAULT_EMOJI_REPAYMENT,
-  MODAL_ID_REPAYMENT,
-  MODAL_CLOSE_REPAYMENT,
 } from '../../../util/Config.js';
 import RepaymentFormState from './RepaymentFormState.js';
 import Repayment from '../../repayment/Repayment.js';
@@ -430,6 +428,7 @@ class RepaymentManager {
     editForm.emoji = repayment.emoji;
     editForm.note = repayment.note;
     editForm.repaymentId = repayment.id;
+    editForm.activeHiddenForm = null;
   };
 
   // API
@@ -481,7 +480,6 @@ class RepaymentManager {
   #loadDefaultData = () => {
     this.#loadAddFormDefaultData();
     this.#loadSettleFormDefaultData();
-    this.#loadModalCloseEvent();
   };
 
   /**
@@ -499,15 +497,6 @@ class RepaymentManager {
   #loadSettleFormDefaultData = () => {
     const settleForm = state.repaymentForms.settle;
     settleForm.emoji = DEFAULT_EMOJI_REPAYMENT;
-  };
-
-  /**
-   * Registers a custom close event for the repayment modal in the application state.*
-   *
-   * @private
-   */
-  #loadModalCloseEvent = () => {
-    state.modalCloseEvents.set(MODAL_ID_REPAYMENT, MODAL_CLOSE_REPAYMENT);
   };
 
   // Validate

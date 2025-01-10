@@ -28,7 +28,6 @@ class State {
   #transactions = [];
   #transactionsCache = new Map();
   #activeModalId = null;
-  #modalCloseEvents = new Map();
   #repaymentForms = repaymentFormCollection;
   #activeEmojiFieldId = null;
   #dates = dateCollection;
@@ -306,16 +305,6 @@ class State {
       );
     }
     this.#activeModalId = modalId;
-  }
-
-  /**
-   * Gets the map with events associated with closing certain modals.
-   * @returns {Map<number, string>} The modalCloseEvents map.
-   * - Key: The modal's ID (number)
-   * - Value: The event associated with closing the modal.
-   */
-  get modalCloseEvents() {
-    return this.#modalCloseEvents;
   }
 
   /**

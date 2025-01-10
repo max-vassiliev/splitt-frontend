@@ -30,9 +30,10 @@ class RepaymentModel {
     if (currentActiveForm && currentActiveForm.type === REPAYMENT_FORM_ADD) {
       return { shouldRender: false };
     }
+    const shouldCleanup = this.#checkForCleanup(currentActiveForm);
     repaymentManager.setActiveForm(REPAYMENT_FORM_ADD);
     const addForm = repaymentManager.getActiveForm();
-    return this.#prepareFormViewModel(addForm);
+    return this.#prepareFormViewModel(addForm, shouldCleanup);
   };
 
   /**
@@ -42,10 +43,12 @@ class RepaymentModel {
    * @returns {Object} An object representing the form's view model.
    */
   prepareSettleForm = selectedUserId => {
+    const currentActiveForm = repaymentManager.getActiveForm();
+    const shouldCleanup = this.#checkForCleanup(currentActiveForm);
     const partyId = TypeParser.parseStringToBigInt(selectedUserId);
     repaymentManager.loadSettleForm(partyId);
     const settleForm = repaymentManager.getActiveForm();
-    return this.#prepareFormViewModel(settleForm);
+    return this.#prepareFormViewModel(settleForm, shouldCleanup);
   };
 
   /**
@@ -66,9 +69,10 @@ class RepaymentModel {
     ) {
       return { shouldRender: false };
     }
+    const shouldCleanup = this.#checkForCleanup(currentActiveForm);
     await repaymentManager.loadEditForm(repaymentId);
     const editForm = repaymentManager.getActiveForm();
-    return this.#prepareFormViewModel(editForm);
+    return this.#prepareFormViewModel(editForm, shouldCleanup);
   };
 
   // Prepare View Model
@@ -77,10 +81,11 @@ class RepaymentModel {
    * Prepares the view model for the Repayment Forms.
    *
    * @param {Object} form - The form object to be prepared.
+   * @param {boolean} shouldCleanup — `true` if the form needs to be cleaned up, otherwise `false`.
    * @returns {Object} The view model for the form.
    * @private
    */
-  #prepareFormViewModel = form => {
+  #prepareFormViewModel = (form, shouldCleanup = false) => {
     const {
       type,
       amount,
@@ -96,6 +101,7 @@ class RepaymentModel {
     const shouldRender = true;
     return {
       shouldRender,
+      shouldCleanup,
       type,
       amount,
       date,
@@ -340,6 +346,17 @@ class RepaymentModel {
   };
 
   // Validation
+
+  /**
+   * Determines whether the form needs to be cleaned up when rendering.
+   *
+   * @param {Object|null} currentActiveForm - The currently active form object or null if no form is active.
+   * @param {string} currentActiveForm.type - The type of the active form (e.g., REPAYMENT_FORM_EDIT).
+   * @returns {boolean} `true` if the active form requires cleanup, otherwise `false`.
+   */
+  #checkForCleanup = currentActiveForm => {
+    return currentActiveForm?.type === REPAYMENT_FORM_EDIT;
+  };
 
   /**
    * Validates the input date within the allowed date range.

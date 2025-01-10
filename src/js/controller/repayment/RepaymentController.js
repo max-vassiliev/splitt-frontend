@@ -135,6 +135,7 @@ class RepaymentController extends EventEmitter {
 
   #renderViewModel = viewModel => {
     if (!viewModel.shouldRender) return;
+    this.#cleanupForm(viewModel.shouldCleanup);
     formView.render(viewModel);
     noteFormView.render(viewModel.note, viewModel.noteCount);
     this.toggleHiddenFormOnLoad(viewModel.activeHiddenForm);
@@ -145,15 +146,10 @@ class RepaymentController extends EventEmitter {
     repaymentModel.deactivateEmojiField();
   };
 
-  cleanupOnFormClose = () => {
-    const activeFormType = repaymentModel.getActiveFormType();
-    if (activeFormType === REPAYMENT_FORM_EDIT) this.#closeEditForm();
-  };
-
-  #closeEditForm = () => {
+  #cleanupForm = shouldCleanup => {
+    if (!shouldCleanup) return;
     formView.hideEditFormElements();
     noteFormView.renderResetButtonVisibility(false);
-    repaymentModel.resetHiddenForm();
   };
 
   // Toggle Hidden Form

@@ -27,9 +27,6 @@ export const MODAL_IDS = new Set([
   MODAL_ID_REPAYMENT,
 ]);
 
-// Modal Events
-export const MODAL_CLOSE_REPAYMENT = 'repaymentFormClosed';
-
 // Numbers
 export const MIN_TRANSACTION_YEAR_LIMIT = 5;
 export const MAX_AMOUNT = 10000000000;

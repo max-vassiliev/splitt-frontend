@@ -241,16 +241,6 @@ class StateManager {
   }
 
   /**
-   * Retrieves the custom close event for the currently active modal.
-   *
-   * @returns {string|undefined} The close event name associated with the active modal ID,
-   * or `undefined` if no close event is registered for the active modal.
-   */
-  getActiveModalCloseEvent = () => {
-    return state.modalCloseEvents.get(state.activeModalId);
-  };
-
-  /**
    * Gets required pagination data.
    * @returns {Object} A page data object containing the fields:
    *                     - page (number): the current page number

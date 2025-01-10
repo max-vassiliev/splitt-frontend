@@ -8,7 +8,6 @@ import paginationController from './pagination/PaginationController.js';
 import repaymentContoller from './repayment/RepaymentController.js';
 import emojiController from './emoji/EmojiController.js';
 import eventBus from '../util/EventBus.js';
-import { MODAL_CLOSE_REPAYMENT } from '../util/Config.js';
 
 class MainController {
   init = async () => {
@@ -41,7 +40,6 @@ class MainController {
     this.#bindSettleDebt();
     this.#bindOpenEditRepayment();
     this.#bindRepaymentFormEmojiEdit();
-    this.#bindRepaymentFormClosed();
     this.#bindDateReset();
     this.#bindEmojiRegisterField();
     this.#bindEmojiSetTopMargin();
@@ -104,12 +102,6 @@ class MainController {
   #bindRepaymentFormEmojiEdit = () => {
     eventBus.on('repaymentFormEmojiEdited', editResponse => {
       repaymentContoller.handleEmojiEdit(editResponse);
-    });
-  };
-
-  #bindRepaymentFormClosed = () => {
-    eventBus.on(MODAL_CLOSE_REPAYMENT, () => {
-      repaymentContoller.cleanupOnFormClose();
     });
   };
 
