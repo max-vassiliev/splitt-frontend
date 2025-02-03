@@ -635,6 +635,7 @@ export function initializeLegacyScript() {
 
     // f: Add Expense: Payer Form
 
+    // TODO! перенести
     function handleRemovePayerButtonClick() {
       const row = this.closest('.payer-table-row');
       const rowId = parseInt(row.dataset.rowId, 10);
@@ -1329,12 +1330,13 @@ export function initializeLegacyScript() {
       if (!addExpenseFormModel.splitt) return 0;
 
       const userSplittAmount =
-        addExpenseFormModel.splitt.splittAmounts.get(currentUserId);
+        addExpenseFormModel.splitt.splitt.get(currentUserId);
       const userExpenseAmount = getAmountByPayerId(currentUserId);
 
       return userExpenseAmount - userSplittAmount;
     }
 
+    // TODO1 есть: ExpenseFormView
     function renderSplittBalanceNote(balance) {
       addExpenseSplittBalanceNoteLabel.textContent = 'ваш баланс:\u00A0';
       let formattedBalance = formatAmountForOutput(balance);
@@ -1538,11 +1540,12 @@ export function initializeLegacyScript() {
     // Load Content (load:)
     // ----------------------
 
+    // TODO! удалить ненужное
     // load: Add Expense / Add Repayment: Set Default Emojis
-    addExpenseEmojiDefault.textContent = DEFAULT_EMOJI_EXPENSE;
+    // addExpenseEmojiDefault.textContent = DEFAULT_EMOJI_EXPENSE;
 
     // load: Add Expense: Payer Form
-    createFirstPayerRow();
+    // createFirstPayerRow();
 
     // ----------------------
     // Event Listeners (el:)
@@ -1560,10 +1563,11 @@ export function initializeLegacyScript() {
       // toggleEmojiPicker(event);
     });
 
-    addExpenseEmojiDefault.addEventListener('click', function (event) {
-      // activeEmojiField = addExpenseEmojiField;
-      // toggleEmojiPicker(event);
-    });
+    // TODO! удалить
+    // addExpenseEmojiDefault.addEventListener('click', function (event) {
+    //   activeEmojiField = addExpenseEmojiField;
+    //   toggleEmojiPicker(event);
+    // });
 
     addExpenseEmojiDefaultBtn.addEventListener('click', function () {
       // activeEmojiField = addExpenseEmojiField;

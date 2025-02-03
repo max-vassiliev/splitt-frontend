@@ -286,7 +286,7 @@ class RepaymentModel {
       id: member.id,
       name: member.name,
     }));
-    const currentUserId = stateManager.getCurrentUser().id;
+    const currentUserId = stateManager.getUserId();
     return { currentUserId, members };
   };
 

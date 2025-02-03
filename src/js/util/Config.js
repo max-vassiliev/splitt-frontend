@@ -20,10 +20,12 @@ export const DEFAULT_LOCALE = 'ru-RU';
 // Modals
 export const MODAL_ID_MENU = 1;
 export const MODAL_ID_GROUP = 2;
-export const MODAL_ID_REPAYMENT = 3;
+export const MODAL_ID_EXPENSE = 3;
+export const MODAL_ID_REPAYMENT = 4;
 export const MODAL_IDS = new Set([
   MODAL_ID_MENU,
   MODAL_ID_GROUP,
+  MODAL_ID_EXPENSE,
   MODAL_ID_REPAYMENT,
 ]);
 
@@ -40,6 +42,10 @@ export const DEFAULT_EMOJI_EXPENSE = '🗒️';
 export const DEFAULT_EMOJI_REPAYMENT = '✅';
 export const DEFAULT_EMOJI_EMPTY = 'no_emoji';
 
+// Misc
+
+export const USERNAME_OTHER = 'другой пользователь';
+
 // Status
 export const STATUS_POSITIVE = 'positive';
 export const STATUS_NEGATIVE = 'negative';
@@ -50,7 +56,7 @@ export const STATUS_OPTIONS = new Set([
   STATUS_NEUTRAL,
 ]);
 
-// Status
+// Form Validation Status
 export const VALIDATION_STATUS_NO_EDIT = 'noedit';
 export const VALIDATION_STATUS_VALID = 'valid';
 export const VALIDATION_STATUS_INVALID = 'invalid';
@@ -65,17 +71,64 @@ export const TYPE_EXPENSE = 'expense';
 export const TYPE_REPAYMENT = 'repayment';
 export const TRANSACTION_TYPES = new Set([TYPE_EXPENSE, TYPE_REPAYMENT]);
 export const TRANSACTION_NOTE_LIMIT = 250;
+export const TRANSACTION_TITLE_LIMIT = 50;
+
+// Expense
+export const EXPENSE_FORM_ADD = 'exp-add';
+export const EXPENSE_FORM_EDIT = 'exp-edit';
+export const EXPENSE_FORM_TYPES = new Set([
+  EXPENSE_FORM_ADD,
+  EXPENSE_FORM_EDIT,
+]);
+export const EXPENSE_HIDDEN_FORM_PAID_BY = 'exp-paid-by';
+export const EXPENSE_HIDDEN_FORM_SPLITT = 'exp-splitt';
+export const EXPENSE_HIDDEN_FORM_NOTE = 'exp-note';
+export const EXPENSE_HIDDEN_FORM_TYPES = new Set([
+  EXPENSE_HIDDEN_FORM_PAID_BY,
+  EXPENSE_HIDDEN_FORM_SPLITT,
+  EXPENSE_HIDDEN_FORM_NOTE,
+]);
+
+// Expense: Paid By
+export const EXPENSE_PAID_BY_EMPTY = 'exp-paid-by__empty';
+export const EXPENSE_PAID_BY_CURRENT_USER = 'exp-paid-by__current-user';
+export const EXPENSE_PAID_BY_OTHER_USER = 'exp-paid-by__other-user';
+export const EXPENSE_PAID_BY_COPAYMENT = 'exp-paid-by__copayment';
+export const EXPENSE_PAID_BY_TYPES = new Set([
+  EXPENSE_PAID_BY_EMPTY,
+  EXPENSE_PAID_BY_CURRENT_USER,
+  EXPENSE_PAID_BY_OTHER_USER,
+  EXPENSE_PAID_BY_COPAYMENT,
+]);
+
+// Expense: Splitt
+export const EXPENSE_SPLITT_EQUALLY = 'exp-splitt__equally';
+export const EXPENSE_SPLITT_PARTS = 'exp-splitt__parts';
+export const EXPENSE_SPLITT_SHARES = 'exp-splitt__shares';
+export const EXPENSE_SPLITT_TYPES = new Set([
+  EXPENSE_SPLITT_EQUALLY,
+  EXPENSE_SPLITT_PARTS,
+  EXPENSE_SPLITT_SHARES,
+]);
+export const EXPENSE_BALANCE_DEFAULT = 'exp-balance__default';
+export const EXPENSE_BALANCE_CHECK_PAID_BY = 'exp-balance__check-paid-by';
+export const EXPENSE_BALANCE_CHECK_SPLITT = 'exp-balance__check-splitt';
+export const EXPENSE_BALANCE_STATUSES = new Set([
+  EXPENSE_BALANCE_DEFAULT,
+  EXPENSE_BALANCE_CHECK_PAID_BY,
+  EXPENSE_BALANCE_CHECK_SPLITT,
+]);
 
 // Repayment
-export const REPAYMENT_FORM_ADD = 'add';
-export const REPAYMENT_FORM_SETTLE = 'settle';
-export const REPAYMENT_FORM_EDIT = 'edit';
+export const REPAYMENT_FORM_ADD = 'rpm-add';
+export const REPAYMENT_FORM_SETTLE = 'rpm-settle';
+export const REPAYMENT_FORM_EDIT = 'rpm-edit';
 export const REPAYMENT_FORM_TYPES = new Set([
   REPAYMENT_FORM_ADD,
   REPAYMENT_FORM_SETTLE,
   REPAYMENT_FORM_EDIT,
 ]);
-export const REPAYMENT_HIDDEN_FORM_NOTE = 'note';
+export const REPAYMENT_HIDDEN_FORM_NOTE = 'rpm-note';
 export const REPAYMENT_HIDDEN_FORM_TYPES = new Set([
   REPAYMENT_HIDDEN_FORM_NOTE,
 ]);

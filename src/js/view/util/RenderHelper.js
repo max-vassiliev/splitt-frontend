@@ -43,6 +43,18 @@ export const deactivateHTMLElement = element => {
 };
 
 /**
+ * Removes utility classes from an HTML element.
+ *
+ * @param {HTMLElement} element - The element from which utility classes should be removed.
+ * @param {string[]} utilityClasses - An array of utility class names to be removed.
+ */
+export const removeUtilityClasses = (element, utilityClasses) => {
+  utilityClasses.forEach(utilityClass => {
+    element.classList.remove(utilityClass);
+  });
+};
+
+/**
  * Formats an amount in the smallest currency unit to a localized string with currency symbol.
  *
  * @param {number} amount - The amount in the smallest currency unit (e.g., cents for USD).

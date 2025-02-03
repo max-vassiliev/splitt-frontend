@@ -161,6 +161,10 @@ class StateManager {
     return state.members;
   }
 
+  getMemberById = id => {
+    return state.members.get(id);
+  };
+
   /**
    * Retrieves a map of members filtered by the given array of IDs.
    * @param {Array} ids - An array of member IDs to filter from the state.members map.

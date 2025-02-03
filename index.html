@@ -147,7 +147,11 @@
         <!-- ADD EXPENSE: Main -->
         <div class="add-transaction__form_main add-expense__form_main">
           <div class="add-transaction__form_header add-expense__form_header">
-            Добавить трату
+            <div
+              class="add-transaction__form_header_text add-expense__form_header_text"
+            >
+              Добавить трату
+            </div>
           </div>
           <!-- ADD EXPENSE: Main (default)-->
           <form class="add-transaction__form_body">
@@ -159,7 +163,6 @@
                   name="expense-title"
                   type="text"
                   maxlength="50"
-                  placeholder="Введите название"
                   autocomplete="off"
                 />
               </div>
@@ -187,10 +190,11 @@
               <div
                 class="add-transaction__form_input-container add-expense-emoji-container default"
               >
-                <div
+                <!-- TODO! удалить -->
+                <!-- <div
                   class="emoji-default add-expense-emoji-default"
                   title="выбрать"
-                ></div>
+                ></div> -->
                 <input
                   class="add-transaction__form_input-text emoji-input add-expense"
                   type="text"
@@ -244,17 +248,15 @@
               <div
                 class="add-transaction__form_input-splitt-comment splitt-balance-note"
               >
-                <span class="splitt-balance-note__label"
-                  >ваш баланс:&nbsp;</span
-                >
-                <span class="splitt-balance-note__amount">0,00&nbsp;₽</span>
+                <span class="splitt-balance-note__label"></span>
+                <span class="splitt-balance-note__amount"></span>
               </div>
             </div>
             <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">Комментарий</label>
               <div class="add-transaction__form_input-container">
                 <button
-                  class="add-transaction__form_btn-edit add-expense__btn-edit"
+                  class="add-transaction__form_btn-edit add-expense__btn-edit btn__expense-note"
                   data-form="note"
                 >
                   написать
@@ -263,7 +265,7 @@
             </div>
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close btn__close_popup"
+                class="add-transaction__form_btn-close btn__close_popup add-expense__btn--close"
                 type="button"
               >
                 закрыть
@@ -401,7 +403,8 @@
               </div>
               <!-- Splitt Form: Equally -->
               <div class="splitt-form__table" id="splitt-equally-table">
-                <table class="splitt-form__equally">
+                <!-- TODO! удалить -->
+                <!-- <table class="splitt-form__equally">
                   <tr class="splitt-equally__row" data-user-id="1">
                     <td class="splitt-equally-column__checkbox">
                       <input
@@ -478,7 +481,7 @@
                     </td>
                     <td class="splitt-equally-column__amount">0,00&nbsp;₽</td>
                   </tr>
-                </table>
+                </table> -->
               </div>
               <!-- Splitt Form: Parts -->
               <div class="splitt-form__table" id="splitt-parts-table">

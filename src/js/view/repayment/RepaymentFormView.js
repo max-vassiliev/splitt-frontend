@@ -1,15 +1,12 @@
 import {
-  ACTIVE_CLASS,
-  DISABLED_ATTRIBUTE,
-  REPAYMENT_FORM_EDIT,
-  DEFAULT_EMOJI_REPAYMENT,
-  TYPE_REPAYMENT,
   DEFAULT_CLASS,
+  DEFAULT_EMOJI_REPAYMENT,
   INVISIBLE_CLASS,
+  REPAYMENT_FORM_EDIT,
+  TYPE_REPAYMENT,
 } from '../../util/Config.js';
 import {
   formatAmountForOutput,
-  setAmountCursorPosition,
   setAmountCursorOnClick,
   activateHTMLElement,
   deactivateHTMLElement,
@@ -18,6 +15,7 @@ import {
   isActiveHTMLElement,
 } from '../util/RenderHelper.js';
 import alignmentHelper from '../util/AlignmentHelper.js';
+import formHelper from '../util/TransactionFormHelper.js';
 
 class RepaymentFormView {
   #headerAddCaption = 'Вернуть долг';
@@ -299,13 +297,10 @@ class RepaymentFormView {
   // Render: Elements
 
   renderAmountInput = ({ processedAmount, amountIn, cursorPosition }) => {
-    const amountOut = formatAmountForOutput(processedAmount);
-    this.#inputAmount.value = amountOut;
     const inputElement = this.#inputAmount;
-    if (!cursorPosition) return;
-    setAmountCursorPosition({
+    formHelper.renderAmountInput({
+      processedAmount,
       amountIn,
-      amountOut,
       cursorPosition,
       inputElement,
     });
@@ -317,19 +312,13 @@ class RepaymentFormView {
   };
 
   renderSubmitButton = isFormValid => {
-    if (isFormValid) {
-      this.#buttonSubmit.removeAttribute(DISABLED_ATTRIBUTE);
-      this.#buttonSubmit.classList.add(ACTIVE_CLASS);
-    } else {
-      this.#buttonSubmit.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
-      this.#buttonSubmit.classList.remove(ACTIVE_CLASS);
-    }
+    const submitButton = this.#buttonSubmit;
+    formHelper.renderSubmitButton(submitButton, isFormValid);
   };
 
   updateDateInput = ({ min, max, updateDefaultDate }) => {
-    this.#inputDate.setAttribute('max', max);
-    this.#inputDate.setAttribute('min', min);
-    if (updateDefaultDate) this.#inputDate.value = max;
+    const dateInput = this.#inputDate;
+    formHelper.updateDateInput({ min, max, updateDefaultDate, dateInput });
   };
 
   // Render: Edit Form

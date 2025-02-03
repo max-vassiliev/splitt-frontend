@@ -38,6 +38,7 @@ class RepaymentManager {
     state.repaymentForms.activeForm = formType;
   };
 
+  // TODO! метод не используется в модели; нужен ли?
   /**
    * Retrieves the repayment form of the specified type.
    *
@@ -49,22 +50,6 @@ class RepaymentManager {
   getForm = type => {
     this.#validateFormType(type);
     state.repaymentForms[type];
-  };
-
-  /**
-   * Updates the active form's emoji field.
-   *
-   * @param {string} emoji - The new emoji to set for the active form.
-   * @fires repaymentFormEmojiEdited - Emits when the emoji is edited in for the "edit" form.
-   */
-  setActiveFormEmoji = emoji => {
-    const form = this.getActiveForm();
-    if (form.type === REPAYMENT_FORM_EDIT) {
-      const editResponse = form.editEmoji(emoji);
-      eventBus.emit('repaymentFormEmojiEdited', editResponse);
-    } else {
-      state.repaymentForms.activeForm.emoji = emoji;
-    }
   };
 
   /**
@@ -84,6 +69,22 @@ class RepaymentManager {
   setActiveHiddenForm = type => {
     if (state.repaymentForms.activeForm) {
       state.repaymentForms.activeForm.activeHiddenForm = type;
+    }
+  };
+
+  /**
+   * Updates the active form's emoji field.
+   *
+   * @param {string} emoji - The new emoji to set for the active form.
+   * @fires repaymentFormEmojiEdited - Emits when the emoji is edited in for the "edit" form.
+   */
+  setActiveFormEmoji = emoji => {
+    const form = this.getActiveForm();
+    if (form.type === REPAYMENT_FORM_EDIT) {
+      const editResponse = form.editEmoji(emoji);
+      eventBus.emit('repaymentFormEmojiEdited', editResponse);
+    } else {
+      state.repaymentForms.activeForm.emoji = emoji;
     }
   };
 
@@ -475,7 +476,7 @@ class RepaymentManager {
   // Initialize
 
   /**
-   * Initializes the default data and configurations for the repayment form.
+   * Initializes the default data and configurations for the repayment form state.
    */
   #loadDefaultData = () => {
     this.#loadAddFormDefaultData();
@@ -503,7 +504,7 @@ class RepaymentManager {
 
   /**
    * Validates the repayment form type.
-   * @param {*} type The repayment form type too validate.
+   * @param {string} type The repayment form type to validate.
    * @throws {Error} If the value is not one of {@link REPAYMENT_FORM_TYPES}.
    */
   #validateFormType = type => {

@@ -5,6 +5,7 @@ import groupController from './group/GroupController.js';
 import summaryController from './summary/SummaryController.js';
 import transactionsController from './transactions/TransactionsController.js';
 import paginationController from './pagination/PaginationController.js';
+import expenseController from './expense/ExpenseController.js';
 import repaymentContoller from './repayment/RepaymentController.js';
 import emojiController from './emoji/EmojiController.js';
 import eventBus from '../util/EventBus.js';
@@ -23,9 +24,14 @@ class MainController {
       transactionsController.init();
       paginationController.init();
       emojiController.init();
+      expenseController.init();
       repaymentContoller.init();
 
       this.#alignTransactionForms();
+
+      // TODO! удалить потом
+      // expenseController.openSplittForm();
+      // expenseController.openPaidByForm();
     } catch (error) {
       throw error;
     }
@@ -65,12 +71,13 @@ class MainController {
   };
 
   #alignTransactionForms = () => {
+    expenseController.alignForm();
     repaymentContoller.alignForm();
     emojiController.alignContainer();
   };
 
   #bindAlignEmojiContainer = () => {
-    repaymentContoller.on('alignEmojiContainer', () => {
+    eventBus.on('alignEmojiContainer', () => {
       emojiController.alignContainer();
     });
   };

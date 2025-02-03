@@ -5,6 +5,7 @@ import repaymentModel from '../../model/repayment/RepaymentModel.js';
 import modalView from '../../view/page/ModalView.js';
 import HiddenFormMediator from '../../view/util/HiddenFormMediator.js';
 import {
+  TYPE_REPAYMENT,
   REPAYMENT_HIDDEN_FORM_NOTE,
   MODAL_ID_REPAYMENT,
   REPAYMENT_FORM_EDIT,
@@ -17,7 +18,7 @@ class RepaymentController extends EventEmitter {
 
   constructor() {
     super();
-    this.#hiddenFormMediator = new HiddenFormMediator();
+    this.#hiddenFormMediator = new HiddenFormMediator(TYPE_REPAYMENT);
   }
 
   init = () => {
@@ -236,7 +237,7 @@ class RepaymentController extends EventEmitter {
 
   #activateEmojiField = () => {
     repaymentModel.activateEmojiField();
-    this.emit('alignEmojiContainer');
+    eventBus.emit('alignEmojiContainer');
   };
 
   #toggleEmojiPicker = event => {

@@ -5,6 +5,7 @@
   "scripts": {
     "start": "npx parcel index.html",
     "build": "npx parcel build index.html",
+    "clean": "rm -rf .parcel-cache",
     "copy-images": "cp -R src/images dist/images",
     "copy-json": "cp -R src/json/ dist/json",
     "clean-test-json": "rm -rf dist/json/test/*",

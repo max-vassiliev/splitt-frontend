@@ -14,6 +14,7 @@ import Group from '../group/Group.js';
 import GroupOption from '../group/GroupOption.js';
 import Expense from '../transaction/Expense.js';
 import Repayment from '../repayment/Repayment.js';
+import expenseFormCollection from './expense/ExpenseFormCollection.js';
 import repaymentFormCollection from './repayment/RepaymentFormCollection.js';
 import dateCollection from './date/DateCollection.js';
 
@@ -28,6 +29,7 @@ class State {
   #transactions = [];
   #transactionsCache = new Map();
   #activeModalId = null;
+  #expenseForms = expenseFormCollection;
   #repaymentForms = repaymentFormCollection;
   #activeEmojiFieldId = null;
   #dates = dateCollection;
@@ -349,6 +351,14 @@ class State {
       );
     }
     this.#transactionsPerPage = value;
+  }
+
+  /**
+   * Gets the expense forms collection from the 'expenseForms' field.
+   * @returns {expenseFormCollection} The expense forms collection object.
+   */
+  get expenseForms() {
+    return this.#expenseForms;
   }
 
   /**
