@@ -1,12 +1,10 @@
 import {
   getAvatarUrl,
   formatAmountForOutput,
+  restyleRemainderRow,
 } from '../../../util/RenderHelper.js';
-import {
-  DEFAULT_AMOUNT,
-  DEFAULT_AVATAR,
-  HIDDEN_CLASS,
-} from '../../../../util/Config.js';
+import { HIDDEN_CLASS, VISIBLE_CLASS } from '../../../../util/Config.js';
+import PaidByEntryView from './PaidByEntryView.js';
 
 class ExpensePaidByView {
   #form;
@@ -21,9 +19,14 @@ class ExpensePaidByView {
   #remainderElement;
   #remainderRow;
   #btnClose;
+  #entries;
+  #payerSwitchClass = '.payer__switch';
+  #amountInputClass = '.payer-amount__input';
   #amountWidthOptions;
+  #amountWidthDefault = '14rem';
 
   constructor() {
+    this.#entries = new Map();
     this.#parseFormElements();
     this.#initAmountWidthOptions();
   }
@@ -65,65 +68,130 @@ class ExpensePaidByView {
     ]);
   };
 
-  // TODO!
-  // Add Row
-  // Delete Row
+  // GETTERS
 
-  // LOAD
+  get form() {
+    return this.#form;
+  }
 
-  loadDefaultEntry = data => {
+  hasDefaultRow = () => {
+    return this.#entries.size === 1;
+  };
+
+  // Render
+
+  render = data => {
     const {
-      users,
-      currentUser,
-      paidByData: { defaultEntryId: entryId, disableAddButton },
+      entries,
+      switchOptions,
+      usersToDisable,
+      total,
+      remainder,
+      expenseAmount,
+      disableAddButton,
     } = data;
 
-    const payerOptionsHTML = this.#generateDefaultEntryOptionsHTML(
-      users,
-      currentUser.id
+    const { defaultEntry, otherEntries } = entries;
+    const defaultEntryData = {
+      entry: defaultEntry,
+      switchOptions,
+      usersToDisable,
+      isFirstRow: true,
+    };
+
+    this.#clearEntries();
+    this.#renderDefaultEntry(defaultEntryData);
+    this.#renderEntries(otherEntries, switchOptions, usersToDisable);
+    this.#renderAddPayerButton(disableAddButton);
+    this.#renderCalculationRows(total, remainder, expenseAmount);
+  };
+
+  #renderDefaultEntry = entryData => {
+    this.#renderEntry(entryData);
+  };
+
+  #renderEntries = (entryModels, switchOptions, usersToDisable) => {
+    if (!Array.isArray(entryModels) || entryModels.length === 0) return;
+    entryModels.forEach(entryModel => {
+      this.#renderEntry({ entry: entryModel, switchOptions, usersToDisable });
+    });
+  };
+
+  #renderEntry = data => {
+    const { entry, switchOptions, usersToDisable, isFirstRow = false } = data;
+    if (!entry) return;
+    const { userId, entryId } = entry;
+    const payerOptionsHTML = this.#generatePayerOptionsHTML(
+      switchOptions,
+      userId,
+      usersToDisable
     );
 
     const rowHTML = this.#generateNewRowHTML({
       payerOptionsHTML,
-      entryId,
-      userId: currentUser.id,
-      avatar: currentUser.avatar,
-      isFirstRow: true,
+      isFirstRow,
+      ...entry,
     });
 
     this.#addPayerRow.insertAdjacentHTML('beforebegin', rowHTML);
-    this.#updateAddPayerButton(disableAddButton);
-
-    // TODO! проверить необходимость этого кода
-    // const defaultPayerRow = addPayerRow.previousElementSibling;
-    // addEventListenersToPayerRow(defaultPayerRow, true);
-    // addPayerRowToModel(defaultPayerRow);
+    const rowElement = this.#addPayerRow.previousElementSibling;
+    this.#addRowToEntries(rowElement, entryId);
   };
 
-  #updateAddPayerButton = (shouldHide = false) => {
-    if (!shouldHide) return;
-    this.#addPayerButton.classList.add(HIDDEN_CLASS);
+  #renderCalculationRows = (total, remainder, expenseAmount) => {
+    this.#totalElement.textContent = formatAmountForOutput(total);
+    this.#remainderElement.textContent = formatAmountForOutput(remainder);
+
+    this.#totalRow.style.visibility =
+      remainder === 0 ? HIDDEN_CLASS : VISIBLE_CLASS;
+    restyleRemainderRow(remainder, this.#remainderRow);
+
+    this.#adjustAmountInputWidth(total, expenseAmount);
   };
 
-  #generateDefaultEntryOptionsHTML = (users, currentUserId) => {
-    let payerOptionsHTML = '';
+  #renderAddPayerButton = (shouldHide = false) => {
+    if (shouldHide) {
+      this.#addPayerButton.classList.add(HIDDEN_CLASS);
+    } else {
+      this.#addPayerButton.classList.remove(HIDDEN_CLASS);
+    }
+  };
 
-    users.forEach(user => {
-      const { id, name } = user;
-      const selectedAttribute = id === currentUserId ? ' selected' : '';
-      payerOptionsHTML += `<option value="${id}"${selectedAttribute}>${name}</option>\n`;
+  #adjustAmountInputWidth = (total, expenseAmount) => {
+    const referenceAmount = expenseAmount > total ? expenseAmount : total;
+    const referenceAmountLength = referenceAmount.toString().length;
+    const adjustedWidth =
+      this.#amountWidthOptions.get(referenceAmountLength) ||
+      this.#amountWidthDefault;
+
+    const amountInputElements = Array.from(this.#entries.values()).map(
+      entry => entry.amountInput
+    );
+    amountInputElements.forEach(inputElement => {
+      inputElement.style.width = adjustedWidth;
     });
-
-    return payerOptionsHTML;
   };
 
-  #generatePayerOptionsHTML = ({ users, usersToDisable }) => {
+  // Add / Delete Row
+
+  // Generate HTML
+
+  #generatePayerOptionsHTML = (switchOptions, payerId, usersToDisable) => {
     let payerOptionsHTML = '';
 
-    users.forEach(user => {
-      const { id, name } = user;
-      const disabledAttribute = usersToDisable.has(id) ? ' disabled' : '';
-      payerOptionsHTML += `<option value="${id}"${disabledAttribute}>${name}</option>\n`;
+    switchOptions.forEach((name, id) => {
+      let disabledAttribute;
+      let selectedAttribute;
+
+      if (id === payerId) {
+        selectedAttribute = ' selected';
+        disabledAttribute = '';
+      } else {
+        selectedAttribute = '';
+        disabledAttribute = usersToDisable.has(id) ? ' disabled' : '';
+      }
+
+      payerOptionsHTML += `<option value="${id}"${disabledAttribute}${selectedAttribute}>${name}</option>\n`;
     });
 
     return payerOptionsHTML;
@@ -134,16 +202,13 @@ class ExpensePaidByView {
     entryId,
     userId,
     avatar,
+    amount,
     isFirstRow,
   }) => {
-    const avatarUrl = avatar
-      ? getAvatarUrl(avatar)
-      : getAvatarUrl(DEFAULT_AVATAR);
+    const avatarUrl = getAvatarUrl(avatar);
     const dataUserId = userId ? ` data-user-id="${userId}"` : '';
     const removeColumnAttribute = isFirstRow ? ' inactive' : '';
-    const outputAmount = formatAmountForOutput(DEFAULT_AMOUNT, {
-      showSign: true,
-    });
+    const outputAmount = formatAmountForOutput(amount);
 
     return `
         <tr class="payer-table-row" data-entry-id="${entryId}"${dataUserId}>
@@ -175,11 +240,22 @@ class ExpensePaidByView {
         </tr>`;
   };
 
-  // GETTERS
+  // Utility
 
-  get form() {
-    return this.#form;
-  }
+  #clearEntries = () => {
+    while (this.#addPayerRow.previousElementSibling) {
+      this.#addPayerRow.previousElementSibling.remove();
+    }
+    this.#entries.clear();
+  };
+
+  #addRowToEntries = (rowElement, entryId, userId = null) => {
+    const payerSwitch = rowElement.querySelector(this.#payerSwitchClass);
+    const amountInput = rowElement.querySelector(this.#amountInputClass);
+    const entry = new PaidByEntryView(entryId, payerSwitch, amountInput);
+    if (userId) entry.userId = userId;
+    this.#entries.set(entryId, entry);
+  };
 
   // ADD HANDLERS
 

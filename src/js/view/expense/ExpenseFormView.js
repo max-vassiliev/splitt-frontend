@@ -12,6 +12,7 @@ class ExpenseFormView {
   // Render
   render = data => {
     mainView.render(data);
+    paidByView.render({ ...data.paidBy, expenseAmount: data.amount });
   };
 
   renderAmountInput = data => {
@@ -63,9 +64,6 @@ class ExpenseFormView {
   // LOAD
 
   loadAddFormSetupData = data => {
-    // const { members, currentUserId, paidByDefaultEntryId } = data;
-    console.log('loadAddFormSetupData');
-    paidByView.loadDefaultEntry(data);
     splittView.loadUsers(data);
   };
 

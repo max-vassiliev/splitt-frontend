@@ -988,6 +988,7 @@ header {
 .splitt-shares__row-remainder,
 .payer-table-row__remainder {
   color: #fff;
+  visibility: hidden;
   font-weight: 400;
   font-size: 1.7rem;
   white-space: nowrap;

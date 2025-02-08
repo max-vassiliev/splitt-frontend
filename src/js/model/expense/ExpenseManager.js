@@ -7,7 +7,7 @@ import state from '../state/State.js';
 
 class ExpenseManager {
   init = () => {
-    this.#loadDefaultData();
+    this.#initForms();
   };
 
   // Getters and Setters
@@ -53,30 +53,19 @@ class ExpenseManager {
     }
   };
 
-  /**
-   * Retrieves the data to set up the Paid By subform of Expense Add Form.
-   *
-   * @returns {Object} The object containing the data to set up the Paid By subform.
-   * @property {number} defaultEntryId — ID of the default entry.
-   */
-  getAddPaidBySetupData = () => {
-    const defaultEntryId = state.expenseForms.add.paidBy.defaultEntryId;
-    return { defaultEntryId };
-  };
-
   // Initialize
 
   /**
    * Initializes the default data and configurations for the expense form state.
    */
-  #loadDefaultData = () => {
-    this.#loadAddFormDefaultData();
+  #initForms = () => {
+    this.#initAddForm();
   };
 
   /**
    * Initializes the default data and configurations for the add expense form state.
    */
-  #loadAddFormDefaultData = () => {
+  #initAddForm = () => {
     const addForm = state.expenseForms.add;
     const currentUserId = state.userId;
     const userIds = [...state.members.keys()];
@@ -86,6 +75,18 @@ class ExpenseManager {
     addForm.splitt.equally.init(userIds);
     addForm.splitt.parts.init(userIds);
     addForm.splitt.shares.init(userIds);
+  };
+
+  // Reset
+
+  // TODO! пока наброски: разделение между init() и reset()
+  #resetAddForm = () => {
+    const addForm = state.expenseForms.add;
+    const currentUserId = state.userId;
+    const userIds = [...state.members.keys()];
+
+    addForm.emoji = DEFAULT_EMOJI_EXPENSE;
+    addForm.paidBy.reset(currentUserId);
   };
 
   // Validate

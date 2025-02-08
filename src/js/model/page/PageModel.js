@@ -21,6 +21,16 @@ class PageModel {
   };
 
   /**
+   * Gets the app's global settings.
+   * @returns {Object} The object with the app's global settings.
+   * @property {string} locale The current locale.
+   * @property {string} currencySymbol The currency symbol for transactions in the group.
+   */
+  getAppSettings = () => {
+    return stateManager.getLocaleAndCurrencySymbol();
+  };
+
+  /**
    * Gets the active modal ID.
    * @returns {number|null} An the active modal ID or null.
    */

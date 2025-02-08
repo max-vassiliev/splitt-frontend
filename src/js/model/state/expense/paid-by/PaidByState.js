@@ -4,10 +4,10 @@ class PaidByState {
   #entries;
   #usersInEntries;
   #payersInEntries;
-  #defaultEntryId;
   #total;
   #remainder;
   #isValid;
+  #isInitialized;
 
   constructor() {
     this.#entries = new Map();
@@ -16,18 +16,38 @@ class PaidByState {
     this.#total = 0;
     this.#remainder = 0;
     this.#isValid = true;
+    this.#isInitialized = false;
   }
 
   /**
    * Initializes the state with a default entry for a user (should be the current user).
    * @param {bigint} userId - The current user's ID.
    */
-  init = userId => {
+  init = currentUserId => {
+    this.#loadDefaultEntry(currentUserId);
+    this.#isInitialized = true;
+  };
+
+  reset = currentUserId => {
+    this.#clear();
+    this.#loadDefaultEntry(currentUserId);
+  };
+
+  #loadDefaultEntry = currentUserId => {
     const defaultEntry = new PaidByEntry();
-    defaultEntry.userId = userId;
+    defaultEntry.userId = currentUserId;
+    defaultEntry.isDefault = true;
     this.#entries.set(defaultEntry.entryId, defaultEntry);
-    this.#usersInEntries.add(userId);
-    this.#defaultEntryId = defaultEntry.entryId;
+    this.#usersInEntries.add(currentUserId);
+  };
+
+  #clear = () => {
+    this.#entries.clear();
+    this.#usersInEntries.clear();
+    this.#payersInEntries.clear();
+    this.#total = 0;
+    this.#remainder = 0;
+    this.#isValid = true;
   };
 
   // Getters
@@ -36,9 +56,13 @@ class PaidByState {
    * Checks if the subform is valid and ready for submission.
    * @returns {boolean} `true` if valid, otherwise `false`.
    */
-  isValid = () => {
+  get isValid() {
     return this.#isValid;
-  };
+  }
+
+  get isInitialized() {
+    return this.#isInitialized;
+  }
 
   /**
    * Retrieves all Paid By entries.
@@ -46,14 +70,6 @@ class PaidByState {
    */
   get entries() {
     return this.#entries;
-  }
-
-  /**
-   * Retrieves the ID of the default entry.
-   * @returns {number} The default entry ID.
-   */
-  get defaultEntryId() {
-    return this.#defaultEntryId;
   }
 
   /**

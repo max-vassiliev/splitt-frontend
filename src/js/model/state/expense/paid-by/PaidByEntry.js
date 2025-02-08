@@ -5,6 +5,7 @@ class PaidByEntry {
   #entryId;
   #userId;
   #amount;
+  #isDefault;
 
   /**
    * Creates a new ExpensePaidByEntry instance.
@@ -16,6 +17,7 @@ class PaidByEntry {
     this.#entryId = entryId ? entryId : this.#generateID();
     this.#userId = null;
     this.#amount = 0;
+    this.#isDefault = false;
   }
 
   /**
@@ -77,10 +79,32 @@ class PaidByEntry {
   set amount(value) {
     if (!isNonNegativeInteger(value)) {
       throw new Error(
-        `amount must be a non-negative integer. Recieved: ${value} (${typeof value})`
+        `amount must be a non-negative integer. Received: ${value} (${typeof value}).`
       );
     }
     this.#amount = value;
+  }
+
+  /**
+   * Gets the "isDefault" flag, indicating whether this entry is the default entry.
+   * @returns {boolean} `true` if this entry is the default entry, otherwise `false`.
+   */
+  get isDefault() {
+    return this.#isDefault;
+  }
+
+  /**
+   * Sets the "isDefault" flag, marking this entry as the default entry.
+   * @param {boolean} value - `true` if this entry should be the default entry, otherwise `false`.
+   * @throws {TypeError} If the provided value is not a boolean.
+   */
+  set isDefault(value) {
+    if (typeof value !== 'boolean') {
+      throw new TypeError(
+        `isDefault must be a boolean. Received: ${value} (${typeof value}).`
+      );
+    }
+    this.#isDefault = value;
   }
 
   // Validation

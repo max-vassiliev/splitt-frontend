@@ -4,13 +4,13 @@ import {
   EXPENSE_BALANCE_CHECK_PAID_BY,
   EXPENSE_BALANCE_CHECK_SPLITT,
   EXPENSE_BALANCE_STATUSES,
-} from '../../util/Config.js';
-import ExpenseFormState from '../state/expense/ExpenseFormState.js';
-import PaidByState from '../state/expense/paid-by/PaidByState.js';
-import PaidByEntry from '../state/expense/paid-by/PaidByEntry.js';
-import SplittEquallyState from '../state/expense/splitt/SplittEquallyState.js';
-import SplittPartsState from '../state/expense/splitt/SplittPartsState.js';
-import SplittSharesState from '../state/expense/splitt/SplittSharesState.js';
+} from '../../../util/Config.js';
+import ExpenseFormState from '../../state/expense/ExpenseFormState.js';
+import PaidByState from '../../state/expense/paid-by/PaidByState.js';
+import PaidByEntry from '../../state/expense/paid-by/PaidByEntry.js';
+import SplittEquallyState from '../../state/expense/splitt/SplittEquallyState.js';
+import SplittPartsState from '../../state/expense/splitt/SplittPartsState.js';
+import SplittSharesState from '../../state/expense/splitt/SplittSharesState.js';
 
 class ExpenseBalanceService {
   /**

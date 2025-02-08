@@ -36,7 +36,6 @@ class ExpenseSplittEquallyView {
   // LOAD
 
   loadUsers = data => {
-    console.log('splitt equally: loadUsers()');
     const tableHTML = this.#generateTableHTML(data);
     this.#container.insertAdjacentHTML('afterbegin', tableHTML);
   };

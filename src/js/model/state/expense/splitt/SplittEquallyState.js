@@ -6,10 +6,12 @@ import SplittState from './SplittState.js';
 
 class SplittEquallyState extends SplittState {
   #splittAmounts;
+  #selectedUsers;
 
   constructor() {
     super(EXPENSE_SPLITT_EQUALLY);
     this.#splittAmounts = new Map();
+    this.#selectedUsers = new Set();
   }
 
   // Initialization
@@ -21,10 +23,10 @@ class SplittEquallyState extends SplittState {
   init = userIds => {
     userIds.forEach(userId => {
       this.#splittAmounts.set(userId, DEFAULT_AMOUNT);
+      this.#selectedUsers.add(userId);
     });
     this.#validateForSubmission();
     this._isInitialized = true;
-    this.update();
   };
 
   // Update
@@ -40,7 +42,7 @@ class SplittEquallyState extends SplittState {
    * @returns {Object} An object containing the updated splitt amounts and validation status.
    */
   update = ({ expenseAmount, userId, isSelected = false }) => {
-    if (userId) this.#updateSplittAmounts(userId, isSelected);
+    if (userId) this.#updateUser(userId, isSelected);
     this.#calculateSplitts(expenseAmount);
     this.#validateForSubmission();
     return this.#prepareUpdateResponse();
@@ -56,6 +58,14 @@ class SplittEquallyState extends SplittState {
     return new Map(this.#splittAmounts);
   };
 
+  /**
+   * Retrieves the IDs of the selected users.
+   * @returns {Set<bigint>} The set with the selected users' IDs.
+   */
+  get selectedUsers() {
+    return this.#selectedUsers;
+  }
+
   // Prepare Output
 
   /**
@@ -67,6 +77,7 @@ class SplittEquallyState extends SplittState {
   #prepareUpdateResponse = () => {
     return {
       splittAmounts: this.getSplittAmounts(),
+      selectedUsers: this.selectedUsers,
       isValid: this._isValid,
     };
   };
@@ -78,34 +89,49 @@ class SplittEquallyState extends SplittState {
    * A valid state requires at least one selected user.
    */
   #validateForSubmission = () => {
-    this._isValid = this.#splittAmounts.size === 0 ? false : true;
+    this._isValid = this.#selectedUsers.size === 0 ? false : true;
   };
 
   /**
-   * Adds or removes a user from the splitt amounts map based on selection status.
-   * @param {bigint} userId - The user ID to update.
-   * @param {boolean} isSelected - Whether the user is selected.
+   * Updates the selected users set by adding or removing a user based on selection status.
+   * If a user is deselected, their split amount is reset to the default amount.
+   *
+   * @param {bigint} userId - The ID of the user to update.
+   * @param {boolean} isSelected - `true` to add the user to the selected set, `false` to remove them.
    */
-  #updateSplittAmounts = (userId, isSelected) => {
+  #updateUser = (userId, isSelected) => {
     if (isSelected) {
-      this.#splittAmounts.set(userId, DEFAULT_AMOUNT);
+      this.#selectedUsers.add(userId);
     } else {
-      this.#splittAmounts.delete(userId);
+      this.#selectedUsers.delete(userId);
+      this.#splittAmounts.set(userId, DEFAULT_AMOUNT);
     }
   };
 
   /**
-   * Calculates and updates the splitt amounts based on the expense amount.
+   * Calculates and updates the splitt amounts based on the number of selected users and the expense amount.
    * @param {number} expenseAmount The total expense amount to be split.
    */
   #calculateSplitts = expenseAmount => {
-    const selectedUsers = this.#splittAmounts.size;
-    if (selectedUsers === 0) return;
-    if (selectedUsers === 1) {
-      this.#calculateSplittsSingle(expenseAmount);
-    } else {
-      this.#calculateSplittsDetailed(expenseAmount);
+    switch (this.#selectedUsers.size) {
+      case 0:
+        this.#setDefaultSplitts();
+        break;
+      case 1:
+        this.#calculateSplittsSingle(expenseAmount);
+        break;
+      default:
+        this.#calculateSplittsDetailed(expenseAmount);
     }
+  };
+
+  /**
+   * Sets the default amount to every splittAmounts entry
+   */
+  #setDefaultSplitts = () => {
+    this.#splittAmounts.forEach((_, userId, splittsMap) => {
+      splittsMap.set(userId, DEFAULT_AMOUNT);
+    });
   };
 
   /**
@@ -113,8 +139,8 @@ class SplittEquallyState extends SplittState {
    * @param {number} expenseAmount The expense amount.
    */
   #calculateSplittsSingle = expenseAmount => {
-    const [userId] = this.#splittAmounts.entries().next().value;
-    this.#splittAmounts.set(userId, expenseAmount);
+    const selectedUserId = this.#selectedUsers.values().next().value;
+    this.#splittAmounts.set(selectedUserId, expenseAmount);
   };
 
   /**
@@ -123,13 +149,12 @@ class SplittEquallyState extends SplittState {
    * @param {number} expenseAmount The expense amount.
    */
   #calculateSplittsDetailed = expenseAmount => {
-    const baseAmount = Math.floor(expenseAmount / selectedUsers);
-    const remainder = expenseAmount % selectedUsers;
-    const usersWithHigherAmounts = this.#selectUsersWithHigherAmounts(
-      this.#splittAmounts.keys(),
-      remainder
-    );
-    this.#splittAmounts.forEach((_, userId) => {
+    const selectedUsersCount = this.#selectedUsers.size;
+    const baseAmount = Math.floor(expenseAmount / selectedUsersCount);
+    const remainder = expenseAmount % selectedUsersCount;
+    const usersWithHigherAmounts =
+      this.#selectUsersWithHigherAmounts(remainder);
+    this.#selectedUsers.forEach(userId => {
       let splittAmount = baseAmount;
       if (usersWithHigherAmounts.has(userId)) {
         splittAmount += 1;
@@ -140,13 +165,12 @@ class SplittEquallyState extends SplittState {
 
   /**
    * Randomly selects users to receive a higher splitt amount when an expense is not evenly divisible.
-   * @param {IterableIterator<bigint>} selectedUsers The set of selected user IDs.
    * @param {number} count The number of users to receive a higher amount.
    * @returns {Set<bigint>} A set of user IDs receiving a higher splitt amount.
    */
-  #selectUsersWithHigherAmounts = (selectedUsers, count) => {
+  #selectUsersWithHigherAmounts = count => {
     if (count === 0) return new Set();
-    let allSelectedUsers = Array.from(selectedUsers);
+    let allSelectedUsers = Array.from(this.#selectedUsers);
     allSelectedUsers.sort(() => Math.random() - 0.5);
     let usersWithHigherAmounts = allSelectedUsers.slice(0, count);
     return new Set(usersWithHigherAmounts);

@@ -1,15 +1,20 @@
 import {
   ACTIVE_CLASS,
   HIDDEN_CLASS,
+  VISIBLE_CLASS,
   INVISIBLE_CLASS,
   IMAGES_PATH,
   DEFAULT_AVATAR,
   AMOUNT_COLOR_POSITIVE,
   AMOUNT_COLOR_NEGATIVE,
   AMOUNT_COLOR_NEUTRAL,
+  ABOVE_EXPENSE_AMOUNT_CLASS,
+  BELOW_EXPENSE_AMOUNT_CLASS,
   DEFAULT_CURRENCY_SYMBOL,
   DEFAULT_LOCALE,
+  DEFAULT_AMOUNT,
 } from '../../util/Config.js';
+import appSettings from '../../util/AppSettings.js';
 
 /**
  * Adds the 'active' class to an HTML element.
@@ -55,35 +60,38 @@ export const removeUtilityClasses = (element, utilityClasses) => {
 };
 
 /**
- * Formats an amount in the smallest currency unit to a localized string with currency symbol.
+ * Formats an amount in the smallest currency unit to a localized string with a currency symbol.
  *
- * @param {number} amount - The amount in the smallest currency unit (e.g., cents for USD).
- * @param {Object} options - Formatting options.
- * @param {string} [options.locale=DEFAULT_LOCALE] - The locale for formatting.
- * @param {string} [options.currencySymbol=DEFAULT_CURRENCY_SYMBOL] - The currency symbol to use.
+ * @param {number} amount - The amount in the smallest currency unit (e.g., cents for USD). Defaults to [DEFAULT_AMOUNT]{@link DEFAULT_AMOUNT}.
+ * @param {Object} [options={}] - Formatting options.
  * @param {boolean} [options.showSign=false] - Whether to show a sign (+ or -) before the amount.
- * @returns {string|undefined} The formatted amount string or undefined if the amount is invalid.
+ * @param {string} [options.locale=appSettings.locale] - The locale for formatting.
+ * @param {string} [options.currencySymbol=appSettings.currencySymbol] - The currency symbol to use.
+ * @returns {string} The formatted amount string or the default amount string if the amount is invalid.
  */
 export const formatAmountForOutput = function (
   amount,
-  {
-    locale = DEFAULT_LOCALE,
-    currencySymbol = DEFAULT_CURRENCY_SYMBOL,
-    showSign = false,
-  } = {}
+  { showSign = false, ...options } = {}
 ) {
-  if (amount == null || !Number.isInteger(amount)) return;
+  let amountToFormat;
+  if (amount == null || !Number.isInteger(amount)) {
+    amountToFormat = DEFAULT_AMOUNT;
+  } else {
+    amountToFormat = amount;
+  }
+  const locale = options.locale ?? appSettings.locale;
+  const currencySymbol = options.currencySymbol ?? appSettings.currencySymbol;
 
-  let formattedAmount = Math.abs(amount / 100).toLocaleString(locale, {
+  let formattedAmount = Math.abs(amountToFormat / 100).toLocaleString(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 
   let sign = '';
   if (showSign) {
-    if (amount < 0) {
+    if (amountToFormat < 0) {
       sign = '-\u00A0';
-    } else if (amount > 0) {
+    } else if (amountToFormat > 0) {
       sign = '+\u00A0';
     }
   }
@@ -177,6 +185,31 @@ export const getAvatarUrl = function (avatar) {
 export const getAmountColor = function (amount) {
   if (!amount || amount === 0) return AMOUNT_COLOR_NEUTRAL;
   return amount < 0 ? AMOUNT_COLOR_NEGATIVE : AMOUNT_COLOR_POSITIVE;
+};
+
+/**
+ * Updates the styling of the remainder row based on the given amount.
+ *
+ * @param {number} amount - The amount determining the styling. Must be an integer.
+ * @param {HTMLElement} row - The remainder row element.
+ */
+export const restyleRemainderRow = function (amount, row) {
+  if (!Number.isInteger(amount)) return;
+  removeUtilityClasses(row, [
+    ABOVE_EXPENSE_AMOUNT_CLASS,
+    BELOW_EXPENSE_AMOUNT_CLASS,
+  ]);
+
+  if (amount === 0) {
+    row.style.visibility = HIDDEN_CLASS;
+    return;
+  }
+
+  row.style.visibility = VISIBLE_CLASS;
+  const rowStyle =
+    amount < 0 ? ABOVE_EXPENSE_AMOUNT_CLASS : BELOW_EXPENSE_AMOUNT_CLASS;
+
+  row.classList.add(rowStyle);
 };
 
 /**

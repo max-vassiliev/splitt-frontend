@@ -6,6 +6,7 @@ export const USE_MOCKS = true;
 export const ACTIVE_CLASS = 'active';
 export const INACTIVE_CLASS = 'inactive';
 export const HIDDEN_CLASS = 'hidden';
+export const VISIBLE_CLASS = 'visible';
 export const INVISIBLE_CLASS = 'invisible';
 export const DEFAULT_CLASS = 'default';
 export const DISABLED_ATTRIBUTE = 'disabled';

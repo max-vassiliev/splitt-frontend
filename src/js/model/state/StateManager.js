@@ -161,6 +161,19 @@ class StateManager {
     return state.members;
   }
 
+  /**
+   * Gets the number of members in the group.
+   * @returns {number} The number of group members.
+   */
+  getMembersCount() {
+    return state.members.size;
+  }
+
+  /**
+   * Gets the user by ID.
+   * @param {bigint} id The user's ID.
+   * @returns {User} The User object with data on the group member.
+   */
   getMemberById = id => {
     return state.members.get(id);
   };

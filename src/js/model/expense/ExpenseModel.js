@@ -17,7 +17,8 @@ import expenseManager from './ExpenseManager.js';
 import stateManager from '../state/StateManager.js';
 import dateManager from '../state/date/DateManager.js';
 import emojiManager from '../emoji/EmojiManager.js';
-import balanceService from './ExpenseBalanceService.js';
+import balanceService from './service/ExpenseBalanceService.js';
+import paidByService from './service/PaidByService.js';
 import PaidByState from '../state/expense/paid-by/PaidByState.js';
 
 class ExpenseModel {
@@ -67,13 +68,19 @@ class ExpenseModel {
       isValid,
     } = form;
 
+    const currentUserId = stateManager.getUserId();
+    const groupMembers = stateManager.getMembers();
+
     const date = this.#prepareViewDate(form.date);
     const noteCount = note ? note.length : 0;
     const shouldRender = true;
-    const currentUserId = stateManager.getUserId();
-    const paidByViewModel = this.#prepareViewPaidBy(paidByData, currentUserId);
     const splittViewModel = splittData.activeForm;
     const balance = balanceService.getBalance(form, currentUserId);
+    const paidByViewModel = paidByService.prepareViewModel(
+      paidByData,
+      currentUserId,
+      groupMembers
+    );
 
     return {
       type,
@@ -90,68 +97,6 @@ class ExpenseModel {
       shouldRender,
       shouldCleanup,
     };
-  };
-
-  /**
-   * Prepares the view model for the Paid By subform.
-   * @param {PaidByState} data The Paid By subform state.
-   * @param {bigint} currentUserId The current user's ID.
-   * @returns {Object} The Paid By view model
-   */
-  #prepareViewPaidBy = (data, currentUserId) => {
-    const {
-      entries,
-      usersInEntries,
-      payersInEntries,
-      total,
-      remainder,
-      isValid,
-    } = data;
-
-    const { type, name } = this.#preparePaidByProperties(
-      payersInEntries,
-      currentUserId
-    );
-
-    return {
-      type,
-      name,
-      entries,
-      users: usersInEntries,
-      payers: payersInEntries,
-      total,
-      remainder,
-      isValid,
-    };
-  };
-
-  /**
-   * Prepares additional properties for the Paid By view model, which are not set in the state.
-   *
-   * @param {Set<bigint>} payers A set of payers' IDs.
-   * @param {bigint} currentUserId The current user's ID.
-   * @returns {Object} The object containing additional for the Paid By view model.
-   * @property {string} type Specifies whether the expense was covered by the current user,
-   *                         another user, multiple users or if it is empty. The value is
-   *                         one of [EXPENSE_PAID_BY_TYPES]{@link EXPENSE_PAID_BY_TYPES}.
-   * @property {string} name The name of the user that paid for the expense.
-   *                         Only added if the expense was covered by a single user
-   *                         that is not the current user.
-   */
-  #preparePaidByProperties = (payers, currentUserId) => {
-    const payersCount = payers.size;
-    if (payersCount === 0) return { type: EXPENSE_PAID_BY_EMPTY };
-    if (payersCount > 1) return { type: EXPENSE_PAID_BY_COPAYMENT };
-
-    const payerId = payers.next().value;
-
-    if (payerId === currentUserId) {
-      return { type: EXPENSE_PAID_BY_CURRENT_USER };
-    } else {
-      let name = stateManager.getMemberById(payerId)?.name;
-      if (!name) name = USERNAME_OTHER;
-      return { type: EXPENSE_PAID_BY_OTHER_USER, name };
-    }
   };
 
   /**
@@ -203,15 +148,10 @@ class ExpenseModel {
 
     const currentUser = stateManager.getCurrentUser();
     const displaySettings = stateManager.getLocaleAndCurrencySymbol();
-    const paidByData = {
-      ...expenseManager.getAddPaidBySetupData(),
-      disableAddButton: users.length === 1,
-    };
 
     return {
       users,
       currentUser,
-      paidByData,
       displaySettings,
     };
   };
