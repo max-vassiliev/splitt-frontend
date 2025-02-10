@@ -5,8 +5,8 @@ import {
   EXPENSE_HIDDEN_FORM_NOTE,
   TYPE_EXPENSE,
 } from '../../util/Config.js';
-import addButtonView from '../../view/expense/AddExpenseButtonView.js';
-import formView from '../../view/expense/ExpenseFormView.js';
+import addButtonView from '../../view/forms/expense/AddExpenseButtonView.js';
+import formView from '../../view/forms/expense/ExpenseFormView.js';
 import modalView from '../../view/page/ModalView.js';
 import expenseModel from '../../model/expense/ExpenseModel.js';
 import HiddenFormMediator from '../../view/util/HiddenFormMediator.js';

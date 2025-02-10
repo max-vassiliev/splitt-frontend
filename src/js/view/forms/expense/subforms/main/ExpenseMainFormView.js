@@ -17,7 +17,7 @@ import {
   EXPENSE_BALANCE_DEFAULT,
   EXPENSE_BALANCE_CHECK_PAID_BY,
   EXPENSE_BALANCE_CHECK_SPLITT,
-} from '../../../../util/Config.js';
+} from '../../../../../util/Config.js';
 import {
   formatAmountForOutput,
   setAmountCursorPosition,
@@ -27,9 +27,9 @@ import {
   isActiveHTMLElement,
   activateHTMLElement,
   deactivateHTMLElement,
-} from '../../../util/RenderHelper.js';
-import formHelper from '../../../util/TransactionFormHelper.js';
-import alignmentHelper from '../../../util/AlignmentHelper.js';
+} from '../../../../util/RenderHelper.js';
+import formHelper from '../../../common/TransactionFormHelper.js';
+import alignmentHelper from '../../../../util/AlignmentHelper.js';
 
 class ExpenseMainFormView {
   #headerAddCaption = 'Добавить трату';

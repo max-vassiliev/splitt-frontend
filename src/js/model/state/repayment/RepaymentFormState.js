@@ -189,7 +189,7 @@ class RepaymentFormState {
 
   /**
    * Sets the repayment note.
-   * @param {string|null} value Null or a string not exceeding the length limit set in [TRANSACTION_NOTE_LIMIT]{@link TRANSACTION_NOTE_LIMIT}.
+   * @param {string|null} value Null or a string not exceeding the length limit set in {@link TRANSACTION_NOTE_LIMIT}.
    */
   set note(value) {
     this._validateNote(value);

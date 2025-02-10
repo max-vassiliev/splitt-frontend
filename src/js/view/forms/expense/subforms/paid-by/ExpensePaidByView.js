@@ -2,8 +2,8 @@ import {
   getAvatarUrl,
   formatAmountForOutput,
   restyleRemainderRow,
-} from '../../../util/RenderHelper.js';
-import { HIDDEN_CLASS, VISIBLE_CLASS } from '../../../../util/Config.js';
+} from '../../../../util/RenderHelper.js';
+import { HIDDEN_CLASS, VISIBLE_CLASS } from '../../../../../util/Config.js';
 import PaidByEntryView from './PaidByEntryView.js';
 
 class ExpensePaidByView {

@@ -1,8 +1,8 @@
-import { ACTIVE_CLASS, DISABLED_ATTRIBUTE } from '../../util/Config.js';
+import { ACTIVE_CLASS, DISABLED_ATTRIBUTE } from '../../../util/Config.js';
 import {
   formatAmountForOutput,
   setAmountCursorPosition,
-} from './RenderHelper.js';
+} from '../../util/RenderHelper.js';
 
 class TransactionFormHelper {
   renderAmountInput = ({

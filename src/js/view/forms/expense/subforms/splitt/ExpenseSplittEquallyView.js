@@ -1,7 +1,7 @@
 import {
   formatAmountForOutput,
   getAvatarUrl,
-} from '../../../util/RenderHelper.js';
+} from '../../../../util/RenderHelper.js';
 
 class ExpenseSplittEquallyView {
   #container;

@@ -3,7 +3,7 @@ import {
   EXPENSE_SPLITT_EQUALLY,
   EXPENSE_SPLITT_PARTS,
   EXPENSE_SPLITT_SHARES,
-} from '../../../../util/Config.js';
+} from '../../../../../util/Config.js';
 import equallyView from './ExpenseSplittEquallyView.js';
 import partsView from './ExpenseSplittPartsView.js';
 import sharesView from './ExpenseSplittSharesView.js';

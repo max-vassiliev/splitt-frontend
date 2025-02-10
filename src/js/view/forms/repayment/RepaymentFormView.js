@@ -4,7 +4,7 @@ import {
   INVISIBLE_CLASS,
   REPAYMENT_FORM_EDIT,
   TYPE_REPAYMENT,
-} from '../../util/Config.js';
+} from '../../../util/Config.js';
 import {
   formatAmountForOutput,
   setAmountCursorOnClick,
@@ -13,9 +13,9 @@ import {
   toggleEmojiInputField,
   renderResetButton,
   isActiveHTMLElement,
-} from '../util/RenderHelper.js';
-import alignmentHelper from '../util/AlignmentHelper.js';
-import formHelper from '../util/TransactionFormHelper.js';
+} from '../../util/RenderHelper.js';
+import alignmentHelper from '../../util/AlignmentHelper.js';
+import formHelper from '../common/TransactionFormHelper.js';
 
 class RepaymentFormView {
   #headerAddCaption = 'Вернуть долг';

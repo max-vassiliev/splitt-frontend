@@ -2,7 +2,7 @@ import {
   EXPENSE_HIDDEN_FORM_PAID_BY,
   EXPENSE_HIDDEN_FORM_SPLITT,
   EXPENSE_HIDDEN_FORM_NOTE,
-} from '../../util/Config.js';
+} from '../../../util/Config.js';
 import mainView from './subforms/main/ExpenseMainFormView.js';
 import paidByView from './subforms/paid-by/ExpensePaidByView.js';
 import splittView from './subforms/splitt/ExpenseSplittView.js';
@@ -14,6 +14,7 @@ class ExpenseFormView {
     mainView.render(data);
     paidByView.render({ ...data.paidBy, expenseAmount: data.amount });
     splittView.render(data.splitt);
+    noteView.render(data.note, data.noteCount);
   };
 
   renderAmountInput = data => {
