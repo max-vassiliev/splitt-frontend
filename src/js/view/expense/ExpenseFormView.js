@@ -13,6 +13,7 @@ class ExpenseFormView {
   render = data => {
     mainView.render(data);
     paidByView.render({ ...data.paidBy, expenseAmount: data.amount });
+    splittView.render(data.splitt);
   };
 
   renderAmountInput = data => {

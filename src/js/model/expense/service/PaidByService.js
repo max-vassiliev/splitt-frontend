@@ -11,14 +11,6 @@ import User from '../../user/User.js';
 class PaidByService {
   /**
    * Prepares the view model for the Paid By subform.
-   * @param {PaidByState} data The Paid By subform state.
-   * @param {bigint} currentUserId The current user's ID.
-   * @param {Map<bigint, User>} groupMembers The current group members' list.
-   * @returns {Object} The Paid By view model
-   */
-
-  /**
-   * Prepares the view model for the Paid By subform.
    * @param {PaidByState} paidByData - The Paid By subform state.
    * @param {bigint} currentUserId - The current user's ID.
    * @param {Map<bigint, User>} groupMembers - A map of the group's members.

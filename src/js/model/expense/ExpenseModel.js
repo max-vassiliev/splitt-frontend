@@ -19,6 +19,7 @@ import dateManager from '../state/date/DateManager.js';
 import emojiManager from '../emoji/EmojiManager.js';
 import balanceService from './service/ExpenseBalanceService.js';
 import paidByService from './service/PaidByService.js';
+import splittService from './service/SplittService.js';
 import PaidByState from '../state/expense/paid-by/PaidByState.js';
 
 class ExpenseModel {
@@ -74,7 +75,9 @@ class ExpenseModel {
     const date = this.#prepareViewDate(form.date);
     const noteCount = note ? note.length : 0;
     const shouldRender = true;
-    const splittViewModel = splittData.activeForm;
+    const splittViewModel = splittService.prepareViewModel(
+      splittData.activeForm
+    );
     const balance = balanceService.getBalance(form, currentUserId);
     const paidByViewModel = paidByService.prepareViewModel(
       paidByData,

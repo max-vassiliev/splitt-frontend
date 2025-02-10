@@ -5,19 +5,30 @@ import {
 
 class ExpenseSplittEquallyView {
   #container;
+  #table;
   #rows;
   #checkboxes;
 
   constructor() {
+    this.#rows = new Map();
     this.#parseFormElements();
-    // TODO! надо будет загрузить элементы
   }
 
   #parseFormElements = () => {
     this.#container = document.getElementById('splitt-equally-table');
-    // TODO! скорее всего нужно иначе, так как каждый ряд нужно загрузить
-    // this.#rows = document.querySelectorAll('.splitt-equally__row');
-    // this.#checkboxes = document.querySelectorAll('.splitt-equally-checkbox');
+    this.#table = document.querySelector('.splitt-form__equally');
+  };
+
+  #parseUserRows = users => {
+    users.forEach(user => {
+      const row = this.#table.querySelector(`[data-user-id="${user.id}"]`);
+      if (!row) return;
+      this.#rows.set(user.id, {
+        row,
+        checkbox: row.querySelector('.splitt-equally-checkbox'),
+        amountCell: row.querySelector('.splitt-equally-column__amount'),
+      });
+    });
   };
 
   // TODO! старый код, с которым нужно что-то сделать
@@ -33,33 +44,44 @@ class ExpenseSplittEquallyView {
   // splittEquallyModel.element = splittEquallyTable;
   // addExpenseFormModel.splitt = splittEquallyModel;
 
+  // RENDER
+
+  render = data => {
+    this.#renderRows(data);
+  };
+
+  #renderRows = data => {
+    const { splittAmounts, selectedUsers } = data;
+    splittAmounts.forEach((amount, userId) => {
+      const { checkbox, amountCell } = this.#rows.get(userId);
+      checkbox.checked = selectedUsers.has(userId);
+      amountCell.textContent = formatAmountForOutput(amount);
+    });
+  };
+
   // LOAD
 
   loadUsers = data => {
-    const tableHTML = this.#generateTableHTML(data);
-    this.#container.insertAdjacentHTML('afterbegin', tableHTML);
+    const { users } = data;
+    const rowsHTML = this.#generateUserRowsHTML(users);
+    this.#table.insertAdjacentHTML('afterbegin', rowsHTML);
+    this.#parseUserRows(users);
   };
 
-  #generateTableHTML = data => {
-    const { users, displaySettings } = data;
-    let tableHTML = '<table class="splitt-form__equally">';
+  #generateUserRowsHTML = users => {
+    let userRowsHTML = '';
     users.forEach(user => {
-      const rowHTML = this.#generateRowHTML(user, displaySettings);
-      tableHTML += rowHTML;
+      const rowHTML = this.#generateRowHTML(user);
+      userRowsHTML += rowHTML;
     });
-    return tableHTML;
+    return userRowsHTML;
   };
 
-  #generateRowHTML = (user, displaySettings) => {
+  #generateRowHTML = user => {
     const { id, name, avatar, amount } = user;
-    const { locale, currencySymbol } = displaySettings;
 
     const avatarUrl = getAvatarUrl(avatar);
-    const formattedAmount = formatAmountForOutput(amount, {
-      locale,
-      currencySymbol,
-      showSign: true,
-    });
+    const formattedAmount = formatAmountForOutput(amount);
 
     return `
         <tr class="splitt-equally__row" data-user-id="${id}">
