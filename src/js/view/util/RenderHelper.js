@@ -5,15 +5,14 @@ import {
   INVISIBLE_CLASS,
   IMAGES_PATH,
   DEFAULT_AVATAR,
+  DEFAULT_AMOUNT,
   AMOUNT_COLOR_POSITIVE,
   AMOUNT_COLOR_NEGATIVE,
   AMOUNT_COLOR_NEUTRAL,
   ABOVE_EXPENSE_AMOUNT_CLASS,
   BELOW_EXPENSE_AMOUNT_CLASS,
-  DEFAULT_CURRENCY_SYMBOL,
-  DEFAULT_LOCALE,
-  DEFAULT_AMOUNT,
 } from '../../util/Config.js';
+
 import appSettings from '../../util/AppSettings.js';
 
 /**
@@ -103,11 +102,16 @@ export const formatAmountForOutput = function (
  * Formats a percentage value as a string with a percentage symbol.
  *
  * @param {number} value - The percentage value.
- * @returns {string|undefined} The formatted percentage string or undefined if the value is invalid.
+ * @returns {string} The formatted percentage string or default percentage string if the value is invalid.
  */
 export const formatPercentForOutput = function (value) {
-  if (value == null || !Number.isInteger(value)) return;
-  return `${value}\u202F%`;
+  let percentToFormat;
+  if (value == null || !Number.isInteger(value)) {
+    percentToFormat = DEFAULT_AMOUNT;
+  } else {
+    percentToFormat = value;
+  }
+  return `${percentToFormat}\u202F%`;
 };
 
 /**
@@ -210,6 +214,38 @@ export const restyleRemainderRow = function (amount, row) {
     amount < 0 ? ABOVE_EXPENSE_AMOUNT_CLASS : BELOW_EXPENSE_AMOUNT_CLASS;
 
   row.classList.add(rowStyle);
+};
+
+/**
+ * Adjusts the width of one or more HTML elements based on the length of the largest amount.
+ *
+ * @param {Object} params - The parameters object.
+ * @param {number} params.total - The total amount to compare.
+ * @param {number} params.expenseAmount - The expense amount to compare.
+ * @param {Map<number, string>} params.widthOptions - A map where the key is the number of digits
+ * in the amount and the value is the corresponding width.
+ * @param {string} params.defaultWidth - The default width to apply if no match is found in widthOptions.
+ * @param {HTMLElement[] | HTMLElement} params.inputElements - A single HTML element or an array of elements to be resized.
+ */
+export const adjustAmountElementsWidth = ({
+  total,
+  expenseAmount,
+  widthOptions,
+  defaultWidth,
+  amountElements,
+}) => {
+  const referenceAmount = expenseAmount > total ? expenseAmount : total;
+  const referenceAmountLength = referenceAmount.toString().length;
+  const adjustedWidth = widthOptions.get(referenceAmountLength) || defaultWidth;
+  if (Array.isArray(amountElements)) {
+    amountElements.forEach(amountElement => {
+      amountElement.style.width = adjustedWidth;
+    });
+  } else if (inputElements instanceof HTMLElement) {
+    amountElements.style.width = adjustedWidth;
+  } else {
+    console.warn('adjustAmountElementsWidth: Invalid inputElements provided.');
+  }
 };
 
 /**

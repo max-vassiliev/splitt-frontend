@@ -53,9 +53,6 @@ class ExpenseSplittView {
 
   loadUsers = data => {
     equallyView.loadUsers(data);
-    // TODO!
-    // partsView.loadUsers(data);
-    // sharesView.loadUsers(data);
   };
 
   // GETTERS

@@ -2,6 +2,7 @@ import {
   getAvatarUrl,
   formatAmountForOutput,
   restyleRemainderRow,
+  adjustAmountElementsWidth,
 } from '../../../../util/RenderHelper.js';
 import { HIDDEN_CLASS, VISIBLE_CLASS } from '../../../../../util/Config.js';
 import PaidByEntryView from './PaidByEntryView.js';
@@ -146,7 +147,8 @@ class ExpensePaidByView {
       remainder === 0 ? HIDDEN_CLASS : VISIBLE_CLASS;
     restyleRemainderRow(remainder, this.#remainderRow);
 
-    this.#adjustAmountInputWidth(total, expenseAmount);
+    // this.#adjustAmountInputWidth(total, expenseAmount);
+    this.#adjustInputWidth(total, expenseAmount);
   };
 
   #renderAddPayerButton = (shouldHide = false) => {
@@ -157,20 +159,34 @@ class ExpensePaidByView {
     }
   };
 
-  #adjustAmountInputWidth = (total, expenseAmount) => {
-    const referenceAmount = expenseAmount > total ? expenseAmount : total;
-    const referenceAmountLength = referenceAmount.toString().length;
-    const adjustedWidth =
-      this.#amountWidthOptions.get(referenceAmountLength) ||
-      this.#amountWidthDefault;
-
-    const amountInputElements = Array.from(this.#entries.values()).map(
+  #adjustInputWidth = (total, expenseAmount) => {
+    const amountElements = Array.from(this.#entries.values()).map(
       entry => entry.amountInput
     );
-    amountInputElements.forEach(inputElement => {
-      inputElement.style.width = adjustedWidth;
+    adjustAmountElementsWidth({
+      total,
+      expenseAmount,
+      amountElements,
+      widthOptions: this.#amountWidthOptions,
+      defaultWidth: this.#amountWidthDefault,
     });
   };
+
+  // TODO! удалить (возможно)
+  // #adjustAmountInputWidth = (total, expenseAmount) => {
+  //   const referenceAmount = expenseAmount > total ? expenseAmount : total;
+  //   const referenceAmountLength = referenceAmount.toString().length;
+  //   const adjustedWidth =
+  //     this.#amountWidthOptions.get(referenceAmountLength) ||
+  //     this.#amountWidthDefault;
+
+  //   const amountInputElements = Array.from(this.#entries.values()).map(
+  //     entry => entry.amountInput
+  //   );
+  //   amountInputElements.forEach(inputElement => {
+  //     inputElement.style.width = adjustedWidth;
+  //   });
+  // };
 
   // Add / Delete Row
 

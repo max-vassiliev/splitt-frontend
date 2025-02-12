@@ -18,6 +18,14 @@ class SplittService {
       EXPENSE_SPLITT_EQUALLY,
       this.#prepareViewModelEqually
     );
+    this.#viewModelPreparers.set(
+      EXPENSE_SPLITT_PARTS,
+      this.#prepareViewModelParts
+    );
+    this.#viewModelPreparers.set(
+      EXPENSE_SPLITT_SHARES,
+      this.#prepareViewModelShares
+    );
   };
 
   /**
@@ -48,6 +56,54 @@ class SplittService {
       isValid: data.isValid,
       splittAmounts: data.getSplittAmounts(),
       selectedUsers: data.selectedUsers,
+    };
+  };
+
+  /**
+   * Prepares the view model for the Splitt Parts type.
+   * @param {Object} data The state data for the Splitt subform.
+   * @param {string} data.type The type of Splitt.
+   * @param {boolean} data.isValid Indicates whether the Splitt is valid.
+   * @param {Function} data.getSplittAmounts A method that retrieves Splitt amounts.
+   * @param {number} data.total The total sum of Splitt amounts.
+   * @param {number} data.remainder The remainder, the difference between the expense amount and total.
+   * @returns {Object} The view model for the Splitt Parts type.
+   * @private
+   */
+  #prepareViewModelParts = data => {
+    return {
+      type: data.type,
+      isValid: data.isValid,
+      splittAmounts: data.getSplittAmounts(),
+      total: data.total,
+      remainder: data.remainder,
+    };
+  };
+
+  /**
+   * Prepares the view model for the Splitt Shares type.
+   * @param {Object} data The state data for the Splitt subform.
+   * @param {string} data.type The type of Splitt.
+   * @param {boolean} data.isValid Indicates whether the Splitt is valid.
+   * @param {Function} data.getSplittShares A method that retrieves Splitt shares.
+   * @param {Function} data.getSplittAmounts A method that retrieves Splitt amounts.
+   * @param {number} data.totalShare The total share of Splitt shares.
+   * @param {number} data.totalAmount The total sum of Splitt amounts.
+   * @param {number} data.remainderShare The remaining shares to be assigned.
+   * @param {number} data.remainderAmount The remainder, the difference between the expense amount and total amount.
+   * @returns {Object} The view model for the Splitt Shares type.
+   * @private
+   */
+  #prepareViewModelShares = data => {
+    return {
+      type: data.type,
+      isValid: data.isValid,
+      splittShares: data.getSplittShares(),
+      splittAmounts: data.getSplittAmounts(),
+      totalShare: data.totalShare,
+      totalAmount: data.totalAmount,
+      remainderShare: data.remainderShare,
+      remainderAmount: data.remainderAmount,
     };
   };
 

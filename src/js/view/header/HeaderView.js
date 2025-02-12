@@ -1,4 +1,4 @@
-import { ACTIVE_CLASS, HIDDEN_ATTRIBUTE } from '../../util/Config.js';
+import { ACTIVE_CLASS, INVISIBLE_CLASS } from '../../util/Config.js';
 import { getAvatarUrl } from '../util/RenderHelper.js';
 
 class HeaderView {
@@ -84,7 +84,7 @@ class HeaderView {
         usernameElement.textContent = username;
       });
 
-    this.#header.removeAttribute(HIDDEN_ATTRIBUTE);
+    this.#header.classList.remove(INVISIBLE_CLASS);
   }
 }
 

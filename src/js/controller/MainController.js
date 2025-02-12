@@ -24,8 +24,8 @@ class MainController {
       transactionsController.init();
       paginationController.init();
       emojiController.init();
-      expenseController.init();
       repaymentContoller.init();
+      expenseController.init();
 
       this.#alignTransactionForms();
 

@@ -59,6 +59,22 @@ class SplittPartsState extends SplittState {
     return new Map(this.#splittAmounts);
   };
 
+  /**
+   * Retrieves the total sum of all splitt amounts.
+   * @returns {number} The total sum of splitt amounts.
+   */
+  get total() {
+    return this.#total;
+  }
+
+  /**
+   * Retrieves the remainder, which is the difference between the expense amount and the total sum of splitt amounts.
+   * @returns {number} The remaining amount to be allocated.
+   */
+  get remainder() {
+    return this.#remainder;
+  }
+
   // Prepare Output
 
   /**

@@ -83,6 +83,43 @@ class SplittSharesState extends SplittState {
     return new Map(this.#splittShares);
   };
 
+  /**
+   * Retrieves the total sum of all splitt shares.
+   * @returns {number} The total sum of splitt shares.
+   */
+  get totalShare() {
+    return this.#totalShare;
+  }
+
+  /**
+   * Retrieves the total sum of all splitt amounts.
+   * @returns {number} The total sum of splitt amounts.
+   */
+  get totalAmount() {
+    return this.#totalAmount;
+  }
+
+  /**
+   * Retrieves the remainder share,
+   * which is the share that needs to be allocated
+   * to make the total amount be equal to the expense amount.
+   *
+   * @returns {number} The remaining share to be allocated.
+   */
+  get remainderShare() {
+    return this.#remainderShare;
+  }
+
+  /**
+   * Retrieves the remainder amount,
+   * which represents tha amount value of the remainder share.
+   *
+   * @returns {number} The remaining amount.
+   */
+  get remainderAmount() {
+    return this.#remainderAmount;
+  }
+
   // Prepare Output
 
   /**

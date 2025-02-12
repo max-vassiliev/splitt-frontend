@@ -11,9 +11,10 @@ import noteView from './subforms/note/ExpenseNoteView.js';
 class ExpenseFormView {
   // Render
   render = data => {
+    const { amount: expenseAmount } = data;
     mainView.render(data);
-    paidByView.render({ ...data.paidBy, expenseAmount: data.amount });
-    splittView.render(data.splitt);
+    paidByView.render({ ...data.paidBy, expenseAmount });
+    splittView.render({ ...data.splitt, expenseAmount });
     noteView.render(data.note, data.noteCount);
   };
 

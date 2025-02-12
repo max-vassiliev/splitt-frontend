@@ -41,7 +41,7 @@
     <div class="overlay hidden"></div>
     <div class="overlay-error hidden"></div>
     <!-- TOP NAVIGATION -->
-    <header hidden>
+    <header class="invisible">
       <div class="logo">
         <img src="logo.png" alt="Logo" class="logo_img" />
         <h1 class="logo_text">Splitt</h1>
@@ -486,7 +486,8 @@
               <!-- Splitt Form: Parts -->
               <div class="splitt-form__table" id="splitt-parts-table">
                 <table class="splitt-form__parts">
-                  <tr class="splitt-parts__row inactive" data-user-id="1">
+                  <!-- TODO! удалить -->
+                  <!-- <tr class="splitt-parts__row inactive" data-user-id="1">
                     <td class="splitt-parts-column__avatar">
                       <img
                         class="account__avatar"
@@ -561,15 +562,13 @@
                         value="0,00&nbsp;₽"
                       />
                     </td>
-                  </tr>
+                  </tr> -->
                   <tr class="splitt-parts__row-separator"></tr>
                   <tr class="splitt-parts__row-total">
                     <td class="splitt-parts-column__total-label" colspan="2">
                       Всего
                     </td>
-                    <td class="splitt-parts-column__total-amount">
-                      0,00&nbsp;₽
-                    </td>
+                    <td class="splitt-parts-column__total-amount"></td>
                   </tr>
                   <tr class="splitt-parts__row-remainder">
                     <td
@@ -578,16 +577,15 @@
                     >
                       Осталось
                     </td>
-                    <td class="splitt-parts-column__remainder-amount">
-                      1&nbsp;234,56&nbsp;₽
-                    </td>
+                    <td class="splitt-parts-column__remainder-amount"></td>
                   </tr>
                 </table>
               </div>
               <!-- Splitt Form: Shares -->
               <div class="splitt-form__table" id="splitt-shares-table">
                 <table class="splitt-form__shares">
-                  <tr class="splitt-shares__row inactive" data-user-id="1">
+                  <!-- TODO! удалить -->
+                  <!-- <tr class="splitt-shares__row inactive" data-user-id="1">
                     <td class="splitt-shares-column__avatar">
                       <img
                         class="account__avatar"
@@ -666,17 +664,17 @@
                       />
                     </td>
                     <td class="splitt-shares-column__amount">0,00&nbsp;₽</td>
-                  </tr>
+                  </tr> -->
                   <tr class="splitt-shares__row-separator"></tr>
                   <tr class="splitt-shares__row-total">
                     <td class="splitt-shares-column__total-label" colspan="2">
                       Всего
                     </td>
-                    <td class="splitt-shares-column__total-share">0&nbsp;%</td>
+                    <td class="splitt-shares-column__total-share"></td>
                     <td class="splitt-shares-column__total-amount">
-                      <div class="splitt-shares-column__total-amount-value">
-                        0,00&nbsp;₽
-                      </div>
+                      <div
+                        class="splitt-shares-column__total-amount-value"
+                      ></div>
                     </td>
                   </tr>
                   <tr class="splitt-shares__row-remainder">
@@ -686,12 +684,8 @@
                     >
                       Осталось
                     </td>
-                    <td class="splitt-shares-column__remainder-share">
-                      0&nbsp;%
-                    </td>
-                    <td class="splitt-shares-column__remainder-amount">
-                      0,00&nbsp;₽
-                    </td>
+                    <td class="splitt-shares-column__remainder-share"></td>
+                    <td class="splitt-shares-column__remainder-amount"></td>
                   </tr>
                 </table>
               </div>

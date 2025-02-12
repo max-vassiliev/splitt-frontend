@@ -2,6 +2,7 @@ import {
   formatAmountForOutput,
   getAvatarUrl,
 } from '../../../../util/RenderHelper.js';
+import { INACTIVE_CLASS } from '../../../../../util/Config.js';
 
 class ExpenseSplittEquallyView {
   #container;
@@ -53,10 +54,19 @@ class ExpenseSplittEquallyView {
   #renderRows = data => {
     const { splittAmounts, selectedUsers } = data;
     splittAmounts.forEach((amount, userId) => {
-      const { checkbox, amountCell } = this.#rows.get(userId);
+      const { checkbox, amountCell, row } = this.#rows.get(userId);
       checkbox.checked = selectedUsers.has(userId);
       amountCell.textContent = formatAmountForOutput(amount);
+      this.#toggleRowActiveView(row, checkbox.checked);
     });
+  };
+
+  #toggleRowActiveView = (row, isActive) => {
+    if (isActive) {
+      row.classList.remove(INACTIVE_CLASS);
+    } else {
+      row.classList.add(INACTIVE_CLASS);
+    }
   };
 
   // LOAD
