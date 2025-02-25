@@ -3,7 +3,12 @@ import {
   EXPENSE_SPLITT_EQUALLY,
   EXPENSE_SPLITT_PARTS,
   EXPENSE_SPLITT_SHARES,
+  ACTIVE_CLASS,
 } from '../../../../../util/Config.js';
+import {
+  activateHTMLElement,
+  removeUtilityClass,
+} from '../../../../util/RenderHelper.js';
 import equallyView from './ExpenseSplittEquallyView.js';
 import partsView from './ExpenseSplittPartsView.js';
 import sharesView from './ExpenseSplittSharesView.js';
@@ -16,11 +21,13 @@ class ExpenseSplittView {
   #splittButtonParts;
   #splittButtonShares;
   #splittButtons;
+  #splittContainers;
   #splittViews;
 
   constructor() {
     this.#parseFormElements();
     this.#initSplittButtons();
+    this.#initSplittContainers();
     this.#initSplittViews();
   }
 
@@ -49,10 +56,20 @@ class ExpenseSplittView {
     this.#splittViews.set(EXPENSE_SPLITT_SHARES, sharesView);
   };
 
+  #initSplittContainers = () => {
+    this.#splittContainers = [
+      equallyView.container,
+      partsView.container,
+      sharesView.container,
+    ];
+  };
+
   // LOAD
 
   loadUsers = data => {
     equallyView.loadUsers(data);
+    partsView.init(data.users);
+    sharesView.init(data.users);
   };
 
   // GETTERS
@@ -63,20 +80,38 @@ class ExpenseSplittView {
 
   // ADD HANDLERS
 
-  addHandlerSplittButtonClickEqually = handler => {
-    this.#splittButtonEqually.addEventListener('click', handler);
+  addHandlerOptionButtonClick = handler => {
+    this.#addHandlerOptionButtonClickEqually(handler);
+    this.#addHandlerOptionButtonClickParts(handler);
+    this.#addHandlerOptionButtonClickShares(handler);
   };
 
-  addHandlerSplittButtonClickParts = handler => {
-    this.#splittButtonParts.addEventListener('click', handler);
+  #addHandlerOptionButtonClickEqually = handler => {
+    this.#splittButtonEqually.addEventListener('click', () =>
+      handler(EXPENSE_SPLITT_EQUALLY)
+    );
   };
 
-  addHandlerSplittButtonClickShares = handler => {
-    this.#splittButtonShares.addEventListener('click', handler);
+  #addHandlerOptionButtonClickParts = handler => {
+    this.#splittButtonParts.addEventListener('click', () =>
+      handler(EXPENSE_SPLITT_PARTS)
+    );
+  };
+
+  #addHandlerOptionButtonClickShares = handler => {
+    this.#splittButtonShares.addEventListener('click', () =>
+      handler(EXPENSE_SPLITT_SHARES)
+    );
   };
 
   addHandlerCloseButtonClick = handler => {
     this.#btnClose.addEventListener('click', handler);
+  };
+
+  // METHODS
+
+  selectType = type => {
+    this.#renderButton(type);
   };
 
   // RENDER
@@ -86,6 +121,7 @@ class ExpenseSplittView {
     this.#renderButton(type);
     const activeView = this.#splittViews.get(type);
     activeView.render(data);
+    this.#showSplittView(activeView.container);
   };
 
   #renderButton = splittType => {
@@ -98,6 +134,17 @@ class ExpenseSplittView {
   #resetButtons = () => {
     Array.from(this.#splittButtons.values()).forEach(button => {
       button.checked = false;
+    });
+  };
+
+  #showSplittView = viewContainer => {
+    this.#hideSplittViews();
+    activateHTMLElement(viewContainer);
+  };
+
+  #hideSplittViews = () => {
+    this.#splittContainers.forEach(splittContainer => {
+      removeUtilityClass(splittContainer, ACTIVE_CLASS);
     });
   };
 }

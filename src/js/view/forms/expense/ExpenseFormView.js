@@ -9,7 +9,12 @@ import splittView from './subforms/splitt/ExpenseSplittView.js';
 import noteView from './subforms/note/ExpenseNoteView.js';
 
 class ExpenseFormView {
-  // Render
+  // --------
+  // GLOBAL
+  // --------
+
+  // Global: Render
+
   render = data => {
     const { amount: expenseAmount } = data;
     mainView.render(data);
@@ -18,79 +23,7 @@ class ExpenseFormView {
     noteView.render(data.note, data.noteCount);
   };
 
-  renderAmountInput = data => {
-    mainView.renderAmountInput(data);
-  };
-
-  adjustAmountInputCursor = data => {
-    mainView.adjustAmountInputCursor(data);
-  };
-
-  renderEmoji = emoji => {
-    mainView.renderEmoji(emoji);
-  };
-
-  renderDate = date => {
-    mainView.renderDate(date);
-  };
-
-  renderPaidBy = data => {
-    const { type, name } = data;
-    mainView.renderPaidByButtonCaption({ type, name });
-  };
-
-  renderSplitt = data => {
-    const { type } = data;
-    mainView.renderSplittButtonCaption(type);
-  };
-
-  renderSubmitButton = isFormValid => {
-    mainView.renderSubmitButton(isFormValid);
-  };
-
-  // Activate / Deactivate
-
-  activate = () => {
-    mainView.activate();
-  };
-
-  deactivate = () => {
-    mainView.deactivate();
-  };
-
-  // Alignment
-
-  alignForm = () => {
-    mainView.alignForm();
-  };
-
-  // LOAD
-
-  loadAddFormSetupData = data => {
-    splittView.loadUsers(data);
-  };
-
-  updateDateInput = dateInputData => {
-    mainView.updateDateInput(dateInputData);
-  };
-
-  // GETTERS
-
-  getMainForm = () => {
-    return mainView.form;
-  };
-
-  isActive = () => {
-    return mainView.isActive();
-  };
-
-  getEmojiField = () => {
-    return mainView.getEmojiField();
-  };
-
-  getEmojiTopMarginData = () => {
-    return mainView.getEmojiTopMarginData();
-  };
+  // Global: Getters
 
   getHiddenFormToggleElements = () => {
     const { buttonPaidBy, buttonSplitt, buttonNote } =
@@ -118,27 +51,41 @@ class ExpenseFormView {
     return [paidByElements, splittElements, noteElements];
   };
 
-  // ADD HANDLERS
+  // -----------
+  // MAIN FORM
+  // -----------
 
-  addHandlerAmountInput = handler => {
-    mainView.addHandlerAmountInput(handler);
+  // Main Form: Render
+
+  renderSubmitButton = isFormValid => {
+    mainView.renderSubmitButton(isFormValid);
   };
 
-  addHandlerAmountInputClick = handler => {
-    mainView.addHandlerAmountInputClick(handler);
+  // Main Form: Utilities
+
+  activate = () => {
+    mainView.activate();
   };
 
-  addHandlerDateInput = handler => {
-    mainView.addHandlerDateInput(handler);
+  deactivate = () => {
+    mainView.deactivate();
   };
 
-  addHandlerPaidByButtonClick = handler => {
-    mainView.addHandlerPaidByButtonClick(handler);
+  alignForm = () => {
+    mainView.alignForm();
   };
 
-  addHandlerSplittButtonClick = handler => {
-    mainView.addHandlerSplittButtonClick(handler);
+  // Main Form: Getters
+
+  getMainForm = () => {
+    return mainView.form;
   };
+
+  isActive = () => {
+    return mainView.isActive();
+  };
+
+  // Main Form: Add Handlers
 
   addHandlerNoteButtonClick = handler => {
     mainView.addHandlerNoteButtonClick(handler);
@@ -148,7 +95,71 @@ class ExpenseFormView {
     mainView.addHandlerCloseButtonClick(handler);
   };
 
-  // ADD HANDLERS (Emoji)
+  // --------
+  // AMOUNT
+  // --------
+
+  // Amount: Render
+
+  renderAmountInput = data => {
+    mainView.renderAmountInput(data);
+  };
+
+  adjustAmountInputCursor = data => {
+    mainView.adjustAmountInputCursor(data);
+  };
+
+  // Amount: Add Handlers
+
+  addHandlerAmountInput = handler => {
+    mainView.addHandlerAmountInput(handler);
+  };
+
+  addHandlerAmountInputClick = handler => {
+    mainView.addHandlerAmountInputClick(handler);
+  };
+
+  // -------
+  // DATE
+  // -------
+
+  // Date: Render
+
+  renderDate = date => {
+    mainView.renderDate(date);
+  };
+
+  updateDateInput = dateInputData => {
+    mainView.updateDateInput(dateInputData);
+  };
+
+  // Date: Add Handlers
+
+  addHandlerDateInput = handler => {
+    mainView.addHandlerDateInput(handler);
+  };
+
+  // -------
+  // EMOJI
+  // -------
+
+  // Emoji: Render
+
+  renderEmoji = emoji => {
+    mainView.renderEmoji(emoji);
+  };
+
+  // Emoji: Getters
+
+  getEmojiField = () => {
+    return mainView.getEmojiField();
+  };
+
+  getEmojiTopMarginData = () => {
+    return mainView.getEmojiTopMarginData();
+  };
+
+  // Emoji: Add Handlers
 
   addHandlerEmojiPickerSwitchBtnClick = handler => {
     mainView.addHandlerEmojiPickerSwitchBtnClick(handler);
@@ -166,7 +177,25 @@ class ExpenseFormView {
     mainView.addHandlerEmojiRemoveBtnClick(handler);
   };
 
-  // ADD HANDLERS (Paid By)
+  // ---------------
+  // HIDDEN FORMS
+  // ---------------
+
+  // Hidden Forms: Add Handlers
+
+  addHandlerCloseHiddenFormButtonClick = handler => {
+    splittView.addHandlerCloseButtonClick(handler);
+  };
+
+  // ---------
+  // PAID BY
+  // ---------
+
+  // Paid By Form: Add Handlers
+
+  addHandlerPaidByButtonClick = handler => {
+    mainView.addHandlerPaidByButtonClick(handler);
+  };
 
   addHandlerPaidByTableClick = handler => {
     paidByView.addHandlerTableClick(handler);
@@ -193,6 +222,36 @@ class ExpenseFormView {
   // TODO! удалить (возможно)
   addHandlerPayerButton = handler => {
     paidByView.addHandlerPayerButton(handler);
+  };
+
+  // --------
+  // SPLITT
+  // --------
+
+  // Splitt: Render
+
+  renderAfterSplittChange = data => {
+    const { splitt, balance, expenseAmount, isValid } = data;
+    mainView.renderSplittButtonCaption(splitt.type);
+    mainView.renderBalance(balance);
+    mainView.renderSubmitButton(isValid);
+    splittView.render({ ...splitt, expenseAmount });
+  };
+
+  // Splitt: Load
+
+  loadAddFormSetupData = data => {
+    splittView.loadUsers(data);
+  };
+
+  // Splitt: Add Handlers
+
+  addHandlerSplittButtonClick = handler => {
+    mainView.addHandlerSplittButtonClick(handler);
+  };
+
+  addHandlerSplittOptionButtonClick = handler => {
+    splittView.addHandlerOptionButtonClick(handler);
   };
 }
 

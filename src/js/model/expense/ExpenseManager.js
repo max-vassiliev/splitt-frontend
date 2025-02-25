@@ -1,5 +1,6 @@
 import {
   EXPENSE_FORM_TYPES,
+  EXPENSE_SPLITT_TYPES,
   DEFAULT_EMOJI_EXPENSE,
 } from '../../util/Config.js';
 import ExpenseFormState from '../state/expense/ExpenseFormState.js';
@@ -51,6 +52,32 @@ class ExpenseManager {
     if (state.expenseForms.activeForm) {
       state.expenseForms.activeForm.activeHiddenForm = type;
     }
+  };
+
+  // Update
+
+  /**
+   * Updates the active Splitt Form type and recalculates values if needed.
+   * If the requested type is already active, no changes are made.
+   * Otherwise, the corresponding form is retrieved, recalculated, and set as active.
+   * The form is then validated for submission.
+   *
+   * @param {string} type - The new Splitt type to activate. See {@link EXPENSE_SPLITT_TYPES}.
+   * @returns {Object} An object indicating whether the update occurred and the updated active form.
+   * @property {boolean} isUpdated - `true` if the Splitt type was updated, `false` otherwise.
+   * @property {Object} [expenseForm] - The updated expense form state if an update occurred.
+   */
+  updateSplittType = type => {
+    const expenseForm = this.getActiveForm();
+    if (expenseForm.splitt.activeForm.type === type) {
+      return { isUpdated: false };
+    }
+    const splittForm = expenseForm.splitt.getForm(type);
+    splittForm.recalculate(expenseForm.amount);
+    expenseForm.splitt.activeForm = splittForm;
+
+    expenseForm.validateForSubmission();
+    return { isUpdated: true, form: expenseForm };
   };
 
   // Initialize

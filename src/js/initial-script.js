@@ -1615,33 +1615,33 @@ export function initializeLegacyScript() {
 
     // el: Add Expense: Splitt Form
 
-    splittOptionButtons.forEach(splittOptionButton => {
-      splittOptionButton.addEventListener('change', handleSplittOptionChange);
-    });
+    // splittOptionButtons.forEach(splittOptionButton => {
+    //   splittOptionButton.addEventListener('change', handleSplittOptionChange);
+    // });
 
-    splittEquallyCheckboxes.forEach(checkbox =>
-      checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
-    );
+    // splittEquallyCheckboxes.forEach(checkbox =>
+    //   checkbox.addEventListener('change', handleSplittEquallyCheckboxChange)
+    // );
 
-    splittEquallyTableRows.forEach(row =>
-      row.addEventListener('click', handleSplittEquallyRowClick)
-    );
+    // splittEquallyTableRows.forEach(row =>
+    //   row.addEventListener('click', handleSplittEquallyRowClick)
+    // );
 
-    splittPartsAmountInputs.forEach(inputAmount =>
-      inputAmount.addEventListener('input', handleSplittPartsAmountInput)
-    );
+    // splittPartsAmountInputs.forEach(inputAmount =>
+    //   inputAmount.addEventListener('input', handleSplittPartsAmountInput)
+    // );
 
-    splittPartsRows.forEach(row =>
-      row.addEventListener('click', handleSplittPartsRowClick)
-    );
+    // splittPartsRows.forEach(row =>
+    //   row.addEventListener('click', handleSplittPartsRowClick)
+    // );
 
-    splittSharesInputs.forEach(inputShare =>
-      inputShare.addEventListener('input', handleSplittSharesInput)
-    );
+    // splittSharesInputs.forEach(inputShare =>
+    //   inputShare.addEventListener('input', handleSplittSharesInput)
+    // );
 
-    splittSharesRows.forEach(row =>
-      row.addEventListener('click', handleSplittSharesRowClick)
-    );
+    // splittSharesRows.forEach(row =>
+    //   row.addEventListener('click', handleSplittSharesRowClick)
+    // );
 
     // el: Add Expense: Note Form
 

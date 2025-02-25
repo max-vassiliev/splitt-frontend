@@ -26,6 +26,8 @@ class ExpenseController {
     expenseModel.init();
     this.#loadData();
     this.#bindEventHandlers();
+    this.#bindHiddenFormHandlers();
+    this.#bindSplittFormHandlers();
 
     // TODO! удалить
     // console.log(State);
@@ -82,6 +84,14 @@ class ExpenseController {
       this.#toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_NOTE);
     });
     formView.addHandlerCloseButtonClick(this.#closeForm);
+  };
+
+  #bindHiddenFormHandlers = () => {
+    formView.addHandlerCloseHiddenFormButtonClick(this.#closeHiddenForm);
+  };
+
+  #bindSplittFormHandlers = () => {
+    formView.addHandlerSplittOptionButtonClick(this.#handleSplittOptionChange);
   };
 
   // Toggle Form
@@ -166,7 +176,13 @@ class ExpenseController {
 
   // Handlers: Reset
 
-  // Handlers: Hidden Form
+  // Handlers: Splitt Form
+
+  #handleSplittOptionChange = splittType => {
+    const response = expenseModel.updateSplittType(splittType);
+    if (!response.shouldRender) return;
+    formView.renderAfterSplittChange(response);
+  };
 
   // Alignment
 

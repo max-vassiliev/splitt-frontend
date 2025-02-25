@@ -23,6 +23,7 @@ class SplittCollection {
     // TODO! вернуть equally
     this.#activeForm = this.#equally;
     // this.#activeForm = this.#parts;
+    // this.#activeForm = this.#shares;
     this.#initFormsMap();
   }
 
@@ -31,6 +32,25 @@ class SplittCollection {
     this.#forms.set(EXPENSE_SPLITT_EQUALLY, this.#equally);
     this.#forms.set(EXPENSE_SPLITT_PARTS, this.#parts);
     this.#forms.set(EXPENSE_SPLITT_SHARES, this.#shares);
+  };
+
+  /**
+   * Retrieves the splitt form by it's type.
+   * @param {string} type The type of the splitt form. See {@link EXPENSE_SPLITT_TYPES}.
+   * @returns {Object} One of the splitt form state assigned to the type.
+   * @throws {Error} If the splitt type is invalid or no form is assigned to the type.
+   */
+  getForm = type => {
+    if (!EXPENSE_SPLITT_TYPES.has(type)) {
+      throw new Error(`Invalid Splitt type: ${type}.`);
+    }
+
+    const form = this.#forms.get(type);
+    if (!form) {
+      throw new Error(`No form assigned to the type: ${type}.`);
+    }
+
+    return form;
   };
 
   /**
@@ -43,20 +63,13 @@ class SplittCollection {
 
   /**
    * Sets the active splitt form state.
-   * @param {string} splittType The splitt type to set as active. See {@link EXPENSE_SPLITT_TYPES}.
-   * @throws {Error} If the splitt type is invalid or no form is assigned to the type.
+   * @param {object} form The form instance to set as active.
+   * @throws {Error} If the provided form is not one of the registered forms.
    */
-  set activeForm(splittType) {
-    if (!EXPENSE_SPLITT_TYPES.has(splittType)) {
-      throw new Error(`Invalid Splitt type: ${splittType}.`);
+  set activeForm(form) {
+    if (![...this.#forms.values()].includes(form)) {
+      throw new Error('Invalid form: The provided form is not registered.');
     }
-
-    const form = this.#forms.get(splittType);
-    if (!form) {
-      console.warn(`No form assigned to the type: ${splittType}.`);
-      return;
-    }
-
     this.#activeForm = form;
   }
 

@@ -20,12 +20,12 @@ class ExpenseSplittPartsView {
 
   constructor() {
     this.#isInitialized = false;
+    this.#rows = new Map();
+    this.#parseFormElements();
+    this.#initAmountWidthOptions();
   }
 
   init = users => {
-    this.#rows = new Map();
-    this.#initAmountWidthOptions();
-    this.#parseFormElements();
     this.#loadUsers(users);
     this.#isInitialized = true;
   };
@@ -73,6 +73,10 @@ class ExpenseSplittPartsView {
 
   // GETTERS
 
+  get container() {
+    return this.#container;
+  }
+
   get isInitialized() {
     return this.#isInitialized;
   }
@@ -92,7 +96,7 @@ class ExpenseSplittPartsView {
     splittAmounts.forEach((amount, userId) => {
       const { amountInput, row } = this.#rows.get(userId);
       amountInput.value = formatAmountForOutput(amount);
-      this.#toggleRowActiveView(row, amount === DEFAULT_AMOUNT);
+      this.#toggleRowActiveView(row, amount);
     });
   };
 
@@ -118,8 +122,8 @@ class ExpenseSplittPartsView {
     });
   };
 
-  #toggleRowActiveView = (row, isActive) => {
-    if (isActive) {
+  #toggleRowActiveView = (row, amount) => {
+    if (amount !== DEFAULT_AMOUNT) {
       row.classList.remove(INACTIVE_CLASS);
     } else {
       row.classList.add(INACTIVE_CLASS);

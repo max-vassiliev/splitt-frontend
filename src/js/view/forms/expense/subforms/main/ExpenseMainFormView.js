@@ -294,11 +294,6 @@ class ExpenseMainFormView {
     formHelper.renderSubmitButton(submitButton, isFormValid);
   };
 
-  updateDateInput = ({ min, max, updateDefaultDate }) => {
-    const dateInput = this.#inputDate;
-    formHelper.updateDateInput({ min, max, updateDefaultDate, dateInput });
-  };
-
   renderEmoji = emoji => {
     if (!emoji) {
       toggleEmojiInputField(this.getEmojiField(), false);
@@ -314,36 +309,6 @@ class ExpenseMainFormView {
   updateDateInput = ({ min, max, updateDefaultDate }) => {
     const dateInput = this.#inputDate;
     formHelper.updateDateInput({ min, max, updateDefaultDate, dateInput });
-  };
-
-  // Render: Edit Form
-
-  // Render: Private Methods
-
-  #renderCaptions = formType => {
-    if (formType === EXPENSE_FORM_EDIT) {
-      this.#renderCaptionsEdit();
-    } else {
-      this.#renderCaptionsAdd();
-    }
-  };
-
-  #renderCaptionsAdd = () => {
-    this.#header.textContent = this.#headerAddCaption;
-    this.#buttonSubmit.textContent = this.#submitAddCaption;
-  };
-
-  #renderCaptionsEdit = () => {
-    this.#header.textContent = this.#headerEditCaption;
-    this.#buttonSubmit.textContent = this.#submitEditCaption;
-  };
-
-  #renderTitle = title => {
-    this.#inputTitle.value = title ? title : '';
-  };
-
-  #renderAmount = amount => {
-    this.#inputAmount.value = formatAmountForOutput(amount);
   };
 
   /**
@@ -380,6 +345,36 @@ class ExpenseMainFormView {
     } else {
       this.#renderBalanceCheckForm(balance);
     }
+  };
+
+  // Render: Edit Form
+
+  // Render: Private Methods
+
+  #renderCaptions = formType => {
+    if (formType === EXPENSE_FORM_EDIT) {
+      this.#renderCaptionsEdit();
+    } else {
+      this.#renderCaptionsAdd();
+    }
+  };
+
+  #renderCaptionsAdd = () => {
+    this.#header.textContent = this.#headerAddCaption;
+    this.#buttonSubmit.textContent = this.#submitAddCaption;
+  };
+
+  #renderCaptionsEdit = () => {
+    this.#header.textContent = this.#headerEditCaption;
+    this.#buttonSubmit.textContent = this.#submitEditCaption;
+  };
+
+  #renderTitle = title => {
+    this.#inputTitle.value = title ? title : '';
+  };
+
+  #renderAmount = amount => {
+    this.#inputAmount.value = formatAmountForOutput(amount);
   };
 
   /**

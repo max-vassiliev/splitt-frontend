@@ -47,6 +47,16 @@ export const deactivateHTMLElement = element => {
 };
 
 /**
+ * Removes a utility class from an HTML element.
+ *
+ * @param {HTMLElement} element - The element from which utility class should be removed.
+ * @param {string} utilityClass - The utility class name to be removed.
+ */
+export const removeUtilityClass = (element, utilityClass) => {
+  element.classList.remove(utilityClass);
+};
+
+/**
  * Removes utility classes from an HTML element.
  *
  * @param {HTMLElement} element - The element from which utility classes should be removed.
@@ -54,7 +64,7 @@ export const deactivateHTMLElement = element => {
  */
 export const removeUtilityClasses = (element, utilityClasses) => {
   utilityClasses.forEach(utilityClass => {
-    element.classList.remove(utilityClass);
+    removeUtilityClass(element, utilityClass);
   });
 };
 
@@ -241,10 +251,10 @@ export const adjustAmountElementsWidth = ({
     amountElements.forEach(amountElement => {
       amountElement.style.width = adjustedWidth;
     });
-  } else if (inputElements instanceof HTMLElement) {
+  } else if (amountElements instanceof HTMLElement) {
     amountElements.style.width = adjustedWidth;
   } else {
-    console.warn('adjustAmountElementsWidth: Invalid inputElements provided.');
+    console.warn('adjustAmountElementsWidth: Invalid amountElements provided.');
   }
 };
 

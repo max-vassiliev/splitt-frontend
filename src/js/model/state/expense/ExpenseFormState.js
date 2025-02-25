@@ -215,7 +215,7 @@ class ExpenseFormState {
 
   // Validation
 
-  _validateForSubmission = () => {
+  validateForSubmission = () => {
     //
   };
 

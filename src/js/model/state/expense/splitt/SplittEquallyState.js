@@ -48,6 +48,17 @@ class SplittEquallyState extends SplittState {
     return this.#prepareUpdateResponse();
   };
 
+  /**
+   * Recalculates the splitt amounts based on the provided expense amount
+   * and validates the form state after recalculation.
+   *
+   * @param {number} expenseAmount - The total expense amount used for recalculation.
+   */
+  recalculate = expenseAmount => {
+    this.#calculateSplitts(expenseAmount);
+    this.#validateForSubmission();
+  };
+
   // Getters
 
   /**

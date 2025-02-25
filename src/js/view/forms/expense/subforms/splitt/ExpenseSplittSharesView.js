@@ -23,12 +23,12 @@ class ExpenseSplittSharesView {
 
   constructor() {
     this.#isInitialized = false;
-  }
-
-  init = users => {
     this.#rows = new Map();
     this.#initAmountWidthOptions();
     this.#parseFormElements();
+  }
+
+  init = users => {
     this.#loadUsers(users);
     this.#isInitialized = true;
   };
@@ -85,6 +85,10 @@ class ExpenseSplittSharesView {
 
   // GETTERS
 
+  get container() {
+    return this.#container;
+  }
+
   get isInitialized() {
     return this.#isInitialized;
   }
@@ -116,7 +120,7 @@ class ExpenseSplittSharesView {
       const amount = splittAmounts.get(userId);
       shareInput.value = formatPercentForOutput(share);
       amountCell.value = formatAmountForOutput(amount);
-      this.#toggleRowActiveView(row, share === DEFAULT_AMOUNT);
+      this.#toggleRowActiveView(row, share);
     });
   };
 
@@ -141,8 +145,8 @@ class ExpenseSplittSharesView {
     });
   };
 
-  #toggleRowActiveView = (row, isActive) => {
-    if (isActive) {
+  #toggleRowActiveView = (row, share) => {
+    if (share !== DEFAULT_AMOUNT) {
       row.classList.remove(INACTIVE_CLASS);
     } else {
       row.classList.add(INACTIVE_CLASS);

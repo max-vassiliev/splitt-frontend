@@ -115,6 +115,41 @@ class ExpenseModel {
     return dateManager.getToday().string;
   };
 
+  // Public methods: Update
+
+  /**
+   * Updates the active Splitt type in the expense form and recalculates related values.
+   * If the requested type is already active, no changes are made.
+   * Otherwise, the corresponding Splitt form is updated, and the necessary values are retrieved.
+   *
+   * @param {string} type - The new Splitt type to activate. See {@link EXPENSE_SPLITT_TYPES}.
+   * @returns {Object} An object containing rendering information and updated values.
+   * @property {boolean} shouldRender - `true` if the Splitt type was updated and requires re-rendering, `false` otherwise.
+   * @property {Object} [splitt] - The prepared view model for the updated Splitt form.
+   * @property {Object} [balance] - The updated balance for the current user.
+   * @property {number} [expenseAmount] - The updated total expense amount.
+   * @property {boolean} [isValid] - The validity status of the updated expense form.
+   */
+  updateSplittType = type => {
+    const updateResponse = expenseManager.updateSplittType(type);
+    if (!updateResponse.isUpdated) {
+      return { shouldRender: false };
+    }
+    const { form } = updateResponse;
+    const currentUserId = stateManager.getUserId();
+    const splittViewModel = splittService.prepareViewModel(
+      form.splitt.activeForm
+    );
+    const balance = balanceService.getBalance(form, currentUserId);
+    return {
+      shouldRender: true,
+      splitt: splittViewModel,
+      balance,
+      expenseAmount: form.amount,
+      isValid: form.isValid,
+    };
+  };
+
   // Public methods: Get
 
   /**

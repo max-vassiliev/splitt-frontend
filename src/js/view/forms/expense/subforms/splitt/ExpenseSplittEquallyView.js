@@ -45,6 +45,12 @@ class ExpenseSplittEquallyView {
   // splittEquallyModel.element = splittEquallyTable;
   // addExpenseFormModel.splitt = splittEquallyModel;
 
+  // GETTERS
+
+  get container() {
+    return this.#container;
+  }
+
   // RENDER
 
   render = data => {
