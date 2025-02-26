@@ -6,7 +6,7 @@ class RepaymentNoteView extends TransactionNoteView {
       form: '.add-repayment__form_note',
       input: '.add-transaction__form_input-note#repayment-note',
       counter: '.character-count.repayment-note',
-      buttonClose: '.add-repayment__form_btn-close',
+      buttonClose: '.add-repayment__note-form_btn-close',
       resetBtn: '.repayment-hidden.reset-repayment-note',
     });
   }

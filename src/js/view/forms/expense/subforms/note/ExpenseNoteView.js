@@ -6,7 +6,7 @@ class ExpenseNoteView extends TransactionNoteView {
       form: '.add-expense__form_note',
       input: '.add-transaction__form_input-note#expense-note',
       counter: '.character-count.expense-note',
-      buttonClose: '.add-expense__form_btn-close',
+      buttonClose: '.add-expense__note-form_btn-close',
       resetBtn: '.repayment-hidden.reset-repayment-note', // TODO! поменять на expense
     });
   }

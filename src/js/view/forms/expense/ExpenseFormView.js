@@ -184,7 +184,9 @@ class ExpenseFormView {
   // Hidden Forms: Add Handlers
 
   addHandlerCloseHiddenFormButtonClick = handler => {
+    paidByView.addHandlerCloseButtonClick(handler);
     splittView.addHandlerCloseButtonClick(handler);
+    noteView.addHandlerButtonCloseClick(handler);
   };
 
   // ---------

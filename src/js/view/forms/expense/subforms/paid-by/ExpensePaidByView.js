@@ -306,6 +306,10 @@ class ExpensePaidByView {
   };
 
   // TODO! amount input?
+
+  addHandlerCloseButtonClick = handler => {
+    this.#btnClose.addEventListener('click', handler);
+  };
 }
 
 export default new ExpensePaidByView();

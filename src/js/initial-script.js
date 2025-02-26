@@ -1585,12 +1585,13 @@ export function initializeLegacyScript() {
 
     // addExpenseBtnEdit.forEach(button => toggleHiddenForm(button, 'expense'));
 
-    addExpenseHiddenFormBtnClose.forEach(button => {
-      button.addEventListener('click', function (event) {
-        event.preventDefault();
-        closeAddExpenseHiddenForm();
-      });
-    });
+    // TODO! удалить
+    // addExpenseHiddenFormBtnClose.forEach(button => {
+    //   button.addEventListener('click', function (event) {
+    //     event.preventDefault();
+    //     closeAddExpenseHiddenForm();
+    //   });
+    // });
 
     addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
 

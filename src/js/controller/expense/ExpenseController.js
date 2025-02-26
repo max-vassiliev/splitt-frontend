@@ -152,7 +152,8 @@ class ExpenseController {
     expenseModel.updateActiveHiddenForm(newFormType);
   };
 
-  #closeHiddenForm = () => {
+  #closeHiddenForm = event => {
+    event.preventDefault();
     const activeHiddenFormType = expenseModel.getActiveHiddenForm();
     if (!activeHiddenFormType) return;
     this.#hiddenFormMediator.closeForm(activeHiddenFormType);
