@@ -1646,9 +1646,9 @@ export function initializeLegacyScript() {
 
     // el: Add Expense: Note Form
 
-    addExpenseNoteInput.addEventListener('input', () =>
-      handleTransactionNoteInput(addExpenseNoteForm)
-    );
+    // addExpenseNoteInput.addEventListener('input', () =>
+    //   handleTransactionNoteInput(addExpenseNoteForm)
+    // );
 
     // el: Delete Transactions
 

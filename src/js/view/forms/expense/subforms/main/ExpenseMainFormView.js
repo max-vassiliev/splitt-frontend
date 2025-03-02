@@ -153,7 +153,7 @@ class ExpenseMainFormView {
   };
 
   addHandlerAmountInput = handler => {
-    this.#inputAmount.addEventListener('input', handler);
+    this.#inputAmount.addEventListener('input', debounce(handler, 50));
   };
 
   addHandlerAmountInputClick = handler => {

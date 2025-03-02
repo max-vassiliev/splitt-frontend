@@ -28,6 +28,7 @@ class ExpenseController {
     this.#bindEventHandlers();
     this.#bindHiddenFormHandlers();
     this.#bindSplittFormHandlers();
+    this.#bindNoteFormHandlers();
 
     // TODO! удалить
     // console.log(State);
@@ -95,6 +96,11 @@ class ExpenseController {
 
   #bindSplittFormHandlers = () => {
     formView.addHandlerSplittOptionButtonClick(this.#handleSplittOptionChange);
+  };
+
+  #bindNoteFormHandlers = () => {
+    formView.addHandlerNoteInput(this.#handleNoteInput);
+    formView.addHandlerNoteInputCount(this.#handleNoteInputCount);
   };
 
   // Toggle Form
@@ -211,6 +217,26 @@ class ExpenseController {
     const response = expenseModel.updateSplittType(splittType);
     if (!response.shouldRender) return;
     formView.renderAfterUpdateSplittOption(response);
+  };
+
+  // Handlers: Note Form
+
+  #handleNoteInput = event => {
+    const input = event.target.value;
+    const response = expenseModel.updateNote(input);
+
+    if (response.isAboveLimit) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
+    formView.renderAfterUpdateNote(response);
+  };
+
+  #handleNoteInputCount = event => {
+    const count = event.target.value.length;
+    formView.renderNoteCount(count);
   };
 
   // Alignment

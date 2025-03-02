@@ -304,6 +304,32 @@ class ExpenseFormView {
   addHandlerSplittOptionButtonClick = handler => {
     splittView.addHandlerOptionButtonClick(handler);
   };
+
+  // ------
+  // NOTE
+  // ------
+
+  // Note: Render
+
+  renderAfterUpdateNote = response => {
+    const { isEmpty, count, shouldClear } = response;
+    mainView.renderNoteButtonCaption(isEmpty);
+    noteView.renderNoteInputResponse({ count, shouldClear });
+  };
+
+  renderNoteCount = count => {
+    noteView.renderCount(count);
+  };
+
+  // Note: Add Handlers
+
+  addHandlerNoteInput = handler => {
+    noteView.addHandlerNoteInput(handler);
+  };
+
+  addHandlerNoteInputCount = handler => {
+    noteView.addHandlerNoteInputCount(handler);
+  };
 }
 
 export default new ExpenseFormView();

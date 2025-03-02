@@ -21,7 +21,7 @@ import balanceService from './service/ExpenseBalanceService.js';
 import paidByService from './service/PaidByService.js';
 import splittService from './service/SplittService.js';
 import mathService from '../util/MathService.js';
-import transactionFormService from '../util/TransactionFormService.js';
+import formService from '../util/TransactionFormService.js';
 import PaidByState from '../state/expense/paid-by/PaidByState.js';
 
 class ExpenseModel {
@@ -165,7 +165,7 @@ class ExpenseModel {
    * @returns {Object} The update response object.
    */
   updateTitle = inputTitle => {
-    const processedTitle = transactionFormService.processTitleInput(inputTitle);
+    const processedTitle = formService.processTitleInput(inputTitle);
     return expenseManager.updateTitle(processedTitle);
   };
 
@@ -217,6 +217,26 @@ class ExpenseModel {
       expenseAmount: form.amount,
       isValid: form.isValid,
     };
+  };
+
+  /**
+   * Updates the note in the active form and returns instructions for rendering.
+   * Processes the input note to ensure it meets validation criteria.
+   * If the note exceeds the character limit, no changes are made to the form.
+   *
+   * @param {string} noteInput - The note string to be set in the form. Can be an empty string or contain whitespace.
+   * @returns {Object} - The validation result object containing the following properties:
+   *   @property {boolean} isEmpty - Indicates if the input is an empty string or contains only whitespace.
+   *   @property {boolean} shouldClear - Indicates if the input should be cleared.
+   *   @property {number} count - The number of characters in the input.
+   *   @property {boolean} isAboveLimit - Indicates if the number of characters exceeds the limit.
+   */
+  updateNote = noteInput => {
+    const validationResult = formService.processNoteInput(noteInput);
+    if (validationResult.isAboveLimit) return validationResult;
+    const noteToSave = validationResult.isEmpty ? null : noteInput;
+    const updateResult = expenseManager.updateNote(noteToSave);
+    return { ...validationResult, ...updateResult };
   };
 
   // Public methods: Get

@@ -115,6 +115,19 @@ class ExpenseManager {
     return { isUpdated: true, form: expenseForm };
   };
 
+  /**
+   * Updates the note in the active expense form.
+   *
+   * @param {string|null} note - The processed note to save. Can be null if the note is empty.
+   * @returns {Object} The result of the update operation.
+   */
+  updateNote = note => {
+    const form = this.getActiveForm();
+    const formType = form.type;
+    form.note = note;
+    return { formType };
+  };
+
   // Initialize
 
   /**
