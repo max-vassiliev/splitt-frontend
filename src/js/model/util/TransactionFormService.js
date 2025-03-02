@@ -3,6 +3,19 @@ import { TRANSACTION_NOTE_LIMIT } from '../../util/Config.js';
 
 class TransactionFormService {
   /**
+   * Processes the title input by normalizing empty strings to `null`.
+   *
+   * @param {string} input - The title input to process.
+   * @returns {string|null} The processed title, or `null` if the input is empty.
+   */
+  processTitleInput = input => {
+    if (isEmptyString(input)) {
+      return null;
+    }
+    return input;
+  };
+
+  /**
    * Processes the note input for a transaction form.
    * Validates the input note, checking for empty strings, whitespace, and length limits.
    *

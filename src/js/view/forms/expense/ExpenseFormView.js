@@ -95,6 +95,24 @@ class ExpenseFormView {
     mainView.addHandlerCloseButtonClick(handler);
   };
 
+  // -------
+  // TITLE
+  // -------
+
+  // Title: Render
+
+  renderAfterUpdateTitle = data => {
+    const { title, isValid } = data;
+    mainView.renderTitle(title);
+    mainView.renderSubmitButton(isValid);
+  };
+
+  // Amount: Add Handlers
+
+  addHandlerTitleInput = handler => {
+    mainView.addHandlerTitleInput(handler);
+  };
+
   // --------
   // AMOUNT
   // --------

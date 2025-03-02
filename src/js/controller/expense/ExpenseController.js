@@ -74,6 +74,7 @@ class ExpenseController {
   };
 
   #bindMainFormHandlers = () => {
+    formView.addHandlerTitleInput(this.#handleTitleInput);
     formView.addHandlerAmountInput(this.#handleAmountInput);
     formView.addHandlerAmountInputClick(this.#handleAmountInputClick);
     formView.addHandlerPaidByButtonClick(event => {
@@ -170,7 +171,13 @@ class ExpenseController {
     }
   };
 
-  // Handlers: Main Form (Amount)
+  // Handlers: Main Form
+
+  #handleTitleInput = event => {
+    const inputTitle = event.target.value;
+    const response = expenseModel.updateTitle(inputTitle);
+    formView.renderAfterUpdateTitle(response);
+  };
 
   #handleAmountInput = event => {
     const inputAmount = event.target.value;

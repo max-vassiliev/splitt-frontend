@@ -101,7 +101,7 @@ class ExpenseFormState {
       field: 'title',
       limit: TRANSACTION_TITLE_LIMIT,
     });
-    this.title = value;
+    this._title = value;
   }
 
   /**
@@ -219,7 +219,7 @@ class ExpenseFormState {
 
   validateForSubmission = () => {
     this._isValid =
-      isNonEmptyString(this._title) &&
+      this._title !== null &&
       isPositiveInteger(this._amount) &&
       this._paidBy.isValid &&
       this._splitt.activeForm?.isValid;

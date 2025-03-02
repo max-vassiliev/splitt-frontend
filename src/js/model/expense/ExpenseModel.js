@@ -21,6 +21,7 @@ import balanceService from './service/ExpenseBalanceService.js';
 import paidByService from './service/PaidByService.js';
 import splittService from './service/SplittService.js';
 import mathService from '../util/MathService.js';
+import transactionFormService from '../util/TransactionFormService.js';
 import PaidByState from '../state/expense/paid-by/PaidByState.js';
 
 class ExpenseModel {
@@ -156,6 +157,17 @@ class ExpenseModel {
   };
 
   // Public methods: Update
+
+  /**
+   * Updates the title of the active form.
+   *
+   * @param {string} inputTitle - The new title input.
+   * @returns {Object} The update response object.
+   */
+  updateTitle = inputTitle => {
+    const processedTitle = transactionFormService.processTitleInput(inputTitle);
+    return expenseManager.updateTitle(processedTitle);
+  };
 
   /**
    * Processes, updates, and prepares the view model for an expense amount change.

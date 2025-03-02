@@ -57,6 +57,21 @@ class ExpenseManager {
   // Update
 
   /**
+   * Updates the title of the active form and revalidates the form for submission.
+   *
+   * @param {string} title - The updated title to set.
+   * @returns {Object} The updated state of the form.
+   * @property {string|null} title - The new title of the expense.
+   * @property {boolean} isValid - Indicates if the form remains valid after the update.
+   */
+  updateTitle = title => {
+    const form = this.getActiveForm();
+    form.title = title;
+    form.validateForSubmission();
+    return { title, isValid: form.isValid };
+  };
+
+  /**
    * Updates the amount for the active form and propagates changes to related subforms.
    *
    * @param {number} amount - The new amount to set.

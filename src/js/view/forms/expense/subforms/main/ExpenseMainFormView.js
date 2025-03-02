@@ -28,6 +28,7 @@ import {
   activateHTMLElement,
   deactivateHTMLElement,
 } from '../../../../util/RenderHelper.js';
+import { debounce } from '../../../../util/InputHelper.js';
 import formHelper from '../../../common/TransactionFormHelper.js';
 import alignmentHelper from '../../../../util/AlignmentHelper.js';
 
@@ -147,6 +148,10 @@ class ExpenseMainFormView {
 
   // ADD HANDLERS
 
+  addHandlerTitleInput = handler => {
+    this.#inputTitle.addEventListener('input', debounce(handler, 300));
+  };
+
   addHandlerAmountInput = handler => {
     this.#inputAmount.addEventListener('input', handler);
   };
@@ -261,7 +266,7 @@ class ExpenseMainFormView {
       balance,
     } = data;
     this.#renderCaptions(type);
-    this.#renderTitle(title);
+    this.renderTitle(title);
     this.#renderAmount(amount);
     this.renderEmoji(emoji);
     this.renderDate(date);
@@ -369,7 +374,7 @@ class ExpenseMainFormView {
     this.#buttonSubmit.textContent = this.#submitEditCaption;
   };
 
-  #renderTitle = title => {
+  renderTitle = title => {
     this.#inputTitle.value = title ? title : '';
   };
 
