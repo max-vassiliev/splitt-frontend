@@ -74,6 +74,8 @@ class ExpenseController {
   };
 
   #bindMainFormHandlers = () => {
+    formView.addHandlerAmountInput(this.#handleAmountInput);
+    formView.addHandlerAmountInputClick(this.#handleAmountInputClick);
     formView.addHandlerPaidByButtonClick(event => {
       this.#toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_PAID_BY);
     });
@@ -168,6 +170,25 @@ class ExpenseController {
     }
   };
 
+  // Handlers: Main Form (Amount)
+
+  #handleAmountInput = event => {
+    const inputAmount = event.target.value;
+    const cursorPosition = event.target.selectionStart;
+    const response = expenseModel.updateAmount(inputAmount);
+    formView.renderAfterUpdateAmount({
+      ...response,
+      inputAmount,
+      cursorPosition,
+    });
+  };
+
+  #handleAmountInputClick = event => {
+    const inputValue = event.target.value;
+    const cursorPosition = event.target.selectionStart;
+    formView.adjustAmountInputCursor({ inputValue, cursorPosition });
+  };
+
   // Handlers: Main Form (Emoji)
 
   #activateEmojiField = () => {
@@ -182,7 +203,7 @@ class ExpenseController {
   #handleSplittOptionChange = splittType => {
     const response = expenseModel.updateSplittType(splittType);
     if (!response.shouldRender) return;
-    formView.renderAfterSplittChange(response);
+    formView.renderAfterUpdateSplittOption(response);
   };
 
   // Alignment

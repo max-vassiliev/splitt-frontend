@@ -107,6 +107,17 @@ class ExpensePaidByView {
     this.#renderCalculationRows(total, remainder, expenseAmount);
   };
 
+  renderAfterExpenseAmountChange = data => {
+    const { hasSingleEntry, total, remainder, expenseAmount } = data;
+    if (hasSingleEntry) {
+      const { defaultEntryAmount } = data;
+      const defaultEntry = this.#entries.values().next().value;
+      defaultEntry.amountInput.value =
+        formatAmountForOutput(defaultEntryAmount);
+    }
+    this.#renderCalculationRows(total, remainder, expenseAmount);
+  };
+
   #renderDefaultEntry = entryData => {
     this.#renderEntry(entryData);
   };

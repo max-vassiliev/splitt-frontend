@@ -90,6 +90,15 @@ class PaidByState {
   }
 
   /**
+   * Checks if the form contains only a single entry.
+   *
+   * @returns {boolean} Returns `true` if there is exactly one entry, otherwise `false`.
+   */
+  hasSingleEntry = () => {
+    return this.#entries.size === 1;
+  };
+
+  /**
    * Gets the total amount in the Paid By form, the sum of all amounts in the entries.
    * @returns {number} The total amount.
    */
@@ -233,6 +242,58 @@ class PaidByState {
     };
   };
 
+  /**
+   * Makes updates to the Paid By form after an expense amount update.
+   *
+   * - If there is only one payer, their amount is automatically updated.
+   * - Recalculates totals and revalidates the form after the update.
+   * - Returns relevant data about the update.
+   *
+   * @param {number} expenseAmount - The new expense amount.
+   * @returns {Object} The updated state after the amount change.
+   * @property {boolean} hasSingleEntry - Indicates if there is only one entry.
+   * @property {number} total - The updated total amount.
+   * @property {number} remainder - The remaining amount to be allocated.
+   * @property {boolean} isValid - Whether the updated form state is valid.
+   * @property {number} [defaultEntryAmount] - The updated amount for the single entry (only present if `hasSinglePayer` is `true`).
+   */
+  updateAfterExpenseAmountChange = expenseAmount => {
+    const hasSingleEntry = this.hasSingleEntry();
+    const defaultEntryAmount = hasSingleEntry
+      ? this.#updateDefaultEntryAmount(expenseAmount)
+      : null;
+
+    this.#calculate(expenseAmount);
+    this.#validate();
+
+    return {
+      hasSingleEntry,
+      total: this.#total,
+      remainder: this.#remainder,
+      isValid: this.#isValid,
+      ...(hasSingleEntry ? { defaultEntryAmount } : {}),
+    };
+  };
+
+  /**
+   * Updates the amount for the single entry if only one payer exists.
+   *
+   * @param {number} amount - The new amount to set for the default entry.
+   * @returns {number} The updated amount of the default entry.
+   */
+  #updateDefaultEntryAmount = amount => {
+    const defaultEntry = this.#entries.values().next().value;
+    defaultEntry.amount = amount;
+
+    if (amount > 0 && this.#payersInEntries.size === 0) {
+      this.#payersInEntries.add(defaultEntry.userId);
+    } else if (amount === 0 && this.#payersInEntries.size > 0) {
+      this.#payersInEntries.clear();
+    }
+
+    return defaultEntry.amount;
+  };
+
   // Inner Logic
 
   /**
@@ -240,6 +301,12 @@ class PaidByState {
    * @param {number} expenseAmount - The expense amount.
    */
   #calculate = expenseAmount => {
+    if (this.hasSingleEntry()) {
+      this.#total = expenseAmount;
+      this.#remainder = 0;
+      return;
+    }
+
     let total = 0;
     for (const entry of this.#entries.values()) {
       total += entry.amount;
@@ -291,10 +358,10 @@ class PaidByState {
 
   /**
    * Validates the state of the Paid By subform. Updates the "isValid" field.
-   * The subform is considered valid if the remainder is not zero and there is at least one payer.
+   * The subform is considered valid if the remainder is zero and there is at least one payer.
    */
   #validate = () => {
-    this.#isValid = this.#remainder !== 0 && this.#payersInEntries.size > 0;
+    this.#isValid = this.#remainder === 0 && this.#payersInEntries.size > 0;
   };
 
   /**

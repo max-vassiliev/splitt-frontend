@@ -109,6 +109,37 @@ class ExpenseFormView {
     mainView.adjustAmountInputCursor(data);
   };
 
+  renderAfterUpdateAmount = response => {
+    const {
+      amount: expenseAmount,
+      isValid,
+      balance,
+      paidBy,
+      splitt,
+      inputAmount,
+      cursorPosition,
+    } = response;
+
+    mainView.renderAmountInput({
+      processedAmount: expenseAmount,
+      amountIn: inputAmount,
+      cursorPosition,
+    });
+    mainView.renderPaidByButtonCaption({
+      type: paidBy.type,
+      name: paidBy.name,
+    });
+    paidByView.renderAfterExpenseAmountChange({
+      ...paidBy,
+      expenseAmount,
+    });
+    splittView.render({ ...splitt, expenseAmount });
+    mainView.renderBalance(balance);
+    mainView.renderSubmitButton(isValid);
+    //
+    // потом: renderEditFormElements
+  };
+
   // Amount: Add Handlers
 
   addHandlerAmountInput = handler => {
@@ -232,7 +263,7 @@ class ExpenseFormView {
 
   // Splitt: Render
 
-  renderAfterSplittChange = data => {
+  renderAfterUpdateSplittOption = data => {
     const { splitt, balance, expenseAmount, isValid } = data;
     mainView.renderSplittButtonCaption(splitt.type);
     mainView.renderBalance(balance);

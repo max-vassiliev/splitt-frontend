@@ -7,6 +7,8 @@ import {
 import {
   isNonEmptyStringOrNull,
   isNonNegativeInteger,
+  isNonEmptyString,
+  isPositiveInteger,
 } from '../../../util/SplittValidator.js';
 import PaidByState from './paid-by/PaidByState.js';
 import SplittCollection from './splitt/SplittCollection.js';
@@ -216,7 +218,11 @@ class ExpenseFormState {
   // Validation
 
   validateForSubmission = () => {
-    //
+    this._isValid =
+      isNonEmptyString(this._title) &&
+      isPositiveInteger(this._amount) &&
+      this._paidBy.isValid &&
+      this._splitt.activeForm?.isValid;
   };
 
   /**

@@ -57,6 +57,26 @@ class ExpenseManager {
   // Update
 
   /**
+   * Updates the amount for the active form and propagates changes to related subforms.
+   *
+   * @param {number} amount - The new amount to set.
+   * @returns {Object} The update result object.
+   * @property {Object} form - The updated active form.
+   * @property {Object} updateResponsePaidBy - The result of the Paid By form update.
+   */
+  updateAmount = amount => {
+    const form = this.getActiveForm();
+    form.amount = amount;
+    const updateResponsePaidBy =
+      form.paidBy.updateAfterExpenseAmountChange(amount);
+    form.splitt.activeForm.update({
+      expenseAmount: amount,
+    });
+    form.validateForSubmission();
+    return { form, updateResponsePaidBy };
+  };
+
+  /**
    * Updates the active Splitt Form type and recalculates values if needed.
    * If the requested type is already active, no changes are made.
    * Otherwise, the corresponding form is retrieved, recalculated, and set as active.

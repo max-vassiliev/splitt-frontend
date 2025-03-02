@@ -40,7 +40,7 @@ class PaidByService {
     const disableAddButton = entries.size === groupMembers.size;
     const switchOptions = this.#prepareSwitchOptions(groupMembers);
     const entryViewModels = this.#prepareEntryViewModels(entries, groupMembers);
-    const { type, name } = this.#prepareButtonProperties(
+    const { type, name } = this.#prepareTypeProperties(
       payersInEntries,
       currentUserId,
       groupMembers
@@ -60,6 +60,34 @@ class PaidByService {
   };
 
   /**
+   * Prepares the view model for the "Paid By" section after an expense amount update.
+   *
+   * @param {Object} data - The data required to construct the "Paid By" view model.
+   * @param {Object} data.updateResponsePaidBy - The response from the "Paid By" state update.
+   * @param {Object} data.paidByState - The current state of the "Paid By" section.
+   * @param {string} data.currentUserId - The ID of the current user.
+   * @param {Object} data.groupMembers - The members of the expense group.
+   * @returns {Object} The structured "Paid By" view model.
+   * @property {string} type - The "Paid By" type, one of {@link EXPENSE_PAID_BY_TYPES}.
+   * @property {string|null} name - The name associated with payer (for single payers), or `null` if not applicable.
+   */
+  prepareViewModelAfterExpenseAmountUpdate = data => {
+    const { updateResponsePaidBy, paidByState, currentUserId, groupMembers } =
+      data;
+    const { type, name } = this.#prepareTypeProperties(
+      paidByState.payersInEntries,
+      currentUserId,
+      groupMembers
+    );
+
+    return {
+      type,
+      name,
+      ...updateResponsePaidBy,
+    };
+  };
+
+  /**
    * Determines the properties for the Paid By button in the main form.
    *
    * @param {Set<bigint>} payers - A set of payer IDs.
@@ -72,12 +100,12 @@ class PaidByService {
    * @property {string} [name] - The payer's name, included if a single user other than
    *                            the current user paid.
    */
-  #prepareButtonProperties = (payers, currentUserId, groupMembers) => {
+  #prepareTypeProperties = (payers, currentUserId, groupMembers) => {
     const payersCount = payers.size;
     if (payersCount === 0) return { type: EXPENSE_PAID_BY_EMPTY };
     if (payersCount > 1) return { type: EXPENSE_PAID_BY_COPAYMENT };
 
-    const payerId = payers.next().value;
+    const payerId = payers.values().next().value;
 
     if (payerId === currentUserId) {
       return { type: EXPENSE_PAID_BY_CURRENT_USER };

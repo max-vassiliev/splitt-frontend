@@ -20,6 +20,7 @@ import emojiManager from '../emoji/EmojiManager.js';
 import balanceService from './service/ExpenseBalanceService.js';
 import paidByService from './service/PaidByService.js';
 import splittService from './service/SplittService.js';
+import mathService from '../util/MathService.js';
 import PaidByState from '../state/expense/paid-by/PaidByState.js';
 
 class ExpenseModel {
@@ -115,7 +116,63 @@ class ExpenseModel {
     return dateManager.getToday().string;
   };
 
+  /**
+   * Constructs the updated view model after an expense amount change.
+   *
+   * @param {Object} response - The response object containing form updates.
+   * @param {Object} response.form - The updated form after the expense amount change.
+   * @param {Object} response.updateResponsePaidBy - The update result from the "Paid By" section.
+   * @returns {Object} The structured view model after the amount update.
+   * @property {number} amount - The updated expense amount.
+   * @property {boolean} isValid - Whether the updated form state is valid.
+   * @property {Object} balance - The updated balance information for the current user.
+   * @property {Object} paidBy - The updated view model for the "Paid By" section.
+   * @property {Object} splitt - The updated view model for the "Splitt" section.
+   */
+  #prepareViewModelAfterUpdateAmount = response => {
+    const { form, updateResponsePaidBy } = response;
+
+    const currentUserId = stateManager.getUserId();
+    const groupMembers = stateManager.getMembers();
+    const balance = balanceService.getBalance(form, currentUserId);
+    const paidByViewModel =
+      paidByService.prepareViewModelAfterExpenseAmountUpdate({
+        updateResponsePaidBy,
+        paidByState: form.paidBy,
+        currentUserId,
+        groupMembers,
+      });
+    const splittViewModel = splittService.prepareViewModel(
+      form.splitt.activeForm
+    );
+
+    return {
+      amount: form.amount,
+      isValid: form.isValid,
+      balance,
+      paidBy: paidByViewModel,
+      splitt: splittViewModel,
+    };
+  };
+
   // Public methods: Update
+
+  /**
+   * Processes, updates, and prepares the view model for an expense amount change.
+   *
+   * @param {string} inputAmount - The raw input amount to process and update.
+   * @returns {Object} The updated view model after processing the amount change.
+   * @property {number} amount - The updated expense amount.
+   * @property {boolean} isValid - Whether the updated form state is valid.
+   * @property {Object} balance - The updated balance information for the current user.
+   * @property {Object} paidBy - The updated view model for the "Paid By" section.
+   * @property {Object} splitt - The updated view model for the "Splitt" section.
+   */
+  updateAmount = inputAmount => {
+    const processedAmount = mathService.processInputAmount(inputAmount);
+    const response = expenseManager.updateAmount(processedAmount);
+    return this.#prepareViewModelAfterUpdateAmount(response);
+  };
 
   /**
    * Updates the active Splitt type in the expense form and recalculates related values.

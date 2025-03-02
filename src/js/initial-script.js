@@ -1593,12 +1593,12 @@ export function initializeLegacyScript() {
     //   });
     // });
 
-    addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
+    // addExpenseTitleInput.addEventListener('input', handleAddExpenseTitleInput);
 
-    addExpenseAmountInput.addEventListener(
-      'input',
-      handleAddExpenseAmountInput
-    );
+    // addExpenseAmountInput.addEventListener(
+    //   'input',
+    //   handleAddExpenseAmountInput
+    // );
 
     addExpenseDateInput.addEventListener('input', handleAddExpenseDateInput);
 

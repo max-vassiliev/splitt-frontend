@@ -73,7 +73,8 @@ class ExpenseBalanceService {
       currentUserId
     );
     const userSplittAmount = this.#getUserSplittAmount(
-      splittData.activeForm.getSplittAmounts()
+      splittData.activeForm.getSplittAmounts(),
+      currentUserId
     );
 
     return userPaidByAmount - userSplittAmount;
