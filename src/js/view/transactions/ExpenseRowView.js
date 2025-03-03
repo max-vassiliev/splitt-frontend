@@ -1,4 +1,4 @@
-import Expense from '../../model/transaction/Expense.js';
+import Expense from '../../model/state/expense/Expense.js';
 import {
   formatAmountForOutput,
   formatDateForDisplay,

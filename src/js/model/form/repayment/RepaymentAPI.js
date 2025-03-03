@@ -3,8 +3,8 @@ import {
   API_HEADER_REQUESTER,
   API_PATH_GROUP,
   API_PATH_REPAYMENT,
-} from '../api/ApiConfig.js';
-import { ApiClient } from '../api/ApiClient.js';
+} from '../../api/ApiConfig.js';
+import { ApiClient } from '../../api/ApiClient.js';
 
 class RepaymentAPI {
   /**

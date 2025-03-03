@@ -5,8 +5,8 @@ import {
   EXPENSE_PAID_BY_OTHER_USER,
   EXPENSE_PAID_BY_TYPES,
   USERNAME_OTHER,
-} from '../../../util/Config.js';
-import User from '../../user/User.js';
+} from '../../../../util/Config.js';
+import User from '../../../user/User.js';
 
 class PaidByService {
   /**

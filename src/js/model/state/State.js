@@ -12,8 +12,8 @@ import {
 import UserBalance from '../balance/UserBalance.js';
 import Group from '../group/Group.js';
 import GroupOption from '../group/GroupOption.js';
-import Expense from '../transaction/Expense.js';
-import Repayment from '../repayment/Repayment.js';
+import Expense from './expense/Expense.js';
+import Repayment from './repayment/Repayment.js';
 import expenseFormCollection from './expense/ExpenseFormCollection.js';
 import repaymentFormCollection from './repayment/RepaymentFormCollection.js';
 import dateCollection from './date/DateCollection.js';

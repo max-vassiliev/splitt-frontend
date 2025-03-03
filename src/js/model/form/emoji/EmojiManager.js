@@ -1,5 +1,5 @@
-import state from '../state/State.js';
-import { TRANSACTION_TYPES } from '../../util/Config.js';
+import state from '../../state/State.js';
+import { TRANSACTION_TYPES } from '../../../util/Config.js';
 
 class EmojiManager {
   /**

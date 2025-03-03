@@ -1,4 +1,4 @@
-import { isNonEmptyString } from '../../util/SplittValidator.js';
+import { isNonEmptyString } from '../../../util/SplittValidator.js';
 
 class RepaymentParty {
   #id;

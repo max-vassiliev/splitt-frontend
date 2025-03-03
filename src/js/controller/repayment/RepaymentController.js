@@ -1,7 +1,7 @@
 import addButtonView from '../../view/forms/repayment/AddRepaymentButtonView.js';
 import formView from '../../view/forms/repayment/RepaymentFormView.js';
 import noteFormView from '../../view/forms/repayment/RepaymentNoteView.js';
-import repaymentModel from '../../model/repayment/RepaymentModel.js';
+import repaymentModel from '../../model/form/repayment/RepaymentModel.js';
 import modalView from '../../view/page/ModalView.js';
 import HiddenFormMediator from '../../view/util/HiddenFormMediator.js';
 import {

@@ -1,19 +1,22 @@
-import repaymentManager from '../state/repayment/RepaymentManager.js';
+import repaymentManager from './RepaymentManager.js';
 import emojiManager from '../emoji/EmojiManager';
-import dateManager from '../state/date/DateManager.js';
-import stateManager from '../state/StateManager.js';
-import formService from '../util/TransactionFormService.js';
+import dateManager from '../date/DateManager.js';
+import stateManager from '../../state/StateManager.js';
 import {
   TYPE_REPAYMENT,
   REPAYMENT_FORM_ADD,
   REPAYMENT_FORM_EDIT,
-} from '../../util/Config.js';
-import { validateDate } from '../../util/SplittValidator.js';
-import mathService from '../util/MathService.js';
-import DateState from '../state/date/DateState.js';
-import TypeParser from '../util/TypeParser.js';
+} from '../../../util/Config.js';
+import mathService from '../../util/MathService.js';
+import DateState from '../../state/date/DateState.js';
+import TypeParser from '../../util/TypeParser.js';
+import TransactionFormModel from '../common/TransactionFormModel.js';
 
-class RepaymentModel {
+class RepaymentModel extends TransactionFormModel {
+  constructor() {
+    super({ manager: repaymentManager, dateManager });
+  }
+
   init = () => {
     repaymentManager.init();
   };
@@ -156,18 +159,7 @@ class RepaymentModel {
     return repaymentManager.updateAmount(processedAmount);
   };
 
-  /**
-   * Updates the date in the active form after validating the input date string.
-   *
-   * @param {string} dateInput The date string to be set in the form.
-   * @returns {Object} The response object.
-   */
-  updateDate = dateInput => {
-    const date = new Date(dateInput);
-    this.#validateInputDate(date);
-    return repaymentManager.updateDate(date);
-  };
-
+  // TODO! удалить
   /**
    * Updates the note in the active form and returns instructions for rendering.
    * Processes the input note to ensure it meets validation criteria.
@@ -180,13 +172,13 @@ class RepaymentModel {
    *   @property {number} count - The number of characters in the input.
    *   @property {boolean} isAboveLimit - Indicates if the number of characters exceeds the limit.
    */
-  updateNote = noteInput => {
-    const validationResult = formService.processNoteInput(noteInput);
-    if (validationResult.isAboveLimit) return validationResult;
-    const noteToSave = validationResult.isEmpty ? null : noteInput;
-    const updateResult = repaymentManager.updateNote(noteToSave);
-    return { ...validationResult, ...updateResult };
-  };
+  // updateNote = noteInput => {
+  //   const validationResult = formService.processNoteInput(noteInput);
+  //   if (validationResult.isAboveLimit) return validationResult;
+  //   const noteToSave = validationResult.isEmpty ? null : noteInput;
+  //   const updateResult = repaymentManager.updateNote(noteToSave);
+  //   return { ...validationResult, ...updateResult };
+  // };
 
   /**
    * Updates the active hidden form type.
@@ -291,27 +283,6 @@ class RepaymentModel {
   };
 
   /**
-   * Retrieves the updated date range and update status for the date input element.
-   *
-   * @returns {Object} An object containing the following properties:
-   *   @property {string} min - The minimum transaction date as a string.
-   *   @property {string} max - The maximum transaction date as a string.
-   *   @property {boolean} updateDefaultDate - A flag indicating if the default date should be updated to today's date.
-   */
-  getDateInputUpdateData = () => {
-    const {
-      min: { string: min },
-      max: { string: max },
-    } = dateManager.getTransactionDateRange();
-    const form = repaymentManager.getActiveForm();
-    let updateDefaultDate = false;
-    if (form && !form.date) {
-      updateDefaultDate = true;
-    }
-    return { min, max, updateDefaultDate };
-  };
-
-  /**
    * Retrieves the `type` field from the active form if available.
    *
    * @returns {string|null} One of [REPAYMENT_FORM_TYPES]{@link REPAYMENT_FORM_TYPES} or `null` if active form is not set.
@@ -356,20 +327,6 @@ class RepaymentModel {
    */
   #checkForCleanup = currentActiveForm => {
     return currentActiveForm?.type === REPAYMENT_FORM_EDIT;
-  };
-
-  /**
-   * Validates the input date within the allowed date range.
-   *
-   * @param {Date} inputDate - The date to be validated.
-   * @private
-   */
-  #validateInputDate = inputDate => {
-    const {
-      min: { date: minDate },
-      max: { date: maxDate },
-    } = dateManager.getTransactionDateRange();
-    validateDate(inputDate, maxDate, minDate);
   };
 }
 

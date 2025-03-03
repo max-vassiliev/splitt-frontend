@@ -12,19 +12,23 @@ import {
   EXPENSE_BALANCE_DEFAULT,
   EXPENSE_BALANCE_CHECK_PAID_BY,
   EXPENSE_BALANCE_CHECK_SPLITT,
-} from '../../util/Config.js';
+} from '../../../util/Config.js';
+import { isEmptyString } from '../../../util/SplittValidator.js';
 import expenseManager from './ExpenseManager.js';
-import stateManager from '../state/StateManager.js';
-import dateManager from '../state/date/DateManager.js';
+import stateManager from '../../state/StateManager.js';
+import dateManager from '../date/DateManager.js';
 import emojiManager from '../emoji/EmojiManager.js';
 import balanceService from './service/ExpenseBalanceService.js';
 import paidByService from './service/PaidByService.js';
 import splittService from './service/SplittService.js';
-import mathService from '../util/MathService.js';
-import formService from '../util/TransactionFormService.js';
-import PaidByState from '../state/expense/paid-by/PaidByState.js';
+import mathService from '../../util/MathService.js';
+import TransactionFormModel from '../common/TransactionFormModel.js';
 
-class ExpenseModel {
+class ExpenseModel extends TransactionFormModel {
+  constructor() {
+    super({ manager: expenseManager, dateManager });
+  }
+
   init = () => {
     expenseManager.init();
   };
@@ -156,6 +160,50 @@ class ExpenseModel {
     };
   };
 
+  // Public methods: Get
+
+  /**
+   * Retrieves the `type` field from the active form if available.
+   *
+   * @returns {string|null} One of [EXPENSE_FORM_TYPES]{@link EXPENSE_FORM_TYPES} or `null` if active form is not set.
+   */
+  getActiveFormType = () => {
+    return expenseManager.getActiveForm()?.type ?? null;
+  };
+
+  /**
+   * Retrieves the currently active hidden form.
+   *
+   * @returns {string|null} The active hidden form type or null, if none is set.
+   */
+  getActiveHiddenForm = () => {
+    return expenseManager.getActiveHiddenForm();
+  };
+
+  /**
+   * Retrieves the data required to set up the Expense Add Form when the page loads.
+   *
+   * @returns {Object} An object containing the required properties, primarily user info.
+   */
+  getAddFormSetupData = () => {
+    const users = [...stateManager.getMembers().values()].map(member => ({
+      id: member.id,
+      name: member.name,
+      avatar: member.avatar,
+      amount: DEFAULT_AMOUNT,
+      share: DEFAULT_AMOUNT,
+    }));
+
+    const currentUser = stateManager.getCurrentUser();
+    const displaySettings = stateManager.getLocaleAndCurrencySymbol();
+
+    return {
+      users,
+      currentUser,
+      displaySettings,
+    };
+  };
+
   // Public methods: Update
 
   /**
@@ -165,7 +213,7 @@ class ExpenseModel {
    * @returns {Object} The update response object.
    */
   updateTitle = inputTitle => {
-    const processedTitle = formService.processTitleInput(inputTitle);
+    const processedTitle = this.#processTitleInput(inputTitle);
     return expenseManager.updateTitle(processedTitle);
   };
 
@@ -220,93 +268,6 @@ class ExpenseModel {
   };
 
   /**
-   * Updates the note in the active form and returns instructions for rendering.
-   * Processes the input note to ensure it meets validation criteria.
-   * If the note exceeds the character limit, no changes are made to the form.
-   *
-   * @param {string} noteInput - The note string to be set in the form. Can be an empty string or contain whitespace.
-   * @returns {Object} - The validation result object containing the following properties:
-   *   @property {boolean} isEmpty - Indicates if the input is an empty string or contains only whitespace.
-   *   @property {boolean} shouldClear - Indicates if the input should be cleared.
-   *   @property {number} count - The number of characters in the input.
-   *   @property {boolean} isAboveLimit - Indicates if the number of characters exceeds the limit.
-   */
-  updateNote = noteInput => {
-    const validationResult = formService.processNoteInput(noteInput);
-    if (validationResult.isAboveLimit) return validationResult;
-    const noteToSave = validationResult.isEmpty ? null : noteInput;
-    const updateResult = expenseManager.updateNote(noteToSave);
-    return { ...validationResult, ...updateResult };
-  };
-
-  // Public methods: Get
-
-  /**
-   * Retrieves the `type` field from the active form if available.
-   *
-   * @returns {string|null} One of [EXPENSE_FORM_TYPES]{@link EXPENSE_FORM_TYPES} or `null` if active form is not set.
-   */
-  getActiveFormType = () => {
-    return expenseManager.getActiveForm()?.type ?? null;
-  };
-
-  /**
-   * Retrieves the currently active hidden form.
-   *
-   * @returns {string|null} The active hidden form type or null, if none is set.
-   */
-  getActiveHiddenForm = () => {
-    return expenseManager.getActiveHiddenForm();
-  };
-
-  /**
-   * Retrieves the data required to set up the Expense Add Form when the page loads.
-   *
-   * @returns {Object} An object containing the required properties, primarily user info.
-   */
-  getAddFormSetupData = () => {
-    const users = [...stateManager.getMembers().values()].map(member => ({
-      id: member.id,
-      name: member.name,
-      avatar: member.avatar,
-      amount: DEFAULT_AMOUNT,
-      share: DEFAULT_AMOUNT,
-    }));
-
-    const currentUser = stateManager.getCurrentUser();
-    const displaySettings = stateManager.getLocaleAndCurrencySymbol();
-
-    return {
-      users,
-      currentUser,
-      displaySettings,
-    };
-  };
-
-  /**
-   * Retrieves the updated date range and update status for the date input element.
-   *
-   * @returns {Object} An object containing the following properties:
-   *   @property {string} min - The minimum transaction date as a string.
-   *   @property {string} max - The maximum transaction date as a string.
-   *   @property {boolean} updateDefaultDate - A flag indicating if the default date should be updated to today's date.
-   */
-  getDateInputUpdateData = () => {
-    const {
-      min: { string: min },
-      max: { string: max },
-    } = dateManager.getTransactionDateRange();
-    const form = expenseManager.getActiveForm();
-    let updateDefaultDate = false;
-    if (form && !form.date) {
-      updateDefaultDate = true;
-    }
-    return { min, max, updateDefaultDate };
-  };
-
-  // Public methods: Update
-
-  /**
    * Updates the active hidden form type.
    *
    * @param {string|null} type The hidden form element to set as active, or null to deactivate.
@@ -329,6 +290,21 @@ class ExpenseModel {
    */
   deactivateEmojiField = () => {
     emojiManager.clearActiveEmojiFieldId();
+  };
+
+  // Private Methods
+
+  /**
+   * Processes the title input by normalizing empty strings to `null`.
+   *
+   * @param {string} input - The title input to process.
+   * @returns {string|null} The processed title, or `null` if the input is empty.
+   */
+  #processTitleInput = input => {
+    if (isEmptyString(input)) {
+      return null;
+    }
+    return input;
   };
 
   // Validation

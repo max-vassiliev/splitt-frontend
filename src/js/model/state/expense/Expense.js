@@ -3,8 +3,8 @@ import {
   isPositiveInteger,
   isNonEmptyStringOrNull,
   isNonEmptyString,
-} from '../../util/SplittValidator.js';
-import TypeParser from '../util/TypeParser.js';
+} from '../../../util/SplittValidator.js';
+import TypeParser from '../../util/TypeParser.js';
 
 class Expense {
   #id;

@@ -1,42 +1,32 @@
-import state from '../State.js';
-import repaymentAPI from '../../repayment/RepaymentAPI.js';
+import state from '../../state/State.js';
+import repaymentAPI from './RepaymentAPI.js';
 import {
+  TYPE_REPAYMENT,
   REPAYMENT_FORM_SETTLE,
   REPAYMENT_FORM_EDIT,
   REPAYMENT_FORM_TYPES,
   DEFAULT_EMOJI_REPAYMENT,
 } from '../../../util/Config.js';
-import RepaymentFormState from './RepaymentFormState.js';
-import Repayment from '../../repayment/Repayment.js';
+import RepaymentFormState from '../../state/repayment/RepaymentFormState.js';
+import Repayment from '../../state/repayment/Repayment.js';
 import eventBus from '../../../util/EventBus.js';
+import TransactionFormManager from '../common/TransactionFormManager.js';
 
-class RepaymentManager {
+class RepaymentManager extends TransactionFormManager {
+  constructor() {
+    super({
+      transactionType: TYPE_REPAYMENT,
+      formCollection: state.repaymentForms,
+      formTypes: REPAYMENT_FORM_TYPES,
+      formTypeEdit: REPAYMENT_FORM_EDIT,
+    });
+  }
+
   init = () => {
     this.#loadDefaultData();
   };
 
   // Getters and Setters
-
-  /**
-   * Retrieves the currently active repayment form.
-   *
-   * @returns {RepaymentFormState|null} The active repayment form state object or null, if none is selected.
-   */
-  getActiveForm = () => {
-    return state.repaymentForms.activeForm;
-  };
-
-  /**
-   * Sets the active repayment form based on the provided type.
-   *
-   * @param {string} formType - The type of the repayment form to set as active.
-   *                        Must be one of {@link REPAYMENT_FORM_TYPES}.
-   * @throws {Error} Throws an error if the provided type is not valid.
-   */
-  setActiveForm = formType => {
-    this.#validateFormType(formType);
-    state.repaymentForms.activeForm = formType;
-  };
 
   // TODO! метод не используется в модели; нужен ли?
   /**
@@ -50,26 +40,6 @@ class RepaymentManager {
   getForm = type => {
     this.#validateFormType(type);
     state.repaymentForms[type];
-  };
-
-  /**
-   * Gets the currently active hidden form type.
-   *
-   * @returns {string|null} The active hidden form element or null, if none is set.
-   */
-  getActiveHiddenForm = () => {
-    return state.repaymentForms.activeForm.activeHiddenForm;
-  };
-
-  /**
-   * Sets the active hidden form.
-   *
-   * @param {string|null} type The hidden form type to set as active or null to deactivate.
-   */
-  setActiveHiddenForm = type => {
-    if (state.repaymentForms.activeForm) {
-      state.repaymentForms.activeForm.activeHiddenForm = type;
-    }
   };
 
   /**
@@ -139,17 +109,17 @@ class RepaymentManager {
    * @param {Date} date The new date to set.
    * @returns {Object} The update result object.
    */
-  updateDate = date => {
-    const form = this.getActiveForm();
-    const formType = form.type;
-    if (formType === REPAYMENT_FORM_EDIT) {
-      const { isFormValid, hasEdits, isFieldEdited } = form.editDate(date);
-      return { formType, isFormValid, hasEdits, isFieldEdited };
-    } else {
-      form.date = date;
-      return { formType };
-    }
-  };
+  // updateDate = date => {
+  //   const form = this.getActiveForm();
+  //   const formType = form.type;
+  //   if (formType === REPAYMENT_FORM_EDIT) {
+  //     const { isFormValid, hasEdits, isFieldEdited } = form.editDate(date);
+  //     return { formType, isFormValid, hasEdits, isFieldEdited };
+  //   } else {
+  //     form.date = date;
+  //     return { formType };
+  //   }
+  // };
 
   /**
    * Updates the note in the active repayment form.

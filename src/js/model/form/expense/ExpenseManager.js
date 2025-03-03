@@ -1,57 +1,25 @@
 import {
+  TYPE_EXPENSE,
   EXPENSE_FORM_TYPES,
+  EXPENSE_FORM_EDIT,
   EXPENSE_SPLITT_TYPES,
   DEFAULT_EMOJI_EXPENSE,
-} from '../../util/Config.js';
-import ExpenseFormState from '../state/expense/ExpenseFormState.js';
-import state from '../state/State.js';
+} from '../../../util/Config.js';
+import state from '../../state/State.js';
+import TransactionFormManager from '../common/TransactionFormManager.js';
 
-class ExpenseManager {
+class ExpenseManager extends TransactionFormManager {
+  constructor() {
+    super({
+      transactionType: TYPE_EXPENSE,
+      formCollection: state.expenseForms,
+      formTypes: EXPENSE_FORM_TYPES,
+      formTypeEdit: EXPENSE_FORM_EDIT,
+    });
+  }
+
   init = () => {
     this.#initForms();
-  };
-
-  // Getters and Setters
-
-  /**
-   * Retrieves the currently active expense form.
-   *
-   * @returns {ExpenseFormState|null} The active expense form state object or null, if none is selected.
-   */
-  getActiveForm = () => {
-    return state.expenseForms.activeForm;
-  };
-
-  /**
-   * Sets the active expense form based on the provided type.
-   *
-   * @param {string} formType - The type of the expense form to set as active.
-   *                            Must be one of [EXPENSE_FORM_TYPES]{@link EXPENSE_FORM_TYPES}.
-   * @throws {Error} Throws an error if the provided type is not valid.
-   */
-  setActiveForm = formType => {
-    this.#validateFormType(formType);
-    state.expenseForms.activeForm = formType;
-  };
-
-  /**
-   * Gets the currently active hidden form type.
-   *
-   * @returns {string|null} The active hidden form element or null, if none is set.
-   */
-  getActiveHiddenForm = () => {
-    return state.expenseForms.activeForm.activeHiddenForm;
-  };
-
-  /**
-   * Sets the active hidden form.
-   *
-   * @param {string|null} type The hidden form type to set as active or null to deactivate.
-   */
-  setActiveHiddenForm = type => {
-    if (state.expenseForms.activeForm) {
-      state.expenseForms.activeForm.activeHiddenForm = type;
-    }
   };
 
   // Update

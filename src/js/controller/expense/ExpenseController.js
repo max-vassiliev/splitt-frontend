@@ -8,7 +8,7 @@ import {
 import addButtonView from '../../view/forms/expense/AddExpenseButtonView.js';
 import formView from '../../view/forms/expense/ExpenseFormView.js';
 import modalView from '../../view/page/ModalView.js';
-import expenseModel from '../../model/expense/ExpenseModel.js';
+import expenseModel from '../../model/form/expense/ExpenseModel.js';
 import HiddenFormMediator from '../../view/util/HiddenFormMediator.js';
 import eventBus from '../../util/EventBus.js';
 
@@ -78,6 +78,7 @@ class ExpenseController {
     formView.addHandlerTitleInput(this.#handleTitleInput);
     formView.addHandlerAmountInput(this.#handleAmountInput);
     formView.addHandlerAmountInputClick(this.#handleAmountInputClick);
+    formView.addHandlerDateInput(this.#handleDateInput);
     formView.addHandlerPaidByButtonClick(event => {
       this.#toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_PAID_BY);
     });
@@ -200,6 +201,11 @@ class ExpenseController {
     const inputValue = event.target.value;
     const cursorPosition = event.target.selectionStart;
     formView.adjustAmountInputCursor({ inputValue, cursorPosition });
+  };
+
+  #handleDateInput = event => {
+    const dateInput = event.target.value;
+    expenseModel.updateDate(dateInput);
   };
 
   // Handlers: Main Form (Emoji)

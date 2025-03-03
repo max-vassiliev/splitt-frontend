@@ -1,5 +1,5 @@
 import stateManager from '../state/StateManager.js';
-import dateManager from '../state/date/DateManager.js';
+import dateManager from '../form/date/DateManager.js';
 import pageAPI from './PageAPI.js';
 
 class PageModel {

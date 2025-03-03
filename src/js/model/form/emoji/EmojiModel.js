@@ -1,6 +1,6 @@
 import emojiManager from './EmojiManager.js';
-import repaymentManager from '../state/repayment/RepaymentManager.js';
-import { TYPE_REPAYMENT, TRANSACTION_TYPES } from '../../util/Config.js';
+import repaymentManager from '../repayment/RepaymentManager.js';
+import { TYPE_REPAYMENT, TRANSACTION_TYPES } from '../../../util/Config.js';
 
 class EmojiModel {
   #formManagers;
