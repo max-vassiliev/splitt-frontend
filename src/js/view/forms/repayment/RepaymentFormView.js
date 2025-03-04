@@ -240,9 +240,9 @@ class RepaymentFormView {
 
   // GETTERS
 
-  get form() {
+  getForm = () => {
     return this.#form;
-  }
+  };
 
   get mainForm() {
     return this.#mainForm;

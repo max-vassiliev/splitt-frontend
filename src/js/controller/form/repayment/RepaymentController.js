@@ -1,28 +1,29 @@
-import addButtonView from '../../view/forms/repayment/AddRepaymentButtonView.js';
-import formView from '../../view/forms/repayment/RepaymentFormView.js';
-import noteFormView from '../../view/forms/repayment/RepaymentNoteView.js';
-import repaymentModel from '../../model/form/repayment/RepaymentModel.js';
-import modalView from '../../view/page/ModalView.js';
-import HiddenFormMediator from '../../view/util/HiddenFormMediator.js';
+import addButtonView from '../../../view/forms/repayment/AddRepaymentButtonView.js';
+import formView from '../../../view/forms/repayment/RepaymentFormView.js';
+import noteFormView from '../../../view/forms/repayment/RepaymentNoteView.js';
+import repaymentModel from '../../../model/form/repayment/RepaymentModel.js';
+import HiddenFormMediator from '../../../view/util/HiddenFormMediator.js';
 import {
   TYPE_REPAYMENT,
   REPAYMENT_HIDDEN_FORM_NOTE,
   MODAL_ID_REPAYMENT,
   REPAYMENT_FORM_EDIT,
-} from '../../util/Config.js';
-import EventEmitter from 'events';
-import eventBus from '../../util/EventBus.js';
+} from '../../../util/Config.js';
+import TransactionFormController from '../common/TransactionFormController.js';
+import eventBus from '../../../util/EventBus.js';
 
-class RepaymentController extends EventEmitter {
-  #hiddenFormMediator;
-
+class RepaymentController extends TransactionFormController {
   constructor() {
-    super();
-    this.#hiddenFormMediator = new HiddenFormMediator(TYPE_REPAYMENT);
+    super({
+      model: repaymentModel,
+      view: formView,
+      hiddenFormMediator: new HiddenFormMediator(TYPE_REPAYMENT),
+      modalId: MODAL_ID_REPAYMENT,
+    });
   }
 
   init = () => {
-    repaymentModel.init();
+    this.initSuper();
     this.#loadData();
     this.#bindEventHandlers();
   };
@@ -31,10 +32,8 @@ class RepaymentController extends EventEmitter {
 
   #loadData = () => {
     this.#loadOptions();
-    this.#loadEmojiField();
     this.#loadNoteForm();
     this.updateDateInputRange();
-    this.#registerForm();
   };
 
   #loadOptions = () => {
@@ -42,24 +41,14 @@ class RepaymentController extends EventEmitter {
     formView.loadOptions(optionsData);
   };
 
-  #loadEmojiField = () => {
-    const emojiField = formView.getEmojiField();
-    eventBus.emit('registerEmojiField', emojiField);
-  };
-
   #loadNoteForm = () => {
     const form = noteFormView.form;
     const button = formView.buttonNote;
-    this.#hiddenFormMediator.registerFormButtonPair(
+    this._hiddenFormMediator.registerFormButtonPair(
       REPAYMENT_HIDDEN_FORM_NOTE,
       form,
       button
     );
-  };
-
-  #registerForm = () => {
-    const formElement = formView.form;
-    modalView.registerModal(MODAL_ID_REPAYMENT, formElement);
   };
 
   // Bind Event Handlers
@@ -67,7 +56,6 @@ class RepaymentController extends EventEmitter {
   #bindEventHandlers = () => {
     addButtonView.addHandlerClick(this.#openAddForm);
     this.#bindMainFormEventHandlers();
-    this.#bindEmojiEventHandlers();
     this.#bindResetEventHandlers();
     this.#bindNoteFormEventHandlers();
   };
@@ -84,13 +72,6 @@ class RepaymentController extends EventEmitter {
       this.#toggleHiddenForm(event, REPAYMENT_HIDDEN_FORM_NOTE);
     });
     formView.addHandlerCloseButtonClick(this.#closeForm);
-  };
-
-  #bindEmojiEventHandlers = () => {
-    formView.addHandlerEmojiPickerSwitchBtnClick(this.#toggleEmojiPicker);
-    formView.addHandlerEmojiInputFieldClick(this.#toggleEmojiPicker);
-    formView.addHandlerEmojiDefaultBtnClick(this.#restoreDefaultEmoji);
-    formView.addHandlerEmojiRemoveBtnClick(this.#removeEmoji);
   };
 
   #bindResetEventHandlers = () => {
@@ -129,7 +110,7 @@ class RepaymentController extends EventEmitter {
   };
 
   #openForm = viewModel => {
-    this.#activateEmojiField();
+    this._activateEmojiField();
     this.#renderViewModel(viewModel);
     eventBus.emit('openModal', MODAL_ID_REPAYMENT);
   };
@@ -161,31 +142,31 @@ class RepaymentController extends EventEmitter {
     if (activeHiddenFormType !== formType) {
       this.#openHiddenForm(formType, activeHiddenFormType);
     } else {
-      this.#hiddenFormMediator.closeForm(activeHiddenFormType);
+      this._hiddenFormMediator.closeForm(activeHiddenFormType);
       repaymentModel.updateActiveHiddenForm(null);
     }
   };
 
   #openHiddenForm = (newFormType, activeFormType) => {
     if (activeFormType && newFormType !== activeFormType) {
-      this.#hiddenFormMediator.closeForm(activeFormType);
+      this._hiddenFormMediatorhiddenFormMediator.closeForm(activeFormType);
     }
-    this.#hiddenFormMediator.openForm(newFormType);
+    this._hiddenFormMediator.openForm(newFormType);
     repaymentModel.updateActiveHiddenForm(newFormType);
   };
 
   #closeHiddenForm = () => {
     const activeHiddenFormType = repaymentModel.getActiveHiddenForm();
     if (!activeHiddenFormType) return;
-    this.#hiddenFormMediator.closeForm(activeHiddenFormType);
+    this._hiddenFormMediator.closeForm(activeHiddenFormType);
     repaymentModel.updateActiveHiddenForm(null);
   };
 
   toggleHiddenFormOnLoad = hiddenForm => {
     if (hiddenForm) {
-      this.#hiddenFormMediator.openForm(hiddenForm);
+      this._hiddenFormMediator.openForm(hiddenForm);
     } else {
-      this.#hiddenFormMediator.closeAll();
+      this._hiddenFormMediator.closeAll();
     }
   };
 
@@ -231,26 +212,6 @@ class RepaymentController extends EventEmitter {
       formView.renderEditFormElements('date', response);
       formView.renderSubmitButton(response.isFormValid);
     }
-  };
-
-  // Handlers: Main Form (Emoji)
-
-  #activateEmojiField = () => {
-    repaymentModel.activateEmojiField();
-    eventBus.emit('alignEmojiContainer');
-  };
-
-  #toggleEmojiPicker = event => {
-    this.emit('emojiPickerToggle');
-    event.stopPropagation();
-  };
-
-  #restoreDefaultEmoji = defaultEmoji => {
-    this.emit('emojiRestoreDefault', defaultEmoji);
-  };
-
-  #removeEmoji = () => {
-    this.emit('emojiRemove');
   };
 
   handleEmojiEdit = response => {

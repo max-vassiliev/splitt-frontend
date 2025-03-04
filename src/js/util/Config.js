@@ -89,6 +89,7 @@ export const EXPENSE_HIDDEN_FORM_TYPES = new Set([
   EXPENSE_HIDDEN_FORM_SPLITT,
   EXPENSE_HIDDEN_FORM_NOTE,
 ]);
+export const EVENT_EXPENSE_EMOJI_EDIT = 'repaymentFormEmojiEdited';
 
 // Expense: Paid By
 export const EXPENSE_PAID_BY_EMPTY = 'exp-paid-by__empty';
@@ -133,3 +134,4 @@ export const REPAYMENT_HIDDEN_FORM_NOTE = 'rpm-note';
 export const REPAYMENT_HIDDEN_FORM_TYPES = new Set([
   REPAYMENT_HIDDEN_FORM_NOTE,
 ]);
+export const EVENT_REPAYMENT_EMOJI_EDIT = 'repaymentFormEmojiEdited';

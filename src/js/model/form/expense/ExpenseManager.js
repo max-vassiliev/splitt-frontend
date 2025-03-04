@@ -4,6 +4,7 @@ import {
   EXPENSE_FORM_EDIT,
   EXPENSE_SPLITT_TYPES,
   DEFAULT_EMOJI_EXPENSE,
+  EVENT_EXPENSE_EMOJI_EDIT,
 } from '../../../util/Config.js';
 import state from '../../state/State.js';
 import TransactionFormManager from '../common/TransactionFormManager.js';
@@ -15,6 +16,7 @@ class ExpenseManager extends TransactionFormManager {
       formCollection: state.expenseForms,
       formTypes: EXPENSE_FORM_TYPES,
       formTypeEdit: EXPENSE_FORM_EDIT,
+      emojiEditEvent: EVENT_EXPENSE_EMOJI_EDIT,
     });
   }
 

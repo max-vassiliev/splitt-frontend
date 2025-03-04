@@ -1,13 +1,16 @@
 import { validateDate, isEmptyString } from '../../../util/SplittValidator.js';
 import { TRANSACTION_NOTE_LIMIT } from '../../../util/Config.js';
+import emojiManager from '../emoji/EmojiManager.js';
+import dateManager from '../date/DateManager.js';
 
 class TransactionFormModel {
   #manager;
-  #dateManager;
+  #transactionType;
 
-  constructor({ manager, dateManager }) {
+  constructor(config) {
+    const { manager, transactionType } = config;
     this.#manager = manager;
-    this.#dateManager = dateManager;
+    this.#transactionType = transactionType;
   }
 
   // DATE
@@ -41,7 +44,7 @@ class TransactionFormModel {
     const {
       min: { string: min },
       max: { string: max },
-    } = this.#dateManager.getTransactionDateRange();
+    } = dateManager.getTransactionDateRange();
     const form = this.#manager.getActiveForm();
     let updateDefaultDate = false;
     if (form && !form.date) {
@@ -60,8 +63,24 @@ class TransactionFormModel {
     const {
       min: { date: minDate },
       max: { date: maxDate },
-    } = this.#dateManager.getTransactionDateRange();
+    } = dateManager.getTransactionDateRange();
     validateDate(inputDate, maxDate, minDate);
+  };
+
+  // EMOJI
+
+  /**
+   * Activates the emoji field for the transaction form.
+   */
+  activateEmojiField = () => {
+    emojiManager.setActiveEmojiFieldId(this.#transactionType);
+  };
+
+  /**
+   * Deactivates the active emoji field for the transaction form.
+   */
+  deactivateEmojiField = () => {
+    emojiManager.clearActiveEmojiFieldId();
   };
 
   // NOTE

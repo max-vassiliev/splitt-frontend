@@ -77,7 +77,7 @@ class ExpenseFormView {
 
   // Main Form: Getters
 
-  getMainForm = () => {
+  getForm = () => {
     return mainView.form;
   };
 

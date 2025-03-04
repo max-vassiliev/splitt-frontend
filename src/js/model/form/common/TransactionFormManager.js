@@ -3,13 +3,21 @@ class TransactionFormManager {
   #formCollection;
   #formTypeEdit;
   #formTypes;
+  #emojiEditEvent;
 
   constructor(config) {
-    const { transactionType, formCollection, formTypes, formTypeEdit } = config;
+    const {
+      transactionType,
+      formCollection,
+      formTypes,
+      formTypeEdit,
+      emojiEditEvent,
+    } = config;
     this.#transactionType = transactionType;
     this.#formCollection = formCollection;
     this.#formTypes = formTypes;
     this.#formTypeEdit = formTypeEdit;
+    this.#emojiEditEvent = emojiEditEvent;
   }
 
   // Getters and Setters
@@ -74,6 +82,22 @@ class TransactionFormManager {
     } else {
       form.date = date;
       return { formType };
+    }
+  };
+
+  /**
+   * Updates the active form's emoji field.
+   *
+   * @param {string} emoji - The new emoji to set for the active form.
+   * @fires {string} this.#emojiEditEvent - Emits when the emoji is updated in the "edit" form.
+   */
+  updateEmoji = emoji => {
+    const form = this.getActiveForm();
+    if (form.type === this.#formTypeEdit) {
+      const editResponse = form.editEmoji(emoji);
+      eventBus.emit(this.#emojiEditEvent, editResponse);
+    } else {
+      form.emoji = emoji;
     }
   };
 

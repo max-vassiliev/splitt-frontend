@@ -1,6 +1,11 @@
 import emojiManager from './EmojiManager.js';
 import repaymentManager from '../repayment/RepaymentManager.js';
-import { TYPE_REPAYMENT, TRANSACTION_TYPES } from '../../../util/Config.js';
+import expenseManager from '../expense/ExpenseManager.js';
+import {
+  TYPE_REPAYMENT,
+  TYPE_EXPENSE,
+  TRANSACTION_TYPES,
+} from '../../../util/Config.js';
 
 class EmojiModel {
   #formManagers;
@@ -8,6 +13,7 @@ class EmojiModel {
   constructor() {
     this.#formManagers = new Map();
     this.#formManagers.set(TYPE_REPAYMENT, repaymentManager);
+    this.#formManagers.set(TYPE_EXPENSE, expenseManager);
   }
 
   /**
@@ -25,7 +31,7 @@ class EmojiModel {
   saveEmoji = emoji => {
     const activeEmojiFieldId = emojiManager.getActiveEmojiFieldId();
     const formManager = this.#formManagers.get(activeEmojiFieldId);
-    formManager.setActiveFormEmoji(emoji);
+    formManager.updateEmoji(emoji);
   };
 
   /**

@@ -1,7 +1,7 @@
-import pickerView from '../../view/emoji/EmojiPickerView.js';
-import fieldView from '../../view/emoji/EmojiFieldView.js';
-import model from '../../model/form/emoji/EmojiModel.js';
-import { DEFAULT_EMOJI_EMPTY } from '../../util/Config.js';
+import pickerView from '../../../view/emoji/EmojiPickerView.js';
+import fieldView from '../../../view/emoji/EmojiFieldView.js';
+import model from '../../../model/form/emoji/EmojiModel.js';
+import { DEFAULT_EMOJI_EMPTY } from '../../../util/Config.js';
 
 class EmojiController {
   init() {

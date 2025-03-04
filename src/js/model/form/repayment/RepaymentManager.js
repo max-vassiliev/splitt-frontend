@@ -6,6 +6,7 @@ import {
   REPAYMENT_FORM_EDIT,
   REPAYMENT_FORM_TYPES,
   DEFAULT_EMOJI_REPAYMENT,
+  EVENT_REPAYMENT_EMOJI_EDIT,
 } from '../../../util/Config.js';
 import RepaymentFormState from '../../state/repayment/RepaymentFormState.js';
 import Repayment from '../../state/repayment/Repayment.js';
@@ -19,6 +20,7 @@ class RepaymentManager extends TransactionFormManager {
       formCollection: state.repaymentForms,
       formTypes: REPAYMENT_FORM_TYPES,
       formTypeEdit: REPAYMENT_FORM_EDIT,
+      emojiEditEvent: EVENT_REPAYMENT_EMOJI_EDIT,
     });
   }
 

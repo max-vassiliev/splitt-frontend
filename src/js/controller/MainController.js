@@ -5,10 +5,11 @@ import groupController from './group/GroupController.js';
 import summaryController from './summary/SummaryController.js';
 import transactionsController from './transactions/TransactionsController.js';
 import paginationController from './pagination/PaginationController.js';
-import expenseController from './expense/ExpenseController.js';
-import repaymentContoller from './repayment/RepaymentController.js';
-import emojiController from './emoji/EmojiController.js';
+import expenseController from './form/expense/ExpenseController.js';
+import repaymentContoller from './form/repayment/RepaymentController.js';
+import emojiController from './form/emoji/EmojiController.js';
 import eventBus from '../util/EventBus.js';
+import { EVENT_REPAYMENT_EMOJI_EDIT } from '../util/Config.js';
 
 class MainController {
   init = async () => {
@@ -107,7 +108,7 @@ class MainController {
   };
 
   #bindRepaymentFormEmojiEdit = () => {
-    eventBus.on('repaymentFormEmojiEdited', editResponse => {
+    eventBus.on(EVENT_REPAYMENT_EMOJI_EDIT, editResponse => {
       repaymentContoller.handleEmojiEdit(editResponse);
     });
   };
@@ -125,19 +126,19 @@ class MainController {
   };
 
   #bindEmojiPickerToggle = () => {
-    repaymentContoller.on('emojiPickerToggle', () => {
+    eventBus.on('emojiPickerToggle', () => {
       emojiController.toggleEmojiPicker();
     });
   };
 
   #bindEmojiRestoreDefault = () => {
-    repaymentContoller.on('emojiRestoreDefault', defaultEmoji => {
+    eventBus.on('emojiRestoreDefault', defaultEmoji => {
       emojiController.restoreDefaultEmoji(defaultEmoji);
     });
   };
 
   #bindEmojiRemove = () => {
-    repaymentContoller.on('emojiRemove', () => {
+    eventBus.on('emojiRemove', () => {
       emojiController.handleEmojiRemove();
     });
   };

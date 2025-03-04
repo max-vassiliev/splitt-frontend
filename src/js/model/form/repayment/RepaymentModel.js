@@ -1,5 +1,4 @@
 import repaymentManager from './RepaymentManager.js';
-import emojiManager from '../emoji/EmojiManager';
 import dateManager from '../date/DateManager.js';
 import stateManager from '../../state/StateManager.js';
 import {
@@ -14,7 +13,7 @@ import TransactionFormModel from '../common/TransactionFormModel.js';
 
 class RepaymentModel extends TransactionFormModel {
   constructor() {
-    super({ manager: repaymentManager, dateManager });
+    super({ manager: repaymentManager, transactionType: TYPE_REPAYMENT });
   }
 
   init = () => {
@@ -159,27 +158,6 @@ class RepaymentModel extends TransactionFormModel {
     return repaymentManager.updateAmount(processedAmount);
   };
 
-  // TODO! удалить
-  /**
-   * Updates the note in the active form and returns instructions for rendering.
-   * Processes the input note to ensure it meets validation criteria.
-   * If the note exceeds the character limit, no changes are made to the form.
-   *
-   * @param {string} noteInput - The note string to be set in the form. Can be an empty string or contain whitespace.
-   * @returns {Object} - The validation result object containing the following properties:
-   *   @property {boolean} isEmpty - Indicates if the input is an empty string or contains only whitespace.
-   *   @property {boolean} shouldClear - Indicates if the input should be cleared.
-   *   @property {number} count - The number of characters in the input.
-   *   @property {boolean} isAboveLimit - Indicates if the number of characters exceeds the limit.
-   */
-  // updateNote = noteInput => {
-  //   const validationResult = formService.processNoteInput(noteInput);
-  //   if (validationResult.isAboveLimit) return validationResult;
-  //   const noteToSave = validationResult.isEmpty ? null : noteInput;
-  //   const updateResult = repaymentManager.updateNote(noteToSave);
-  //   return { ...validationResult, ...updateResult };
-  // };
-
   /**
    * Updates the active hidden form type.
    *
@@ -298,22 +276,6 @@ class RepaymentModel extends TransactionFormModel {
    */
   getActiveHiddenForm = () => {
     return repaymentManager.getActiveHiddenForm();
-  };
-
-  // Public methods: Emoji
-
-  /**
-   * Activates the emoji field for repayments.
-   */
-  activateEmojiField = () => {
-    emojiManager.setActiveEmojiFieldId(TYPE_REPAYMENT);
-  };
-
-  /**
-   * Deactivates the active emoji field.
-   */
-  deactivateEmojiField = () => {
-    emojiManager.clearActiveEmojiFieldId();
   };
 
   // Validation

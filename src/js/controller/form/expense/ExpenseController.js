@@ -4,34 +4,28 @@ import {
   EXPENSE_HIDDEN_FORM_SPLITT,
   EXPENSE_HIDDEN_FORM_NOTE,
   TYPE_EXPENSE,
-} from '../../util/Config.js';
-import addButtonView from '../../view/forms/expense/AddExpenseButtonView.js';
-import formView from '../../view/forms/expense/ExpenseFormView.js';
-import modalView from '../../view/page/ModalView.js';
-import expenseModel from '../../model/form/expense/ExpenseModel.js';
-import HiddenFormMediator from '../../view/util/HiddenFormMediator.js';
-import eventBus from '../../util/EventBus.js';
+} from '../../../util/Config.js';
+import addButtonView from '../../../view/forms/expense/AddExpenseButtonView.js';
+import formView from '../../../view/forms/expense/ExpenseFormView.js';
+import expenseModel from '../../../model/form/expense/ExpenseModel.js';
+import TransactionFormController from '../common/TransactionFormController.js';
+import HiddenFormMediator from '../../../view/util/HiddenFormMediator.js';
+import eventBus from '../../../util/EventBus.js';
 
-// TODO! удалить
-import State from '../../model/state/State.js';
-
-class ExpenseController {
-  #hiddenFormMediator;
-
+class ExpenseController extends TransactionFormController {
   constructor() {
-    this.#hiddenFormMediator = new HiddenFormMediator(TYPE_EXPENSE);
+    super({
+      model: expenseModel,
+      view: formView,
+      hiddenFormMediator: new HiddenFormMediator(TYPE_EXPENSE),
+      modalId: MODAL_ID_EXPENSE,
+    });
   }
 
   init = () => {
-    expenseModel.init();
+    this.initSuper();
     this.#loadData();
     this.#bindEventHandlers();
-    this.#bindHiddenFormHandlers();
-    this.#bindSplittFormHandlers();
-    this.#bindNoteFormHandlers();
-
-    // TODO! удалить
-    // console.log(State);
   };
 
   // Load Data
@@ -39,9 +33,7 @@ class ExpenseController {
   #loadData = () => {
     this.#loadAddFormSetupData();
     this.#loadHiddenForms();
-    this.#loadEmojiField();
     this.updateDateInputRange();
-    this.#registerForm();
   };
 
   #loadAddFormSetupData = () => {
@@ -49,22 +41,12 @@ class ExpenseController {
     formView.loadAddFormSetupData(data);
   };
 
-  #loadEmojiField = () => {
-    const emojiField = formView.getEmojiField();
-    eventBus.emit('registerEmojiField', emojiField);
-  };
-
   #loadHiddenForms = () => {
     const hiddenFormElements = formView.getHiddenFormToggleElements();
     hiddenFormElements.forEach(hiddenForm => {
       const { type, form, button } = hiddenForm;
-      this.#hiddenFormMediator.registerFormButtonPair(type, form, button);
+      this._hiddenFormMediator.registerFormButtonPair(type, form, button);
     });
-  };
-
-  #registerForm = () => {
-    const formElement = formView.getMainForm();
-    modalView.registerModal(MODAL_ID_EXPENSE, formElement);
   };
 
   // Bind Event Handlers
@@ -72,6 +54,9 @@ class ExpenseController {
   #bindEventHandlers = () => {
     addButtonView.addHandlerClick(this.#openAddForm);
     this.#bindMainFormHandlers();
+    this.#bindHiddenFormHandlers();
+    this.#bindSplittFormHandlers();
+    this.#bindNoteFormHandlers();
   };
 
   #bindMainFormHandlers = () => {
@@ -124,7 +109,7 @@ class ExpenseController {
   };
 
   #openForm = viewModel => {
-    this.#activateEmojiField();
+    this._activateEmojiField();
     this.#renderViewModel(viewModel);
     eventBus.emit('openModal', MODAL_ID_EXPENSE);
   };
@@ -149,16 +134,16 @@ class ExpenseController {
     if (activeHiddenFormType !== formType) {
       this.#openHiddenForm(formType, activeHiddenFormType);
     } else {
-      this.#hiddenFormMediator.closeForm(activeHiddenFormType);
+      this._hiddenFormMediator.closeForm(activeHiddenFormType);
       expenseModel.updateActiveHiddenForm(null);
     }
   };
 
   #openHiddenForm = (newFormType, activeFormType) => {
     if (activeFormType && newFormType !== activeFormType) {
-      this.#hiddenFormMediator.closeForm(activeFormType);
+      this._hiddenFormMediator.closeForm(activeFormType);
     }
-    this.#hiddenFormMediator.openForm(newFormType);
+    this._hiddenFormMediator.openForm(newFormType);
     expenseModel.updateActiveHiddenForm(newFormType);
   };
 
@@ -166,15 +151,15 @@ class ExpenseController {
     event.preventDefault();
     const activeHiddenFormType = expenseModel.getActiveHiddenForm();
     if (!activeHiddenFormType) return;
-    this.#hiddenFormMediator.closeForm(activeHiddenFormType);
+    this._hiddenFormMediator.closeForm(activeHiddenFormType);
     expenseModel.updateActiveHiddenForm(null);
   };
 
   toggleHiddenFormOnLoad = hiddenForm => {
     if (hiddenForm) {
-      this.#hiddenFormMediator.openForm(hiddenForm);
+      this._hiddenFormMediator.openForm(hiddenForm);
     } else {
-      this.#hiddenFormMediator.closeAll();
+      this._hiddenFormMediator.closeAll();
     }
   };
 
@@ -210,10 +195,7 @@ class ExpenseController {
 
   // Handlers: Main Form (Emoji)
 
-  #activateEmojiField = () => {
-    expenseModel.activateEmojiField();
-    eventBus.emit('alignEmojiContainer');
-  };
+  handleEmojiEdit = response => {};
 
   // Handlers: Reset
 

@@ -17,7 +17,6 @@ import { isEmptyString } from '../../../util/SplittValidator.js';
 import expenseManager from './ExpenseManager.js';
 import stateManager from '../../state/StateManager.js';
 import dateManager from '../date/DateManager.js';
-import emojiManager from '../emoji/EmojiManager.js';
 import balanceService from './service/ExpenseBalanceService.js';
 import paidByService from './service/PaidByService.js';
 import splittService from './service/SplittService.js';
@@ -26,7 +25,7 @@ import TransactionFormModel from '../common/TransactionFormModel.js';
 
 class ExpenseModel extends TransactionFormModel {
   constructor() {
-    super({ manager: expenseManager, dateManager });
+    super({ manager: expenseManager, transactionType: TYPE_EXPENSE });
   }
 
   init = () => {
@@ -274,22 +273,6 @@ class ExpenseModel extends TransactionFormModel {
    */
   updateActiveHiddenForm = type => {
     expenseManager.setActiveHiddenForm(type);
-  };
-
-  // Public methods: Emoji
-
-  /**
-   * Activates the emoji field for expenses.
-   */
-  activateEmojiField = () => {
-    emojiManager.setActiveEmojiFieldId(TYPE_EXPENSE);
-  };
-
-  /**
-   * Deactivates the active emoji field.
-   */
-  deactivateEmojiField = () => {
-    emojiManager.clearActiveEmojiFieldId();
   };
 
   // Private Methods
