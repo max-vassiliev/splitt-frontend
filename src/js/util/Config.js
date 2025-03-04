@@ -135,3 +135,9 @@ export const REPAYMENT_HIDDEN_FORM_TYPES = new Set([
   REPAYMENT_HIDDEN_FORM_NOTE,
 ]);
 export const EVENT_REPAYMENT_EMOJI_EDIT = 'repaymentFormEmojiEdited';
+
+// Transaction Forms
+export const TRANSACTION_FORM_TYPES = new Set([
+  ...EXPENSE_FORM_TYPES,
+  ...REPAYMENT_FORM_TYPES,
+]);

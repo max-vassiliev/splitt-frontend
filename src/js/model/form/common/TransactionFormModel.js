@@ -1,17 +1,53 @@
 import { validateDate, isEmptyString } from '../../../util/SplittValidator.js';
-import { TRANSACTION_NOTE_LIMIT } from '../../../util/Config.js';
+import {
+  TRANSACTION_NOTE_LIMIT,
+  TRANSACTION_FORM_TYPES,
+} from '../../../util/Config.js';
 import emojiManager from '../emoji/EmojiManager.js';
 import dateManager from '../date/DateManager.js';
 
 class TransactionFormModel {
   #manager;
   #transactionType;
+  #formTypeEdit;
 
   constructor(config) {
-    const { manager, transactionType } = config;
+    const { manager, transactionType, formTypeEdit } = config;
     this.#manager = manager;
     this.#transactionType = transactionType;
+    this.#formTypeEdit = formTypeEdit;
   }
+
+  // FORM DATA
+
+  /**
+   * Retrieves the `type` of the active form if available.
+   *
+   * @returns {string|null} One of {@link TRANSACTION_FORM_TYPES} or `null` if active form is not set.
+   */
+  getActiveFormType = () => {
+    return this.#manager.getActiveForm()?.type ?? null;
+  };
+
+  // HIDDEN FORMS
+
+  /**
+   * Retrieves the currently active hidden form.
+   *
+   * @returns {string|null} The active hidden form type or null, if none is set.
+   */
+  getActiveHiddenForm = () => {
+    return this.#manager.getActiveHiddenForm();
+  };
+
+  /**
+   * Updates the active hidden form type.
+   *
+   * @param {string|null} type The hidden form element to set as active, or null to deactivate.
+   */
+  updateActiveHiddenForm = type => {
+    this.#manager.setActiveHiddenForm(type);
+  };
 
   // DATE
 
@@ -51,6 +87,19 @@ class TransactionFormModel {
       updateDefaultDate = true;
     }
     return { min, max, updateDefaultDate };
+  };
+
+  /**
+   * Gets the date as a string value for the view model.
+   *
+   * @param {DateState|null} dateState - The DateState object containing the date information, or null.
+   * @returns {string} The string representation of the date.
+   */
+  _prepareViewDate = dateState => {
+    if (dateState) {
+      return dateState.string;
+    }
+    return dateManager.getToday().string;
   };
 
   /**
@@ -127,6 +176,19 @@ class TransactionFormModel {
     const isAboveLimit = count > TRANSACTION_NOTE_LIMIT;
 
     return { isEmpty, count, shouldClear, isAboveLimit };
+  };
+
+  // UTILS
+
+  /**
+   * Determines whether the form needs to be cleaned up when rendering.
+   *
+   * @param {Object|null} currentActiveForm - The currently active form object or null if no form is active.
+   * @param {string} currentActiveForm.type - The type of the active form.
+   * @returns {boolean} `true` if the active form requires cleanup, otherwise `false`.
+   */
+  _checkForCleanup = currentActiveForm => {
+    return currentActiveForm?.type === this.#formTypeEdit;
   };
 }
 

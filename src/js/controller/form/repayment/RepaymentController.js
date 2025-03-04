@@ -66,12 +66,12 @@ class RepaymentController extends TransactionFormController {
       this.#handlePartyChange(event, false)
     );
     formView.addHandlerAmountInput(this.#handleAmountInput);
-    formView.addHandlerAmountInputClick(this.#handleAmountInputClick);
+    formView.addHandlerAmountInputClick(this._handleAmountInputClick);
     formView.addHandlerDateInput(this.#handleDateInput);
     formView.addHandlerNoteButtonClick(event => {
-      this.#toggleHiddenForm(event, REPAYMENT_HIDDEN_FORM_NOTE);
+      this._toggleHiddenForm(event, REPAYMENT_HIDDEN_FORM_NOTE);
     });
-    formView.addHandlerCloseButtonClick(this.#closeForm);
+    formView.addHandlerCloseButtonClick(this._closeForm);
   };
 
   #bindResetEventHandlers = () => {
@@ -86,7 +86,7 @@ class RepaymentController extends TransactionFormController {
   };
 
   #bindNoteFormEventHandlers = () => {
-    noteFormView.addHandlerButtonCloseClick(this.#closeHiddenForm);
+    noteFormView.addHandlerButtonCloseClick(this._closeHiddenForm);
     noteFormView.addHandlerNoteInput(this.#handleNoteInput);
     noteFormView.addHandlerNoteInputCount(this.#handleNoteInputCount);
   };
@@ -123,51 +123,10 @@ class RepaymentController extends TransactionFormController {
     this.toggleHiddenFormOnLoad(viewModel.activeHiddenForm);
   };
 
-  #closeForm = () => {
-    eventBus.emit('closeActiveModal');
-    repaymentModel.deactivateEmojiField();
-  };
-
   #cleanupForm = shouldCleanup => {
     if (!shouldCleanup) return;
     formView.hideEditFormElements();
     noteFormView.renderResetButtonVisibility(false);
-  };
-
-  // Toggle Hidden Form
-
-  #toggleHiddenForm = (event, formType) => {
-    event.preventDefault();
-    const activeHiddenFormType = repaymentModel.getActiveHiddenForm();
-    if (activeHiddenFormType !== formType) {
-      this.#openHiddenForm(formType, activeHiddenFormType);
-    } else {
-      this._hiddenFormMediator.closeForm(activeHiddenFormType);
-      repaymentModel.updateActiveHiddenForm(null);
-    }
-  };
-
-  #openHiddenForm = (newFormType, activeFormType) => {
-    if (activeFormType && newFormType !== activeFormType) {
-      this._hiddenFormMediatorhiddenFormMediator.closeForm(activeFormType);
-    }
-    this._hiddenFormMediator.openForm(newFormType);
-    repaymentModel.updateActiveHiddenForm(newFormType);
-  };
-
-  #closeHiddenForm = () => {
-    const activeHiddenFormType = repaymentModel.getActiveHiddenForm();
-    if (!activeHiddenFormType) return;
-    this._hiddenFormMediator.closeForm(activeHiddenFormType);
-    repaymentModel.updateActiveHiddenForm(null);
-  };
-
-  toggleHiddenFormOnLoad = hiddenForm => {
-    if (hiddenForm) {
-      this._hiddenFormMediator.openForm(hiddenForm);
-    } else {
-      this._hiddenFormMediator.closeAll();
-    }
   };
 
   // Handlers: Main Form
@@ -197,12 +156,6 @@ class RepaymentController extends TransactionFormController {
     if (response.formType === REPAYMENT_FORM_EDIT) {
       formView.renderEditFormElements('amount', response);
     }
-  };
-
-  #handleAmountInputClick = event => {
-    const inputValue = event.target.value;
-    const cursorPosition = event.target.selectionStart;
-    formView.adjustAmountInputCursor({ inputValue, cursorPosition });
   };
 
   #handleDateInput = event => {
@@ -301,26 +254,6 @@ class RepaymentController extends TransactionFormController {
   #handleNoteInputCount = event => {
     const count = event.target.value.length;
     noteFormView.renderCount(count);
-  };
-
-  // Alignment
-
-  alignForm() {
-    const isActiveForm = formView.isActive();
-    formView.activate();
-
-    formView.alignForm();
-    const emojiTopMarginData = formView.getEmojiTopMarginData();
-    eventBus.emit('setEmojiTopMargin', emojiTopMarginData);
-
-    if (!isActiveForm) formView.deactivate();
-  }
-
-  // Update
-
-  updateDateInputRange = () => {
-    const dateInputData = repaymentModel.getDateInputUpdateData();
-    formView.updateDateInput(dateInputData);
   };
 }
 

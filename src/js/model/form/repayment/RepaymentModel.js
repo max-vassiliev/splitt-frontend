@@ -1,5 +1,4 @@
 import repaymentManager from './RepaymentManager.js';
-import dateManager from '../date/DateManager.js';
 import stateManager from '../../state/StateManager.js';
 import {
   TYPE_REPAYMENT,
@@ -7,13 +6,16 @@ import {
   REPAYMENT_FORM_EDIT,
 } from '../../../util/Config.js';
 import mathService from '../../util/MathService.js';
-import DateState from '../../state/date/DateState.js';
 import TypeParser from '../../util/TypeParser.js';
 import TransactionFormModel from '../common/TransactionFormModel.js';
 
 class RepaymentModel extends TransactionFormModel {
   constructor() {
-    super({ manager: repaymentManager, transactionType: TYPE_REPAYMENT });
+    super({
+      manager: repaymentManager,
+      transactionType: TYPE_REPAYMENT,
+      formTypeEdit: REPAYMENT_FORM_EDIT,
+    });
   }
 
   init = () => {
@@ -32,7 +34,7 @@ class RepaymentModel extends TransactionFormModel {
     if (currentActiveForm && currentActiveForm.type === REPAYMENT_FORM_ADD) {
       return { shouldRender: false };
     }
-    const shouldCleanup = this.#checkForCleanup(currentActiveForm);
+    const shouldCleanup = this._checkForCleanup(currentActiveForm);
     repaymentManager.setActiveForm(REPAYMENT_FORM_ADD);
     const addForm = repaymentManager.getActiveForm();
     return this.#prepareFormViewModel(addForm, shouldCleanup);
@@ -46,7 +48,7 @@ class RepaymentModel extends TransactionFormModel {
    */
   prepareSettleForm = selectedUserId => {
     const currentActiveForm = repaymentManager.getActiveForm();
-    const shouldCleanup = this.#checkForCleanup(currentActiveForm);
+    const shouldCleanup = this._checkForCleanup(currentActiveForm);
     const partyId = TypeParser.parseStringToBigInt(selectedUserId);
     repaymentManager.loadSettleForm(partyId);
     const settleForm = repaymentManager.getActiveForm();
@@ -71,7 +73,7 @@ class RepaymentModel extends TransactionFormModel {
     ) {
       return { shouldRender: false };
     }
-    const shouldCleanup = this.#checkForCleanup(currentActiveForm);
+    const shouldCleanup = this._checkForCleanup(currentActiveForm);
     await repaymentManager.loadEditForm(repaymentId);
     const editForm = repaymentManager.getActiveForm();
     return this.#prepareFormViewModel(editForm, shouldCleanup);
@@ -98,7 +100,7 @@ class RepaymentModel extends TransactionFormModel {
       activeHiddenForm,
       isValid,
     } = form;
-    const date = this.#prepareViewDate(form.date);
+    const date = this._prepareViewDate(form.date);
     const noteCount = note ? note.length : 0;
     const shouldRender = true;
     return {
@@ -115,19 +117,6 @@ class RepaymentModel extends TransactionFormModel {
       activeHiddenForm,
       isValid,
     };
-  };
-
-  /**
-   * Gets the date as a string value for the view model.
-   *
-   * @param {DateState|null} dateState - The DateState object containing the date information, or null.
-   * @returns {string} The string representation of the date.
-   */
-  #prepareViewDate = dateState => {
-    if (dateState) {
-      return dateState.string;
-    }
-    return dateManager.getToday().string;
   };
 
   // Public methods: Update
@@ -156,15 +145,6 @@ class RepaymentModel extends TransactionFormModel {
   updateAmount = inputAmount => {
     const processedAmount = mathService.processInputAmount(inputAmount);
     return repaymentManager.updateAmount(processedAmount);
-  };
-
-  /**
-   * Updates the active hidden form type.
-   *
-   * @param {string|null} type The hidden form element to set as active, or null to deactivate.
-   */
-  updateActiveHiddenForm = type => {
-    repaymentManager.setActiveHiddenForm(type);
   };
 
   // Public methods: Reset
@@ -258,37 +238,6 @@ class RepaymentModel extends TransactionFormModel {
     }));
     const currentUserId = stateManager.getUserId();
     return { currentUserId, members };
-  };
-
-  /**
-   * Retrieves the `type` field from the active form if available.
-   *
-   * @returns {string|null} One of [REPAYMENT_FORM_TYPES]{@link REPAYMENT_FORM_TYPES} or `null` if active form is not set.
-   */
-  getActiveFormType = () => {
-    return repaymentManager.getActiveForm()?.type ?? null;
-  };
-
-  /**
-   * Retrieves the currently active hidden form.
-   *
-   * @returns {string|null} The active hidden form type or null, if none is set.
-   */
-  getActiveHiddenForm = () => {
-    return repaymentManager.getActiveHiddenForm();
-  };
-
-  // Validation
-
-  /**
-   * Determines whether the form needs to be cleaned up when rendering.
-   *
-   * @param {Object|null} currentActiveForm - The currently active form object or null if no form is active.
-   * @param {string} currentActiveForm.type - The type of the active form (e.g., REPAYMENT_FORM_EDIT).
-   * @returns {boolean} `true` if the active form requires cleanup, otherwise `false`.
-   */
-  #checkForCleanup = currentActiveForm => {
-    return currentActiveForm?.type === REPAYMENT_FORM_EDIT;
   };
 }
 

@@ -16,7 +16,6 @@ import {
 import { isEmptyString } from '../../../util/SplittValidator.js';
 import expenseManager from './ExpenseManager.js';
 import stateManager from '../../state/StateManager.js';
-import dateManager from '../date/DateManager.js';
 import balanceService from './service/ExpenseBalanceService.js';
 import paidByService from './service/PaidByService.js';
 import splittService from './service/SplittService.js';
@@ -25,7 +24,11 @@ import TransactionFormModel from '../common/TransactionFormModel.js';
 
 class ExpenseModel extends TransactionFormModel {
   constructor() {
-    super({ manager: expenseManager, transactionType: TYPE_EXPENSE });
+    super({
+      manager: expenseManager,
+      transactionType: TYPE_EXPENSE,
+      formTypeEdit: EXPENSE_FORM_EDIT,
+    });
   }
 
   init = () => {
@@ -46,7 +49,7 @@ class ExpenseModel extends TransactionFormModel {
     if (currentActiveForm && currentActiveForm.type === EXPENSE_FORM_ADD) {
       return { shouldRender: false };
     }
-    const shouldCleanup = this.#checkForCleanup(currentActiveForm);
+    const shouldCleanup = this._checkForCleanup(currentActiveForm);
     expenseManager.setActiveForm(EXPENSE_FORM_ADD);
     const addForm = expenseManager.getActiveForm();
     return this.#prepareFormViewModel(addForm, shouldCleanup);
@@ -77,7 +80,7 @@ class ExpenseModel extends TransactionFormModel {
     const currentUserId = stateManager.getUserId();
     const groupMembers = stateManager.getMembers();
 
-    const date = this.#prepareViewDate(form.date);
+    const date = this._prepareViewDate(form.date);
     const noteCount = note ? note.length : 0;
     const shouldRender = true;
     const splittViewModel = splittService.prepareViewModel(
@@ -105,19 +108,6 @@ class ExpenseModel extends TransactionFormModel {
       shouldRender,
       shouldCleanup,
     };
-  };
-
-  /**
-   * Gets the date as a string value for the view model.
-   *
-   * @param {DateState|null} dateState The DateState object containing the date information, or null.
-   * @returns {string} The string representation of the date.
-   */
-  #prepareViewDate = dateState => {
-    if (dateState) {
-      return dateState.string;
-    }
-    return dateManager.getToday().string;
   };
 
   /**
@@ -156,50 +146,6 @@ class ExpenseModel extends TransactionFormModel {
       balance,
       paidBy: paidByViewModel,
       splitt: splittViewModel,
-    };
-  };
-
-  // Public methods: Get
-
-  /**
-   * Retrieves the `type` field from the active form if available.
-   *
-   * @returns {string|null} One of [EXPENSE_FORM_TYPES]{@link EXPENSE_FORM_TYPES} or `null` if active form is not set.
-   */
-  getActiveFormType = () => {
-    return expenseManager.getActiveForm()?.type ?? null;
-  };
-
-  /**
-   * Retrieves the currently active hidden form.
-   *
-   * @returns {string|null} The active hidden form type or null, if none is set.
-   */
-  getActiveHiddenForm = () => {
-    return expenseManager.getActiveHiddenForm();
-  };
-
-  /**
-   * Retrieves the data required to set up the Expense Add Form when the page loads.
-   *
-   * @returns {Object} An object containing the required properties, primarily user info.
-   */
-  getAddFormSetupData = () => {
-    const users = [...stateManager.getMembers().values()].map(member => ({
-      id: member.id,
-      name: member.name,
-      avatar: member.avatar,
-      amount: DEFAULT_AMOUNT,
-      share: DEFAULT_AMOUNT,
-    }));
-
-    const currentUser = stateManager.getCurrentUser();
-    const displaySettings = stateManager.getLocaleAndCurrencySymbol();
-
-    return {
-      users,
-      currentUser,
-      displaySettings,
     };
   };
 
@@ -266,13 +212,30 @@ class ExpenseModel extends TransactionFormModel {
     };
   };
 
+  // Public methods: Get
+
   /**
-   * Updates the active hidden form type.
+   * Retrieves the data required to set up the Expense Add Form when the page loads.
    *
-   * @param {string|null} type The hidden form element to set as active, or null to deactivate.
+   * @returns {Object} An object containing the required properties, primarily user info.
    */
-  updateActiveHiddenForm = type => {
-    expenseManager.setActiveHiddenForm(type);
+  getAddFormSetupData = () => {
+    const users = [...stateManager.getMembers().values()].map(member => ({
+      id: member.id,
+      name: member.name,
+      avatar: member.avatar,
+      amount: DEFAULT_AMOUNT,
+      share: DEFAULT_AMOUNT,
+    }));
+
+    const currentUser = stateManager.getCurrentUser();
+    const displaySettings = stateManager.getLocaleAndCurrencySymbol();
+
+    return {
+      users,
+      currentUser,
+      displaySettings,
+    };
   };
 
   // Private Methods
@@ -288,19 +251,6 @@ class ExpenseModel extends TransactionFormModel {
       return null;
     }
     return input;
-  };
-
-  // Validation
-
-  /**
-   * Determines whether the form needs to be cleaned up when rendering.
-   *
-   * @param {Object|null} currentActiveForm - The currently active form object or null if no form is active.
-   * @param {string} currentActiveForm.type - The type of the active form.
-   * @returns {boolean} `true` if the active form requires cleanup, otherwise `false`.
-   */
-  #checkForCleanup = currentActiveForm => {
-    return currentActiveForm?.type === EXPENSE_FORM_EDIT;
   };
 }
 

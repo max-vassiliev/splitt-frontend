@@ -51,6 +51,65 @@ class TransactionFormController {
     this._view.addHandlerEmojiRemoveBtnClick(this.#removeEmoji);
   };
 
+  // Toggle Form
+
+  _closeForm = () => {
+    eventBus.emit('closeActiveModal');
+    this._model.deactivateEmojiField();
+  };
+
+  // Toggle Hidden Form
+
+  _toggleHiddenForm = (event, formType) => {
+    console.log('NIIIIIICEE 🎤');
+    event.preventDefault();
+    const activeHiddenFormType = this._model.getActiveHiddenForm();
+    if (activeHiddenFormType !== formType) {
+      this._openHiddenForm(formType, activeHiddenFormType);
+    } else {
+      this._hiddenFormMediator.closeForm(activeHiddenFormType);
+      this._model.updateActiveHiddenForm(null);
+    }
+  };
+
+  _openHiddenForm = (newFormType, activeFormType) => {
+    if (activeFormType && newFormType !== activeFormType) {
+      this._hiddenFormMediator.closeForm(activeFormType);
+    }
+    this._hiddenFormMediator.openForm(newFormType);
+    this._model.updateActiveHiddenForm(newFormType);
+  };
+
+  _closeHiddenForm = () => {
+    const activeHiddenFormType = this._model.getActiveHiddenForm();
+    if (!activeHiddenFormType) return;
+    this._hiddenFormMediator.closeForm(activeHiddenFormType);
+    this._model.updateActiveHiddenForm(null);
+  };
+
+  toggleHiddenFormOnLoad = hiddenForm => {
+    if (hiddenForm) {
+      this._hiddenFormMediator.openForm(hiddenForm);
+    } else {
+      this._hiddenFormMediator.closeAll();
+    }
+  };
+
+  // Amount
+
+  _handleAmountInputClick = event => {
+    const inputValue = event.target.value;
+    const cursorPosition = event.target.selectionStart;
+    this._view.adjustAmountInputCursor({ inputValue, cursorPosition });
+  };
+
+  // Date
+
+  updateDateInputRange = () => {
+    const dateInputData = this._model.getDateInputUpdateData();
+    this._view.updateDateInput(dateInputData);
+  };
+
   // Emoji
 
   _activateEmojiField = () => {
@@ -70,6 +129,19 @@ class TransactionFormController {
   #removeEmoji = () => {
     eventBus.emit('emojiRemove');
   };
+
+  // Alignment
+
+  alignForm() {
+    const isActiveForm = this._view.isActive();
+    this._view.activate();
+
+    this._view.alignForm();
+    const emojiTopMarginData = this._view.getEmojiTopMarginData();
+    eventBus.emit('setEmojiTopMargin', emojiTopMarginData);
+
+    if (!isActiveForm) this._view.deactivate();
+  }
 }
 
 export default TransactionFormController;

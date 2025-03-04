@@ -62,22 +62,22 @@ class ExpenseController extends TransactionFormController {
   #bindMainFormHandlers = () => {
     formView.addHandlerTitleInput(this.#handleTitleInput);
     formView.addHandlerAmountInput(this.#handleAmountInput);
-    formView.addHandlerAmountInputClick(this.#handleAmountInputClick);
+    formView.addHandlerAmountInputClick(this._handleAmountInputClick);
     formView.addHandlerDateInput(this.#handleDateInput);
     formView.addHandlerPaidByButtonClick(event => {
-      this.#toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_PAID_BY);
+      this._toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_PAID_BY);
     });
     formView.addHandlerSplittButtonClick(event => {
-      this.#toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_SPLITT);
+      this._toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_SPLITT);
     });
     formView.addHandlerNoteButtonClick(event => {
-      this.#toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_NOTE);
+      this._toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_NOTE);
     });
-    formView.addHandlerCloseButtonClick(this.#closeForm);
+    formView.addHandlerCloseButtonClick(this._closeForm);
   };
 
   #bindHiddenFormHandlers = () => {
-    formView.addHandlerCloseHiddenFormButtonClick(this.#closeHiddenForm);
+    formView.addHandlerCloseHiddenFormButtonClick(this._closeHiddenForm);
   };
 
   #bindSplittFormHandlers = () => {
@@ -94,13 +94,13 @@ class ExpenseController extends TransactionFormController {
   // TODO! удалить потом
   openSplittForm = () => {
     this.#openAddForm();
-    this.#openHiddenForm(EXPENSE_HIDDEN_FORM_SPLITT, null);
+    this._openHiddenForm(EXPENSE_HIDDEN_FORM_SPLITT, null);
   };
 
   // TODO! удалить потом
   openPaidByForm = () => {
     this.#openAddForm();
-    this.#openHiddenForm(EXPENSE_HIDDEN_FORM_PAID_BY, null);
+    this._openHiddenForm(EXPENSE_HIDDEN_FORM_PAID_BY, null);
   };
 
   #openAddForm = () => {
@@ -121,48 +121,6 @@ class ExpenseController extends TransactionFormController {
     this.toggleHiddenFormOnLoad(viewModel.activeHiddenForm);
   };
 
-  #closeForm = () => {
-    eventBus.emit('closeActiveModal');
-    expenseModel.deactivateEmojiField();
-  };
-
-  // Toggle Hidden Forms
-
-  #toggleHiddenForm = (event, formType) => {
-    event.preventDefault();
-    const activeHiddenFormType = expenseModel.getActiveHiddenForm();
-    if (activeHiddenFormType !== formType) {
-      this.#openHiddenForm(formType, activeHiddenFormType);
-    } else {
-      this._hiddenFormMediator.closeForm(activeHiddenFormType);
-      expenseModel.updateActiveHiddenForm(null);
-    }
-  };
-
-  #openHiddenForm = (newFormType, activeFormType) => {
-    if (activeFormType && newFormType !== activeFormType) {
-      this._hiddenFormMediator.closeForm(activeFormType);
-    }
-    this._hiddenFormMediator.openForm(newFormType);
-    expenseModel.updateActiveHiddenForm(newFormType);
-  };
-
-  #closeHiddenForm = event => {
-    event.preventDefault();
-    const activeHiddenFormType = expenseModel.getActiveHiddenForm();
-    if (!activeHiddenFormType) return;
-    this._hiddenFormMediator.closeForm(activeHiddenFormType);
-    expenseModel.updateActiveHiddenForm(null);
-  };
-
-  toggleHiddenFormOnLoad = hiddenForm => {
-    if (hiddenForm) {
-      this._hiddenFormMediator.openForm(hiddenForm);
-    } else {
-      this._hiddenFormMediator.closeAll();
-    }
-  };
-
   // Handlers: Main Form
 
   #handleTitleInput = event => {
@@ -180,12 +138,6 @@ class ExpenseController extends TransactionFormController {
       inputAmount,
       cursorPosition,
     });
-  };
-
-  #handleAmountInputClick = event => {
-    const inputValue = event.target.value;
-    const cursorPosition = event.target.selectionStart;
-    formView.adjustAmountInputCursor({ inputValue, cursorPosition });
   };
 
   #handleDateInput = event => {
@@ -225,26 +177,6 @@ class ExpenseController extends TransactionFormController {
   #handleNoteInputCount = event => {
     const count = event.target.value.length;
     formView.renderNoteCount(count);
-  };
-
-  // Alignment
-
-  alignForm() {
-    const isActiveForm = formView.isActive();
-    formView.activate();
-
-    formView.alignForm();
-    const emojiTopMarginData = formView.getEmojiTopMarginData();
-    eventBus.emit('setEmojiTopMargin', emojiTopMarginData);
-
-    if (!isActiveForm) formView.deactivate();
-  }
-
-  // Update
-
-  updateDateInputRange = () => {
-    const dateInputData = expenseModel.getDateInputUpdateData();
-    formView.updateDateInput(dateInputData);
   };
 }
 

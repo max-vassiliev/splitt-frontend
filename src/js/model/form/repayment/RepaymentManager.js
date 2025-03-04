@@ -10,7 +10,6 @@ import {
 } from '../../../util/Config.js';
 import RepaymentFormState from '../../state/repayment/RepaymentFormState.js';
 import Repayment from '../../state/repayment/Repayment.js';
-import eventBus from '../../../util/EventBus.js';
 import TransactionFormManager from '../common/TransactionFormManager.js';
 
 class RepaymentManager extends TransactionFormManager {
@@ -42,22 +41,6 @@ class RepaymentManager extends TransactionFormManager {
   getForm = type => {
     this.#validateFormType(type);
     state.repaymentForms[type];
-  };
-
-  /**
-   * Updates the active form's emoji field.
-   *
-   * @param {string} emoji - The new emoji to set for the active form.
-   * @fires repaymentFormEmojiEdited - Emits when the emoji is edited in for the "edit" form.
-   */
-  setActiveFormEmoji = emoji => {
-    const form = this.getActiveForm();
-    if (form.type === REPAYMENT_FORM_EDIT) {
-      const editResponse = form.editEmoji(emoji);
-      eventBus.emit('repaymentFormEmojiEdited', editResponse);
-    } else {
-      state.repaymentForms.activeForm.emoji = emoji;
-    }
   };
 
   // Update
@@ -102,26 +85,6 @@ class RepaymentManager extends TransactionFormManager {
       return { formType, amount, isFormValid: form.isValid };
     }
   };
-
-  /**
-   * Updates the date for the active form.
-   * If the form type is {@link REPAYMENT_FORM_EDIT}, it performs validation and returns a detailed object.
-   * Otherwise, it updates the date directly and returns a simplified object.
-   *
-   * @param {Date} date The new date to set.
-   * @returns {Object} The update result object.
-   */
-  // updateDate = date => {
-  //   const form = this.getActiveForm();
-  //   const formType = form.type;
-  //   if (formType === REPAYMENT_FORM_EDIT) {
-  //     const { isFormValid, hasEdits, isFieldEdited } = form.editDate(date);
-  //     return { formType, isFormValid, hasEdits, isFieldEdited };
-  //   } else {
-  //     form.date = date;
-  //     return { formType };
-  //   }
-  // };
 
   /**
    * Updates the note in the active repayment form.
