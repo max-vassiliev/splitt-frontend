@@ -61,7 +61,6 @@ class TransactionFormController {
   // Toggle Hidden Form
 
   _toggleHiddenForm = (event, formType) => {
-    console.log('NIIIIIICEE 🎤');
     event.preventDefault();
     const activeHiddenFormType = this._model.getActiveHiddenForm();
     if (activeHiddenFormType !== formType) {

@@ -26,7 +26,7 @@ class ExpenseBalanceService {
    * @param {bigint} currentUserId The current user's ID.
    * @returns {Object} The object containing the balance details
    * @property {string} status The balance status.
-   *                            One of [EXPENSE_BALANCE_STATUSES]{@link EXPENSE_BALANCE_STATUSES}.
+   *                           One of {@link EXPENSE_BALANCE_STATUSES}.
    * @property {number} amount The current user's balance in the expense (optional).
    */
   getBalance = (expenseData, currentUserId) => {

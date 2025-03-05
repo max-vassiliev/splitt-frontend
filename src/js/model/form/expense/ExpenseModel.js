@@ -3,6 +3,7 @@ import {
   EXPENSE_FORM_ADD,
   EXPENSE_FORM_EDIT,
   DEFAULT_AMOUNT,
+  MIN_EXPENSE_AMOUNT,
   USERNAME_OTHER,
   EXPENSE_PAID_BY_EMPTY,
   EXPENSE_PAID_BY_COPAYMENT,
@@ -12,6 +13,7 @@ import {
   EXPENSE_BALANCE_DEFAULT,
   EXPENSE_BALANCE_CHECK_PAID_BY,
   EXPENSE_BALANCE_CHECK_SPLITT,
+  EXPENSE_BALANCE_AMOUNT_BELOW_MIN,
 } from '../../../util/Config.js';
 import { isEmptyString } from '../../../util/SplittValidator.js';
 import expenseManager from './ExpenseManager.js';
@@ -116,6 +118,7 @@ class ExpenseModel extends TransactionFormModel {
    * @param {Object} response - The response object containing form updates.
    * @param {Object} response.form - The updated form after the expense amount change.
    * @param {Object} response.updateResponsePaidBy - The update result from the "Paid By" section.
+   * @param {Object} [response.amountBelowMinimum] - The processed amount, if the amount is below {@link MIN_EXPENSE_AMOUNT}.
    * @returns {Object} The structured view model after the amount update.
    * @property {number} amount - The updated expense amount.
    * @property {boolean} isValid - Whether the updated form state is valid.
@@ -124,11 +127,17 @@ class ExpenseModel extends TransactionFormModel {
    * @property {Object} splitt - The updated view model for the "Splitt" section.
    */
   #prepareViewModelAfterUpdateAmount = response => {
-    const { form, updateResponsePaidBy } = response;
+    const { form, updateResponsePaidBy, amountBelowMinimum } = response;
 
     const currentUserId = stateManager.getUserId();
     const groupMembers = stateManager.getMembers();
-    const balance = balanceService.getBalance(form, currentUserId);
+
+    const amount = amountBelowMinimum ? amountBelowMinimum : form.amount;
+
+    const balance = amountBelowMinimum
+      ? { status: EXPENSE_BALANCE_AMOUNT_BELOW_MIN }
+      : balanceService.getBalance(form, currentUserId);
+
     const paidByViewModel =
       paidByService.prepareViewModelAfterExpenseAmountUpdate({
         updateResponsePaidBy,
@@ -136,12 +145,13 @@ class ExpenseModel extends TransactionFormModel {
         currentUserId,
         groupMembers,
       });
+
     const splittViewModel = splittService.prepareViewModel(
       form.splitt.activeForm
     );
 
     return {
-      amount: form.amount,
+      amount,
       isValid: form.isValid,
       balance,
       paidBy: paidByViewModel,
@@ -175,7 +185,22 @@ class ExpenseModel extends TransactionFormModel {
    */
   updateAmount = inputAmount => {
     const processedAmount = mathService.processInputAmount(inputAmount);
+    if (processedAmount < MIN_EXPENSE_AMOUNT) {
+      return this.#updateAmountBelowMinimum(processedAmount);
+    }
     const response = expenseManager.updateAmount(processedAmount);
+    return this.#prepareViewModelAfterUpdateAmount(response);
+  };
+
+  /**
+   * Handles the amount update when the processed amount is below the minimum allowed.
+   *
+   * @param {number} amount - The invalid amount entered by the user.
+   * @returns {Object} The updated view model, with the recieved amount.
+   */
+  #updateAmountBelowMinimum = amount => {
+    const response = expenseManager.updateAmount(DEFAULT_AMOUNT);
+    response.amountBelowMinimum = amount;
     return this.#prepareViewModelAfterUpdateAmount(response);
   };
 

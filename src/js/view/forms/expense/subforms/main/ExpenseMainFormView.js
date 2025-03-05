@@ -17,6 +17,7 @@ import {
   EXPENSE_BALANCE_DEFAULT,
   EXPENSE_BALANCE_CHECK_PAID_BY,
   EXPENSE_BALANCE_CHECK_SPLITT,
+  EXPENSE_BALANCE_AMOUNT_BELOW_MIN,
 } from '../../../../../util/Config.js';
 import {
   formatAmountForOutput,
@@ -52,6 +53,7 @@ class ExpenseMainFormView {
   #labelSplitt = 'Поделить';
   #balanceLabelDefault = 'ваш баланс:\u00A0';
   #balanceLabelCheckForm = formName => `проверьте форму «${formName}»`;
+  #balanceLabelAmountBelowMin = 'слишком малая сумма';
   #balanceAmountOptions = [POSITIVE_CLASS, NEGATIVE_CLASS, HIDDEN_CLASS];
   #form;
   #mainForm;
@@ -279,6 +281,10 @@ class ExpenseMainFormView {
 
   // Render: Elements
 
+  renderTitle = title => {
+    this.#inputTitle.value = title ? title : '';
+  };
+
   renderAmountInput = ({ processedAmount, amountIn, cursorPosition }) => {
     const inputElement = this.#inputAmount;
     formHelper.renderAmountInput({
@@ -345,11 +351,26 @@ class ExpenseMainFormView {
    */
   renderBalance = balance => {
     removeUtilityClasses(this.#balanceAmount, this.#balanceAmountOptions);
-    if (balance.status === EXPENSE_BALANCE_DEFAULT) {
-      this.#renderBalanceDefault(balance.amount);
-    } else {
-      this.#renderBalanceCheckForm(balance);
+    switch (balance.status) {
+      case EXPENSE_BALANCE_DEFAULT:
+        this.#renderBalanceDefault(balance.amount);
+        break;
+      case EXPENSE_BALANCE_AMOUNT_BELOW_MIN:
+        this.#renderBalanceAmountBelowMin();
+        break;
+      case EXPENSE_BALANCE_CHECK_PAID_BY:
+      case EXPENSE_BALANCE_CHECK_SPLITT:
+        this.#renderBalanceCheckForm(balance);
+        break;
+      default:
+        console.warn(`Unexpected balance status: ${balance.status}`);
     }
+  };
+
+  renderNoteButtonCaption = isEmpty => {
+    this.#buttonNote.textContent = isEmpty
+      ? this.#buttonNoteCaptionEmpty
+      : this.#buttonNoteCaption;
   };
 
   // Render: Edit Form
@@ -372,10 +393,6 @@ class ExpenseMainFormView {
   #renderCaptionsEdit = () => {
     this.#header.textContent = this.#headerEditCaption;
     this.#buttonSubmit.textContent = this.#submitEditCaption;
-  };
-
-  renderTitle = title => {
-    this.#inputTitle.value = title ? title : '';
   };
 
   #renderAmount = amount => {
@@ -421,10 +438,14 @@ class ExpenseMainFormView {
     this.#balanceAmount.classList.add(HIDDEN_CLASS);
   };
 
-  renderNoteButtonCaption = isEmpty => {
-    this.#buttonNote.textContent = isEmpty
-      ? this.#buttonNoteCaptionEmpty
-      : this.#buttonNoteCaption;
+  /**
+   * Renders the balance, when the provided expense amount is below minimum.
+   *
+   * @private
+   */
+  #renderBalanceAmountBelowMin = () => {
+    this.#balanceLabel.textContent = this.#balanceLabelAmountBelowMin;
+    this.#balanceAmount.classList.add(HIDDEN_CLASS);
   };
 
   // Alignment
