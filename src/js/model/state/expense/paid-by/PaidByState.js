@@ -187,14 +187,12 @@ class PaidByState {
    * @param {number} entryId - The ID of the entry to update.
    *
    * @returns {Object} The response object.
-   * @property {number} entryId The ID of the updated entry.
    * @property {bigint} addedUser The ID of the added user.
-   * @property {bigint|null} removedUser ID of the previous user associated with the entry.
-   * @property {boolean} isValid The flag indicating if the subform is ready for submission.
+   * @property {bigint|null} removedUserId The ID of the removed user or `null` if the previous user was not set.
    *
    * @throws {Error} If the user is already present.
    */
-  updateUser = (userId, entryId) => {
+  updateUser = (entryId, userId) => {
     this.#validateUserNotPresent(userId);
     const entry = this.#getEntry(entryId);
     const currentPayerId = entry.userId;
@@ -204,10 +202,8 @@ class PaidByState {
     this.#validate();
 
     return {
-      entryId,
-      addedUser: userId,
-      removedUser: currentPayerId,
-      isValid: this.#isValid,
+      addedUserId: userId,
+      removedUserId: currentPayerId,
     };
   };
 

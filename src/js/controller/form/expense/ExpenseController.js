@@ -9,16 +9,24 @@ import addButtonView from '../../../view/forms/expense/AddExpenseButtonView.js';
 import formView from '../../../view/forms/expense/ExpenseFormView.js';
 import expenseModel from '../../../model/form/expense/ExpenseModel.js';
 import TransactionFormController from '../common/TransactionFormController.js';
+import ExpensePaidByHandler from './ExpensePaidByHandler.js';
 import HiddenFormMediator from '../../../view/util/HiddenFormMediator.js';
 import eventBus from '../../../util/EventBus.js';
 
 class ExpenseController extends TransactionFormController {
+  #paidByHandler;
+
   constructor() {
     super({
       model: expenseModel,
       view: formView,
       hiddenFormMediator: new HiddenFormMediator(TYPE_EXPENSE),
       modalId: MODAL_ID_EXPENSE,
+    });
+
+    this.#paidByHandler = new ExpensePaidByHandler({
+      controller: this,
+      selectors: formView.getSelectors().paidBy,
     });
   }
 
@@ -55,6 +63,7 @@ class ExpenseController extends TransactionFormController {
     addButtonView.addHandlerClick(this.#openAddForm);
     this.#bindMainFormHandlers();
     this.#bindHiddenFormHandlers();
+    this.#bindPaidByFormHandlers();
     this.#bindSplittFormHandlers();
     this.#bindNoteFormHandlers();
   };
@@ -78,6 +87,12 @@ class ExpenseController extends TransactionFormController {
 
   #bindHiddenFormHandlers = () => {
     formView.addHandlerCloseHiddenFormButtonClick(this._closeHiddenForm);
+  };
+
+  #bindPaidByFormHandlers = () => {
+    formView.addHandlerPaidByTableClick(this.#handlePaidByTableClick);
+    formView.addHandlerPaidByTableChange(this.#handlePaidByTableChange);
+    formView.addHandlerPaidByTableInput(this.#handlePaidByTableInput);
   };
 
   #bindSplittFormHandlers = () => {
@@ -150,6 +165,25 @@ class ExpenseController extends TransactionFormController {
   handleEmojiEdit = response => {};
 
   // Handlers: Reset
+
+  // Handlers: Paid By Form
+
+  #handlePaidByTableClick = event => {
+    //
+  };
+
+  #handlePaidByTableChange = event => {
+    this.#paidByHandler.handlePayerSwitch(event);
+  };
+
+  #handlePaidByTableInput = event => {
+    //
+  };
+
+  updatePayer = (entryId, newPayerId) => {
+    const response = expenseModel.updatePayer(entryId, newPayerId);
+    formView.renderAfterUpdatePayer(response);
+  };
 
   // Handlers: Splitt Form
 

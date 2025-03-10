@@ -1,6 +1,6 @@
 import Expense from '../state/expense/Expense.js';
 import Repayment from '../state/repayment/Repayment.js';
-import TypeParser from '../util/TypeParser.js';
+import TypeParser from '../../util/TypeParser.js';
 import RepaymentParty from '../state/repayment/RepaymentParty.js';
 
 class TransactionManager {

@@ -9,6 +9,14 @@ import splittView from './subforms/splitt/ExpenseSplittView.js';
 import noteView from './subforms/note/ExpenseNoteView.js';
 
 class ExpenseFormView {
+  #selectors;
+
+  constructor() {
+    this.#selectors = {
+      paidBy: paidByView.getSelectors(),
+    };
+  }
+
   // --------
   // GLOBAL
   // --------
@@ -24,6 +32,10 @@ class ExpenseFormView {
   };
 
   // Global: Getters
+
+  getSelectors = () => {
+    return this.#selectors;
+  };
 
   getHiddenFormToggleElements = () => {
     const { buttonPaidBy, buttonSplitt, buttonNote } =
@@ -107,7 +119,7 @@ class ExpenseFormView {
     mainView.renderSubmitButton(isValid);
   };
 
-  // Amount: Add Handlers
+  // Title: Add Handlers
 
   addHandlerTitleInput = handler => {
     mainView.addHandlerTitleInput(handler);
@@ -154,8 +166,6 @@ class ExpenseFormView {
     splittView.render({ ...splitt, expenseAmount });
     mainView.renderBalance(balance);
     mainView.renderSubmitButton(isValid);
-    //
-    // потом: renderEditFormElements
   };
 
   // Amount: Add Handlers
@@ -242,6 +252,15 @@ class ExpenseFormView {
   // PAID BY
   // ---------
 
+  // Paid By Form: Render
+
+  renderAfterUpdatePayer = data => {
+    const { type, name, balance } = data;
+    mainView.renderPaidByButtonCaption({ type, name });
+    mainView.renderBalance(balance);
+    paidByView.renderAfterUpdatePayer(data);
+  };
+
   // Paid By Form: Add Handlers
 
   addHandlerPaidByButtonClick = handler => {
@@ -261,19 +280,14 @@ class ExpenseFormView {
   };
 
   // TODO! удалить (возможно)
-  addHandlerPayerAvatarClick = handler => {
-    paidByView.addHandlerPayerAvatarClick(handler);
-  };
+  // addHandlerPayerAvatarClick = handler => {
+  //   paidByView.addHandlerPayerAvatarClick(handler);
+  // };
 
   // TODO! удалить (возможно)
-  addHandlerPayerSwitch = handler => {
-    paidByView.addHandlerPayerSwitch(handler);
-  };
-
-  // TODO! удалить (возможно)
-  addHandlerPayerButton = handler => {
-    paidByView.addHandlerPayerButton(handler);
-  };
+  // addHandlerPayerButton = handler => {
+  //   paidByView.addHandlerPayerButton(handler);
+  // };
 
   // --------
   // SPLITT

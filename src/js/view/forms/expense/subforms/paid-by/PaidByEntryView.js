@@ -1,7 +1,11 @@
+import { DISABLED_ATTRIBUTE } from '../../../../../util/Config.js';
+
 class PaidByEntryView {
   #entryId;
-  #userId; // TODO! подумать, нужно ли
+  #userId;
   #payerSwitch;
+  #payerOptions;
+  #avatarElement;
   #amountInput;
 
   /**
@@ -9,11 +13,20 @@ class PaidByEntryView {
    * @param {number} entryId The unique identifier for this entry.
    * @param {HTMLElement} payerSwitch The switch element for selecting payer status.
    * @param {HTMLElement} amountInput The input element for specifying the amount.
+   * @param {HTMLElement} avatarElement The avatar <img> element that stores the avatar.
    */
-  constructor(entryId, payerSwitch, amountInput) {
+  constructor({
+    entryId,
+    payerSwitch,
+    payerOptions,
+    amountInput,
+    avatarElement,
+  }) {
     this.#entryId = entryId;
     this.#payerSwitch = payerSwitch;
     this.#amountInput = amountInput;
+    this.#avatarElement = avatarElement;
+    this.#payerOptions = payerOptions;
   }
 
   // Getters
@@ -43,11 +56,28 @@ class PaidByEntryView {
   }
 
   /**
+   * Gets the payer options map.
+   * @returns {Map<BigInt, HTMLElement>} The map with the user ID as the key
+   *                                     and the assiciated <option> element as the value.
+   */
+  get payerOptions() {
+    return this.#payerOptions;
+  }
+
+  /**
    * Gets the amount input element.
    * @returns {HTMLElement} The amount input element or `undefined` if not assigned.
    */
   get amountInput() {
     return this.#amountInput;
+  }
+
+  /**
+   * Gets the payer's avatar <img> element.
+   * @returns {HTMLElement} The avatar element.
+   */
+  get avatarElement() {
+    return this.#avatarElement;
   }
 
   // Setters
@@ -65,6 +95,20 @@ class PaidByEntryView {
     }
     this.#userId = userId;
   }
+
+  // Update
+
+  updateOptionsAfterPayerChange = (addedUserId, removedUserId) => {
+    this.#payerOptions.forEach((payerOption, payerId) => {
+      if (payerId === removedUserId) {
+        payerOption.removeAttribute(DISABLED_ATTRIBUTE);
+        return;
+      }
+      if (payerId === addedUserId && this.#userId !== addedUserId) {
+        payerOption.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
+      }
+    });
+  };
 }
 
 export default PaidByEntryView;

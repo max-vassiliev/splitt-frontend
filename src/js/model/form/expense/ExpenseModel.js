@@ -205,6 +205,31 @@ class ExpenseModel extends TransactionFormModel {
   };
 
   /**
+   * Updates the payer for a specific Paid By entry.
+   *
+   * @param {number} entryId - The ID of the entry to update.
+   * @param {bigint} newPayerId - The ID of the new payer.
+   * @returns {Object} The updated view model containing relevant state data.
+   */
+  updatePayer = (entryId, newPayerId) => {
+    const response = expenseManager.updatePayer(entryId, newPayerId);
+    const avatar = stateManager.getMemberById(response.addedUserId).avatar;
+    const groupMembers = stateManager.getMembers();
+    const currentUserId = stateManager.getUserId();
+    const form = expenseManager.getActiveForm();
+    const balance = balanceService.getBalance(form, currentUserId);
+
+    return paidByService.prepareViewModelAfterUpdatePayer({
+      ...response,
+      entryId,
+      groupMembers,
+      currentUserId,
+      avatar,
+      balance,
+    });
+  };
+
+  /**
    * Updates the active Splitt type in the expense form and recalculates related values.
    * If the requested type is already active, no changes are made.
    * Otherwise, the corresponding Splitt form is updated, and the necessary values are retrieved.

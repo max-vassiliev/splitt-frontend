@@ -1,7 +1,4 @@
-import {
-  isPositiveNumber,
-  isNumericString,
-} from '../../util/SplittValidator.js';
+import { isPositiveNumber, isNumericString } from './SplittValidator.js';
 
 class TypeParser {
   /**

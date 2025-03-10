@@ -62,6 +62,22 @@ class ExpenseManager extends TransactionFormManager {
   };
 
   /**
+   * Updates the payer for a given entry in the active form.
+   *
+   * @param {number} entryId - The ID of the expense entry to update.
+   * @param {bigint} newPayerId - The ID of the newly assigned payer.
+   * @returns {Object} An object containing the added and removed user IDs and the updated Paid By state.
+   */
+  updatePayer = (entryId, newPayerId) => {
+    const form = this.getActiveForm();
+    const { addedUserId, removedUserId } = form.paidBy.updateUser(
+      entryId,
+      newPayerId
+    );
+    return { addedUserId, removedUserId, paidByState: form.paidBy };
+  };
+
+  /**
    * Updates the active Splitt Form type and recalculates values if needed.
    * If the requested type is already active, no changes are made.
    * Otherwise, the corresponding form is retrieved, recalculated, and set as active.

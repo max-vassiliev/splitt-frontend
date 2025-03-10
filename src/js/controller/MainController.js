@@ -32,7 +32,7 @@ class MainController {
 
       // TODO! удалить потом
       // expenseController.openSplittForm();
-      // expenseController.openPaidByForm();
+      expenseController.openPaidByForm();
     } catch (error) {
       throw error;
     }

@@ -1,4 +1,4 @@
-import TypeParser from '../util/TypeParser.js';
+import TypeParser from '../../util/TypeParser.js';
 
 class UserBalanceDetail {
   #userId;

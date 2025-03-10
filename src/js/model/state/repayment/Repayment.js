@@ -3,7 +3,7 @@ import {
   isPositiveNumber,
   isNonEmptyStringOrNull,
 } from '../../../util/SplittValidator.js';
-import TypeParser from '../../util/TypeParser.js';
+import TypeParser from '../../../util/TypeParser.js';
 import RepaymentParty from './RepaymentParty.js';
 
 class Repayment {

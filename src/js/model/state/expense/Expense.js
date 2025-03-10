@@ -4,7 +4,7 @@ import {
   isNonEmptyStringOrNull,
   isNonEmptyString,
 } from '../../../util/SplittValidator.js';
-import TypeParser from '../../util/TypeParser.js';
+import TypeParser from '../../../util/TypeParser.js';
 
 class Expense {
   #id;

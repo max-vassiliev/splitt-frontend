@@ -88,6 +88,48 @@ class PaidByService {
   };
 
   /**
+   * Prepares the view model after updating the payer.
+   *
+   * @param {Object} data - Data needed to construct the updated view model.
+   * @param {Object} data.paidByState - The updated PaidBy state after the payer change.
+   * @param {Map<bigint, User>} data.groupMembers - A map of the group's members.
+   * @param {bigint} data.currentUserId - The ID of the current user.
+   * @param {bigint} data.addedUserId - The ID of the newly assigned payer.
+   * @param {bigint|null} data.removedUserId - The ID of the removed payer or `null`.
+   * @param {string\null} data.avatar - URL of the newly assigned payer's avatar or `null`.
+   * @param {Object} data.balance - The updated balance after payer change.
+   * @param {number} data.entryId - The ID of the expense entry that was updated.
+   * @returns {Object} The view model containing updated payer data and state.
+   */
+  prepareViewModelAfterUpdatePayer = data => {
+    const {
+      paidByState,
+      groupMembers,
+      currentUserId,
+      addedUserId,
+      removedUserId,
+      avatar,
+      balance,
+      entryId,
+    } = data;
+    const { type, name } = this.#prepareTypeProperties(
+      paidByState.payersInEntries,
+      currentUserId,
+      groupMembers
+    );
+
+    return {
+      type,
+      name,
+      avatar,
+      entryId,
+      balance,
+      addedUserId,
+      removedUserId,
+    };
+  };
+
+  /**
    * Determines the properties for the Paid By button in the main form.
    *
    * @param {Set<bigint>} payers - A set of payer IDs.

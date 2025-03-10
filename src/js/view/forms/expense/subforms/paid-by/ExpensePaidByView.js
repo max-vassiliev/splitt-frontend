@@ -4,6 +4,7 @@ import {
   restyleRemainderRow,
   adjustAmountElementsWidth,
 } from '../../../../util/RenderHelper.js';
+import TypeParser from '../../../../../util/TypeParser.js';
 import { HIDDEN_CLASS, VISIBLE_CLASS } from '../../../../../util/Config.js';
 import PaidByEntryView from './PaidByEntryView.js';
 
@@ -11,6 +12,7 @@ class ExpensePaidByView {
   #form;
   #table;
   #rows;
+  #selectors;
   #payerSwitches;
   #avatarColumns;
   #addPayerRow;
@@ -29,6 +31,7 @@ class ExpensePaidByView {
   constructor() {
     this.#entries = new Map();
     this.#parseFormElements();
+    this.#initSelectors();
     this.#initAmountWidthOptions();
   }
 
@@ -53,6 +56,17 @@ class ExpensePaidByView {
     this.#btnClose = this.#form.querySelector('.add-expense__form_btn-close');
   };
 
+  #initSelectors = () => {
+    this.#selectors = {
+      TABLE: '.payer-table',
+      PAYER_SELECT: '.payer-select',
+      PAYER_AVATAR_CELL: '.payer-table-column__avatar',
+      PAYER_AVATAR: '.account__avatar',
+      PAYER_ROW: '.payer-table-row',
+      ADD_PAYER_BUTTON: '.add-payer-button',
+    };
+  };
+
   #initAmountWidthOptions = () => {
     this.#amountWidthOptions = new Map([
       [1, '8rem'],
@@ -74,6 +88,10 @@ class ExpensePaidByView {
   get form() {
     return this.#form;
   }
+
+  getSelectors = () => {
+    return this.#selectors;
+  };
 
   hasDefaultRow = () => {
     return this.#entries.size === 1;
@@ -107,6 +125,8 @@ class ExpensePaidByView {
     this.#renderCalculationRows(total, remainder, expenseAmount);
   };
 
+  // Render After Update
+
   renderAfterExpenseAmountChange = data => {
     const { hasSingleEntry, total, remainder, expenseAmount } = data;
     if (hasSingleEntry) {
@@ -118,6 +138,15 @@ class ExpensePaidByView {
     this.#renderCalculationRows(total, remainder, expenseAmount);
   };
 
+  renderAfterUpdatePayer = data => {
+    const { avatar, entryId, addedUserId, removedUserId, selectedUsers } = data;
+    this.#renderAvatar(entryId, avatar);
+    this.#updateEntryUserId(entryId, addedUserId);
+    this.#updatePayerSwitchesAfterPayerChange(addedUserId, removedUserId);
+  };
+
+  // Render: Single
+
   #renderDefaultEntry = entryData => {
     this.#renderEntry(entryData);
   };
@@ -127,6 +156,11 @@ class ExpensePaidByView {
     entryModels.forEach(entryModel => {
       this.#renderEntry({ entry: entryModel, switchOptions, usersToDisable });
     });
+  };
+
+  #renderAvatar = (entryId, avatar) => {
+    const entry = this.#entries.get(entryId);
+    entry.avatarElement.src = getAvatarUrl(avatar);
   };
 
   #renderEntry = data => {
@@ -158,8 +192,18 @@ class ExpensePaidByView {
       remainder === 0 ? HIDDEN_CLASS : VISIBLE_CLASS;
     restyleRemainderRow(remainder, this.#remainderRow);
 
-    // this.#adjustAmountInputWidth(total, expenseAmount);
     this.#adjustInputWidth(total, expenseAmount);
+  };
+
+  #updateEntryUserId = (entryId, userId) => {
+    const entry = this.#entries.get(entryId);
+    entry.userId = userId;
+  };
+
+  #updatePayerSwitchesAfterPayerChange = (addedUserId, removedUserId) => {
+    this.#entries.forEach(entry =>
+      entry.updateOptionsAfterPayerChange(addedUserId, removedUserId)
+    );
   };
 
   #renderAddPayerButton = (shouldHide = false) => {
@@ -182,22 +226,6 @@ class ExpensePaidByView {
       defaultWidth: this.#amountWidthDefault,
     });
   };
-
-  // TODO! удалить (возможно)
-  // #adjustAmountInputWidth = (total, expenseAmount) => {
-  //   const referenceAmount = expenseAmount > total ? expenseAmount : total;
-  //   const referenceAmountLength = referenceAmount.toString().length;
-  //   const adjustedWidth =
-  //     this.#amountWidthOptions.get(referenceAmountLength) ||
-  //     this.#amountWidthDefault;
-
-  //   const amountInputElements = Array.from(this.#entries.values()).map(
-  //     entry => entry.amountInput
-  //   );
-  //   amountInputElements.forEach(inputElement => {
-  //     inputElement.style.width = adjustedWidth;
-  //   });
-  // };
 
   // Add / Delete Row
 
@@ -279,9 +307,32 @@ class ExpensePaidByView {
   #addRowToEntries = (rowElement, entryId, userId = null) => {
     const payerSwitch = rowElement.querySelector(this.#payerSwitchClass);
     const amountInput = rowElement.querySelector(this.#amountInputClass);
-    const entry = new PaidByEntryView(entryId, payerSwitch, amountInput);
+    const avatarElement = rowElement.querySelector(
+      this.getSelectors().PAYER_AVATAR
+    );
+    const payerOptions = this.#parseEntryPayerOptions(rowElement);
+
+    const entry = new PaidByEntryView({
+      entryId,
+      payerSwitch,
+      payerOptions,
+      amountInput,
+      avatarElement,
+    });
     if (userId) entry.userId = userId;
     this.#entries.set(entryId, entry);
+  };
+
+  #parseEntryPayerOptions = rowElement => {
+    const payerOptionElements = rowElement.querySelectorAll('option');
+    return new Map(
+      Array.from(payerOptionElements)
+        .slice(1)
+        .map(optionElement => {
+          const id = TypeParser.parseStringToBigInt(optionElement.value);
+          return [id, optionElement];
+        })
+    );
   };
 
   // ADD HANDLERS
@@ -303,12 +354,6 @@ class ExpensePaidByView {
   addHandlerPayerAvatarClick = handler => {
     [...this.#avatarColumns].forEach(column => {
       column.addEventListener('click', handler);
-    });
-  };
-
-  addHandlerPayerSwitch = handler => {
-    [...this.#payerSwitches].forEach(payerSwitch => {
-      payerSwitch.addEventListener('change', handler);
     });
   };
 

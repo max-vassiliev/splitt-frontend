@@ -6,7 +6,7 @@ import {
   REPAYMENT_FORM_EDIT,
 } from '../../../util/Config.js';
 import mathService from '../../util/MathService.js';
-import TypeParser from '../../util/TypeParser.js';
+import TypeParser from '../../../util/TypeParser.js';
 import TransactionFormModel from '../common/TransactionFormModel.js';
 
 class RepaymentModel extends TransactionFormModel {
