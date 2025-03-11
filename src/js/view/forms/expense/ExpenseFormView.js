@@ -261,6 +261,10 @@ class ExpenseFormView {
     paidByView.renderAfterUpdatePayer(data);
   };
 
+  renderAfterAddPayerRow = data => {
+    paidByView.renderAfterAddPayerRow(data);
+  };
+
   // Paid By Form: Add Handlers
 
   addHandlerPaidByButtonClick = handler => {

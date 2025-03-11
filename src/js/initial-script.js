@@ -1604,15 +1604,16 @@ export function initializeLegacyScript() {
 
     // el: Add Expense: Payer Form
 
-    payerAvatarColumns.forEach(column => {
-      column.addEventListener('click', handlePayerAvatarClick);
-    });
+    // TODO! удалить
+    // payerAvatarColumns.forEach(column => {
+    //   column.addEventListener('click', handlePayerAvatarClick);
+    // });
 
-    payerSwitches.forEach(payerSwitch => {
-      payerSwitch.addEventListener('change', handlePayerSwitch);
-    });
+    // payerSwitches.forEach(payerSwitch => {
+    //   payerSwitch.addEventListener('change', handlePayerSwitch);
+    // });
 
-    addPayerButton.addEventListener('click', handleAddPayerClick);
+    // addPayerButton.addEventListener('click', handleAddPayerClick);
 
     // el: Add Expense: Splitt Form
 

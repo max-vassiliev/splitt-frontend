@@ -130,6 +130,47 @@ class PaidByService {
   };
 
   /**
+   * Prepares the view model after a new Paid By entry is added.
+   * This ensures the UI reflects the latest form state.
+   *
+   * @param {Object} data - The data related to the new entry.
+   * @param {number} data.entriesCount - The total number of Paid By entries in the form state.
+   * @param {Array} data.groupMembers - The list of all group members.
+   * @param {Set<number>} data.usersInEntries - Set of user IDs currently assigned to certain entries.
+   * @param {PaidByEntry} data.entry - The newly added Paid By entry state.
+   * @param {Object} rest - Additional properties from the response object.
+   *
+   * @returns {Object} The view model for rendering.
+   */
+  prepareViewModelAfterAddPayerEntry = data => {
+    const {
+      entriesCount,
+      groupMembers,
+      usersInEntries,
+      entry: entryState,
+      ...rest
+    } = data;
+
+    const deactivateAddPayerButton = entriesCount === groupMembers.size;
+    const switchOptions = this.#prepareSwitchOptions(groupMembers);
+    const entry = {
+      entryId: entryState.entryId,
+      userId: entryState.userId,
+      amount: entryState.amount,
+      isDefault: entryState.isDefault,
+    };
+
+    return {
+      shouldRender: true,
+      entry,
+      deactivateAddPayerButton,
+      switchOptions,
+      usersToDisable: usersInEntries,
+      ...rest,
+    };
+  };
+
+  /**
    * Determines the properties for the Paid By button in the main form.
    *
    * @param {Set<bigint>} payers - A set of payer IDs.

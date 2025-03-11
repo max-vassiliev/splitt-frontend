@@ -59,10 +59,11 @@ class ExpensePaidByView {
   #initSelectors = () => {
     this.#selectors = {
       TABLE: '.payer-table',
-      PAYER_SELECT: '.payer-select',
+      PAYER_SWITCH: '.payer__switch',
       PAYER_AVATAR_CELL: '.payer-table-column__avatar',
       PAYER_AVATAR: '.account__avatar',
       PAYER_ROW: '.payer-table-row',
+      ADD_PAYER_ROW: '.payer-table-row__add-payer',
       ADD_PAYER_BUTTON: '.add-payer-button',
     };
   };
@@ -145,7 +146,25 @@ class ExpensePaidByView {
     this.#updatePayerSwitchesAfterPayerChange(addedUserId, removedUserId);
   };
 
-  // Render: Single
+  renderAfterAddPayerRow = data => {
+    const {
+      entry,
+      switchOptions,
+      usersToDisable,
+      deactivateAddPayerButton,
+      defaultEntryAffected,
+    } = data;
+    this.#renderEntry({ entry, switchOptions, usersToDisable });
+    if (defaultEntryAffected) {
+      const defaultEntry = this.#entries.get(data.defaultEntryId);
+      defaultEntry.activateInput();
+    }
+    if (deactivateAddPayerButton) {
+      this.#renderAddPayerButton(true);
+    }
+  };
+
+  // Render: Elements
 
   #renderDefaultEntry = entryData => {
     this.#renderEntry(entryData);
@@ -263,6 +282,7 @@ class ExpensePaidByView {
     const avatarUrl = getAvatarUrl(avatar);
     const dataUserId = userId ? ` data-user-id="${userId}"` : '';
     const removeColumnAttribute = isFirstRow ? ' inactive' : '';
+    const inputReadonlyAttribute = isFirstRow ? ' readonly' : '';
     const outputAmount = formatAmountForOutput(amount);
 
     return `
@@ -290,6 +310,7 @@ class ExpensePaidByView {
               name="expense-payer-amount-input"
               type="text"
               value="${outputAmount}"
+              ${inputReadonlyAttribute}
             />
           </td>
         </tr>`;

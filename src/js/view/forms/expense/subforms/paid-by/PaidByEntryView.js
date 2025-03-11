@@ -1,4 +1,7 @@
-import { DISABLED_ATTRIBUTE } from '../../../../../util/Config.js';
+import {
+  DISABLED_ATTRIBUTE,
+  READONLY_ATTRIBUTE,
+} from '../../../../../util/Config.js';
 
 class PaidByEntryView {
   #entryId;
@@ -108,6 +111,16 @@ class PaidByEntryView {
         payerOption.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
       }
     });
+  };
+
+  // Toggle Elements
+
+  activateInput = () => {
+    this.#amountInput.removeAttribute(READONLY_ATTRIBUTE);
+  };
+
+  deactivateInput = () => {
+    this.#amountInput.setAttribute(READONLY_ATTRIBUTE, READONLY_ATTRIBUTE);
   };
 }
 

@@ -11,6 +11,7 @@ export const INVISIBLE_CLASS = 'invisible';
 export const DEFAULT_CLASS = 'default';
 export const DISABLED_ATTRIBUTE = 'disabled';
 export const HIDDEN_ATTRIBUTE = 'hidden';
+export const READONLY_ATTRIBUTE = 'readonly';
 export const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
 export const ABOVE_EXPENSE_AMOUNT_CLASS = 'above-expense-amount';
 export const POSITIVE_CLASS = 'positive';

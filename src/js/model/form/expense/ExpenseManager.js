@@ -24,7 +24,7 @@ class ExpenseManager extends TransactionFormManager {
     this.#initForms();
   };
 
-  // Update
+  // Update: Main Form
 
   /**
    * Updates the title of the active form and revalidates the form for submission.
@@ -61,6 +61,8 @@ class ExpenseManager extends TransactionFormManager {
     return { form, updateResponsePaidBy };
   };
 
+  // Update: Paid By
+
   /**
    * Updates the payer for a given entry in the active form.
    *
@@ -76,6 +78,18 @@ class ExpenseManager extends TransactionFormManager {
     );
     return { addedUserId, removedUserId, paidByState: form.paidBy };
   };
+
+  /**
+   * Delegates the addition of a Paid By entry to the PaidByState of the active expense form.
+   *
+   * @returns {Object} The response object from the PaidByState.
+   */
+  addPaidByEntry = () => {
+    const form = this.getActiveForm();
+    return form.paidBy.addEntry();
+  };
+
+  // Update: Splitt
 
   /**
    * Updates the active Splitt Form type and recalculates values if needed.
@@ -100,6 +114,8 @@ class ExpenseManager extends TransactionFormManager {
     expenseForm.validateForSubmission();
     return { isUpdated: true, form: expenseForm };
   };
+
+  // Update: Note
 
   /**
    * Updates the note in the active expense form.

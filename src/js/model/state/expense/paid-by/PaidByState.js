@@ -2,6 +2,7 @@ import PaidByEntry from './PaidByEntry.js';
 
 class PaidByState {
   #entries;
+  #defaultEntryId;
   #usersInEntries;
   #payersInEntries;
   #total;
@@ -38,6 +39,7 @@ class PaidByState {
     defaultEntry.userId = currentUserId;
     defaultEntry.isDefault = true;
     this.#entries.set(defaultEntry.entryId, defaultEntry);
+    this.#defaultEntryId = defaultEntry.entryId;
     this.#usersInEntries.add(currentUserId);
   };
 
@@ -141,12 +143,23 @@ class PaidByState {
    * @property {number} entryId The ID of the new entry.
    * @property {PaidByEntry} entry The new entry state.
    * @property {number} entriesCount The number of Paid By entries in the form state.
+   * @property {boolean} defaultEntryAffected - Indicates whether the default entry was affected.
+   * @property {number} [defaultEntryId] - The ID of the default entry if it was affected.
    */
   addEntry = () => {
+    const defaultEntryAffected = this.hasSingleEntry();
     const entry = new PaidByEntry();
     const entryId = entry.entryId;
     this.#entries.set(entryId, entry);
-    return { entryId, entry, entriesCount: this.#entries.size };
+
+    return {
+      entryId,
+      entry,
+      entriesCount: this.#entries.size,
+      usersInEntries: this.#usersInEntries,
+      defaultEntryAffected,
+      ...(defaultEntryAffected && { defaultEntryId: this.#defaultEntryId }),
+    };
   };
 
   /**

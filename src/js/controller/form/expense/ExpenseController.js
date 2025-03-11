@@ -169,20 +169,26 @@ class ExpenseController extends TransactionFormController {
   // Handlers: Paid By Form
 
   #handlePaidByTableClick = event => {
-    //
+    this.#paidByHandler.handleTableClick(event);
   };
 
   #handlePaidByTableChange = event => {
-    this.#paidByHandler.handlePayerSwitch(event);
+    this.#paidByHandler.handleTableChange(event);
   };
 
   #handlePaidByTableInput = event => {
-    //
+    this.#paidByHandler.handleTableInput(event);
   };
 
-  updatePayer = (entryId, newPayerId) => {
+  handlePayerUpdate = (entryId, newPayerId) => {
     const response = expenseModel.updatePayer(entryId, newPayerId);
     formView.renderAfterUpdatePayer(response);
+  };
+
+  handleAddPayerRow = () => {
+    const response = expenseModel.addPaidByEntry();
+    if (!response.shouldRender) return;
+    formView.renderAfterAddPayerRow(response);
   };
 
   // Handlers: Splitt Form

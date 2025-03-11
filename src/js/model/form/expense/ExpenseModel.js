@@ -159,7 +159,7 @@ class ExpenseModel extends TransactionFormModel {
     };
   };
 
-  // Public methods: Update
+  // Update: Main Form
 
   /**
    * Updates the title of the active form.
@@ -204,6 +204,8 @@ class ExpenseModel extends TransactionFormModel {
     return this.#prepareViewModelAfterUpdateAmount(response);
   };
 
+  // Update: Paid By
+
   /**
    * Updates the payer for a specific Paid By entry.
    *
@@ -228,6 +230,31 @@ class ExpenseModel extends TransactionFormModel {
       balance,
     });
   };
+
+  /**
+   * Adds a new Paid By entry to the expense form.
+   * Ensures that the number of entries does not exceed the number of group members.
+   *
+   * @returns {Object} The view model for rendering.
+   */
+  addPaidByEntry = () => {
+    const form = expenseManager.getActiveForm();
+    const groupMembers = stateManager.getMembers();
+
+    if (form.paidBy.entries.size >= groupMembers.size) {
+      console.warn('Paid By entries limit exceeded.');
+      return { shouldRender: false };
+    }
+
+    const response = expenseManager.addPaidByEntry();
+
+    return paidByService.prepareViewModelAfterAddPayerEntry({
+      ...response,
+      groupMembers,
+    });
+  };
+
+  // Update: Splitt
 
   /**
    * Updates the active Splitt type in the expense form and recalculates related values.
