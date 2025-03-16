@@ -406,14 +406,13 @@ class ExpenseMainFormView {
    * @param {number} amount - The balance amount.
    */
   #renderBalanceDefault = amount => {
-    const isPositive = amount > 0;
-
     this.#balanceLabel.textContent = this.#balanceLabelDefault;
     this.#balanceAmount.textContent = formatAmountForOutput(amount, {
-      showSign: isPositive,
+      showSign: true,
     });
+    
     if (amount === 0) return;
-    if (isPositive) {
+    if (amount > 0) {
       this.#balanceAmount.classList.add(POSITIVE_CLASS);
     } else {
       this.#balanceAmount.classList.add(NEGATIVE_CLASS);

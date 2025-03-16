@@ -2,6 +2,7 @@ import PaidByEntry from './PaidByEntry.js';
 
 class PaidByState {
   #entries;
+  #entriesPool;
   #defaultEntryId;
   #usersInEntries;
   #payersInEntries;
@@ -12,6 +13,7 @@ class PaidByState {
 
   constructor() {
     this.#entries = new Map();
+    this.#entriesPool = new Map();
     this.#usersInEntries = new Set();
     this.#payersInEntries = new Set();
     this.#total = 0;
@@ -29,20 +31,21 @@ class PaidByState {
     this.#isInitialized = true;
   };
 
+  /**
+   * Resets the state by clearing all entries and reloading the default entry.
+   *
+   * @param {bigint} currentUserId - The ID of the current user to set as the default entry.
+   */
   reset = currentUserId => {
     this.#clear();
     this.#loadDefaultEntry(currentUserId);
   };
 
-  #loadDefaultEntry = currentUserId => {
-    const defaultEntry = new PaidByEntry();
-    defaultEntry.userId = currentUserId;
-    defaultEntry.isDefault = true;
-    this.#entries.set(defaultEntry.entryId, defaultEntry);
-    this.#defaultEntryId = defaultEntry.entryId;
-    this.#usersInEntries.add(currentUserId);
-  };
-
+  /**
+   * Clears all Paid By state data.
+   *
+   * @private
+   */
   #clear = () => {
     this.#entries.clear();
     this.#usersInEntries.clear();
@@ -50,6 +53,21 @@ class PaidByState {
     this.#total = 0;
     this.#remainder = 0;
     this.#isValid = true;
+  };
+
+  /**
+   * Initializes and loads the default entry for the Paid By subform.
+   *
+   * @private
+   * @param {bigint} currentUserId - The ID of the user to be set as the default entry.
+   */
+  #loadDefaultEntry = currentUserId => {
+    const defaultEntry = new PaidByEntry();
+    defaultEntry.userId = currentUserId;
+    defaultEntry.isDefault = true;
+    this.#entries.set(defaultEntry.entryId, defaultEntry);
+    this.#defaultEntryId = defaultEntry.entryId;
+    this.#usersInEntries.add(currentUserId);
   };
 
   // Getters
@@ -62,6 +80,10 @@ class PaidByState {
     return this.#isValid;
   }
 
+  /**
+   * Checks if the form has been initialized.
+   * @returns {boolean} `true` if it has, otherwise `false`.
+   */
   get isInitialized() {
     return this.#isInitialized;
   }
@@ -134,63 +156,111 @@ class PaidByState {
     return entry;
   };
 
+  /**
+   * Retrieves the default entry state.
+   * @returns {PaidByEntry} The default entry state.
+   */
+  getDefaultEntry = () => {
+    return this.#entries.get(this.#defaultEntryId);
+  };
+
   // Public Methods
 
   /**
-   * Adds a new Paid By entry.
+   * Adds a new Paid By entry to the active entries map.
+   *
+   * Utilizes an existing entry from the entries pool, if available.
+   * Otherwise, creates a new entry state object.
    *
    * @returns {Object} The response object.
    * @property {number} entryId The ID of the new entry.
    * @property {PaidByEntry} entry The new entry state.
+   * @property {boolean} isNewEntry The flag marking whether a new entry state object was created.
    * @property {number} entriesCount The number of Paid By entries in the form state.
    * @property {boolean} defaultEntryAffected - Indicates whether the default entry was affected.
    * @property {number} [defaultEntryId] - The ID of the default entry if it was affected.
    */
   addEntry = () => {
-    const defaultEntryAffected = this.hasSingleEntry();
-    const entry = new PaidByEntry();
+    let entry;
+    const isNewEntry = this.#entriesPool.size === 0;
+    const isDefaultEntryAffected = this.hasSingleEntry();
+    if (!isNewEntry) {
+      entry = this.#entriesPool.values().next().value;
+      this.#entriesPool.delete(entry.entryId);
+    } else {
+      entry = new PaidByEntry();
+    }
     const entryId = entry.entryId;
     this.#entries.set(entryId, entry);
 
     return {
       entryId,
       entry,
+      isNewEntry,
       entriesCount: this.#entries.size,
       usersInEntries: this.#usersInEntries,
-      defaultEntryAffected,
-      ...(defaultEntryAffected && { defaultEntryId: this.#defaultEntryId }),
+      isDefaultEntryAffected,
+      ...(isDefaultEntryAffected && { defaultEntryId: this.#defaultEntryId }),
     };
   };
 
   /**
-   * Deletes an entry and updates relevant states.
+   * Removes an entry from the active entries map.
    *
-   * @param {number} entryId - The ID of the entry to delete.
-   * @param {number} expenseAmount - The total expense amount for recalculations.
+   * The removed entry is moved to the entries pool.
+   * The remaining entries are updated accordingly.
    *
-   * @returns {Object} The updated state after deletion.
-   * @throws {Error} If the entry cannot be deleted.
+   * @param {number} entryId - The ID of the entry to be removed.
+   * @param {number} expenseAmount - The total amount of the expense.
+   * @returns {Object} - An object containing the status of removal and related updates.
    */
-  deleteEntry = (entryId, expenseAmount) => {
-    this.#validateEntriesBeforeDelete();
-    const entry = this.#getEntry(entryId);
-    const userId = entry.userId;
-    const amount = entry.amount;
+  removeEntry = (entryId, expenseAmount) => {
+    const entry = this.#entries.get(entryId);
+    const isRemoved = this.#isEntryRemovable(entry, entryId);
+    if (!isRemoved) return { isRemoved };
 
+    const userId = entry.userId;
+    entry.clear();
+    this.#entriesPool.set(entryId, entry);
     this.#entries.delete(entryId);
     if (userId) this.#deleteUser(userId);
-    if (amount) this.#calculate(expenseAmount);
+
+    const isDefaultEntryAffected = this.hasSingleEntry();
+
+    const isRecalculated = this.#updateDefaultEntryAmount(expenseAmount);
+
+    if (isRecalculated) this.#calculate(expenseAmount);
     this.#validate();
 
     return {
-      entryId,
-      removedUser: userId,
-      payersCount: this.#payersInEntries.size,
-      entriesCount: this.#entries.size,
-      total: this.#total,
-      remainder: this.#remainder,
-      isValid: this.#isValid,
+      isRemoved,
+      isDefaultEntryAffected,
+      isRecalculated,
+      removedUserId: userId || null,
+      ...(isDefaultEntryAffected && { defaultEntryId: this.#defaultEntryId }),
     };
+  };
+
+  /**
+   * Checks whether an entry can be removed from the active entries map.
+   *
+   * Prevents accidental deletion of the default entry.
+   *
+   * @private
+   * @param {PaidByEntry} entry - The entry object to be checked.
+   * @param {number} entryId - The ID of the entry being evaluated.
+   * @returns {boolean} - Returns `true` if the entry can be removed, otherwise `false`.
+   */
+  #isEntryRemovable = (entry, entryId) => {
+    if (!entry) {
+      console.warn(`No active entry found for ID ${entryId}.`);
+      return false;
+    }
+    if (entry.isDefault || this.#entries.size === 1) {
+      console.warn(`Unable to remove entry. This is the default entry.`);
+      return false;
+    }
+    return true;
   };
 
   /**
@@ -264,13 +334,14 @@ class PaidByState {
    * @property {number} total - The updated total amount.
    * @property {number} remainder - The remaining amount to be allocated.
    * @property {boolean} isValid - Whether the updated form state is valid.
-   * @property {number} [defaultEntryAmount] - The updated amount for the single entry (only present if `hasSinglePayer` is `true`).
+   * @property {number} defaultEntryAmount - The updated amount for the default (single) entry.
    */
   updateAfterExpenseAmountChange = expenseAmount => {
     const hasSingleEntry = this.hasSingleEntry();
-    const defaultEntryAmount = hasSingleEntry
-      ? this.#updateDefaultEntryAmount(expenseAmount)
-      : null;
+    if (hasSingleEntry) {
+      this.#updateDefaultEntryAmount(expenseAmount);
+    }
+    const defaultEntryAmount = this.getDefaultEntry().amount;
 
     this.#calculate(expenseAmount);
     this.#validate();
@@ -280,7 +351,7 @@ class PaidByState {
       total: this.#total,
       remainder: this.#remainder,
       isValid: this.#isValid,
-      ...(hasSingleEntry ? { defaultEntryAmount } : {}),
+      defaultEntryAmount,
     };
   };
 
@@ -288,10 +359,12 @@ class PaidByState {
    * Updates the amount for the single entry if only one payer exists.
    *
    * @param {number} amount - The new amount to set for the default entry.
-   * @returns {number} The updated amount of the default entry.
+   * @returns {boolean} `true` if the entry was updated, otherwise `false`.
    */
   #updateDefaultEntryAmount = amount => {
-    const defaultEntry = this.#entries.values().next().value;
+    const defaultEntry = this.#entries.get(this.#defaultEntryId);
+    if (defaultEntry.amount === amount) return false;
+
     defaultEntry.amount = amount;
 
     if (amount > 0 && this.#payersInEntries.size === 0) {
@@ -300,7 +373,7 @@ class PaidByState {
       this.#payersInEntries.clear();
     }
 
-    return defaultEntry.amount;
+    return true;
   };
 
   // Inner Logic
@@ -381,17 +454,6 @@ class PaidByState {
   #validateUserNotPresent = userId => {
     if (this.#usersInEntries.has(userId)) {
       throw new Error(`Unable to add user. User ID ${userId} already present.`);
-    }
-  };
-
-  /**
-   * Ensures that an entry can be deleted.
-   * Prevents deletion if it is the last remaining entry.
-   * @throws {Error} If attempting to delete the last remaining entry.
-   */
-  #validateEntriesBeforeDelete = () => {
-    if (this.#entries.size === 1) {
-      throw new Error(`Unable to delete entry. This is the last entry.`);
     }
   };
 }

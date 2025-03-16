@@ -240,6 +240,13 @@ class ExpenseFormView {
   // HIDDEN FORMS
   // ---------------
 
+  // Hidden Forms: Load
+
+  loadAddFormSetupData = data => {
+    paidByView.setup(data.paidBy);
+    splittView.loadUsers(data);
+  };
+
   // Hidden Forms: Add Handlers
 
   addHandlerCloseHiddenFormButtonClick = handler => {
@@ -263,6 +270,14 @@ class ExpenseFormView {
 
   renderAfterAddPayerRow = data => {
     paidByView.renderAfterAddPayerRow(data);
+  };
+
+  renderAfterRemovePayerRow = data => {
+    const { balance, isExpenseFormValid, paidByButtonProperties } = data;
+    paidByView.renderAfterRemovePayerRow(data);
+    mainView.renderPaidByButtonCaption(paidByButtonProperties);
+    mainView.renderBalance(balance);
+    mainView.renderSubmitButton(isExpenseFormValid);
   };
 
   // Paid By Form: Add Handlers
@@ -305,12 +320,6 @@ class ExpenseFormView {
     mainView.renderBalance(balance);
     mainView.renderSubmitButton(isValid);
     splittView.render({ ...splitt, expenseAmount });
-  };
-
-  // Splitt: Load
-
-  loadAddFormSetupData = data => {
-    splittView.loadUsers(data);
   };
 
   // Splitt: Add Handlers

@@ -5,8 +5,10 @@ import {
   EXPENSE_SPLITT_TYPES,
   DEFAULT_EMOJI_EXPENSE,
   EVENT_EXPENSE_EMOJI_EDIT,
+  MIN_EXPENSE_AMOUNT,
 } from '../../../util/Config.js';
 import state from '../../state/State.js';
+import ExpenseFormState from '../../state/expense/ExpenseFormState.js';
 import TransactionFormManager from '../common/TransactionFormManager.js';
 
 class ExpenseManager extends TransactionFormManager {
@@ -22,6 +24,16 @@ class ExpenseManager extends TransactionFormManager {
 
   init = () => {
     this.#initForms();
+  };
+
+  // Getters
+
+  /**
+   * Gets the add expense form.
+   * @returns {ExpenseFormState} The add expense form state.
+   */
+  getAddForm = () => {
+    return state.expenseForms.add;
   };
 
   // Update: Main Form
@@ -45,13 +57,17 @@ class ExpenseManager extends TransactionFormManager {
    * Updates the amount for the active form and propagates changes to related subforms.
    *
    * @param {number} amount - The new amount to set.
+   * @param {boolean} [isBelowMin=false] - Indicates if the amount is greater than 0 but below {@link MIN_EXPENSE_AMOUNT}.
    * @returns {Object} The update result object.
    * @property {Object} form - The updated active form.
    * @property {Object} updateResponsePaidBy - The result of the Paid By form update.
    */
-  updateAmount = amount => {
+  updateAmount = (amount, isBelowMin = false) => {
     const form = this.getActiveForm();
     form.amount = amount;
+    if (form.isAmountBelowMin !== isBelowMin) {
+      form.isAmountBelowMin = isBelowMin;
+    }
     const updateResponsePaidBy =
       form.paidBy.updateAfterExpenseAmountChange(amount);
     form.splitt.activeForm.update({
@@ -87,6 +103,22 @@ class ExpenseManager extends TransactionFormManager {
   addPaidByEntry = () => {
     const form = this.getActiveForm();
     return form.paidBy.addEntry();
+  };
+
+  /**
+   * Removes a payer entry from the active expense form's active entries map.
+   *
+   * @param {number} entryId - The ID of the entry to be removed.
+   * @returns {Object} - An object containing the response details and the updated form.
+   */
+  removePaidByEntry = entryId => {
+    const form = this.getActiveForm();
+    const expenseAmount = form.amount;
+    const response = form.paidBy.removeEntry(entryId, expenseAmount);
+    if (!response.isRemoved) return { isRemoved: response.isRemoved };
+
+    form.validateForSubmission();
+    return { response, form };
   };
 
   // Update: Splitt

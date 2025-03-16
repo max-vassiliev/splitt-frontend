@@ -21,6 +21,14 @@ class PaidByEntry {
   }
 
   /**
+   * Resets the entry by clearing the user ID and setting the amount to zero.
+   */
+  clear = () => {
+    this.#userId = null;
+    this.#amount = 0;
+  };
+
+  /**
    * Generates the Paid By Entry ID.
    * @returns {number} The Entry ID.
    */

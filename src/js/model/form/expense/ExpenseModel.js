@@ -120,11 +120,6 @@ class ExpenseModel extends TransactionFormModel {
    * @param {Object} response.updateResponsePaidBy - The update result from the "Paid By" section.
    * @param {Object} [response.amountBelowMinimum] - The processed amount, if the amount is below {@link MIN_EXPENSE_AMOUNT}.
    * @returns {Object} The structured view model after the amount update.
-   * @property {number} amount - The updated expense amount.
-   * @property {boolean} isValid - Whether the updated form state is valid.
-   * @property {Object} balance - The updated balance information for the current user.
-   * @property {Object} paidBy - The updated view model for the "Paid By" section.
-   * @property {Object} splitt - The updated view model for the "Splitt" section.
    */
   #prepareViewModelAfterUpdateAmount = response => {
     const { form, updateResponsePaidBy, amountBelowMinimum } = response;
@@ -134,9 +129,7 @@ class ExpenseModel extends TransactionFormModel {
 
     const amount = amountBelowMinimum ? amountBelowMinimum : form.amount;
 
-    const balance = amountBelowMinimum
-      ? { status: EXPENSE_BALANCE_AMOUNT_BELOW_MIN }
-      : balanceService.getBalance(form, currentUserId);
+    const balance = balanceService.getBalance(form, currentUserId);
 
     const paidByViewModel =
       paidByService.prepareViewModelAfterExpenseAmountUpdate({
@@ -159,7 +152,7 @@ class ExpenseModel extends TransactionFormModel {
     };
   };
 
-  // Update: Main Form
+  // Update: Main Form (Title)
 
   /**
    * Updates the title of the active form.
@@ -171,6 +164,21 @@ class ExpenseModel extends TransactionFormModel {
     const processedTitle = this.#processTitleInput(inputTitle);
     return expenseManager.updateTitle(processedTitle);
   };
+
+  /**
+   * Processes the title input by normalizing empty strings to `null`.
+   *
+   * @param {string} input - The title input to process.
+   * @returns {string|null} The processed title, or `null` if the input is empty.
+   */
+  #processTitleInput = input => {
+    if (isEmptyString(input)) {
+      return null;
+    }
+    return input;
+  };
+
+  // Update: Main Form (Amount)
 
   /**
    * Processes, updates, and prepares the view model for an expense amount change.
@@ -185,7 +193,7 @@ class ExpenseModel extends TransactionFormModel {
    */
   updateAmount = inputAmount => {
     const processedAmount = mathService.processInputAmount(inputAmount);
-    if (processedAmount < MIN_EXPENSE_AMOUNT) {
+    if (processedAmount !== 0 && processedAmount < MIN_EXPENSE_AMOUNT) {
       return this.#updateAmountBelowMinimum(processedAmount);
     }
     const response = expenseManager.updateAmount(processedAmount);
@@ -199,7 +207,7 @@ class ExpenseModel extends TransactionFormModel {
    * @returns {Object} The updated view model, with the recieved amount.
    */
   #updateAmountBelowMinimum = amount => {
-    const response = expenseManager.updateAmount(DEFAULT_AMOUNT);
+    const response = expenseManager.updateAmount(DEFAULT_AMOUNT, true);
     response.amountBelowMinimum = amount;
     return this.#prepareViewModelAfterUpdateAmount(response);
   };
@@ -254,6 +262,31 @@ class ExpenseModel extends TransactionFormModel {
     });
   };
 
+  /**
+   * Removes a payer entry from the expense and prepares the view model for updates.
+   *
+   * @param {number} entryId - The ID of the entry to be removed.
+   * @returns {Object} - The updated view model or an indicator that no rendering is needed.
+   */
+  removePaidByEntry = entryId => {
+    const { response, form } = expenseManager.removePaidByEntry(entryId);
+    if (!response.isRemoved) {
+      return { shouldRender: false };
+    }
+    const currentUserId = stateManager.getUserId();
+    const groupMembers = stateManager.getMembers();
+    const balance = balanceService.getBalance(form, currentUserId);
+
+    return paidByService.prepareViewModelAfterRemovePayerEntry({
+      entryId,
+      response,
+      form,
+      currentUserId,
+      groupMembers,
+      balance,
+    });
+  };
+
   // Update: Splitt
 
   /**
@@ -297,7 +330,8 @@ class ExpenseModel extends TransactionFormModel {
    * @returns {Object} An object containing the required properties, primarily user info.
    */
   getAddFormSetupData = () => {
-    const users = [...stateManager.getMembers().values()].map(member => ({
+    const groupMembers = stateManager.getMembers();
+    const users = [...groupMembers.values()].map(member => ({
       id: member.id,
       name: member.name,
       avatar: member.avatar,
@@ -307,27 +341,18 @@ class ExpenseModel extends TransactionFormModel {
 
     const currentUser = stateManager.getCurrentUser();
     const displaySettings = stateManager.getLocaleAndCurrencySymbol();
+    const paidByStateAdd = expenseManager.getAddForm().paidBy;
+    const paidBy = paidByService.prepareViewModelOnLoad({
+      paidByStateAdd,
+      groupMembers,
+    });
 
     return {
       users,
       currentUser,
       displaySettings,
+      paidBy,
     };
-  };
-
-  // Private Methods
-
-  /**
-   * Processes the title input by normalizing empty strings to `null`.
-   *
-   * @param {string} input - The title input to process.
-   * @returns {string|null} The processed title, or `null` if the input is empty.
-   */
-  #processTitleInput = input => {
-    if (isEmptyString(input)) {
-      return null;
-    }
-    return input;
   };
 }
 

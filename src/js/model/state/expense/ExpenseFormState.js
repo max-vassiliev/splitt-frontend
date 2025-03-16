@@ -18,6 +18,7 @@ class ExpenseFormState {
   _type;
   _title;
   _amount;
+  _isAmountBelowMin;
   _date;
   _emoji;
   _paidBy;
@@ -30,6 +31,7 @@ class ExpenseFormState {
     this.type = type;
     this._title = null;
     this._amount = 0;
+    this._isAmountBelowMin = false;
     this._date = null;
     this._paidBy = new PaidByState();
     this._splitt = new SplittCollection();
@@ -124,6 +126,28 @@ class ExpenseFormState {
       );
     }
     this._amount = value;
+  }
+
+  /**
+   * Gets the flag marking that the expense amount is below minimum.
+   * @returns {boolean} `true` if the entered amount is below minimum, otherwise `false`.
+   */
+  get isAmountBelowMin() {
+    return this._isAmountBelowMin;
+  }
+
+  /**
+   * Sets the flag marking that the entered amount was below the minimum.
+   * @param {boolean} value Must be a boolean.
+   * @throws {Error} If the value is not a boolean.
+   */
+  set isAmountBelowMin(value) {
+    if (typeof value !== 'boolean') {
+      throw new TypeError(
+        `Invalid flag for 'isAmountBelowMin'. Expected a boolean. Received: ${value} (${typeof value}).`
+      );
+    }
+    this._isAmountBelowMin = value;
   }
 
   /**

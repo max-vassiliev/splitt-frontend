@@ -1,4 +1,5 @@
 import TypeParser from '../../../util/TypeParser.js';
+import { INACTIVE_CLASS } from '../../../util/Config.js';
 
 class ExpensePaidByHandler {
   #controller;
@@ -36,13 +37,27 @@ class ExpensePaidByHandler {
   handleTableClick = event => {
     if (event.target.closest(this.#selectors.ADD_PAYER_ROW)) {
       this.#handleAddPayerRow();
+      return;
+    }
+    if (event.target.closest(this.#selectors.REMOVE_PAYER_CELL)) {
+      this.#handleRemovePayerRow(event);
+      return;
     }
     // avatar
-    // delete row
   };
 
   #handleAddPayerRow = () => {
     this.#controller.handleAddPayerRow();
+  };
+
+  #handleRemovePayerRow = event => {
+    const removePayerCell = event.target.closest(
+      this.#selectors.REMOVE_PAYER_CELL
+    );
+    if (removePayerCell.classList.contains(INACTIVE_CLASS)) return;
+    const row = event.target.closest(this.#selectors.PAYER_ROW);
+    const entryId = parseInt(row.dataset.entryId, 10);
+    this.#controller.handleRemovePayerRow(entryId);
   };
 
   // Validation

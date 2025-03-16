@@ -10,6 +10,7 @@ export const VISIBLE_CLASS = 'visible';
 export const INVISIBLE_CLASS = 'invisible';
 export const DEFAULT_CLASS = 'default';
 export const DISABLED_ATTRIBUTE = 'disabled';
+export const SELECTED_ATTRIBUTE = 'selected';
 export const HIDDEN_ATTRIBUTE = 'hidden';
 export const READONLY_ATTRIBUTE = 'readonly';
 export const BELOW_EXPENSE_AMOUNT_CLASS = 'below-expense-amount';
@@ -104,6 +105,7 @@ export const EXPENSE_PAID_BY_TYPES = new Set([
   EXPENSE_PAID_BY_OTHER_USER,
   EXPENSE_PAID_BY_COPAYMENT,
 ]);
+export const EXPENSE_PAID_BY_OPTION_EMPTY_ID = 0n;
 
 // Expense: Splitt
 export const EXPENSE_SPLITT_EQUALLY = 'exp-splitt__equally';

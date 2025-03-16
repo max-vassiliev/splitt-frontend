@@ -191,6 +191,12 @@ class ExpenseController extends TransactionFormController {
     formView.renderAfterAddPayerRow(response);
   };
 
+  handleRemovePayerRow = entryId => {
+    const response = expenseModel.removePaidByEntry(entryId);
+    if (!response.shouldRender) return;
+    formView.renderAfterRemovePayerRow(response);
+  };
+
   // Handlers: Splitt Form
 
   #handleSplittOptionChange = splittType => {

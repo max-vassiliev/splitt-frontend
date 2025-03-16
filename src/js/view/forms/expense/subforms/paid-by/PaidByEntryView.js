@@ -1,7 +1,15 @@
 import {
   DISABLED_ATTRIBUTE,
   READONLY_ATTRIBUTE,
+  EXPENSE_PAID_BY_OPTION_EMPTY_ID,
+  DEFAULT_AVATAR,
+  DEFAULT_AMOUNT,
+  HIDDEN_CLASS,
 } from '../../../../../util/Config.js';
+import {
+  getAvatarUrl,
+  formatAmountForOutput,
+} from '../../../../util/RenderHelper.js';
 
 class PaidByEntryView {
   #entryId;
@@ -10,6 +18,7 @@ class PaidByEntryView {
   #payerOptions;
   #avatarElement;
   #amountInput;
+  #rowElement;
 
   /**
    * Creates a new PaidByEntryView instance.
@@ -24,12 +33,14 @@ class PaidByEntryView {
     payerOptions,
     amountInput,
     avatarElement,
+    rowElement,
   }) {
     this.#entryId = entryId;
     this.#payerSwitch = payerSwitch;
     this.#amountInput = amountInput;
     this.#avatarElement = avatarElement;
     this.#payerOptions = payerOptions;
+    this.#rowElement = rowElement;
   }
 
   // Getters
@@ -48,6 +59,14 @@ class PaidByEntryView {
    */
   get userId() {
     return this.#userId;
+  }
+
+  /**
+   * Gets the entire payer row element.
+   * @returns {HTMLElement} The row element.
+   */
+  get rowElement() {
+    return this.#rowElement;
   }
 
   /**
@@ -87,17 +106,50 @@ class PaidByEntryView {
 
   /**
    * Sets the user ID.
-   * @param {bigint} userId The new user ID.
+   * @param {bigint|null} userId The new user ID or null.
    * @throws {TypeError} If userId is not a bigint.
    */
   set userId(userId) {
-    if (typeof userId !== 'bigint') {
+    if (!(typeof userId === 'bigint' || userId === null)) {
       throw new TypeError(
-        `userId must be a bigint. Received: ${userId} (${typeof userId}).`
+        `userId must be a bigint or null. Received: ${userId} (${typeof userId}).`
       );
     }
     this.#userId = userId;
   }
+
+  // Render
+
+  render = data => {
+    const { userId, avatar, amount, isDefault, isSingleEntry, usersToDisable } =
+      data;
+
+    this.renderUser(userId);
+    this.renderAvatar(avatar);
+    this.renderAmount(amount, isDefault, isSingleEntry);
+    if (usersToDisable && usersToDisable.size > 0) {
+      this.deactivatePayerOptions(usersToDisable);
+    }
+    this.show();
+  };
+
+  renderUser = userId => {
+    this.userId = userId;
+    if (userId) {
+      this.#payerSwitch.value = String(userId);
+    } else {
+      this.#payerSwitch.value = EXPENSE_PAID_BY_OPTION_EMPTY_ID.toString();
+    }
+  };
+
+  renderAvatar = avatar => {
+    this.#avatarElement.src = getAvatarUrl(avatar);
+  };
+
+  renderAmount = (amount, isDefault = false, isSingleEntry = false) => {
+    this.#amountInput.value = formatAmountForOutput(amount);
+    if (isDefault) this.toggleAmountInput(isSingleEntry);
+  };
 
   // Update
 
@@ -115,12 +167,56 @@ class PaidByEntryView {
 
   // Toggle Elements
 
+  reset = () => {
+    this.#avatarElement.src = getAvatarUrl(DEFAULT_AVATAR);
+    this.#amountInput.value = formatAmountForOutput(DEFAULT_AMOUNT);
+    this.#payerSwitch.value = EXPENSE_PAID_BY_OPTION_EMPTY_ID.toString();
+    this.#payerOptions.forEach((option, payerId) => {
+      if (payerId === EXPENSE_PAID_BY_OPTION_EMPTY_ID) return;
+      option.removeAttribute(DISABLED_ATTRIBUTE);
+    });
+  };
+
+  deactivatePayerOptions = payerOptions => {
+    payerOptions.forEach(payerId => {
+      if (payerId !== this.#userId) this.deactivatePayerOption(payerId);
+    });
+  };
+
+  deactivatePayerOption = optionId => {
+    const payerOption = this.#payerOptions.get(optionId);
+    if (!payerOption) return;
+    payerOption.setAttribute(DISABLED_ATTRIBUTE, DISABLED_ATTRIBUTE);
+  };
+
+  activatePayerOption = optionId => {
+    const payerOption = this.#payerOptions.get(optionId);
+    if (!payerOption) return;
+    payerOption.removeAttribute(DISABLED_ATTRIBUTE);
+  };
+
+  toggleAmountInput = isSingleEntry => {
+    if (isSingleEntry) {
+      this.deactivateInput();
+    } else {
+      this.activateInput();
+    }
+  };
+
   activateInput = () => {
     this.#amountInput.removeAttribute(READONLY_ATTRIBUTE);
   };
 
   deactivateInput = () => {
     this.#amountInput.setAttribute(READONLY_ATTRIBUTE, READONLY_ATTRIBUTE);
+  };
+
+  hide = () => {
+    this.#rowElement.classList.add(HIDDEN_CLASS);
+  };
+
+  show = () => {
+    this.#rowElement.classList.remove(HIDDEN_CLASS);
   };
 }
 

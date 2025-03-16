@@ -37,9 +37,11 @@ class PaidByService {
       isValid,
     } = paidByData;
 
+    const hasSingleEntry = paidByData.hasSingleEntry();
     const disableAddButton = entries.size === groupMembers.size;
     const switchOptions = this.#prepareSwitchOptions(groupMembers);
     const entryViewModels = this.#prepareEntryViewModels(entries, groupMembers);
+    entryViewModels.defaultEntry.isSingleEntry = hasSingleEntry;
     const { type, name } = this.#prepareTypeProperties(
       payersInEntries,
       currentUserId,
@@ -51,11 +53,42 @@ class PaidByService {
       name,
       entries: entryViewModels,
       usersToDisable: usersInEntries,
+      hasSingleEntry,
       switchOptions,
       total,
       remainder,
       isValid,
       disableAddButton,
+    };
+  };
+
+  /**
+   * Prepares the initial view model for the Paid By subform when loading the Add Expense form.
+   *
+   * @param {Object} data - The data required to prepare the view model.
+   * @param {Object} data.paidByStateAdd - The Paid By subform state for Add Expense mode.
+   * @param {Map<bigint, User>} data.groupMembers - A map of the group's members.
+   * @returns {Object} The prepared view model for the Paid By subform.
+   */
+  prepareViewModelOnLoad = data => {
+    const { paidByStateAdd, groupMembers } = data;
+    const usersToDisable = paidByStateAdd.usersInEntries;
+    const switchOptions = this.#prepareSwitchOptions(groupMembers);
+
+    const defaultEntryStateAdd = paidByStateAdd.getDefaultEntry();
+    const defaultEntryAddUser = groupMembers.get(defaultEntryStateAdd.userId);
+    const defaultEntryAdd = {
+      entryId: defaultEntryStateAdd.entryId,
+      userId: defaultEntryStateAdd.userId,
+      name: defaultEntryAddUser.name,
+      avatar: defaultEntryAddUser.avatar,
+      amount: defaultEntryStateAdd.amount,
+    };
+
+    return {
+      defaultEntryAdd,
+      usersToDisable,
+      switchOptions,
     };
   };
 
@@ -157,6 +190,7 @@ class PaidByService {
       entryId: entryState.entryId,
       userId: entryState.userId,
       amount: entryState.amount,
+      isNewEntry: entryState.isNewEntry,
       isDefault: entryState.isDefault,
     };
 
@@ -167,6 +201,59 @@ class PaidByService {
       switchOptions,
       usersToDisable: usersInEntries,
       ...rest,
+    };
+  };
+
+  /**
+   * Prepares the view model after a payer entry is removed.
+   *
+   * @param {Object} data - The data required to update the view.
+   * @param {number} data.entryId - The ID of the removed entry.
+   * @param {Object} data.response - The response object from the removal operation.
+   * @param {Object} data.form - The updated expense form.
+   * @param {number} data.currentUserId - The ID of the current user.
+   * @param {Array} data.groupMembers - The list of group members.
+   * @param {Object} data.balance - The updated balance details.
+   * @returns {Object} - The updated view model with necessary UI updates.
+   */
+  prepareViewModelAfterRemovePayerEntry = data => {
+    const { entryId, response, form, currentUserId, groupMembers, balance } =
+      data;
+    const { isDefaultEntryAffected, removedUserId, isRecalculated, ...rest } =
+      response;
+
+    const paidByButtonProperties = this.#prepareTypeProperties(
+      form.paidBy.payersInEntries,
+      currentUserId,
+      groupMembers
+    );
+
+    const calculationRowData = !isRecalculated
+      ? null
+      : {
+          total: form.paidBy.total,
+          remainder: form.paidBy.remainder,
+          expenseAmount: form.amount,
+        };
+
+    const defaultEntryData = !isDefaultEntryAffected
+      ? null
+      : {
+          defaultEntryId: response.defaultEntryId,
+          expenseAmount: form.amount,
+        };
+
+    return {
+      shouldRender: true,
+      entryId,
+      removedUserId,
+      isDefaultEntryAffected,
+      defaultEntryData,
+      isRecalculated,
+      calculationRowData,
+      paidByButtonProperties,
+      balance,
+      isExpenseFormValid: form.isValid,
     };
   };
 
@@ -230,6 +317,7 @@ class PaidByService {
         name: user.name,
         avatar: user.avatar,
         amount: entry.amount,
+        isDefault: entry.isDefault,
       };
       if (entry.isDefault && defaultEntry === null) {
         defaultEntry = entryView;
