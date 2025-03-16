@@ -211,6 +211,10 @@ class PaidByEntryView {
     this.#amountInput.setAttribute(READONLY_ATTRIBUTE, READONLY_ATTRIBUTE);
   };
 
+  focusInput = () => {
+    this.#amountInput.focus();
+  };
+
   hide = () => {
     this.#rowElement.classList.add(HIDDEN_CLASS);
   };

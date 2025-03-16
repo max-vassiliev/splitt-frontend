@@ -280,6 +280,10 @@ class ExpenseFormView {
     mainView.renderSubmitButton(isExpenseFormValid);
   };
 
+  renderAfterPayerAvatarClick = entryId => {
+    paidByView.renderAfterPayerAvatarClick(entryId);
+  };
+
   // Paid By Form: Add Handlers
 
   addHandlerPaidByButtonClick = handler => {

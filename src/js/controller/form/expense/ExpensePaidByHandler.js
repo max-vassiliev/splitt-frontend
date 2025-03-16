@@ -35,7 +35,7 @@ class ExpensePaidByHandler {
   // Event Handlers: Click
 
   handleTableClick = event => {
-    if (event.target.closest(this.#selectors.ADD_PAYER_ROW)) {
+    if (event.target.closest(this.#selectors.ADD_PAYER_BUTTON)) {
       this.#handleAddPayerRow();
       return;
     }
@@ -43,7 +43,9 @@ class ExpensePaidByHandler {
       this.#handleRemovePayerRow(event);
       return;
     }
-    // avatar
+    if (event.target.closest(this.#selectors.PAYER_AVATAR_CELL)) {
+      this.#handlePayerAvatarClick(event);
+    }
   };
 
   #handleAddPayerRow = () => {
@@ -58,6 +60,12 @@ class ExpensePaidByHandler {
     const row = event.target.closest(this.#selectors.PAYER_ROW);
     const entryId = parseInt(row.dataset.entryId, 10);
     this.#controller.handleRemovePayerRow(entryId);
+  };
+
+  #handlePayerAvatarClick = event => {
+    const row = event.target.closest(this.#selectors.PAYER_ROW);
+    const entryId = parseInt(row.dataset.entryId, 10);
+    this.#controller.handlePayerAvatarClick(entryId);
   };
 
   // Validation

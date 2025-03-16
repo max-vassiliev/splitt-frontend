@@ -185,6 +185,10 @@ class ExpenseController extends TransactionFormController {
     formView.renderAfterUpdatePayer(response);
   };
 
+  handlePayerAvatarClick = entryId => {
+    formView.renderAfterPayerAvatarClick(entryId);
+  };
+
   handleAddPayerRow = () => {
     const response = expenseModel.addPaidByEntry();
     if (!response.shouldRender) return;

@@ -15,10 +15,7 @@ import PaidByEntryView from './PaidByEntryView.js';
 class ExpensePaidByView {
   #form;
   #table;
-  #rows;
   #selectors;
-  #payerSwitches;
-  #avatarColumns;
   #addPayerRow;
   #addPayerButton;
   #totalElement;
@@ -44,11 +41,6 @@ class ExpensePaidByView {
   #parseFormElements = () => {
     this.#form = document.querySelector('.add-expense__form_payer');
     this.#table = document.querySelector('.payer-table');
-    this.#rows = document.querySelectorAll('.payer-table-row');
-    this.#payerSwitches = document.querySelectorAll('.payer__switch');
-    this.#avatarColumns = document.querySelectorAll(
-      '.payer-table-column__avatar'
-    );
     this.#addPayerRow = document.querySelector('.payer-table-row__add-payer');
     this.#addPayerButton = document.querySelector('.add-payer-button');
     this.#totalElement = document.querySelector(
@@ -205,6 +197,11 @@ class ExpensePaidByView {
       const defaultEntry = this.#entriesAll.get(defaultEntryId);
       defaultEntry.renderAmount(expenseAmount, true, true);
     }
+  };
+
+  renderAfterPayerAvatarClick = entryId => {
+    const entry = this.#entriesAll.get(entryId);
+    entry.focusInput();
   };
 
   // Render: Elements
@@ -433,20 +430,6 @@ class ExpensePaidByView {
   addHandlerTableInput = handler => {
     this.#table.addEventListener('input', handler);
   };
-
-  // TODO! ред.:
-  // наверное, этот
-  addHandlerPayerAvatarClick = handler => {
-    [...this.#avatarColumns].forEach(column => {
-      column.addEventListener('click', handler);
-    });
-  };
-
-  addHandlerPayerButton = handler => {
-    this.#addPayerButton.addEventListener('click', handler);
-  };
-
-  // TODO! amount input?
 
   addHandlerCloseButtonClick = handler => {
     this.#btnClose.addEventListener('click', handler);
