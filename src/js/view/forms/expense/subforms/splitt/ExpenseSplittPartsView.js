@@ -88,7 +88,7 @@ class ExpenseSplittPartsView {
     const { splittAmounts, total, remainder, expenseAmount } = data;
     this.#renderRows(splittAmounts);
     this.#renderTotal(total);
-    this.#renderRemainder(remainder);
+    this.#renderRemainder(remainder, expenseAmount);
     this.#adjustInputWidth(total, expenseAmount);
   };
 
@@ -104,9 +104,9 @@ class ExpenseSplittPartsView {
     this.#totalCell.textContent = formatAmountForOutput(total);
   };
 
-  #renderRemainder = remainder => {
+  #renderRemainder = (remainder, expenseAmount) => {
     this.#remainderCell.textContent = formatAmountForOutput(remainder);
-    restyleRemainderRow(remainder, this.#remainderRow);
+    restyleRemainderRow(remainder, expenseAmount, this.#remainderRow);
   };
 
   #adjustInputWidth = (total, expenseAmount) => {

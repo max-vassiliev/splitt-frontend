@@ -268,6 +268,31 @@ class ExpenseFormView {
     paidByView.renderAfterUpdatePayer(data);
   };
 
+  renderAfterUpdatePayerAmount = data => {
+    const {
+      response,
+      entryId,
+      inputAmount,
+      expenseAmount,
+      cursorPosition,
+      paidByButtonProperties,
+      balance,
+      isFormValid,
+    } = data;
+
+    paidByView.renderAfterUpdatePayerAmount({
+      entryId,
+      inputAmount,
+      expenseAmount,
+      cursorPosition,
+      ...response,
+    });
+
+    mainView.renderPaidByButtonCaption(paidByButtonProperties);
+    mainView.renderBalance(balance);
+    mainView.renderSubmitButton(isFormValid);
+  };
+
   renderAfterAddPayerRow = data => {
     paidByView.renderAfterAddPayerRow(data);
   };

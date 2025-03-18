@@ -96,6 +96,21 @@ class ExpenseManager extends TransactionFormManager {
   };
 
   /**
+   * Updates the amount assigned to a payer entry in the active form.
+   *
+   * @param {number} entryId - The ID of the payer entry to update.
+   * @param {number} amount - The new amount to assign.
+   * @returns {Object} An object containing the update response and the updated form.
+   */
+  updatePayerAmount = (entryId, amount) => {
+    const form = this.getActiveForm();
+    const expenseAmount = form.amount;
+    const response = form.paidBy.updateAmount(entryId, amount, expenseAmount);
+    form.validateForSubmission();
+    return { response, form };
+  };
+
+  /**
    * Delegates the addition of a Paid By entry to the PaidByState of the active expense form.
    *
    * @returns {Object} The response object from the PaidByState.

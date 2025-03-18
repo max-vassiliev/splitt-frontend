@@ -220,6 +220,8 @@ class PaidByState {
     if (!isRemoved) return { isRemoved };
 
     const userId = entry.userId;
+    const isRecalculated = entry.amount > 0;
+
     entry.clear();
     this.#entriesPool.set(entryId, entry);
     this.#entries.delete(entryId);
@@ -227,7 +229,9 @@ class PaidByState {
 
     const isDefaultEntryAffected = this.hasSingleEntry();
 
-    const isRecalculated = this.#updateDefaultEntryAmount(expenseAmount);
+    if (isDefaultEntryAffected) {
+      this.#updateDefaultEntryAmount(expenseAmount);
+    }
 
     if (isRecalculated) this.#calculate(expenseAmount);
     this.#validate();
@@ -293,17 +297,12 @@ class PaidByState {
   /**
    * Updates the amount for an entry.
    *
-   * @param {number} amount - The new amount.
    * @param {number} entryId - The ID of the entry to update.
+   * @param {number} amount - The new amount.
    * @param {number} expenseAmount - The total expense amount for recalculations.
-   *
    * @returns {Object} The response object.
-   * @property {number} amount The entry amount
-   * @property {number} total The sum of amounts in all entries.
-   * @property {number} remainder The difference between the total amount in all entries and the expense amount.
-   * @property {boolean} isValid The flag indicating if the form is valid for submission.
    */
-  updateAmount = (amount, entryId, expenseAmount) => {
+  updateAmount = (entryId, amount, expenseAmount) => {
     const entry = this.#getEntry(entryId);
     const oldAmount = entry.amount;
     const userId = entry.userId;
@@ -317,7 +316,6 @@ class PaidByState {
       amount,
       total: this.#total,
       remainder: this.#remainder,
-      isValid: this.#isValid,
     };
   };
 
@@ -425,6 +423,7 @@ class PaidByState {
    * @param {number} oldAmount The old amount.
    */
   #updateUserOnAmountUpdate = (userId, newAmount, oldAmount) => {
+    if (!userId) return;
     if (oldAmount !== 0 && newAmount !== 0) return;
     if (oldAmount === 0 && newAmount === 0) return;
     if (oldAmount === 0) {
@@ -440,10 +439,16 @@ class PaidByState {
 
   /**
    * Validates the state of the Paid By subform. Updates the "isValid" field.
-   * The subform is considered valid if the remainder is zero and there is at least one payer.
    */
   #validate = () => {
-    this.#isValid = this.#remainder === 0 && this.#payersInEntries.size > 0;
+    if (this.#remainder !== 0 || this.#payersInEntries.size === 0) {
+      this.#isValid = false;
+      return;
+    }
+
+    this.#isValid = ![...this.#entries.values()].some(
+      entry => entry.amount > 0 && !entry.userId
+    );
   };
 
   /**

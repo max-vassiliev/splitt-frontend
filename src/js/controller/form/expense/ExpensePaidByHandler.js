@@ -15,19 +15,33 @@ class ExpensePaidByHandler {
 
   // Event Handlers: Input
 
-  handleTableInput = event => {};
+  handleTableInput = event => {
+    if (event.target.matches(this.#selectors.PAYER_AMOUNT_INPUT)) {
+      this.#handlePayerAmountInput(event);
+    }
+  };
+
+  #handlePayerAmountInput = event => {
+    const entryId = this.#parseEntryId(event);
+    const inputAmount = event.target.value;
+    const cursorPosition = event.target.selectionStart;
+    this.#controller.handlePayerAmountInput(
+      entryId,
+      inputAmount,
+      cursorPosition
+    );
+  };
 
   // Event Handlers: Change
 
   handleTableChange = event => {
-    if (!event.target.matches(this.#selectors.PAYER_SWITCH)) return;
-    this.#handlePayerUpdate(event);
+    if (event.target.matches(this.#selectors.PAYER_SWITCH)) {
+      this.#handlePayerUpdate(event);
+    }
   };
 
   #handlePayerUpdate = event => {
-    if (!event.target.matches(this.#selectors.PAYER_SWITCH)) return;
-    const row = event.target.closest(this.#selectors.PAYER_ROW);
-    const entryId = parseInt(row.dataset.entryId, 10);
+    const entryId = this.#parseEntryId(event);
     const newPayerId = TypeParser.parseStringToBigInt(event.target.value);
     this.#controller.handlePayerUpdate(entryId, newPayerId);
   };
@@ -57,15 +71,20 @@ class ExpensePaidByHandler {
       this.#selectors.REMOVE_PAYER_CELL
     );
     if (removePayerCell.classList.contains(INACTIVE_CLASS)) return;
-    const row = event.target.closest(this.#selectors.PAYER_ROW);
-    const entryId = parseInt(row.dataset.entryId, 10);
+    const entryId = this.#parseEntryId(event);
     this.#controller.handleRemovePayerRow(entryId);
   };
 
   #handlePayerAvatarClick = event => {
-    const row = event.target.closest(this.#selectors.PAYER_ROW);
-    const entryId = parseInt(row.dataset.entryId, 10);
+    const entryId = this.#parseEntryId(event);
     this.#controller.handlePayerAvatarClick(entryId);
+  };
+
+  // Utils
+
+  #parseEntryId = event => {
+    const row = event.target.closest(this.#selectors.PAYER_ROW);
+    return parseInt(row.dataset.entryId, 10);
   };
 
   // Validation

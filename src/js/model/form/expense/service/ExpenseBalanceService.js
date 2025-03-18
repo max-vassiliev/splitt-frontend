@@ -4,6 +4,7 @@ import {
   EXPENSE_BALANCE_CHECK_PAID_BY,
   EXPENSE_BALANCE_CHECK_SPLITT,
   EXPENSE_BALANCE_AMOUNT_BELOW_MIN,
+  EXPENSE_BALANCE_AMOUNT_ZERO,
   EXPENSE_BALANCE_STATUSES,
 } from '../../../../util/Config.js';
 import ExpenseFormState from '../../../state/expense/ExpenseFormState.js';
@@ -43,7 +44,7 @@ class ExpenseBalanceService {
     }
 
     if (expenseAmount === DEFAULT_AMOUNT) {
-      return { status: EXPENSE_BALANCE_DEFAULT, amount: DEFAULT_AMOUNT };
+      return { status: EXPENSE_BALANCE_AMOUNT_ZERO };
     }
 
     if (!paidByData.isValid) {

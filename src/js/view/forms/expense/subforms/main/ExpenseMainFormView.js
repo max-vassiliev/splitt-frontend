@@ -18,6 +18,7 @@ import {
   EXPENSE_BALANCE_CHECK_PAID_BY,
   EXPENSE_BALANCE_CHECK_SPLITT,
   EXPENSE_BALANCE_AMOUNT_BELOW_MIN,
+  EXPENSE_BALANCE_AMOUNT_ZERO,
 } from '../../../../../util/Config.js';
 import {
   formatAmountForOutput,
@@ -54,6 +55,7 @@ class ExpenseMainFormView {
   #balanceLabelDefault = 'ваш баланс:\u00A0';
   #balanceLabelCheckForm = formName => `проверьте форму «${formName}»`;
   #balanceLabelAmountBelowMin = 'слишком малая сумма';
+  #balanceLabelAmountZero = 'введите сумму траты';
   #balanceAmountOptions = [POSITIVE_CLASS, NEGATIVE_CLASS, HIDDEN_CLASS];
   #form;
   #mainForm;
@@ -355,6 +357,9 @@ class ExpenseMainFormView {
       case EXPENSE_BALANCE_DEFAULT:
         this.#renderBalanceDefault(balance.amount);
         break;
+      case EXPENSE_BALANCE_AMOUNT_ZERO:
+        this.#renderBalanceAmountZero();
+        break;
       case EXPENSE_BALANCE_AMOUNT_BELOW_MIN:
         this.#renderBalanceAmountBelowMin();
         break;
@@ -410,7 +415,7 @@ class ExpenseMainFormView {
     this.#balanceAmount.textContent = formatAmountForOutput(amount, {
       showSign: true,
     });
-    
+
     if (amount === 0) return;
     if (amount > 0) {
       this.#balanceAmount.classList.add(POSITIVE_CLASS);
@@ -444,6 +449,16 @@ class ExpenseMainFormView {
    */
   #renderBalanceAmountBelowMin = () => {
     this.#balanceLabel.textContent = this.#balanceLabelAmountBelowMin;
+    this.#balanceAmount.classList.add(HIDDEN_CLASS);
+  };
+
+  /**
+   * Renders the balance, when the provided expense amount is zero.
+   *
+   * @private
+   */
+  #renderBalanceAmountZero = () => {
+    this.#balanceLabel.textContent = this.#balanceLabelAmountZero;
     this.#balanceAmount.classList.add(HIDDEN_CLASS);
   };
 

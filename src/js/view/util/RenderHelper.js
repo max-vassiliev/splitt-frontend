@@ -11,6 +11,7 @@ import {
   AMOUNT_COLOR_NEUTRAL,
   ABOVE_EXPENSE_AMOUNT_CLASS,
   BELOW_EXPENSE_AMOUNT_CLASS,
+  MIN_EXPENSE_AMOUNT,
 } from '../../util/Config.js';
 
 import appSettings from '../../util/AppSettings.js';
@@ -202,26 +203,35 @@ export const getAmountColor = function (amount) {
 };
 
 /**
- * Updates the styling of the remainder row based on the given amount.
+ * Updates the styling of the remainder row.
  *
- * @param {number} amount - The amount determining the styling. Must be an integer.
+ * @param {number} remainderAmount - The remainder amount. Must be an integer.
+ * @param {number} expenseAmount - The total expense amount. Must be an integer.
  * @param {HTMLElement} row - The remainder row element.
  */
-export const restyleRemainderRow = function (amount, row) {
-  if (!Number.isInteger(amount)) return;
+export const restyleRemainderRow = function (
+  remainderAmount,
+  expenseAmount,
+  row
+) {
+  if (!Number.isInteger(remainderAmount) || !Number.isInteger(expenseAmount)) {
+    return;
+  }
   removeUtilityClasses(row, [
     ABOVE_EXPENSE_AMOUNT_CLASS,
     BELOW_EXPENSE_AMOUNT_CLASS,
   ]);
 
-  if (amount === 0) {
+  if (remainderAmount === 0 || expenseAmount <= MIN_EXPENSE_AMOUNT) {
     row.style.visibility = HIDDEN_CLASS;
     return;
   }
 
   row.style.visibility = VISIBLE_CLASS;
   const rowStyle =
-    amount < 0 ? ABOVE_EXPENSE_AMOUNT_CLASS : BELOW_EXPENSE_AMOUNT_CLASS;
+    remainderAmount < 0
+      ? ABOVE_EXPENSE_AMOUNT_CLASS
+      : BELOW_EXPENSE_AMOUNT_CLASS;
 
   row.classList.add(rowStyle);
 };

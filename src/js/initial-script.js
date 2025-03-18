@@ -736,7 +736,7 @@ export function initializeLegacyScript() {
       }
       payerAvatarColumn.addEventListener('click', handlePayerAvatarClick);
       payerSwitch.addEventListener('change', handlePayerSwitch);
-      payerAmountInput.addEventListener('input', handlePayerAmountInput);
+      // payerAmountInput.addEventListener('input', handlePayerAmountInput);
     }
 
     function addPayerRowToModel(row) {

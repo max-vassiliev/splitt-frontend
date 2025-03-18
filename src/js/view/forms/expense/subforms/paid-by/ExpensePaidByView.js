@@ -3,12 +3,14 @@ import {
   formatAmountForOutput,
   restyleRemainderRow,
   adjustAmountElementsWidth,
+  setAmountCursorPosition,
 } from '../../../../util/RenderHelper.js';
 import TypeParser from '../../../../../util/TypeParser.js';
 import {
   HIDDEN_CLASS,
   VISIBLE_CLASS,
   EXPENSE_PAID_BY_OPTION_EMPTY_ID,
+  MIN_EXPENSE_AMOUNT,
 } from '../../../../../util/Config.js';
 import PaidByEntryView from './PaidByEntryView.js';
 
@@ -60,6 +62,7 @@ class ExpensePaidByView {
       PAYER_SWITCH: '.payer__switch',
       PAYER_AVATAR_CELL: '.payer-table-column__avatar',
       PAYER_AVATAR: '.account__avatar',
+      PAYER_AMOUNT_INPUT: '.payer-amount__input',
       PAYER_ROW: '.payer-table-row',
       ADD_PAYER_ROW: '.payer-table-row__add-payer',
       ADD_PAYER_BUTTON: '.add-payer-button',
@@ -143,6 +146,30 @@ class ExpensePaidByView {
       defaultEntry.amountInput.value =
         formatAmountForOutput(defaultEntryAmount);
     }
+    this.#renderCalculationRows(total, remainder, expenseAmount);
+  };
+
+  renderAfterUpdatePayerAmount = data => {
+    const {
+      entryId,
+      amount,
+      total,
+      remainder,
+      inputAmount,
+      expenseAmount,
+      cursorPosition,
+    } = data;
+    const entry = this.#entriesAll.get(entryId);
+
+    entry.renderAmount(amount);
+    const inputElement = entry.amountInput;
+    setAmountCursorPosition({
+      amountIn: inputAmount,
+      amountOut: inputElement.value,
+      cursorPosition,
+      inputElement,
+    });
+
     this.#renderCalculationRows(total, remainder, expenseAmount);
   };
 
@@ -239,11 +266,16 @@ class ExpensePaidByView {
 
   #renderCalculationRows = (total, remainder, expenseAmount) => {
     this.#totalElement.textContent = formatAmountForOutput(total);
-    this.#remainderElement.textContent = formatAmountForOutput(remainder);
+    this.#remainderElement.textContent = formatAmountForOutput(remainder, {
+      showSign: remainder < 0,
+    });
 
     this.#totalRow.style.visibility =
-      remainder === 0 ? HIDDEN_CLASS : VISIBLE_CLASS;
-    restyleRemainderRow(remainder, this.#remainderRow);
+      remainder === 0 || expenseAmount <= MIN_EXPENSE_AMOUNT
+        ? HIDDEN_CLASS
+        : VISIBLE_CLASS;
+
+    restyleRemainderRow(remainder, expenseAmount, this.#remainderRow);
 
     this.#adjustInputWidth(total, expenseAmount);
   };

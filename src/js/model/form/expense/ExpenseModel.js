@@ -240,6 +240,32 @@ class ExpenseModel extends TransactionFormModel {
   };
 
   /**
+   * Updates the amount assigned to a payer and prepares the updated view model.
+   *
+   * @param {number} entryId - The ID of the payer entry to update.
+   * @param {number} inputAmount - The new amount input by the user.
+   * @returns {Object} The updated view model for rendering.
+   */
+  updatePayerAmount = (entryId, inputAmount) => {
+    const processedAmount = mathService.processInputAmount(inputAmount);
+    const { response, form } = expenseManager.updatePayerAmount(
+      entryId,
+      processedAmount
+    );
+    const currentUserId = stateManager.getUserId();
+    const groupMembers = stateManager.getMembers();
+    const balance = balanceService.getBalance(form, currentUserId);
+    return paidByService.prepareViewModelAfterUpdatePayerAmount({
+      response,
+      form,
+      balance,
+      currentUserId,
+      groupMembers,
+      entryId,
+    });
+  };
+
+  /**
    * Adds a new Paid By entry to the expense form.
    * Ensures that the number of entries does not exceed the number of group members.
    *

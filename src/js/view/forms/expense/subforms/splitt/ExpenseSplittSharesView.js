@@ -110,7 +110,7 @@ class ExpenseSplittSharesView {
 
     this.#renderRows(splittShares, splittAmounts);
     this.#renderTotal(totalShare, totalAmount);
-    this.#renderRemainder(remainderShare, remainderAmount);
+    this.#renderRemainder(remainderShare, expenseAmount, remainderAmount);
     this.#adjustAmountColumnWidth(totalAmount, expenseAmount);
   };
 
@@ -132,7 +132,7 @@ class ExpenseSplittSharesView {
   #renderRemainder = (share, amount) => {
     this.#remainderShareCell.textContent = formatPercentForOutput(share);
     this.#remainderAmountCell.textContent = formatAmountForOutput(amount);
-    restyleRemainderRow(share, this.#remainderRow);
+    restyleRemainderRow(share, expenseAmount, this.#remainderRow);
   };
 
   #adjustAmountColumnWidth = (totalAmount, expenseAmount) => {

@@ -120,11 +120,13 @@ export const EXPENSE_BALANCE_DEFAULT = 'exp-balance__default';
 export const EXPENSE_BALANCE_CHECK_PAID_BY = 'exp-balance__check-paid-by';
 export const EXPENSE_BALANCE_CHECK_SPLITT = 'exp-balance__check-splitt';
 export const EXPENSE_BALANCE_AMOUNT_BELOW_MIN = 'exp-balance__below-min';
+export const EXPENSE_BALANCE_AMOUNT_ZERO = 'exp-balance__zero';
 export const EXPENSE_BALANCE_STATUSES = new Set([
   EXPENSE_BALANCE_DEFAULT,
   EXPENSE_BALANCE_CHECK_PAID_BY,
   EXPENSE_BALANCE_CHECK_SPLITT,
   EXPENSE_BALANCE_AMOUNT_BELOW_MIN,
+  EXPENSE_BALANCE_AMOUNT_ZERO,
 ]);
 
 // Repayment

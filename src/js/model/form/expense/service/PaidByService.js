@@ -163,6 +163,37 @@ class PaidByService {
   };
 
   /**
+   * Prepares the updated view model after a payer amount is changed.
+   *
+   * @param {Object} data - The data needed to generate the updated view model.
+   * @param {Object} data.response - The response from updating the payer amount.
+   * @param {Object} data.form - The updated expense form.
+   * @param {Object} data.balance - The updated balance after the change.
+   * @param {bigint} data.currentUserId - The ID of the current user.
+   * @param {Map<bigint, User>} data.groupMembers - A map of the group's members.
+   * @param {number} data.entryId - The ID of the updated payer entry.
+   * @returns {Object} The updated view model containing UI-related data.
+   */
+  prepareViewModelAfterUpdatePayerAmount = data => {
+    const { response, form, balance, currentUserId, groupMembers, entryId } =
+      data;
+
+    const paidByButtonProperties = this.#prepareTypeProperties(
+      form.paidBy.payersInEntries,
+      currentUserId,
+      groupMembers
+    );
+    return {
+      response,
+      entryId,
+      paidByButtonProperties,
+      balance,
+      expenseAmount: form.amount,
+      isFormValid: form.isValid,
+    };
+  };
+
+  /**
    * Prepares the view model after a new Paid By entry is added.
    * This ensures the UI reflects the latest form state.
    *
