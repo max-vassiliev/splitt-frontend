@@ -5,7 +5,8 @@
   "scripts": {
     "start": "npx parcel index.html",
     "build": "npx parcel build index.html",
-    "copy-images": "cp -R src/images dist/images",
+    "clean": "rm -rf .parcel-cache",
+    "copy-images": "cp -R src/images/. dist/images",
     "copy-json": "cp -R src/json/ dist/json",
     "clean-test-json": "rm -rf dist/json/test/*",
     "copy-test-json": "cp -R src/json/test/* dist/json/test",
@@ -13,12 +14,12 @@
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.9.3",
-    "events": "^3.3.0",
     "parcel": "^2.12.0",
     "process": "^0.11.10"
   },
   "dependencies": {
     "core-js": "^3.31.0",
+    "eventemitter3": "^5.0.1",
     "emoji-mart": "^5.5.2",
     "fractional": "^1.0.0",
     "regenerator-runtime": "^0.13.11"

@@ -1,7 +1,6 @@
 import stateManager from '../state/StateManager.js';
-import dateManager from '../state/date/DateManager.js';
+import dateManager from '../form/date/DateManager.js';
 import pageAPI from './PageAPI.js';
-import eventBus from '../../util/EventBus.js';
 
 class PageModel {
   loadPage = async () => {
@@ -22,6 +21,16 @@ class PageModel {
   };
 
   /**
+   * Gets the app's global settings.
+   * @returns {Object} The object with the app's global settings.
+   * @property {string} locale The current locale.
+   * @property {string} currencySymbol The currency symbol for transactions in the group.
+   */
+  getAppSettings = () => {
+    return stateManager.getLocaleAndCurrencySymbol();
+  };
+
+  /**
    * Gets the active modal ID.
    * @returns {number|null} An the active modal ID or null.
    */
@@ -38,18 +47,9 @@ class PageModel {
   };
 
   /**
-   * Clears the active modal ID and triggers any associated close event.
-   *
-   * If a custom close event is registered for the active modal, the event is emitted
-   * before the active modal ID is set to `null`.
-   *
-   * @fires eventBus#<string> - Emits the event name associated with the active modal.
+   * Clears the active modal ID setting it to `null`.
    */
   closeActiveModal = () => {
-    const closeEvent = stateManager.getActiveModalCloseEvent();
-    if (closeEvent) {
-      eventBus.emit(closeEvent);
-    }
     stateManager.setActiveModalId(null);
   };
 }

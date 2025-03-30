@@ -1,6 +1,32 @@
-import { MAX_AMOUNT } from '../../util/Config.js';
+import { MAX_AMOUNT, ONE_HUNDRED_PERCENT } from '../../util/Config.js';
 
 class MathService {
+  /**
+   * Parses a percentage input string, removes non-numeric characters,
+   * and ensures the result is within valid percentage bounds.
+   *
+   * @param {string} percentString - The input percentage string to be parsed.
+   * @returns {number} The parsed percentage as an integer (0-100).
+   */
+  processInputPercent = percentString => {
+    let percent;
+    let cleanedValue = percentString.replace(/\D/g, '');
+
+    if (cleanedValue === '' || isNaN(cleanedValue)) {
+      percent = 0;
+    } else {
+      let finalPercent;
+      let cleanedValueParsed = parseInt(cleanedValue);
+      cleanedValueParsed > ONE_HUNDRED_PERCENT
+        ? (finalPercent = Math.floor(cleanedValueParsed / 10))
+        : (finalPercent = cleanedValueParsed);
+
+      percent = Math.max(finalPercent, 0);
+    }
+
+    return percent;
+  };
+
   /**
    * Processes the input amount by parsing and verifying it.
    *

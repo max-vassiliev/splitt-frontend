@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="icon" type="image/png" href="/icon.png" />
+    <link rel="icon" type="image/png" href="favicon.ico" />
 
     <link
       href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900&display=swap"
@@ -41,10 +41,10 @@
     <div class="overlay hidden"></div>
     <div class="overlay-error hidden"></div>
     <!-- TOP NAVIGATION -->
-    <header hidden>
+    <header class="invisible">
       <div class="logo">
         <img src="logo.png" alt="Logo" class="logo_img" />
-        <h1 class="logo_text">Splitt</h1>
+        <div class="logo_text">Splitt</div>
       </div>
       <div class="menu">
         <div class="menu__account">
@@ -147,7 +147,11 @@
         <!-- ADD EXPENSE: Main -->
         <div class="add-transaction__form_main add-expense__form_main">
           <div class="add-transaction__form_header add-expense__form_header">
-            Добавить трату
+            <div
+              class="add-transaction__form_header_text add-expense__form_header_text"
+            >
+              Добавить трату
+            </div>
           </div>
           <!-- ADD EXPENSE: Main (default)-->
           <form class="add-transaction__form_body">
@@ -159,7 +163,6 @@
                   name="expense-title"
                   type="text"
                   maxlength="50"
-                  placeholder="Введите название"
                   autocomplete="off"
                 />
               </div>
@@ -187,10 +190,6 @@
               <div
                 class="add-transaction__form_input-container add-expense-emoji-container default"
               >
-                <div
-                  class="emoji-default add-expense-emoji-default"
-                  title="выбрать"
-                ></div>
                 <input
                   class="add-transaction__form_input-text emoji-input add-expense"
                   type="text"
@@ -244,17 +243,15 @@
               <div
                 class="add-transaction__form_input-splitt-comment splitt-balance-note"
               >
-                <span class="splitt-balance-note__label"
-                  >ваш баланс:&nbsp;</span
-                >
-                <span class="splitt-balance-note__amount">0,00&nbsp;₽</span>
+                <span class="splitt-balance-note__label"></span>
+                <span class="splitt-balance-note__amount"></span>
               </div>
             </div>
             <div class="add-transaction__form_field">
               <label class="add-transaction__form_label">Комментарий</label>
               <div class="add-transaction__form_input-container">
                 <button
-                  class="add-transaction__form_btn-edit add-expense__btn-edit"
+                  class="add-transaction__form_btn-edit add-expense__btn-edit btn__expense-note"
                   data-form="note"
                 >
                   написать
@@ -263,7 +260,7 @@
             </div>
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close btn__close_popup"
+                class="add-transaction__form_btn-close btn__close_popup add-expense__btn--close"
                 type="button"
               >
                 закрыть
@@ -399,298 +396,71 @@
                 />
                 <label for="splitt-shares-button">долями (%)</label>
               </div>
-              <!-- Splitt Form: Equally -->
-              <div class="splitt-form__table" id="splitt-equally-table">
-                <table class="splitt-form__equally">
-                  <tr class="splitt-equally__row" data-user-id="1">
-                    <td class="splitt-equally-column__checkbox">
-                      <input
-                        type="checkbox"
-                        class="splitt-equally-checkbox"
-                        checked
-                      />
-                    </td>
-                    <td class="splitt-equally-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-peter.png"
-                        alt="Пётр"
-                      />
-                    </td>
-                    <td class="splitt-equally-column__username">Пётр</td>
-                    <td class="splitt-equally-column__amount">0,00&nbsp;₽</td>
-                  </tr>
-                  <tr class="splitt-equally__row" data-user-id="2">
-                    <td class="splitt-equally-column__checkbox">
-                      <input
-                        type="checkbox"
-                        class="splitt-equally-checkbox"
-                        checked
-                      />
-                    </td>
-                    <td class="splitt-equally-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-kate.png"
-                        alt="Катерина"
-                      />
-                    </td>
-                    <td class="splitt-equally-column__username">Катерина</td>
-                    <td class="splitt-equally-column__amount">0,00&nbsp;₽</td>
-                  </tr>
-                  <tr class="splitt-equally__row" data-user-id="3">
-                    <td class="splitt-equally-column__checkbox">
-                      <input
-                        type="checkbox"
-                        class="splitt-equally-checkbox"
-                        checked
-                      />
-                    </td>
-                    <td class="splitt-equally-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-paul.png"
-                        alt="Павлентий Петрович"
-                      />
-                    </td>
-                    <td class="splitt-equally-column__username">
-                      Константин Константинопольский
-                    </td>
-                    <td class="splitt-equally-column__amount">0,00&nbsp;₽</td>
-                  </tr>
-                  <tr class="splitt-equally__row" data-user-id="4">
-                    <td class="splitt-equally-column__checkbox">
-                      <input
-                        type="checkbox"
-                        class="splitt-equally-checkbox"
-                        checked
-                      />
-                    </td>
-                    <td class="splitt-equally-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-sanya.png"
-                        alt="Арсений Тарковский"
-                      />
-                    </td>
-                    <td class="splitt-equally-column__username">
-                      Арсений Тарковский
-                    </td>
-                    <td class="splitt-equally-column__amount">0,00&nbsp;₽</td>
-                  </tr>
-                </table>
-              </div>
-              <!-- Splitt Form: Parts -->
-              <div class="splitt-form__table" id="splitt-parts-table">
-                <table class="splitt-form__parts">
-                  <tr class="splitt-parts__row inactive" data-user-id="1">
-                    <td class="splitt-parts-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-peter.png"
-                        alt="Пётр"
-                      />
-                    </td>
-                    <td class="splitt-parts-column__username">Пётр</td>
-                    <td class="splitt-parts-column__amount">
-                      <input
-                        class="splitt-amount__input input-amount splitt-parts-amount splitt-parts-amount-input"
-                        name="splitt-amount-input"
-                        type="text"
-                        value="0,00&nbsp;₽"
-                      />
-                    </td>
-                  </tr>
-                  <tr class="splitt-parts__row inactive" data-user-id="2">
-                    <td class="splitt-parts-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-kate.png"
-                        alt="Катерина"
-                      />
-                    </td>
-                    <td class="splitt-parts-column__username">Катерина</td>
-                    <td class="splitt-parts-column__amount">
-                      <input
-                        class="splitt-amount__input input-amount splitt-parts-amount splitt-parts-amount-input"
-                        name="splitt-amount-input"
-                        type="text"
-                        value="0,00&nbsp;₽"
-                      />
-                    </td>
-                  </tr>
-                  <tr class="splitt-parts__row inactive" data-user-id="3">
-                    <td class="splitt-parts-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-paul.png"
-                        alt="Константин Константинопольский"
-                      />
-                    </td>
-                    <td class="splitt-parts-column__username">
-                      Константин Константинопольский
-                    </td>
-                    <td class="splitt-parts-column__amount">
-                      <input
-                        class="splitt-amount__input input-amount splitt-parts-amount splitt-parts-amount-input"
-                        name="splitt-amount-input"
-                        type="text"
-                        value="0,00&nbsp;₽"
-                      />
-                    </td>
-                  </tr>
-                  <tr class="splitt-parts__row inactive" data-user-id="4">
-                    <td class="splitt-parts-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-sanya.png"
-                        alt="Арсений Тарковский"
-                      />
-                    </td>
-                    <td class="splitt-parts-column__username">
-                      Арсений Тарковский
-                    </td>
-                    <td class="splitt-parts-column__amount">
-                      <input
-                        class="splitt-amount__input input-amount splitt-parts-amount splitt-parts-amount-input"
-                        name="splitt-amount-input"
-                        type="text"
-                        value="0,00&nbsp;₽"
-                      />
-                    </td>
-                  </tr>
-                  <tr class="splitt-parts__row-separator"></tr>
-                  <tr class="splitt-parts__row-total">
-                    <td class="splitt-parts-column__total-label" colspan="2">
-                      Всего
-                    </td>
-                    <td class="splitt-parts-column__total-amount">
-                      0,00&nbsp;₽
-                    </td>
-                  </tr>
-                  <tr class="splitt-parts__row-remainder">
-                    <td
-                      class="splitt-parts-column__remainder-label"
-                      colspan="2"
-                    >
-                      Осталось
-                    </td>
-                    <td class="splitt-parts-column__remainder-amount">
-                      1&nbsp;234,56&nbsp;₽
-                    </td>
-                  </tr>
-                </table>
-              </div>
-              <!-- Splitt Form: Shares -->
-              <div class="splitt-form__table" id="splitt-shares-table">
-                <table class="splitt-form__shares">
-                  <tr class="splitt-shares__row inactive" data-user-id="1">
-                    <td class="splitt-shares-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-peter.png"
-                        alt="Пётр"
-                      />
-                    </td>
-                    <td class="splitt-shares-column__username">Пётр</td>
-                    <td class="splitt-shares-column__share">
-                      <input
-                        class="splitt-share__input input-percent splitt-shares-share"
-                        name="splitt-share"
-                        type="text"
-                        value="0&nbsp;%"
-                      />
-                    </td>
-                    <td class="splitt-shares-column__amount">0,00&nbsp;₽</td>
-                  </tr>
-                  <tr class="splitt-shares__row inactive" data-user-id="2">
-                    <td class="splitt-shares-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-kate.png"
-                        alt="Катерина"
-                      />
-                    </td>
-                    <td class="splitt-shares-column__username">Катерина</td>
-                    <td class="splitt-shares-column__share">
-                      <input
-                        class="splitt-share__input input-percent splitt-shares-share"
-                        name="splitt-share"
-                        type="text"
-                        value="0&nbsp;%"
-                      />
-                    </td>
-                    <td class="splitt-shares-column__amount">0,00&nbsp;₽</td>
-                  </tr>
-                  <tr class="splitt-shares__row inactive" data-user-id="3">
-                    <td class="splitt-shares-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-paul.png"
-                        alt="Павлентий Петрович"
-                      />
-                    </td>
-                    <td class="splitt-shares-column__username">
-                      Константин Константинопольский
-                    </td>
-                    <td class="splitt-shares-column__share">
-                      <input
-                        class="splitt-share__input input-percent splitt-shares-share"
-                        name="splitt-share"
-                        type="text"
-                        value="0&nbsp;%"
-                      />
-                    </td>
-                    <td class="splitt-shares-column__amount">0,00&nbsp;₽</td>
-                  </tr>
-                  <tr class="splitt-shares__row inactive" data-user-id="4">
-                    <td class="splitt-shares-column__avatar">
-                      <img
-                        class="account__avatar"
-                        src="src/images/avatar-sanya.png"
-                        alt="Арсений Тарковский"
-                      />
-                    </td>
-                    <td class="splitt-shares-column__username">
-                      Арсений Тарковский
-                    </td>
-                    <td class="splitt-shares-column__share">
-                      <input
-                        class="splitt-share__input input-percent splitt-shares-share"
-                        name="splitt-share"
-                        type="text"
-                        value="0&nbsp;%"
-                      />
-                    </td>
-                    <td class="splitt-shares-column__amount">0,00&nbsp;₽</td>
-                  </tr>
-                  <tr class="splitt-shares__row-separator"></tr>
-                  <tr class="splitt-shares__row-total">
-                    <td class="splitt-shares-column__total-label" colspan="2">
-                      Всего
-                    </td>
-                    <td class="splitt-shares-column__total-share">0&nbsp;%</td>
-                    <td class="splitt-shares-column__total-amount">
-                      <div class="splitt-shares-column__total-amount-value">
-                        0,00&nbsp;₽
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="splitt-shares__row-remainder">
-                    <td
-                      class="splitt-shares-column__remainder-label"
-                      colspan="2"
-                    >
-                      Осталось
-                    </td>
-                    <td class="splitt-shares-column__remainder-share">
-                      0&nbsp;%
-                    </td>
-                    <td class="splitt-shares-column__remainder-amount">
-                      0,00&nbsp;₽
-                    </td>
-                  </tr>
-                </table>
+              <div id="splitt-table-container">
+                <!-- Splitt Form: Equally -->
+                <div
+                  class="splitt-form__table"
+                  id="splitt-equally-table"
+                  data-type="equally"
+                >
+                  <table class="splitt-form__equally"></table>
+                </div>
+                <!-- Splitt Form: Parts -->
+                <div
+                  class="splitt-form__table"
+                  id="splitt-parts-table"
+                  data-type="parts"
+                >
+                  <table class="splitt-form__parts">
+                    <tr class="splitt-parts__row-separator"></tr>
+                    <tr class="splitt-parts__row-total">
+                      <td class="splitt-parts-column__total-label" colspan="2">
+                        Всего
+                      </td>
+                      <td class="splitt-parts-column__total-amount"></td>
+                    </tr>
+                    <tr class="splitt-parts__row-remainder">
+                      <td
+                        class="splitt-parts-column__remainder-label"
+                        colspan="2"
+                      >
+                        Осталось
+                      </td>
+                      <td class="splitt-parts-column__remainder-amount"></td>
+                    </tr>
+                  </table>
+                </div>
+                <!-- Splitt Form: Shares -->
+                <div
+                  class="splitt-form__table"
+                  id="splitt-shares-table"
+                  data-type="shares"
+                >
+                  <table class="splitt-form__shares">
+                    <tr class="splitt-shares__row-separator"></tr>
+                    <tr class="splitt-shares__row-total">
+                      <td class="splitt-shares-column__total-label" colspan="2">
+                        Всего
+                      </td>
+                      <td class="splitt-shares-column__total-share"></td>
+                      <td class="splitt-shares-column__total-amount">
+                        <div
+                          class="splitt-shares-column__total-amount-value"
+                        ></div>
+                      </td>
+                    </tr>
+                    <tr class="splitt-shares__row-remainder">
+                      <td
+                        class="splitt-shares-column__remainder-label"
+                        colspan="2"
+                      >
+                        Осталось
+                      </td>
+                      <td class="splitt-shares-column__remainder-share"></td>
+                      <td class="splitt-shares-column__remainder-amount"></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
             <!-- Splitt Form: Footer -->
@@ -730,7 +500,8 @@
             </div>
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close add-expense__form_btn-close"
+                class="add-transaction__form_btn-close add-expense__note-form_btn-close"
+                type="button"
               >
                 готово
               </button>
@@ -973,7 +744,7 @@
             </div>
             <div class="add-transaction__form_footer">
               <button
-                class="add-transaction__form_btn-close add-repayment__form_btn-close"
+                class="add-transaction__form_btn-close add-repayment__note-form_btn-close"
                 type="button"
               >
                 готово
