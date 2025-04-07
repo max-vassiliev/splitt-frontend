@@ -49,6 +49,26 @@ class MainController {
     this.#bindEmojiPickerToggle();
     this.#bindEmojiRestoreDefault();
     this.#bindEmojiRemove();
+    this.#bindDemoTransactionSubmitted();
+  };
+
+  #bindDemoTransactionSubmitted = () => {
+    eventBus.on('demoTransactionSubmitted', async () => {
+      try {
+        summaryController.handleLoading();
+        transactionsController.handleLoading();
+        await pageController.handleTransactionsUpdateDemo();
+
+        const randomDelay = Math.floor(Math.random() * (300 - 150 + 1)) + 150;
+        await new Promise(resolve => setTimeout(resolve, randomDelay));
+
+        summaryController.handleUpdate();
+        transactionsController.handleUpdate();
+        paginationController.handleUpdate();
+      } catch (error) {
+        throw error;
+      }
+    });
   };
 
   #bindOpenModal = () => {
@@ -64,7 +84,6 @@ class MainController {
   };
 
   #bindAlignTransactionForms = () => {
-    // pageController.on('alignTransactionForms', this.#alignTransactionForms);
     eventBus.on('alignTransactionForms', this.#alignTransactionForms);
   };
 

@@ -3,6 +3,7 @@ import {
   REPAYMENT_FORM_TYPES,
   REPAYMENT_HIDDEN_FORM_TYPES,
   TRANSACTION_NOTE_LIMIT,
+  DEFAULT_EMOJI_REPAYMENT,
 } from '../../../util/Config.js';
 import {
   isNonNegativeInteger,
@@ -30,6 +31,22 @@ class RepaymentFormState {
     this._activeHiddenForm = null;
     this._isValid = false;
   }
+
+  /**
+   * Resets the state of the Repayment Form to its initial default values.
+   *
+   * @returns {void}
+   */
+  reset = () => {
+    this._amount = 0;
+    this._date = null;
+    this._emoji = DEFAULT_EMOJI_REPAYMENT;
+    this._payer = null;
+    this._recipient = null;
+    this._note = null;
+    this._activeHiddenForm = null;
+    this._isValid = false;
+  };
 
   /**
    * Gets the type of the active hidden form, one of {@link REPAYMENT_HIDDEN_FORM_TYPES}, or null.

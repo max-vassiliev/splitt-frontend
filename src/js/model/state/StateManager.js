@@ -21,6 +21,28 @@ class StateManager {
     'group',
   ];
 
+  // UPDATE DEMO
+
+  /**
+   * Updates the application state after a mock transaction is added,
+   * used specifically in the Demo version of the app.
+   *
+   * @param {Object} data - The mock update data returned from the demo API.
+   * @param {Object} data.balances - Updated balances after the demo transaction.
+   * @param {Array<Object>} data.transactions - Updated list of transactions.
+   *
+   * @returns {void}
+   */
+  updateAfterAddTransactionDemo = data => {
+    balanceManager.update(state.balances, data.balances);
+    state.transactions = TransactionManager.initializeTransactionsOnLoad({
+      transactionsData: data.transactions,
+      users: state.members,
+      currentUserId: state.userId,
+    });
+    state.userStatus = this.#determineUserStatus();
+  };
+
   /**
    * LOAD
    */
@@ -45,7 +67,10 @@ class StateManager {
     state.userId = data.currentUserId;
     state.group = groupManager.initializeGroupOnLoad(data.group);
     state.members = userManager.initializeMembersOnLoad(data.members);
-    state.balances = balanceManager.initializeUserBalancesOnLoad(data.balances);
+    state.balances = balanceManager.initializeUserBalancesOnLoad(
+      data.balances,
+      data.members
+    );
     state.transactions = TransactionManager.initializeTransactionsOnLoad({
       transactionsData: data.transactions,
       users: state.members,

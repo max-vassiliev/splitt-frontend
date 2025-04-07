@@ -3,11 +3,11 @@ import {
   EXPENSE_HIDDEN_FORM_TYPES,
   TRANSACTION_TITLE_LIMIT,
   TRANSACTION_NOTE_LIMIT,
+  DEFAULT_EMOJI_EXPENSE,
 } from '../../../util/Config.js';
 import {
   isNonEmptyStringOrNull,
   isNonNegativeInteger,
-  isNonEmptyString,
   isPositiveInteger,
 } from '../../../util/SplittValidator.js';
 import PaidByState from './paid-by/PaidByState.js';
@@ -40,6 +40,26 @@ class ExpenseFormState {
     this._activeHiddenForm = null;
     this._isValid = false;
   }
+
+  /**
+   * Resets the state of the expense form to its initial default values.
+   *
+   * @param {number|string} currentUserId - The ID of the current user, used to initialize the "paidBy" field.
+   *
+   * @returns {void}
+   */
+  reset = currentUserId => {
+    this._title = null;
+    this._amount = 0;
+    this._isAmountBelowMin = false;
+    this._date = null;
+    this._emoji = DEFAULT_EMOJI_EXPENSE;
+    this._note = null;
+    this._activeHiddenForm = null;
+    this._isValid = false;
+    this._paidBy.reset(currentUserId);
+    this._splitt.reset();
+  };
 
   /**
    * Gets the type of the active hidden form, one of {@link EXPENSE_HIDDEN_FORM_TYPES}, or null.

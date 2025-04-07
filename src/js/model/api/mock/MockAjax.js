@@ -2,6 +2,13 @@ import {
   MOCK_DATA_PAGE_FULL,
   MOCK_DATA_GROUPS,
   MOCK_DATA_REPAYMENT_10,
+  MOCK_DATA_DEMO_PAGE_UPD_1,
+  MOCK_DATA_DEMO_PAGE_UPD_2,
+  MOCK_DATA_DEMO_PAGE_UPD_3,
+  MOCK_DATA_DEMO_PAGE_UPD_4,
+  MOCK_DATA_DEMO_PAGE_UPD_5,
+  MOCK_DATA_DEMO_PAGE_UPD_6,
+  MOCK_DATA_DEMO_PAGE_UPD_7,
 } from './MockAjaxConfig.js';
 import {
   API_URL,
@@ -12,10 +19,15 @@ import {
 
 class MockAjax {
   #mockDataGet;
+  #demoDataUpdate;
+  #demoRequestCount;
 
   constructor() {
     this.#mockDataGet = new Map();
+    this.#demoDataUpdate = new Map();
     this.#setMockDataGet();
+    this.#setDemoDataUpdate();
+    this.#demoRequestCount = 1;
   }
 
   /**
@@ -61,6 +73,46 @@ class MockAjax {
     this.#mockDataGet.set(repayment7, MOCK_DATA_REPAYMENT_10);
     this.#mockDataGet.set(repayment3, MOCK_DATA_REPAYMENT_10);
   }
+
+  // DEMO
+
+  getDemoPageUpdate = async () => {
+    try {
+      const filePath = this.#demoDataUpdate.get(this.#demoRequestCount);
+      if (!filePath) {
+        throw new Error(
+          `Mock data unavailable for the current settings: demoRequestCount: ${
+            this.#demoRequestCount
+          }. File path: ${filePath} (${typeof filePath}).`
+        );
+      }
+
+      this.#updateDemoRequestCount();
+
+      const response = await fetch(filePath);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  #updateDemoRequestCount = () => {
+    if (this.#demoRequestCount < 7) this.#demoRequestCount++;
+  };
+
+  #setDemoDataUpdate = () => {
+    this.#demoDataUpdate.set(1, MOCK_DATA_DEMO_PAGE_UPD_1);
+    this.#demoDataUpdate.set(2, MOCK_DATA_DEMO_PAGE_UPD_2);
+    this.#demoDataUpdate.set(3, MOCK_DATA_DEMO_PAGE_UPD_3);
+    this.#demoDataUpdate.set(4, MOCK_DATA_DEMO_PAGE_UPD_4);
+    this.#demoDataUpdate.set(5, MOCK_DATA_DEMO_PAGE_UPD_5);
+    this.#demoDataUpdate.set(6, MOCK_DATA_DEMO_PAGE_UPD_6);
+    this.#demoDataUpdate.set(7, MOCK_DATA_DEMO_PAGE_UPD_7);
+  };
 }
 
 export default new MockAjax();

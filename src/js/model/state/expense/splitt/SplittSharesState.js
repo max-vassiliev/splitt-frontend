@@ -39,6 +39,28 @@ class SplittSharesState extends SplittState {
     this._isInitialized = true;
   };
 
+  // Reset
+
+  /**
+   * Resets the Splitt Shares Form state by assigning the default amount
+   * to both shares and amounts for each user, and clearing all internal totals.
+   *
+   * Also triggers validation for form submission.
+   *
+   * @returns {void}
+   */
+  reset = () => {
+    for (const userId of this.#splittShares.keys()) {
+      this.#splittShares.set(userId, DEFAULT_AMOUNT);
+      this.#splittAmounts.set(userId, DEFAULT_AMOUNT);
+    }
+    this.#totalAmount = DEFAULT_AMOUNT;
+    this.#totalShare = DEFAULT_AMOUNT;
+    this.#remainderAmount = DEFAULT_AMOUNT;
+    this.#remainderShare = DEFAULT_AMOUNT;
+    this.#validateForSubmission();
+  };
+
   // Update
 
   /**

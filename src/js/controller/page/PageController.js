@@ -36,6 +36,14 @@ class PageController {
   #handleWindowResize = () => {
     eventBus.emit('alignTransactionForms');
   };
+
+  handleTransactionsUpdateDemo = async () => {
+    try {
+      await pageModel.updatePageDemo();
+    } catch (error) {
+      throw error;
+    }
+  };
 }
 
 export default new PageController();

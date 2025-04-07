@@ -1,17 +1,27 @@
 import UserBalance from './UserBalance.js';
 import UserBalanceDetail from './UserBalanceDetail.js';
+import TypeParser from '../../util/TypeParser.js';
 
 class UserBalanceManager {
   #requiredFieldsUserBalance = ['userId', 'balance'];
   #requiredFieldsDetails = ['userId', 'amount'];
 
+  update = (balances, balanceUpdates) => {
+    balanceUpdates.forEach(balanceUpdate => {
+      const userId = TypeParser.parseId(balanceUpdate.userId);
+      const userBalance = balances.get(userId);
+      userBalance.balance = balanceUpdate.balance;
+      const details = this.#initializeUserBalanceDetailsOnLoad(balanceUpdate);
+      userBalance.details = details;
+    });
+  };
+
   initializeUserBalancesOnLoad(balancesData) {
-    if (!Array.isArray(balancesData)) {
+    if (!Array.isArray(balancesData) || balancesData.length === 0) {
       throw new Error(
-        `Invalid balances data. Expected an array. Received: ${balancesData} (type: ${typeof balancesData})`
+        `Invalid balances data. Expected an non-empty array. Received: ${balancesData} (type: ${typeof balancesData})`
       );
     }
-    if (balancesData.length === 0) return new Map();
 
     const balances = new Map();
     balancesData.forEach(entry => {

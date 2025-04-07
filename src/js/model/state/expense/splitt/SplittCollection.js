@@ -32,6 +32,19 @@ class SplittCollection {
   };
 
   /**
+   * Resets the entire Splitt Collection by resetting each form
+   * and setting the active form to "equally".
+   *
+   * @returns {void}
+   */
+  reset = () => {
+    this.#equally.reset();
+    this.#parts.reset();
+    this.#shares.reset();
+    this.#activeForm = this.#equally;
+  };
+
+  /**
    * Retrieves the splitt form by it's type.
    * @param {string} type The type of the splitt form. See {@link EXPENSE_SPLITT_TYPES}.
    * @returns {Object} One of the splitt form state assigned to the type.

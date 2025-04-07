@@ -26,6 +26,25 @@ class SplittPartsState extends SplittState {
     this._isInitialized = true;
   };
 
+  // Reset
+
+  /**
+   * Resets the Splitt Parts Form state by assigning the default amount
+   * to each user and resetting internal totals.
+   *
+   * Also triggers validation for form submission.
+   *
+   * @returns {void}
+   */
+  reset = () => {
+    for (const userId of this.#splittAmounts.keys()) {
+      this.#splittAmounts.set(userId, DEFAULT_AMOUNT);
+    }
+    this.#total = 0;
+    this.#remainder = 0;
+    this.#validateForSubmission();
+  };
+
   // Update
 
   /**

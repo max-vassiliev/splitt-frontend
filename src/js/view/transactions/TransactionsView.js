@@ -27,6 +27,15 @@ class TransactionsView {
   }
 
   /**
+   * Renders the element's "loading" state.
+   */
+  renderLoading() {
+    const loadingHTML = this.#generateTransactionsLoadingHTML();
+    this.#clear();
+    this.#container.insertAdjacentHTML('afterbegin', loadingHTML);
+  }
+
+  /**
    * Clears the container.
    */
   #clear() {
@@ -68,6 +77,17 @@ class TransactionsView {
    */
   #isTransactionsEmpty(transactions) {
     return transactions.length === 0;
+  }
+
+  #generateTransactionsLoadingHTML() {
+    return `
+      <div class="transactions__loading">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Получаем данные...</span>
+        </div>
+        <div class="spinner-caption">Получаем данные...</div>
+      </div>
+    `;
   }
 
   /**

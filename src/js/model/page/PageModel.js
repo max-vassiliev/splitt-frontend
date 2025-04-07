@@ -3,19 +3,41 @@ import dateManager from '../form/date/DateManager.js';
 import pageAPI from './PageAPI.js';
 
 class PageModel {
+  /**
+   * Loads the full initial page data from the API
+   * and initializes the application state.
+   *
+   * @returns {Promise<void>}
+   * @throws Will re-throw any errors from the API call.
+   */
   loadPage = async () => {
     try {
       const data = await pageAPI.getFullPageData(4n, 1n);
-
       stateManager.loadState(data);
-
-      const stateToPrint = stateManager.getState();
-      console.log(stateToPrint);
     } catch (error) {
       throw error;
     }
   };
 
+  /**
+   * Loads an incremental demo update from the API
+   * and updates the application state accordingly.
+   *
+   * @returns {Promise<void>}
+   * @throws Will re-throw any errors from the API call.
+   */
+  updatePageDemo = async () => {
+    try {
+      const data = await pageAPI.getPageUpdateData();
+      stateManager.updateAfterAddTransactionDemo(data);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  /**
+   * Initializes the global date settings for the page.
+   */
   initDate = () => {
     dateManager.init();
   };

@@ -47,6 +47,12 @@ class UserSummaryView {
     this.#container.insertAdjacentHTML('afterbegin', summaryHTML);
   }
 
+  renderLoading = () => {
+    const loadingHTML = this.#generateLoadingHTML();
+    this.#clear();
+    this.#container.insertAdjacentHTML('afterbegin', loadingHTML);
+  };
+
   // Get
 
   /**
@@ -62,6 +68,10 @@ class UserSummaryView {
   };
 
   // Generate HTML
+
+  #generateLoadingHTML() {
+    return `<div class="summary loading"></div>`;
+  }
 
   #generateNeutralHTML() {
     return `

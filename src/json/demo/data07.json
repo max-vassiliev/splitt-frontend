@@ -1,0 +1,86 @@
+{
+  "balances": [
+    {
+      "userId": 5,
+      "balance": 0,
+      "details": []
+    },
+    {
+      "userId": 6,
+      "balance": 0,
+      "details": []
+    },
+    {
+      "userId": 7,
+      "balance": 0,
+      "details": []
+    }
+  ],
+  "transactions": [
+    {
+      "id": 17,
+      "type": "repayment",
+      "amount": 268500,
+      "currentUserBalance": -268500,
+      "date": "2025-03-26",
+      "emoji": "✅",
+      "payerId": 5,
+      "recipientId": 6
+    },
+    {
+      "id": 16,
+      "type": "repayment",
+      "amount": 507000,
+      "currentUserBalance": null,
+      "date": "2025-03-26",
+      "emoji": "✅",
+      "payerId": 7,
+      "recipientId": 6
+    },
+    {
+      "id": 15,
+      "type": "expense",
+      "amount": 130000,
+      "currentUserBalance": 61000,
+      "date": "2024-03-25",
+      "emoji": "🗒️",
+      "title": "Чаевые"
+    },
+    {
+      "id": 14,
+      "type": "expense",
+      "amount": 1291000,
+      "currentUserBalance": -392000,
+      "date": "2024-03-25",
+      "emoji": "🦪",
+      "title": "Ужин так ужин"
+    },
+    {
+      "id": 13,
+      "type": "expense",
+      "amount": 63000,
+      "currentUserBalance": -21000,
+      "date": "2024-03-25",
+      "emoji": "🚕",
+      "title": "Такси"
+    },
+    {
+      "id": 12,
+      "type": "expense",
+      "amount": 53000,
+      "currentUserBalance": -26500,
+      "date": "2024-03-25",
+      "emoji": "🍿",
+      "title": "Попкорн"
+    },
+    {
+      "id": 11,
+      "type": "expense",
+      "amount": 165000,
+      "currentUserBalance": 110000,
+      "date": "2024-03-25",
+      "emoji": "🎥",
+      "title": "Кино"
+    }
+  ]
+}

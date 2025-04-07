@@ -9,6 +9,8 @@ class SummaryController {
     this.#bindEventHandlers();
   }
 
+  // Load
+
   #loadData() {
     this.#loadUserSummaryData();
     this.#loadGroupSummaryData();
@@ -24,14 +26,27 @@ class SummaryController {
     groupSummaryView.render(data);
   }
 
+  // Bind Event Handlers
+
   #bindEventHandlers() {
     userSummaryView.addHandlerContainerClick(this.#handleContainerClick);
   }
+
+  // Handlers
 
   #handleContainerClick = event => {
     const selectedUserId = userSummaryView.getSelectedUserId(event.target);
     if (!selectedUserId) return;
     eventBus.emit('settleDebt', selectedUserId);
+  };
+
+  handleLoading = () => {
+    userSummaryView.renderLoading();
+    groupSummaryView.renderLoading();
+  };
+
+  handleUpdate = () => {
+    this.#loadData();
   };
 }
 

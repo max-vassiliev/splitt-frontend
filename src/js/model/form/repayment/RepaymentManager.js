@@ -2,6 +2,7 @@ import state from '../../state/State.js';
 import repaymentAPI from './RepaymentAPI.js';
 import {
   TYPE_REPAYMENT,
+  REPAYMENT_FORM_ADD,
   REPAYMENT_FORM_SETTLE,
   REPAYMENT_FORM_EDIT,
   REPAYMENT_FORM_TYPES,
@@ -132,6 +133,27 @@ class RepaymentManager extends TransactionFormManager {
       hasEdits,
       isFormValid,
     };
+  };
+
+  // Reset (Submit Demo)
+
+  /**
+   * Resets the currently active form.
+   *
+   * @returns {Object} The reset response object.
+   * @property {boolean} shouldRender Indicates whether the form should be rendered.
+   * @property {RepaymentFormState} [form] The active form's current state, if rendering is required.
+   */
+  resetForm = () => {
+    const form = this.getActiveForm();
+    if (!form) return { shouldRender: false };
+
+    form.reset();
+    if (form.type === REPAYMENT_FORM_ADD) {
+      form.payer = state.userId;
+    }
+
+    return { shouldRender: true, form };
   };
 
   // Reset

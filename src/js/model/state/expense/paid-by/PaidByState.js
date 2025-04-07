@@ -1,3 +1,4 @@
+import { DEFAULT_AMOUNT } from '../../../../util/Config.js';
 import PaidByEntry from './PaidByEntry.js';
 
 class PaidByState {
@@ -37,23 +38,49 @@ class PaidByState {
    * @param {bigint} currentUserId - The ID of the current user to set as the default entry.
    */
   reset = currentUserId => {
-    this.#clear();
-    this.#loadDefaultEntry(currentUserId);
+    this.#clear(currentUserId);
   };
 
   /**
-   * Clears all Paid By state data.
+   * Clears all Paid By state data and restores the default entry settings.
    *
    * @private
    */
-  #clear = () => {
-    this.#entries.clear();
+  #clear = currentUserId => {
     this.#usersInEntries.clear();
     this.#payersInEntries.clear();
+    this.#clearEntries(currentUserId);
     this.#total = 0;
     this.#remainder = 0;
     this.#isValid = true;
   };
+
+  /**
+   * Clears and resets all individual "Paid By" entries.
+   *
+   * The default entry is reassigned to the current user, while all
+   * non-default entries are removed from the active entries map and
+   * returned to the entries pool.
+   *
+   * @param {bigint} currentUserId - The ID of the current user to assign to the default entry.
+   *
+   * @private
+   */
+  #clearEntries = currentUserId => {
+    this.#entries.forEach(entry => {
+      entry.amount = DEFAULT_AMOUNT;
+      if (entry.isDefault) {
+        entry.userId = currentUserId;
+        this.#usersInEntries.add(currentUserId);
+      } else {
+        entry.userId = null;
+        this.#entries.delete(entry.entryId);
+        this.#entriesPool.set(entry.entryId, entry);
+      }
+    });
+  };
+
+  //
 
   /**
    * Initializes and loads the default entry for the Paid By subform.

@@ -29,6 +29,24 @@ class SplittEquallyState extends SplittState {
     this._isInitialized = true;
   };
 
+  // Reset
+
+  /**
+   * Resets the Splitt Equally Form state by selecting all users
+   * and assigning the default amount to each.
+   *
+   * Also triggers validation for form submission.
+   *
+   * @returns {void}
+   */
+  reset = () => {
+    for (const userId of this.#splittAmounts.keys()) {
+      this.#selectedUsers.add(userId);
+      this.#splittAmounts.set(userId, DEFAULT_AMOUNT);
+    }
+    this.#validateForSubmission();
+  };
+
   // Update
 
   /**

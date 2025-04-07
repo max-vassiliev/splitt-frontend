@@ -1,0 +1,67 @@
+{
+  "balances": [
+    {
+      "userId": 7,
+      "balance": -76000,
+      "details": [
+        {
+          "userId": 5,
+          "amount": -62500
+        },
+        {
+          "userId": 6,
+          "amount": -13500
+        }
+      ]
+    },
+    {
+      "userId": 5,
+      "balance": 62500,
+      "details": [
+        {
+          "userId": 7,
+          "amount": 62500
+        }
+      ]
+    },
+    {
+      "userId": 6,
+      "balance": 13500,
+      "details": [
+        {
+          "userId": 7,
+          "amount": 13500
+        }
+      ]
+    }
+  ],
+  "transactions": [
+    {
+      "id": 13,
+      "type": "expense",
+      "amount": 63000,
+      "currentUserBalance": -21000,
+      "date": "2024-03-25",
+      "emoji": "🚕",
+      "title": "Такси"
+    },
+    {
+      "id": 12,
+      "type": "expense",
+      "amount": 53000,
+      "currentUserBalance": -26500,
+      "date": "2024-03-25",
+      "emoji": "🍿",
+      "title": "Попкорн"
+    },
+    {
+      "id": 11,
+      "type": "expense",
+      "amount": 165000,
+      "currentUserBalance": 110000,
+      "date": "2024-03-25",
+      "emoji": "🎥",
+      "title": "Кино"
+    }
+  ]
+}

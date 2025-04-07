@@ -31,6 +31,17 @@ class RepaymentFormEditState extends RepaymentFormState {
   }
 
   /**
+   * Resets the state of the Repayment Edit Form to its initial default values.
+   *
+   * @returns {void}
+   */
+  reset = () => {
+    super.reset();
+    this.#repaymentId = null;
+    this.clearAll();
+  };
+
+  /**
    * Populates the #fieldValidators map with field names and their corresponding validation methods.
    * This method sets up the validation functions for each editable field in the form.
    *

@@ -2,6 +2,7 @@ import Expense from '../state/expense/Expense.js';
 import Repayment from '../state/repayment/Repayment.js';
 import TypeParser from '../../util/TypeParser.js';
 import RepaymentParty from '../state/repayment/RepaymentParty.js';
+import state from '../state/State.js';
 
 class TransactionManager {
   #users;
@@ -55,9 +56,12 @@ class TransactionManager {
     expense.id = input.id;
     expense.amount = input.amount;
     expense.currentUserBalance = input.currentUserBalance;
-    expense.date = TypeParser.parseDate(input.date);
     expense.emoji = input.emoji;
     expense.title = input.title;
+
+    // Demo date settings
+    // expense.date = TypeParser.parseDate(input.date);
+    expense.date = state.dates.today.date;
 
     return expense;
   }
@@ -68,10 +72,13 @@ class TransactionManager {
     repayment.id = input.id;
     repayment.amount = input.amount;
     repayment.currentUserBalance = input.currentUserBalance;
-    repayment.date = TypeParser.parseDate(input.date);
     repayment.emoji = input.emoji;
     repayment.payer = this.#initializeRepaymentParty(input.payerId);
     repayment.recipient = this.#initializeRepaymentParty(input.recipientId);
+
+    // Demo date settings
+    // repayment.date = TypeParser.parseDate(input.date);
+    repayment.date = state.dates.today.date;
 
     return repayment;
   }

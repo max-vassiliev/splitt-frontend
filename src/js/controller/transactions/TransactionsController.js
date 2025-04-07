@@ -18,6 +18,14 @@ class TransactionsController {
       transactionsHandler.handleContainerClick
     );
   }
+
+  handleLoading = () => {
+    transactionsView.renderLoading();
+  };
+
+  handleUpdate = () => {
+    this.#loadData();
+  };
 }
 
 export default new TransactionsController();

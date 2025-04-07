@@ -26,6 +26,15 @@ class PageAPI {
       throw error;
     }
   }
+
+  // DEMO
+  async getPageUpdateData() {
+    try {
+      return await ApiClient.getDemoPageUpdate();
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new PageAPI();

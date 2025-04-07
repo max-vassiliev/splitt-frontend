@@ -407,7 +407,11 @@ class ExpensePaidByView {
   // Utility
 
   #clearEntries = () => {
-    // to develop later
+    this.#entries.forEach(entry => {
+      entry.reset();
+      entry.hide();
+      this.#entries.delete(entry.entryId);
+    });
   };
 
   #clearEntry = entryId => {

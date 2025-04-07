@@ -108,6 +108,10 @@ class ExpenseFormView {
     mainView.addHandlerCloseButtonClick(handler);
   };
 
+  addHandlerSubmitButtonClick = handler => {
+    mainView.addHandlerSubmitButtonClick(handler);
+  };
+
   // -------
   // TITLE
   // -------

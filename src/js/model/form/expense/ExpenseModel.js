@@ -71,12 +71,13 @@ class ExpenseModel extends TransactionFormModel {
       isValid,
     } = form;
 
+    const shouldRender = true;
+
     const currentUserId = stateManager.getUserId();
     const groupMembers = stateManager.getMembers();
 
     const date = this._prepareViewDate(form.date);
     const noteCount = note ? note.length : 0;
-    const shouldRender = true;
     const splittViewModel = splittService.prepareViewModel(
       splittData.activeForm
     );
@@ -142,6 +143,23 @@ class ExpenseModel extends TransactionFormModel {
       paidBy: paidByViewModel,
       splitt: splittViewModel,
     };
+  };
+
+  // Reset
+
+  /**
+   * Resets the currently active expense form
+   * and prepares the corresponding view model for rendering.
+   *
+   * @returns {Object} The response view model.
+   * @property {boolean} shouldRender Indicates whether the form should be rendered.
+   * @property {Object} [viewModel] The prepared view model for the form, if rendering is required.
+   */
+  resetForm = () => {
+    const { shouldRender, form } = expenseManager.resetForm();
+    if (!shouldRender) return { shouldRender };
+    const shouldCleanup = this._checkForCleanup(form);
+    return this.#prepareFormViewModel(form, shouldCleanup);
   };
 
   // Update: Main Form (Title)

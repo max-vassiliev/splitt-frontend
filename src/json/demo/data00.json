@@ -1,0 +1,34 @@
+{
+  "balances": [
+    { "userId": 5, "balance": 0, "details": [] },
+    { "userId": 6, "balance": 0, "details": [] },
+    { "userId": 7, "balance": 0, "details": [] }
+  ],
+  "transactions": [],
+  "currentUserId": 5,
+  "group": {
+    "id": 4,
+    "title": "Кино и ужин",
+    "avatar": "movies-101-a.png"
+  },
+  "members": [
+    {
+      "id": 5,
+      "name": "Полина",
+      "email": "polina@example.com",
+      "avatar": "avatar-polina.png"
+    },
+    {
+      "id": 6,
+      "name": "Арина",
+      "email": "arina@example.com",
+      "avatar": "avatar-arina.png"
+    },
+    {
+      "id": 7,
+      "name": "Крис",
+      "email": "kristina@example.com",
+      "avatar": "avatar-kristina.png"
+    }
+  ]
+}

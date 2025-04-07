@@ -24,6 +24,10 @@ class PaginationController {
       paginationHandler.handleClickToNextPage
     );
   }
+
+  handleUpdate = () => {
+    this.#loadData();
+  };
 }
 
 export default new PaginationController();

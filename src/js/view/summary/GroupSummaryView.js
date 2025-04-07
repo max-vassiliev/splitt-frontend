@@ -12,6 +12,8 @@ class GroupSummaryView {
     this.#container = document.querySelector('.group-summary-container');
   }
 
+  // Render
+
   render(data) {
     if (!data || !Array.isArray(data.balances)) {
       console.error('Invalid data format for group summary rendering');
@@ -23,8 +25,20 @@ class GroupSummaryView {
     this.#container.insertAdjacentHTML('afterbegin', tableHTML);
   }
 
+  renderLoading = () => {
+    const loadingHTML = this.#generateLoadingHTML();
+    this.#clear();
+    this.#container.insertAdjacentHTML('afterbegin', loadingHTML);
+  };
+
   #clear() {
     this.#container.innerHTML = '';
+  }
+
+  // Generate HTML
+
+  #generateLoadingHTML() {
+    return `<div class="summary loading"></div>`;
   }
 
   #generateTableHTML(data) {

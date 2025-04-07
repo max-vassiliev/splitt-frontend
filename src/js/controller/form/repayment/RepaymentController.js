@@ -72,6 +72,7 @@ class RepaymentController extends TransactionFormController {
       this._toggleHiddenForm(event, REPAYMENT_HIDDEN_FORM_NOTE);
     });
     formView.addHandlerCloseButtonClick(this._closeForm);
+    formView.addHandlerSubmitButtonClick(this.#handleSubmitForm);
   };
 
   #bindResetEventHandlers = () => {
@@ -127,6 +128,15 @@ class RepaymentController extends TransactionFormController {
     if (!shouldCleanup) return;
     formView.hideEditFormElements();
     noteFormView.renderResetButtonVisibility(false);
+  };
+
+  // Handlers: Submit Form
+
+  #handleSubmitForm = () => {
+    this._closeForm();
+    eventBus.emit('demoTransactionSubmitted');
+    const viewModel = repaymentModel.resetForm();
+    this.#renderViewModel(viewModel);
   };
 
   // Handlers: Main Form

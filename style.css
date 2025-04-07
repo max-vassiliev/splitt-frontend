@@ -941,12 +941,20 @@ header {
 .splitt-equally-column__username,
 .splitt-parts-column__username,
 .splitt-shares-column__username {
-  min-width: 16rem;
   padding-left: 6px;
   padding-right: 10px;
   font-size: 1.5rem;
   font-weight: 500;
   color: #666;
+}
+
+.splitt-equally-column__username,
+.splitt-parts-column__username {
+  min-width: 22rem;
+}
+
+.splitt-shares-column__username {
+  min-width: 16rem;
 }
 
 .splitt-equally-column__amount,
@@ -1119,7 +1127,7 @@ header {
 }
 
 .payer-table-column__username {
-  min-width: 16rem;
+  min-width: 24rem;
   padding-left: 6px;
   padding-right: 10px;
   font-size: 1.5rem;

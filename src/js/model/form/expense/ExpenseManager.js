@@ -1,6 +1,7 @@
 import {
   TYPE_EXPENSE,
   EXPENSE_FORM_TYPES,
+  EXPENSE_FORM_ADD,
   EXPENSE_FORM_EDIT,
   EXPENSE_SPLITT_TYPES,
   DEFAULT_EMOJI_EXPENSE,
@@ -218,14 +219,25 @@ class ExpenseManager extends TransactionFormManager {
 
   // Reset
 
-  // TODO! разделить init() и reset()
-  #resetAddForm = () => {
-    const addForm = state.expenseForms.add;
-    const currentUserId = state.userId;
-    const userIds = [...state.members.keys()];
+  /**
+   * Resets the currently active form.
+   *
+   * @returns {Object} The reset response object.
+   * @property {boolean} shouldRender Indicates whether the form should be rendered.
+   * @property {ExpenseFormState} [form] The active form's current state, if rendering is required.
+   */
+  resetForm = () => {
+    const form = this.getActiveForm();
+    if (!form) return { shouldRender: false };
 
-    addForm.emoji = DEFAULT_EMOJI_EXPENSE;
-    addForm.paidBy.reset(currentUserId);
+    if (form.type === EXPENSE_FORM_ADD) {
+      const currentUserId = state.userId;
+      form.reset(currentUserId);
+    } else {
+      form.reset();
+    }
+
+    return { shouldRender: true, form };
   };
 
   // Validate

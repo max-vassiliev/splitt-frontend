@@ -119,7 +119,7 @@ class RepaymentModel extends TransactionFormModel {
     };
   };
 
-  // Public methods: Update
+  // Update: Main Form
 
   /**
    * Updates the party (payer or recipient) in the active form and validates the form.
@@ -147,7 +147,24 @@ class RepaymentModel extends TransactionFormModel {
     return repaymentManager.updateAmount(processedAmount);
   };
 
-  // Public methods: Reset
+  // Reset (Submit Demo)
+
+  /**
+   * Resets the currently active repayment form
+   * and prepares the corresponding view model for rendering.
+   *
+   * @returns {Object} The response view model.
+   * @property {boolean} shouldRender Indicates whether the form should be rendered.
+   * @property {Object} [viewModel] The prepared view model for the form, if rendering is required.
+   */
+  resetForm = () => {
+    const { shouldRender, form } = repaymentManager.resetForm();
+    if (!shouldRender) return { shouldRender };
+    const shouldCleanup = this._checkForCleanup(form);
+    return this.#prepareFormViewModel(form, shouldCleanup);
+  };
+
+  // Reset
 
   /**
    * Resets all fields in the Repayment Edit Form to their initial state.

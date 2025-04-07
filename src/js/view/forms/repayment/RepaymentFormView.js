@@ -141,6 +141,10 @@ class RepaymentFormView {
     this.#buttonClose.addEventListener('click', handler);
   };
 
+  addHandlerSubmitButtonClick = handler => {
+    this.#buttonSubmit.addEventListener('click', handler);
+  };
+
   // ADD HANDLERS (Emoji)
 
   addHandlerEmojiPickerSwitchBtnClick = handler => {

@@ -90,6 +90,7 @@ class ExpenseController extends TransactionFormController {
       this._toggleHiddenForm(event, EXPENSE_HIDDEN_FORM_NOTE);
     });
     formView.addHandlerCloseButtonClick(this._closeForm);
+    formView.addHandlerSubmitButtonClick(this.#handleSubmitForm);
   };
 
   #bindHiddenFormHandlers = () => {
@@ -130,6 +131,15 @@ class ExpenseController extends TransactionFormController {
     if (!viewModel.shouldRender) return;
     formView.render(viewModel);
     this.toggleHiddenFormOnLoad(viewModel.activeHiddenForm);
+  };
+
+  // Handlers: Submit Form
+
+  #handleSubmitForm = () => {
+    this._closeForm();
+    eventBus.emit('demoTransactionSubmitted');
+    const viewModel = expenseModel.resetForm();
+    this.#renderViewModel(viewModel);
   };
 
   // Handlers: Main Form
