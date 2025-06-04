@@ -2,9 +2,11 @@
   "name": "splitt",
   "version": "1.0.0",
   "description": "Cost sharing application",
+  "default": "index.html",
   "scripts": {
     "start": "npx parcel index.html",
-    "build": "npx parcel build index.html",
+    "build": "parcel build index.html --dist-dir ./dist",
+    "postbuild": "npm run copy-images && npm run copy-json",
     "clean": "rm -rf .parcel-cache",
     "copy-images": "cp -R src/images/. dist/images",
     "copy-json": "cp -R src/json/ dist/json",
@@ -14,13 +16,13 @@
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.9.3",
-    "parcel": "^2.12.0",
+    "parcel": "^2.15.2",
     "process": "^0.11.10"
   },
   "dependencies": {
     "core-js": "^3.31.0",
-    "eventemitter3": "^5.0.1",
     "emoji-mart": "^5.5.2",
+    "eventemitter3": "^5.0.1",
     "fractional": "^1.0.0",
     "regenerator-runtime": "^0.13.11"
   }
