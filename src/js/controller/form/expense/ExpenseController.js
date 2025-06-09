@@ -67,7 +67,7 @@ class ExpenseController extends TransactionFormController {
   // Bind Event Handlers
 
   #bindEventHandlers = () => {
-    addButtonView.addHandlerClick(this.#openAddForm);
+    addButtonView.addHandlerClick(this.openAddForm);
     this.#bindMainFormHandlers();
     this.#bindHiddenFormHandlers();
     this.#bindPaidByFormHandlers();
@@ -116,7 +116,7 @@ class ExpenseController extends TransactionFormController {
 
   // Toggle Form
 
-  #openAddForm = () => {
+  openAddForm = () => {
     const viewModel = expenseModel.prepareAddForm();
     this.#openForm(viewModel);
   };

@@ -40,6 +40,8 @@ class MainController {
     this.#bindGroupSettingsLinkClick();
     this.#bindAlignTransactionForms();
     this.#bindAlignEmojiContainer();
+    this.#bindOpenAddExpense();
+    this.#bindOpenAddRepayment();
     this.#bindSettleDebt();
     this.#bindOpenEditRepayment();
     this.#bindRepaymentFormEmojiEdit();
@@ -108,6 +110,18 @@ class MainController {
   #bindGroupSettingsLinkClick = () => {
     eventBus.on('groupSettingsLinkClick', () => {
       groupController.openGroupModal();
+    });
+  };
+
+  #bindOpenAddExpense = () => {
+    eventBus.on('openAddExpense', () => {
+      expenseController.openAddForm();
+    });
+  };
+
+  #bindOpenAddRepayment = () => {
+    eventBus.on('openAddRepayment', () => {
+      repaymentContoller.openAddForm();
     });
   };
 

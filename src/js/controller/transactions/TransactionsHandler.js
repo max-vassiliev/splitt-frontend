@@ -44,11 +44,11 @@ class TransactionsHandler {
 
   #handleEmptyTransactionsTableClick(event) {
     if (event.target.classList.contains('add-expense-link')) {
-      console.log('add expense (add event: "openAddExpense")');
+      eventBus.emit('openAddExpense');
       return;
     }
     if (event.target.classList.contains('add-repayment-link')) {
-      console.log('add repayment (add event: "openAddRepayment")');
+      eventBus.emit('openAddRepayment');
       return;
     }
   }

@@ -54,7 +54,7 @@ class RepaymentController extends TransactionFormController {
   // Bind Event Handlers
 
   #bindEventHandlers = () => {
-    addButtonView.addHandlerClick(this.#openAddForm);
+    addButtonView.addHandlerClick(this.openAddForm);
     this.#bindMainFormEventHandlers();
     this.#bindResetEventHandlers();
     this.#bindNoteFormEventHandlers();
@@ -94,7 +94,7 @@ class RepaymentController extends TransactionFormController {
 
   // Toggle Form
 
-  #openAddForm = () => {
+  openAddForm = () => {
     const viewModel = repaymentModel.prepareAddForm();
     this.#openForm(viewModel);
   };
