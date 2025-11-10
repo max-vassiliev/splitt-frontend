@@ -13,7 +13,7 @@
 Версия проекта из видео-демонстрации выложена на отдельном сайте: [splitt-demo-v01.netlify.app](https://splitt-demo-v01.netlify.app/). <br>
 На сайте можно посмотреть, как происходят расчеты в основных формах: «Добавить трату» и «Вернуть долг».
 
-Серверная часть приложения: [Splitt Backkend](https://github.com/max-vassiliev/splitt-backend).
+Серверная часть приложения: [Splitt Backend](https://github.com/max-vassiliev/splitt-backend).
 
 ## Технологии
 
